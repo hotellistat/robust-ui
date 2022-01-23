@@ -1,0 +1,48 @@
+<template>
+  <div
+    class="
+      bg-white
+      dark:bg-gray-800
+      rounded-md
+      overflow-hidden
+      border border-gray-200
+      dark:border-gray-700
+    "
+  >
+    <div class="p-4 sm:p-6">
+      <div class="flex">
+        <div
+          class="text-xl font-semibold"
+          :class="[description !== undefined ? 'mb-2' : '']"
+        >
+          <slot name="title" :title="title">{{ title }}</slot>
+        </div>
+      </div>
+      <div
+        v-if="description !== undefined"
+        class="text-gray-500 dark:text-gray-500"
+      >
+        <slot name="description" :description="description">{{
+          description
+        }}</slot>
+      </div>
+    </div>
+    <base-separator />
+    <section class="p-4 sm:p-6">
+      <slot />
+    </section>
+  </div>
+</template>
+
+<script lang="ts">
+export default {
+  props: {
+    title: {
+      type: String,
+    },
+    description: {
+      type: String,
+    },
+  },
+}
+</script>

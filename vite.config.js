@@ -13,11 +13,12 @@ export default defineConfig({
     rollupOptions: {
       // make sure to externalize deps that shouldn't be bundled
       // into your library
-      external: ['vue'],
+      external: ['vue', 'date-fns', 'gsap', '@popperjs/core'],
       output: {
         // Provide global variables to use in the UMD build
         // for externalized deps
         globals: {
+          'date-fns': "date-fns",
           vue: 'Vue',
         },
       },

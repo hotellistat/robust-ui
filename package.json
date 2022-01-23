@@ -1,13 +1,15 @@
 {
   "name": "@hotellistat/robust-ui",
-  "version": "0.0.2",
+  "version": "0.0.3",
   "description": "🌙 A lightweight Vue 3 component library",
   "repository": "https://github.com/hotellistat/robust-ui.git",
   "author": "Daniel Schneider <daniel.schneider@hotellistat.de>",
   "files": [
     "dist"
   ],
-  "publishConfig":{"registry":"https://npm.pkg.github.com"},
+  "publishConfig": {
+    "registry": "https://npm.pkg.github.com"
+  },
   "main": "./dist/robust-ui.umd.js",
   "module": "./dist/robust-ui.es.js",
   "exports": {
@@ -26,25 +28,38 @@
     "analyze": "vite build --config analyze.config.js",
     "publish:library": "npm publish --access public",
     "format": "prettier .  --write",
-    "tailwind-config-viewer": "tailwind-config-viewer -o"
+    "tailwind-config-viewer": "tailwind-config-viewer -o",
+    "storybook": "start-storybook -p 6006"
   },
   "peerDependencies": {
-    "vue": "^3.1.5"
+    "date-fns": "^2.28.0",
+    "vue": "^3.1.5",
+    "gsap": "^3.9.1",
+    "@popperjs/core": "^2.11.2"
   },
   "devDependencies": {
+    "@storybook/addon-actions": "^6.4.14",
+    "@storybook/addon-docs": "^6.4.14",
+    "@storybook/addon-essentials": "^6.4.14",
+    "@storybook/addon-links": "^6.4.14",
+    "@storybook/addons": "^6.4.14",
+    "@storybook/theming": "^6.4.14",
+    "@storybook/vue3": "^6.4.14",
     "@vitejs/plugin-vue": "^2.1.0",
     "@vue/compiler-sfc": "^3.2.28",
     "prettier": "^2.5.1",
     "rollup-plugin-visualizer": "^5.5.4",
     "tailwind-config-viewer": "^1.6.3",
     "vite": "^2.7.13",
-    "vitepress": "^0.21.6"
+    "vitepress": "^0.21.6",
+    "postcss": "^8.4.5",
+    "postcss-import": "^14.0.2"
   },
   "dependencies": {
+    "@vueuse/core": "^7.5.4",
     "autoprefixer": "^10.4.2",
     "cssnano": "^5.0.15",
     "mitt": "^3.0.0",
-    "postcss-import": "^14.0.2",
     "tabbable": "^5.2.1",
     "tailwindcss": "^3.0.15",
     "tippy.js": "^6.3.7"
