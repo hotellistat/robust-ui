@@ -1,0 +1,52 @@
+{
+  "name": "@hotellistat/robust-ui",
+  "version": "0.4.1",
+  "description": "🌙 A lightweight Vue 3 component library",
+  "repository": "https://github.com/hotellistat/robust-ui.git",
+  "author": "Daniel Schneider <daniel.schneider@hotellistat.de>",
+  "files": [
+    "dist"
+  ],
+  "publishConfig":{"registry":"https://npm.pkg.github.com"},
+  "main": "./dist/robust-ui.umd.js",
+  "module": "./dist/robust-ui.es.js",
+  "exports": {
+    ".": {
+      "import": "./dist/robust-ui.es.js",
+      "require": "./dist/robust-ui.umd.js"
+    }
+  },
+  "unpkg": "./dist/robust-ui.umd.js",
+  "jsdelivr": "./dist/robust-ui.umd.js",
+  "scripts": {
+    "dev": "vitepress dev docs",
+    "build": "vitepress build docs",
+    "serve": "vitepress serve docs",
+    "build:library": "vite build",
+    "analyze": "vite build --config analyze.config.js",
+    "publish:library": "npm publish --access public",
+    "format": "prettier .  --write",
+    "tailwind-config-viewer": "tailwind-config-viewer -o"
+  },
+  "peerDependencies": {
+    "vue": "^3.1.5"
+  },
+  "devDependencies": {
+    "@vitejs/plugin-vue": "^2.1.0",
+    "@vue/compiler-sfc": "^3.2.28",
+    "prettier": "^2.5.1",
+    "rollup-plugin-visualizer": "^5.5.4",
+    "tailwind-config-viewer": "^1.6.3",
+    "vite": "^2.7.13",
+    "vitepress": "^0.21.6"
+  },
+  "dependencies": {
+    "autoprefixer": "^10.4.2",
+    "cssnano": "^5.0.15",
+    "mitt": "^3.0.0",
+    "postcss-import": "^14.0.2",
+    "tabbable": "^5.2.1",
+    "tailwindcss": "^3.0.15",
+    "tippy.js": "^6.3.7"
+  }
+}
