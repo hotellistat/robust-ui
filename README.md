@@ -1,8 +1,8 @@
 # 🌙 Robust-UI
 
-[![npm (scoped)](https://img.shields.io/npm/v/@ulissesferreira/robust-ui)](https://www.npmjs.com/package/@ulissesferreira/robust-ui)
-[![npm bundle size (scoped)](https://img.shields.io/bundlephobia/minzip/@ulissesferreira/robust-ui)](https://bundlephobia.com/result?p=@ulissesferreira/robust-ui@latest)
-[![NPM](https://img.shields.io/npm/l/@ulissesferreira/robust-ui)](https://github.com/ulissesferreira/robust-ui/blob/main/LICENSE)
+[![npm (scoped)](https://img.shields.io/npm/v/@hotellistat/robust-ui)](https://www.npmjs.com/package/@hotellistat/robust-ui)
+[![npm bundle size (scoped)](https://img.shields.io/bundlephobia/minzip/@hotellistat/robust-ui)](https://bundlephobia.com/result?p=@hotellistat/robust-ui@latest)
+[![NPM](https://img.shields.io/npm/l/@hotellistat/robust-ui)](https://github.com/hotellistat/robust-ui/blob/main/LICENSE)
 
 A lightweight Vue 3 component library.
 
@@ -13,13 +13,13 @@ When you are starting a new prototype you want to be able to develop features fa
 First install the library using your prefered package manager
 
 ```bash
-yarn add @ulissesferreira/robust-ui
+yarn add @hotellistat/robust-ui
 ```
 
 then you can import the available components like so
 
 ```vue
-import { Button } from '@ulissesferreira/robust-ui'
+import { Button } from '@hotellistat/robust-ui'
 ```
 
 ## Available commands
@@ -64,6 +64,7 @@ yarn lint
 ```
 
 **Format all files**
+
 ```bash
 yarn format
 ```

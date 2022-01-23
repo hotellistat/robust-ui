@@ -28,7 +28,7 @@ To use it:
 1. You register the SidebarManager component in the `app.vue` of your application.
 
 ```vue
-import { SidebarManager } from '@ulissesferreira/robust-ui'
+import { SidebarManager } from '@hotellistat/robust-ui'
 
 <div id="app">
   <sidebar-manager><sidebar-manager/>
@@ -40,7 +40,7 @@ import { SidebarManager } from '@ulissesferreira/robust-ui'
 ```vue
 <Button label="Open" @click="openSidebar" />
 
-import { EVENTS, EventBus } from '@ulissesferreira/robust-ui' import LayoutExample
+import { EVENTS, EventBus } from '@hotellistat/robust-ui' import LayoutExample
 from '@/components/Sidebars/LayoutExample.vue' function openSidebar() {
 EventBus.emit(EVENTS.OPEN_Sidebar, { component: LayoutExample }) }
 ```

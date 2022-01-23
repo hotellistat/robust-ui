@@ -12,7 +12,7 @@ module.exports = {
     nav: [
       {
         text: 'Github',
-        link: 'https://github.com/ulissesferreira/robust-ui',
+        link: 'https://github.com/hotellistat/robust-ui',
       },
     ],
     sidebar: [

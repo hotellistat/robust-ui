@@ -28,7 +28,7 @@ To use it:
 1. You register the ModalManager component in the `app.vue` of your application.
 
 ```vue
-import { ModalManager } from '@ulissesferreira/robust-ui'
+import { ModalManager } from '@hotellistat/robust-ui'
 
 <div id="app">
   <modal-manager><modal-manager/>
@@ -40,7 +40,7 @@ import { ModalManager } from '@ulissesferreira/robust-ui'
 ```vue
 <Button label="Open" @click="openModal" />
 
-import { EVENTS, EventBus } from '@ulissesferreira/robust-ui' import LayoutExample
+import { EVENTS, EventBus } from '@hotellistat/robust-ui' import LayoutExample
 from '@/components/Modals/LayoutExample.vue' function openModal() {
 EventBus.emit(EVENTS.OPEN_MODAL, { component: LayoutExample }) }
 ```
