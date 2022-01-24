@@ -76,8 +76,8 @@ export default defineComponent({
   setup(props, { emit, attrs }) {
     const cuid = "_" + Math.random().toString(36).substr(2, 9);
 
-    const isChecked = computed({
-      get() {
+    const isChecked = computed<boolean>({
+      get(): boolean {
         if (Array.isArray(props.modelValue)) {
           return props.modelValue.includes(props.value);
         } else {

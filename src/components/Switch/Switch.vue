@@ -67,7 +67,7 @@ export default defineComponent({
   },
   setup(props, { emit }) {
     const { modelValue } = toRefs(props)
-    const isChecked = computed({
+    const isChecked: any = computed({
       get: () => modelValue.value,
       set: (value) => {
         emit('update:modelValue', value)

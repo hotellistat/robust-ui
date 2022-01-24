@@ -1,6 +1,6 @@
 <template>
   <component
-    :is="tag"
+    :is="(tag as any)"
     :disabled="disabled"
     class="
       flex

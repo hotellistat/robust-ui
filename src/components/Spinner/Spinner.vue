@@ -28,15 +28,16 @@
   </svg>
 </template>
 
-<script>
-export default {
+<script lang="ts">import { defineComponent, PropType, SVGAttributes } from "vue";
+
+export default defineComponent({
   props: {
     size: {
       type: String,
       default: '24px',
     },
   },
-}
+})
 </script>
 
 <style scoped>

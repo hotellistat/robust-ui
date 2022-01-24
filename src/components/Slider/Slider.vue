@@ -75,9 +75,9 @@
   </div>
 </template>
 
-<script>
-import { computed, onBeforeUnmount, onMounted, ref, watch } from "vue";
-export default {
+<script lang="ts">
+import { computed, defineComponent, onBeforeUnmount, onMounted, ref, watch } from "vue";
+export default defineComponent({
   name: "base-slider",
 
   props: {
@@ -181,7 +181,7 @@ export default {
     };
 
     const reset = () => {
-      setValue(props.initialValue);
+      setValue(initialValue);
     };
 
     const onFocus = () => {
@@ -402,7 +402,7 @@ export default {
       moderateValue,
     };
   },
-};
+})
 </script>
 
 <style>

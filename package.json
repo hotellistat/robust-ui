@@ -1,25 +1,24 @@
 {
   "name": "@hotellistat/robust-ui",
-  "version": "0.0.7",
+  "version": "0.0.8",
   "description": "A lightweight Vue 3 component library",
   "repository": "https://github.com/hotellistat/robust-ui.git",
   "author": "Daniel Schneider <daniel.schneider@hotellistat.de>",
   "files": [
     "dist"
   ],
-  "publishConfig": {
-    "registry": "https://npm.pkg.github.com"
-  },
   "main": "./dist/robust-ui.umd.js",
   "module": "./dist/robust-ui.es.js",
+  "unpkg": "./dist/robust-ui.umd.js",
+  "jsdelivr": "./dist/robust-ui.umd.js",
+  "types": "./dist/index.d.ts",
   "exports": {
     ".": {
       "import": "./dist/robust-ui.es.js",
       "require": "./dist/robust-ui.umd.js"
     }
   },
-  "unpkg": "./dist/robust-ui.umd.js",
-  "jsdelivr": "./dist/robust-ui.umd.js",
+
   "scripts": {
     "dev": "vitepress dev docs",
     "build": "vitepress build docs",

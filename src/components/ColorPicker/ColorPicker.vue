@@ -47,6 +47,7 @@ import {
   toRefs,
   watchEffect,
   nextTick,
+PropType,
 } from 'vue'
 import { setColorValue, rgb2hex } from './composable'
 
@@ -75,8 +76,8 @@ export default defineComponent({
       default: 'dark',
     },
     colorsDefault: {
-      type: Array,
-      default: () => [
+      type: Array as PropType<String[]>,
+      default: [
         '#000000',
         '#FFFFFF',
         '#FF1900',

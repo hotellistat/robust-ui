@@ -5,7 +5,7 @@
   >
     <div
       v-for="tab in tabs"
-      :key="tab.value"
+      :key="(tab.value as any)"
       :ref="registerTab"
       :data-value="tab.value"
       class="
@@ -33,11 +33,11 @@
 </template>
 
 <script lang="ts">
-import { defineComponent, onMounted, PropType, ref } from "vue";
+import { defineComponent, onMounted, PropType, ref } from 'vue'
 
 interface Tab {
-  title: string;
-  value: string;
+  title: string
+  value: string
 }
 
 export default defineComponent({
@@ -52,38 +52,38 @@ export default defineComponent({
   },
 
   setup(props, { emit }) {
-    const root = ref<HTMLElement>();
+    const root = ref<HTMLElement>()
 
-    const tabsRefs = ref<HTMLElement[]>([]);
+    const tabsRefs = ref<HTMLElement[]>([])
 
     const registerTab = (el: HTMLElement) => {
-      tabsRefs.value?.push(el);
-    };
+      tabsRefs.value?.push(el)
+    }
 
     onMounted(() => {
       const activeTab = tabsRefs.value.find(
         (item) => item.dataset.value === props.modelValue
-      );
+      )
       // console.log(activeTab);
       if (activeTab) {
-        console.log(activeTab);
+        console.log(activeTab)
 
         activeTab.scrollIntoView({
-          behavior: "smooth",
-          block: "end",
-        });
+          behavior: 'smooth',
+          block: 'end',
+        })
       }
-    });
+    })
 
     const select = (value: string) => {
-      emit("update:modelValue", value);
-    };
+      emit('update:modelValue', value)
+    }
 
     return {
       select,
       root,
       registerTab,
-    };
+    }
   },
-});
+})
 </script>

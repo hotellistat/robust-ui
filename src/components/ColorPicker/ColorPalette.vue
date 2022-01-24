@@ -25,12 +25,12 @@
 </template>
 
 <script lang="ts">
-import { defineComponent, ref } from 'vue'
+import { defineComponent, PropType, ref } from 'vue'
 
 export default defineComponent({
-  pros: {
+  props: {
     colors: {
-      type: Array,
+      type: Array as PropType<string[]>,
       default: [
         '#FCA5A5',
         '#EF4444',
@@ -69,7 +69,7 @@ export default defineComponent({
       ],
     },
   },
-  setup(_, { emit }) {
+  setup(props, { emit }) {
     const selectedColor = (color: string) => {
       emit('change', color)
     }

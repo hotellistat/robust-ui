@@ -1,8 +1,8 @@
 <template>
   <base-input-wrapper
-    :title="title"
-    :hint="hint"
-    :error="error"
+    :title="(title as any)"
+    :hint="(hint as any)"
+    :error="(error as any)"
     :condensed="condensed"
   >
     <template v-slot:default="slotProps">
@@ -54,8 +54,10 @@
 <script lang="ts">
 import { computed, defineComponent, ref } from 'vue'
 import BaseInputWrapper from '../InputWrapper/InputWrapper.vue'
+
 export default defineComponent({
   props: {
+
     title: String,
     hint: String,
     error: String,

@@ -98,13 +98,14 @@
   </base-input-wrapper>
 </template>
 
-<script>
+<script lang="ts">
 import BasePopper from '../../utils/Popper'
-import { ref, computed, nextTick, toRefs, onMounted } from 'vue'
+import { ref, computed, nextTick, toRefs, onMounted, defineComponent, PropType } from 'vue'
 import BaseInputWrapper from '../InputWrapper/InputWrapper.vue'
 import { debouncedWatch } from '@vueuse/core'
+import { Modifier } from '@popperjs/core'
 
-export default {
+export default defineComponent({
   inheritAttrs: false,
   components: {
     BasePopper,
@@ -131,7 +132,7 @@ export default {
       type: String,
     },
     options: {
-      type: Array,
+      type: Array as PropType<Array<{title: string, value: string | number}>>,
       required: true,
     },
 
@@ -191,7 +192,7 @@ export default {
       await filterBySearchTerm('')
     })
 
-    const popperModifiers = [
+    const popperModifiers: Array<Modifier<string, Record<string, unknown>>> = [
       {
         name: 'sameWidth',
         enabled: true,
@@ -268,5 +269,5 @@ export default {
       search,
     }
   },
-}
+})
 </script>

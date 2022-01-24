@@ -42,9 +42,9 @@
   </div>
 </template>
 
-<script>
-import { computed } from 'vue'
-export default {
+<script lang="ts">
+import { computed, defineComponent } from 'vue'
+export default defineComponent({
   props: {
     modelValue: {
       type: [String, Number, Boolean, Object],
@@ -79,11 +79,5 @@ export default {
       attrs,
     }
   },
-
-  methods: {
-    uid() {
-      return uid()
-    },
-  },
-}
+})
 </script>

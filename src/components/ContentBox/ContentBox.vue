@@ -34,8 +34,9 @@
   </div>
 </template>
 
-<script lang="ts">
-export default {
+<script lang="ts">import { defineComponent } from "vue"
+
+export default defineComponent({
   props: {
     title: {
       type: String,
@@ -44,5 +45,5 @@ export default {
       type: String,
     },
   },
-}
+})
 </script>

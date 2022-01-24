@@ -26,7 +26,7 @@ export default defineComponent({
       required: true
     },
     options: {
-      type: Object as PropType<Options>
+      type: Object as PropType<Object>
     },
     gpu: {
       type: Boolean,

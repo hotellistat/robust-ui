@@ -3,31 +3,32 @@
     <ul class="colors">
       <li
         v-for="item in colorsDefault"
-        :key="item"
+        :key="item as string"
         class="item"
         @click="selectColor(item)"
       >
         <div :style="{ background: `url(${imgAlphaBase64})` }" class="alpha" />
-        <div :style="{ background: item }" class="color" />
+        <div :style="{ background: item as string }" class="color" />
       </li>
     </ul>
     <ul v-if="colorsHistory.length" class="colors history">
       <li
         v-for="item in colorsHistory"
-        :key="item"
+        :key="item as string"
         class="item"
         @click="selectColor(item)"
       >
         <div :style="{ background: `url(${imgAlphaBase64})` }" class="alpha" />
-        <div :style="{ background: item }" class="color" />
+        <div :style="{ background: item as string }" class="color" />
       </li>
     </ul>
   </div>
 </template>
 
 <script lang="ts">
-import { defineComponent, onUnmounted, ref } from 'vue'
+import { defineComponent, onUnmounted, PropType, ref } from 'vue'
 import { createAlphaSquare } from './composable'
+
 export default defineComponent({
   name: 'ColorPicker',
   props: {
@@ -36,8 +37,8 @@ export default defineComponent({
       default: '#000000',
     },
     colorsDefault: {
-      type: Array,
-      default: () => [],
+      type: Array as PropType<String[]>,
+      required: true,
     },
     colorsHistoryKey: {
       type: String,
@@ -46,11 +47,11 @@ export default defineComponent({
   },
   setup(props, { emit }) {
     const color = ref()
-    const colorsHistory = ref([])
+    const colorsHistory = ref<string[]>([])
     const imgAlphaBase64 = ref()
     if (props.colorsHistoryKey && localStorage) {
       colorsHistory.value =
-        JSON.parse(localStorage.getItem(props.colorsHistoryKey) as string) || []
+        JSON.parse(localStorage.getItem(props.colorsHistoryKey)) || []
     }
 
     imgAlphaBase64.value = createAlphaSquare(4).toDataURL()
@@ -59,7 +60,7 @@ export default defineComponent({
       setColorsHistory(color.value)
     })
 
-    const setColorsHistory = (color: string) => {
+    const setColorsHistory = (color) => {
       if (!color) {
         return
       }
@@ -77,7 +78,7 @@ export default defineComponent({
         localStorage.setItem(props.colorsHistoryKey, JSON.stringify(colors))
       }
     }
-    const selectColor = (color: any) => {
+    const selectColor = (color) => {
       emit('selectColor', color)
     }
 

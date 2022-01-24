@@ -57,6 +57,7 @@
 import { defineComponent, ref } from "vue";
 export default defineComponent({
   props: {
+    uid: String,
     title: String,
     hint: String,
     error: String,

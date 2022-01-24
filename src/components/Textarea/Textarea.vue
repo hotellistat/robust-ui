@@ -6,7 +6,7 @@
         <div class="prefix" :class="{ small }" v-if="prefix">{{ prefix }}</div>
 
         <textarea
-          @input="$emit('update', $event.target.value)"
+          @input="onInput"
           v-bind="$attrs"
           :class="{ small, prefixed: prefix, suffixed: suffix }"
         ></textarea>
@@ -18,14 +18,42 @@
   </div>
 </template>
 
-<script>
-export default {
+<script lang="ts">
+import { defineComponent } from 'vue'
+
+export default defineComponent({
   inheritAttrs: false,
-  props: ["label", "small", "prefix", "suffix", "helper"],
-  model: {
-    event: "update",
+  props: {
+    label: {
+      type: String,
+    },
+    small: {
+      type: Boolean,
+    },
+    prefix: {
+      type: String,
+    },
+    suffix: {
+      type: String,
+    },
+    helper: {
+      type: String,
+    },
   },
-};
+
+  setup(props, {emit}){
+    const onInput = (event: any) => {
+      emit('update', event.value)
+    }
+
+    return {
+      onInput
+    }
+  },
+  model: {
+    event: 'update',
+  },
+})
 </script>
 
 <style lang="postcss" scoped>
@@ -105,11 +133,11 @@ textarea {
   }
 
   &:invalid {
-    border: 1px solid theme("colors.yellow.500");
+    border: 1px solid theme('colors.yellow.500');
   }
 
   &:focus {
-    border: 1px solid theme("colors.primary.500");
+    border: 1px solid theme('colors.primary.500');
   }
 
   &:disabled {
