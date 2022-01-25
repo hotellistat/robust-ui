@@ -195,7 +195,7 @@
 </template>
 
 <script lang="ts">
-import HsPopper from '../../utils/Popper'
+import HsPopper from '../Popper/Popper'
 import HsCalendar from '../Calendar/Calendar.vue'
 import HsButton from '../Button/Button.vue'
 import HsCheckbox from '../Checkbox/Checkbox.vue'

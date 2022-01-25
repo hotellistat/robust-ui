@@ -85,8 +85,6 @@ import {
   watch,
 } from 'vue'
 export default defineComponent({
-  name: 'BaseSlider',
-
   props: {
     name: String,
     tabindex: [String, Number],

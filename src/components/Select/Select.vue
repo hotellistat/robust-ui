@@ -81,7 +81,7 @@
 </template>
 
 <script lang="ts">
-import BasePopper from '../../utils/Popper'
+import BasePopper from '../Popper/Popper'
 import {
   ref,
   computed,

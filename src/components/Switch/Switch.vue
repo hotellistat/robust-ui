@@ -29,7 +29,6 @@
 import { computed, defineComponent, PropType, toRefs } from 'vue'
 
 export default defineComponent({
-  name: 'BaseSwitch',
   props: {
     title: {
       type: String,
