@@ -29,8 +29,17 @@ yarn add @hotellistat/robust-ui
 then you can import the available components like so
 
 ```vue
-import { Button } from '@hotellistat/robust-ui'
+import { HsButton } from '@hotellistat/robust-ui'
 ```
+
+## Publishing a new version
+
+To publish a new version you will need to follow these simple steps:
+
+1. Bump the version in the package.json (e.g. 1.0.2) and commit it
+2. Tag you commit with the corresponding version. Tags need to be prefixed with a "v" (e.g. v1.0.2) and give it a description
+3. Run `git push --follow-tags` to push the tags and your commit at the same time
+4. The github action should take care of publishing the new version to npm
 
 ## Available commands
 
