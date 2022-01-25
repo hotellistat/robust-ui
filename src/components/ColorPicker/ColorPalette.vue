@@ -1,25 +1,18 @@
 <template>
   <div
-    class="
-      p-4
-      grid
-      sm:grid-cols-6
-      grid-cols-3
-      gap-x-3 gap-y-3
-      place-items-center
-    "
+    class="grid grid-cols-3 place-items-center gap-x-3 gap-y-3 p-4 sm:grid-cols-6"
   >
     <div
       v-for="(color, index) in colors"
       :key="index"
-      class="flex flex-col gap-y-1 items-center cursor-pointer"
+      class="flex cursor-pointer flex-col items-center gap-y-1"
     >
       <div
         class="h-8 w-16 rounded-md"
         :style="{ background: color }"
         @click="selectedColor(color)"
       ></div>
-      <div class="sm:block hidden">{{ color }}</div>
+      <div class="hidden sm:block">{{ color }}</div>
     </div>
   </div>
 </template>

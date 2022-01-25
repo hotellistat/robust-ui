@@ -1,4 +1,4 @@
-import "./styles/tailwindcss.css"
+import './styles/tailwindcss.css'
 
 export { lockScroll, unlockScroll } from './utils/scrollLock'
 
@@ -10,6 +10,7 @@ export { default as HsColorPicker } from './components/ColorPicker/ColorPicker.v
 export { default as HsContentBox } from './components/ContentBox/ContentBox.vue'
 export { default as HsInput } from './components/Input/Input.vue'
 export { default as HsInputWrapper } from './components/InputWrapper/InputWrapper.vue'
+export { default as HsModal } from './components/Modal/Modal.vue'
 export { default as HsRadio } from './components/Radio/Radio.vue'
 export { default as HsSelect } from './components/Select/Select.vue'
 export { default as HsSlider } from './components/Slider/Slider.vue'

@@ -1,23 +1,22 @@
+import '../src/styles/main.postcss'
+import '../src/styles/storybook.postcss'
 
-import "../src/styles/main.postcss"
-import "../src/styles/storybook.postcss"
-
-import { app } from '@storybook/vue3';
-import clickOutside from "../src/directives/click-outside";
-import PhosphorVue from "phosphor-vue"
+import { app } from '@storybook/vue3'
+import clickOutside from '../src/directives/click-outside'
+import PhosphorVue from 'phosphor-vue'
 
 app.use(PhosphorVue)
-app.directive("click-outside", clickOutside);
+app.directive('click-outside', clickOutside)
 
 export const parameters = {
-  actions: { argTypesRegex: "^on[A-Z].*" },
+  actions: { argTypesRegex: '^on[A-Z].*' },
   layout: 'centered',
   backgrounds: {
-    disable: true
+    disable: true,
   },
   themes: {
     clearable: false,
-    default: "Light",
+    default: 'Light',
     list: [
       {
         name: 'Light',
@@ -27,8 +26,8 @@ export const parameters = {
       {
         name: 'Dark',
         class: ['dark', 'dark-mode'],
-        color: '#111827'
-      }
-    ]
-  }
+        color: '#111827',
+      },
+    ],
+  },
 }

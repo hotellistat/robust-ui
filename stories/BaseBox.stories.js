@@ -4,8 +4,8 @@ export default {
   title: 'Ui/BaseBox',
   component: BaseBox,
   argTypes: {
-    title: { control: { type: 'text' } }
-  }
+    title: { control: { type: 'text' } },
+  },
 }
 
 const DefaultTemplate = (args) => ({
@@ -13,10 +13,10 @@ const DefaultTemplate = (args) => ({
       <div class="p-8 bg-gray-400 text-gray-600">content</div>
   </BaseBox>`,
   components: { BaseBox },
-  setup () {
+  setup() {
     console.log(args)
     return { args }
-  }
+  },
 })
 
 export const Default = DefaultTemplate.bind()
@@ -29,16 +29,16 @@ const TitleTemplate = (args) => ({
       <div class="p-8 bg-gray-400 text-gray-600">content</div>
   </BaseBox>`,
   components: { BaseBox },
-  setup () {
+  setup() {
     console.log(args)
     return { args }
-  }
+  },
 })
 
 export const Title = TitleTemplate.bind()
 
 Title.args = {
-  title: 'Input title'
+  title: 'Input title',
 }
 
 const TitlePropTemplate = (args) => ({
@@ -46,16 +46,16 @@ const TitlePropTemplate = (args) => ({
       <div class="p-8 bg-gray-400 text-gray-600">content</div>
   </BaseBox>`,
   components: { BaseBox },
-  setup () {
+  setup() {
     console.log(args)
     return { args }
-  }
+  },
 })
 
 export const TitleProp = TitlePropTemplate.bind()
 
 TitleProp.args = {
-  title: 'Input title'
+  title: 'Input title',
 }
 
 const StripeTemplate = (args) => ({
@@ -63,14 +63,14 @@ const StripeTemplate = (args) => ({
       <div class="p-8 bg-gray-400 text-gray-600">content</div>
   </BaseBox>`,
   components: { BaseBox },
-  setup () {
+  setup() {
     console.log(args)
     return { args }
-  }
+  },
 })
 
 export const Stripe = StripeTemplate.bind()
 
 Stripe.args = {
-  title: 'Input title'
+  title: 'Input title',
 }

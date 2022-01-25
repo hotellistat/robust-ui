@@ -2,37 +2,21 @@
   <div class="inline-block">
     <label
       :class="[$slots.title ? 'items-start' : 'items-center']"
-      class="vue-checkbox flex items-center cursor-pointer"
+      class="vue-checkbox flex cursor-pointer items-center"
     >
-      <input v-model="isChecked" :id="cuid" type="checkbox" class="hidden" />
+      <input :id="cuid" v-model="isChecked" type="checkbox" class="hidden" />
       <div
-        class="
-          vue-checkbox__inner
-          border
-          rounded-full
-          w-4
-          h-4
-          mr-2
-          relative
-          cursor-pointer
-          flex-shrink-0 flex-grow-0
-          box-content
-          transition-all
-          duration-100
-          flex
-          items-center
-          justify-center
-        "
+        class="vue-checkbox__inner relative mr-2 box-content flex h-4 w-4 flex-shrink-0 flex-grow-0 cursor-pointer items-center justify-center rounded-full border transition-all duration-100"
         :class="[
           isChecked
-            ? 'bg-primary-500 border-primary-500 text-white'
-            : 'bg-gray-100  dark:bg-gray-700 border-gray-300 dark:border-gray-600',
+            ? 'border-primary-500 bg-primary-500 text-white'
+            : 'border-gray-300  bg-gray-100 dark:border-gray-600 dark:bg-gray-700',
         ]"
       >
-        <div class="rounded-full bg-white h-1 w-1"></div>
+        <div class="h-1 w-1 rounded-full bg-white"></div>
       </div>
 
-      <div v-if="title && !$slots.title" class="select-none w-full leading-4">
+      <div v-if="title && !$slots.title" class="w-full select-none leading-4">
         {{ title }}
       </div>
       <div>

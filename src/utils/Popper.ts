@@ -3,7 +3,7 @@ import type {
   StrictModifiers,
   Instance,
   Options,
-  Modifier
+  Modifier,
 } from '@popperjs/core'
 import gsap from 'gsap'
 
@@ -16,34 +16,34 @@ import {
   PropType,
   ref,
   toRefs,
-  watch
+  watch,
 } from 'vue'
 
 export default defineComponent({
   props: {
     appendTo: {
       type: HTMLElement,
-      required: true
+      required: true,
     },
     options: {
-      type: Object as PropType<Object>
+      type: Object as PropType<Object>,
     },
     gpu: {
       type: Boolean,
-      default: true
+      default: true,
     },
     height: {
       type: [String, Number],
-      default: 230
+      default: 230,
     },
     open: {
       type: Boolean,
-      default: false
+      default: false,
     },
     modifiers: {
       type: Array as PropType<Array<Modifier<string, Record<string, unknown>>>>,
-      default: () => []
-    }
+      default: () => [],
+    },
   },
 
   setup(props, { emit, slots }) {
@@ -61,28 +61,28 @@ export default defineComponent({
           options: {
             roundOffsets: ({ x, y }: { x: number; y: number }) => ({
               x: Math.round(x),
-              y: Math.round(y)
-            })
-          }
+              y: Math.round(y),
+            }),
+          },
         },
         {
           name: 'offset',
           options: {
-            offset: [0, 8]
-          }
+            offset: [0, 8],
+          },
         },
         {
           name: 'preventOverflow',
           options: {
-            padding: 8
-          }
+            padding: 8,
+          },
         },
         {
           name: 'computeStyles',
-          options: { adaptive: true, gpuAcceleration: props.gpu }
+          options: { adaptive: true, gpuAcceleration: props.gpu },
         },
-        ...props.modifiers
-      ]
+        ...props.modifiers,
+      ],
     }
 
     function destroy() {
@@ -114,7 +114,7 @@ export default defineComponent({
     }
 
     onUnmounted(() => {
-      console.log("popper unmounted");
+      console.log('popper unmounted')
       destroy()
       root.value?.remove()
     })
@@ -133,7 +133,9 @@ export default defineComponent({
               if (popperArea) {
                 popperArea.appendChild(root.value)
               } else {
-                throw new Error("No popper area found. Make sure to have an element with the id 'popper-area' in the HTML")
+                throw new Error(
+                  "No popper area found. Make sure to have an element with the id 'popper-area' in the HTML"
+                )
               }
               nextTick(() => {
                 popper?.update()
@@ -141,38 +143,46 @@ export default defineComponent({
             }
             await init(appendTo.value)
             if (root.value) {
-              gsap.fromTo(root.value, {
-                scale: 0.9,
-                opacity: 0
-              },
-                {
-                  opacity: 1,
-                  scale: 1,
-                  duration: 0.1,
-                  ease: 'power1'
-                }
-              ).then(() => {
-                emit('opened')
-              })
+              gsap
+                .fromTo(
+                  root.value,
+                  {
+                    scale: 0.9,
+                    opacity: 0,
+                  },
+                  {
+                    opacity: 1,
+                    scale: 1,
+                    duration: 0.1,
+                    ease: 'power1',
+                  }
+                )
+                .then(() => {
+                  emit('opened')
+                })
             }
           } else {
             if (root.value) {
-              gsap.fromTo(root.value, {
-                scale: 1,
-                opacity: 1
-              },
-                {
-                  opacity: 0,
-                  scale: 0.9,
-                  duration: 0.1,
-                  ease: 'power1'
-                }
-              ).then(() => {
-                if (root.value) {
-                  destroy()
-                  render.value = false
-                }
-              })
+              gsap
+                .fromTo(
+                  root.value,
+                  {
+                    scale: 1,
+                    opacity: 1,
+                  },
+                  {
+                    opacity: 0,
+                    scale: 0.9,
+                    duration: 0.1,
+                    ease: 'power1',
+                  }
+                )
+                .then(() => {
+                  if (root.value) {
+                    destroy()
+                    render.value = false
+                  }
+                })
             }
           }
         })
@@ -182,7 +192,7 @@ export default defineComponent({
     return {
       appendTo,
       root,
-      render
+      render,
     }
   },
   render() {
@@ -194,12 +204,13 @@ export default defineComponent({
           onClick: (event: MouseEvent) => {
             event.stopPropagation()
           },
-          class: "bg-white border border-gray-200 dark:border-gray-700 dark:bg-gray-800 rounded-md overflow-hidden shadow-2xl"
+          class:
+            'bg-white border border-gray-200 dark:border-gray-700 dark:bg-gray-800 rounded-md overflow-hidden shadow-2xl',
         },
         this.$slots.default ? this.$slots.default() : undefined
       )
     } else {
       return undefined
     }
-  }
+  },
 })

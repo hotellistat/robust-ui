@@ -4,14 +4,14 @@
     :hint="hint"
     :error="error"
     :condensed="condensed"
-    @click="openDropdown"
     class="cursor-pointer"
+    @click="openDropdown"
   >
-    <template v-slot:default="slotProps">
+    <template #default="slotProps">
       <div
-        class="h-full flex items-center pr-2 text-gray-400"
-        :class="[condensed ? 'pl-2' : 'pl-3']"
         v-if="$slots.prefix"
+        class="flex h-full items-center pr-2 text-gray-400"
+        :class="[condensed ? 'pl-2' : 'pl-3']"
       >
         <slot tag="div" name="prefix" />
       </div>
@@ -19,80 +19,62 @@
         v-show="!open"
         :id="'select_' + cuid"
         ref="select"
-        class="
-          bg-transparent
-          w-full
-          h-full
-          text-current
-          outline-none
-          flex
-          items-center
-        "
+        class="flex h-full w-full items-center bg-transparent text-current outline-none"
         :class="[$slots.prefix || condensed ? 'pl-2' : 'pl-3']"
         v-bind="attrs"
       >
-        <div class="truncate min-w-0 select-none">
+        <div class="min-w-0 select-none truncate">
           {{ activeItem ? activeItem.title : 'Select' }}
         </div>
       </div>
       <input
         v-show="open"
+        ref="refSelectInput"
         v-model="search"
         size="1"
-        ref="refSelectInput"
-        class="bg-transparent block w-full h-full text-current outline-none"
+        class="block h-full w-full bg-transparent text-current outline-none"
         :class="[$slots.prefix || condensed ? 'pl-2' : 'pl-3']"
       />
 
       <div
-        class="h-full flex-shrink-0 flex items-center pr-2 text-gray-400"
+        class="flex h-full flex-shrink-0 items-center pr-2 text-gray-400"
         :class="[condensed ? 'pl-2' : 'pl-3']"
       >
         <ph-caret-down
           :size="18"
           class="transition-transform duration-200"
-          :class="{ 'transform rotate-180': open }"
+          :class="{ 'rotate-180 transform': open }"
         />
       </div>
 
       <base-popper
         v-if="slotProps.wrapperRef"
+        v-model:open="open"
+        v-click-outside="{ handler: blurDropdown, active: open }"
         class="z-[100] origin-top-left"
         :append-to="slotProps.wrapperRef"
-        @closed="resetFields"
-        v-click-outside="{ handler: blurDropdown, active: open }"
         :modifiers="popperModifiers"
-        v-model:open="open"
         :options="{
           placement: 'bottom-start',
         }"
+        @closed="resetFields"
       >
         <ul v-if="computedOptions.length > 0" class="max-h-40 overflow-auto">
           <li
-            class="
-              px-4
-              py-2
-              cursor-pointer
-              dark:hover:bg-gray-600
-              hover:bg-gray-100
-              transition-colors
-              duration-200
-              flex
-              items-center
-            "
-            @click="selectItem(option)"
             v-for="option in computedOptions"
             :key="option.value"
+            class="flex cursor-pointer items-center px-4 py-2 transition-colors duration-200 hover:bg-gray-100 dark:hover:bg-gray-600"
+            @click="selectItem(option)"
           >
             <span>{{ option.title }}</span>
             <ph-check
-              class="ml-auto text-gray-400"
               v-if="modelValue === option.value"
+              class="ml-auto text-gray-400"
               size="20"
             />
           </li>
         </ul>
-        <div v-else class="text-center py-2 text-gray-400">No options</div>
+        <div v-else class="py-2 text-center text-gray-400">No options</div>
       </base-popper>
     </template>
   </base-input-wrapper>
@@ -100,17 +82,25 @@
 
 <script lang="ts">
 import BasePopper from '../../utils/Popper'
-import { ref, computed, nextTick, toRefs, onMounted, defineComponent, PropType } from 'vue'
+import {
+  ref,
+  computed,
+  nextTick,
+  toRefs,
+  onMounted,
+  defineComponent,
+  PropType,
+} from 'vue'
 import BaseInputWrapper from '../InputWrapper/InputWrapper.vue'
 import { debouncedWatch } from '@vueuse/core'
 import { Modifier } from '@popperjs/core'
 
 export default defineComponent({
-  inheritAttrs: false,
   components: {
     BasePopper,
     BaseInputWrapper,
   },
+  inheritAttrs: false,
   props: {
     title: {
       type: String,
@@ -132,7 +122,7 @@ export default defineComponent({
       type: String,
     },
     options: {
-      type: Array as PropType<Array<{title: string, value: string | number}>>,
+      type: Array as PropType<Array<{ title: string; value: string | number }>>,
       required: true,
     },
 

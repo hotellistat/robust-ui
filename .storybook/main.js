@@ -1,4 +1,4 @@
-const path = require("path")
+const path = require('path')
 
 module.exports = {
   async viteFinal(config, { configType }) {
@@ -7,19 +7,19 @@ module.exports = {
       { find: 'vue', replacement: 'vue/dist/vue.esm-bundler.js' },
     ]
 
-    return config;
+    return config
   },
   stories: [
-    "../stories/**/*.stories.mdx",
-    "../stories/**/*.stories.@(js|jsx|ts|tsx)"
+    '../stories/**/*.stories.mdx',
+    '../stories/**/*.stories.@(js|jsx|ts|tsx)',
   ],
   addons: [
-    "storybook-addon-themes",
-    "@storybook/addon-links",
-    "@storybook/addon-essentials",
-    "@storybook/addon-docs"
+    'storybook-addon-themes',
+    '@storybook/addon-links',
+    '@storybook/addon-essentials',
+    '@storybook/addon-docs',
   ],
   core: {
-    builder: "storybook-builder-vite"
-  }
+    builder: 'storybook-builder-vite',
+  },
 }

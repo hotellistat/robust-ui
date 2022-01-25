@@ -60,7 +60,7 @@ export function hex2rgb(hex: any) {
   return {
     r: change(hex.slice(0, 2)),
     g: change(hex.slice(2, 4)),
-    b: change(hex.slice(4, 6))
+    b: change(hex.slice(4, 6)),
   }
 }
 export function rgb2rgba(rgba: any) {
@@ -70,7 +70,7 @@ export function rgb2rgba(rgba: any) {
       r: Number(rgba[0]) || 0,
       g: Number(rgba[1]) || 0,
       b: Number(rgba[2]) || 0,
-      a: Number(rgba[3] ? rgba[3] : 1) // Avoid the case of 0
+      a: Number(rgba[3] ? rgba[3] : 1), // Avoid the case of 0
     }
   } else {
     return rgba

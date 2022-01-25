@@ -9,30 +9,28 @@ export default {
     condensed: { control: { type: 'boolean' } },
     modelValue: { control: { type: 'text' } },
     outline: { control: { type: 'boolean' } },
-
-
-  }
+  },
 }
 
 const DefaultTemplate = (args) => ({
   template: '<base-input v-bind="args"/>',
   components: { BaseInput },
-  setup () {
+  setup() {
     return { args }
-  }
+  },
 })
 
 export const Default = DefaultTemplate.bind()
 
 Default.args = {
-  title: 'Input title'
+  title: 'Input title',
 }
 
 export const Hint = DefaultTemplate.bind()
 
 Hint.args = {
   title: 'Input title',
-  hint: 'This is an input hint. It is supposed to help the user understand the reason this input exists and what it does'
+  hint: 'This is an input hint. It is supposed to help the user understand the reason this input exists and what it does',
 }
 
 export const ErrorHint = DefaultTemplate.bind()
@@ -41,5 +39,6 @@ ErrorHint.args = {
   title: 'Input title',
   hint: 'This is an input hint. It is supposed to help the user understand the reason this input exists and what it does',
 
-  error: 'This is an input error. It tells the user, that there is something wrong with the current input state'
+  error:
+    'This is an input error. It tells the user, that there is something wrong with the current input state',
 }

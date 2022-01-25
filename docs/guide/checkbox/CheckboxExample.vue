@@ -5,13 +5,13 @@
   </div>
   <div style="margin-bottom: 16px">
     <p>State: {{ state }}</p>
-    <Checkbox label="Checkbox" v-model="state" />
+    <Checkbox v-model="state" label="Checkbox" />
   </div>
   <div style="margin-bottom: 16px">
-    <Checkbox label="Unchecked disabled" :modelValue="false" disabled />
+    <Checkbox label="Unchecked disabled" :model-value="false" disabled />
   </div>
   <div style="margin-bottom: 16px">
-    <Checkbox label="Checked disabled" :modelValue="true" disabled />
+    <Checkbox label="Checked disabled" :model-value="true" disabled />
   </div>
 </template>
 <script>

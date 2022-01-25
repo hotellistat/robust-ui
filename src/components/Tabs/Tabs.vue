@@ -1,24 +1,18 @@
 <template>
   <div
     ref="root"
-    class="relative flex justify-start select-none overflow-x-auto"
+    class="relative flex select-none justify-start overflow-x-auto"
   >
     <div
       v-for="tab in tabs"
       :key="(tab.value as any)"
       :ref="registerTab"
       :data-value="tab.value"
-      class="
-        whitespace-no-wrap
-        border-b-2
-        font-medium
-        flex-shrink-0
-        cursor-pointer
-      "
+      class="whitespace-no-wrap flex-shrink-0 cursor-pointer border-b-2 font-medium"
       :class="[
         tab.value === modelValue
           ? 'border-primary-500'
-          : 'dark:border-gray-700 text-gray-400 dark:text-gray-500',
+          : 'text-gray-400 dark:border-gray-700 dark:text-gray-500',
       ]"
     >
       <slot name="tab" :tab="tab" :select="() => select(tab.value)">

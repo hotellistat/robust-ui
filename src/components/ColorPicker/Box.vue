@@ -8,33 +8,33 @@
 </template>
 
 <script lang="ts">
-import { computed, defineComponent } from "vue";
+import { computed, defineComponent } from 'vue'
 
 export default defineComponent({
   props: {
     name: {
       type: String,
-      default: "",
+      default: '',
     },
     color: {
       type: String,
-      default: "",
+      default: '',
     },
   },
   setup(props, { emit }) {
     const modelColor = computed({
       get() {
-        return props.color || "";
+        return props.color || ''
       },
       set(val) {
-        emit("inputColor", val);
+        emit('inputColor', val)
       },
-    });
+    })
     return {
       modelColor,
-    };
+    }
   },
-});
+})
 </script>
 
 <style>

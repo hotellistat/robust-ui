@@ -1,103 +1,53 @@
 <template>
   <div
-    class="select-none p-4 grid grid-cols-1 gap-8"
+    class="grid select-none grid-cols-1 gap-8 p-4"
     :class="{ 'lg:grid-cols-3': Array.isArray(modelValue) }"
   >
-    <div class="flex text-lg font-semibold items-center text-center4">
+    <div class="text-center4 flex items-center text-lg font-semibold">
       <div
-        class="
-          h-7
-          w-7
-          flex
-          items-center
-          justify-center
-          cursor-pointer
-          rounded-full
-          text-gray-500
-          hover:text-gray-700 hover:bg-gray-100
-          dark:hover:text-gray-200 dark:hover:bg-gray-600
-          active:bg-gray-200
-        "
+        class="flex h-7 w-7 cursor-pointer items-center justify-center rounded-full text-gray-500 hover:bg-gray-100 hover:text-gray-700 active:bg-gray-200 dark:hover:bg-gray-600 dark:hover:text-gray-200"
         @click="subYear"
       >
         <ph-caret-double-left size="18" />
       </div>
       <div
-        class="
-          h-7
-          w-7
-          flex
-          items-center
-          justify-center
-          cursor-pointer
-          rounded-full
-          text-gray-500
-          hover:text-gray-700 hover:bg-gray-100
-          dark:hover:text-gray-200 dark:hover:bg-gray-600
-          active:bg-gray-200
-        "
+        class="flex h-7 w-7 cursor-pointer items-center justify-center rounded-full text-gray-500 hover:bg-gray-100 hover:text-gray-700 active:bg-gray-200 dark:hover:bg-gray-600 dark:hover:text-gray-200"
         @click="subMonth"
       >
         <ph-caret-left type="chevron-left" size="18" />
       </div>
-      <div class="flex-1 flex justify-center">
+      <div class="flex flex-1 justify-center">
         <div
-          class="
-            hover:bg-gray-100
-            dark:hover:bg-gray-600
-            rounded-lg
-            px-2
-            cursor-pointer
+          class="cursor-pointer rounded-lg px-2 hover:bg-gray-100 dark:hover:bg-gray-600"
+          @click="
+            () => {
+              showMonthSelection()
+              hideYearSelection()
+            }
           "
-          @click="showMonthSelection() && hideYearSelection()"
         >
           {{ monthHeading }}
         </div>
         <div
-          class="
-            hover:bg-gray-100
-            dark:hover:bg-gray-600
-            rounded-lg
-            px-2
-            cursor-pointer
+          class="cursor-pointer rounded-lg px-2 hover:bg-gray-100 dark:hover:bg-gray-600"
+          @click="
+            () => {
+              showYearSelection()
+              hideMonthSelection()
+            }
           "
-          @click="showYearSelection() && hideMonthSelection()"
         >
           {{ yearHeading }}
         </div>
       </div>
       <div
-        class="
-          h-7
-          w-7
-          flex
-          items-center
-          justify-center
-          cursor-pointer
-          rounded-full
-          text-gray-500
-          hover:text-gray-700 hover:bg-gray-100
-          dark:hover:text-gray-200 dark:hover:bg-gray-600
-          active:bg-gray-200
-        "
+        class="flex h-7 w-7 cursor-pointer items-center justify-center rounded-full text-gray-500 hover:bg-gray-100 hover:text-gray-700 active:bg-gray-200 dark:hover:bg-gray-600 dark:hover:text-gray-200"
         @click="addMonth"
       >
         <ph-caret-right type="chevron-right" size="18" />
       </div>
       <div
-        class="
-          h-7
-          w-7
-          flex
-          items-center
-          justify-center
-          cursor-pointer
-          rounded-full
-          text-gray-500
-          hover:text-gray-700 hover:bg-gray-100
-          dark:hover:text-gray-200 dark:hover:bg-gray-600
-          active:bg-gray-200
-        "
+        class="flex h-7 w-7 cursor-pointer items-center justify-center rounded-full text-gray-500 hover:bg-gray-100 hover:text-gray-700 active:bg-gray-200 dark:hover:bg-gray-600 dark:hover:text-gray-200"
         @click="addYear"
       >
         <ph-caret-double-right type="chevrons-right" size="18" />
@@ -111,25 +61,22 @@
     </h1>
 
     <div>
-      <div v-if="showMonthSelectionActive" class="grid grid-cols-3 gap-4 h-60">
+      <div v-if="showMonthSelectionActive" class="grid h-60 grid-cols-3 gap-4">
         <div
           v-for="(month, index) in months"
-          class="
-            py-2
-            text-center
-            rounded-lg
-            cursor-pointer
-            flex
-            items-center
-            justify-center
-          "
+          :key="index"
+          class="flex cursor-pointer items-center justify-center rounded-lg py-2 text-center"
           :class="[
             activeMonth === index
               ? 'bg-primary-500 text-white'
               : 'hover:bg-gray-100 dark:hover:bg-gray-600',
           ]"
-          @click="setMonth(index) && hideMonthSelection()"
-          :key="index"
+          @click="
+            () => {
+              setMonth(index)
+              hideMonthSelection()
+            }
+          "
         >
           {{ month.title }}
         </div>
@@ -137,20 +84,25 @@
 
       <div
         v-if="showYearSelectionActive"
-        class="h-60 overflow-y-auto flex flex-col gap-2"
+        class="flex h-60 flex-col gap-2 overflow-y-auto"
       >
         <div
-          class="text-center py-2 cursor-pointer rounded-lg"
+          v-for="year in yearSelectionYears"
           :ref="(ref) => (refYearEntry[year] = ref)"
           :key="year"
+          class="cursor-pointer rounded-lg py-2 text-center"
           :class="[
             activeYear === year
               ? 'bg-primary-500 text-white'
               : 'hover:bg-gray-100 dark:hover:bg-gray-600',
           ]"
           :data-year="year"
-          v-for="year in yearSelectionYears"
-          @click="setYear(year) && hideYearSelection()"
+          @click="
+            () => {
+              setYear(year)
+              hideYearSelection()
+            }
+          "
         >
           {{ year }}
         </div>
@@ -160,30 +112,30 @@
         v-if="!showMonthSelectionActive && !showYearSelectionActive"
         class="grid grid-cols-7 gap-y-2 font-courier"
       >
-        <div class="text-center pb-2 text-gray-500 dark:text-gray-400">Mon</div>
-        <div class="text-center pb-2 text-gray-500 dark:text-gray-400">Tue</div>
-        <div class="text-center pb-2 text-gray-500 dark:text-gray-400">Wed</div>
-        <div class="text-center pb-2 text-gray-500 dark:text-gray-400">Thu</div>
-        <div class="text-center pb-2 text-gray-500 dark:text-gray-400">Fri</div>
-        <div class="text-center pb-2 text-gray-500 dark:text-gray-400">Sat</div>
-        <div class="text-center pb-2 text-gray-500 dark:text-gray-400">Sun</div>
+        <div class="pb-2 text-center text-gray-500 dark:text-gray-400">Mon</div>
+        <div class="pb-2 text-center text-gray-500 dark:text-gray-400">Tue</div>
+        <div class="pb-2 text-center text-gray-500 dark:text-gray-400">Wed</div>
+        <div class="pb-2 text-center text-gray-500 dark:text-gray-400">Thu</div>
+        <div class="pb-2 text-center text-gray-500 dark:text-gray-400">Fri</div>
+        <div class="pb-2 text-center text-gray-500 dark:text-gray-400">Sat</div>
+        <div class="pb-2 text-center text-gray-500 dark:text-gray-400">Sun</div>
 
         <div
-          class="day__offset"
           v-for="offset in firstWeekday"
           :key="offset + '_offset'"
+          class="day__offset"
         ></div>
         <div
           v-for="day in daysInMonth"
           :key="day + '_day'"
-          class="flex justify-center relative"
-          @click="daySelect(day)"
+          class="relative flex justify-center"
           :disabled="!dayAllowed(day)"
           :class="[isBetweenRange(day) ? 'bg-primary-500 text-white' : '']"
+          @click="daySelect(day)"
         >
           <div
             v-if="isLast(day) || isFirst(day)"
-            class="absolute h-full bg-primary-500 z-0"
+            class="absolute z-0 h-full bg-primary-500"
             :class="[
               isFirst(day)
                 ? 'right-0 w-1/2'
@@ -193,19 +145,9 @@
             ]"
           ></div>
           <span
-            class="
-              h-8
-              w-8
-              rounded-full
-              flex
-              items-center
-              justify-center
-              pt-0.5
-              cursor-pointer
-              z-[10]
-            "
+            class="z-[10] flex h-8 w-8 cursor-pointer items-center justify-center rounded-full pt-0.5"
             :class="[
-              activeDay(day) ? 'text-white bg-primary-500 rounded-0' : '',
+              activeDay(day) ? 'rounded-0 bg-primary-500 text-white' : '',
               isBetweenRange(day) || isLast(day) || isFirst(day)
                 ? 'hover:bg-primary-400 dark:hover:bg-primary-400'
                 : 'hover:bg-gray-100 dark:hover:bg-gray-600',
@@ -217,90 +159,60 @@
     </div>
     <div
       v-if="Array.isArray(modelValue)"
-      class="flex flex-col items-start w-full"
+      class="flex w-full flex-col items-start"
     >
       <label
-        class="block font-medium mb-1 text-gray-500 dark:text-gray-400 text-sm"
+        class="mb-1 block text-sm font-medium text-gray-500 dark:text-gray-400"
         >From</label
       >
       <input-component
-        placeholder="Date"
         v-model="from"
+        placeholder="Date"
         :error="errorFrom"
-        class="w-full mb-2"
+        class="mb-2 w-full"
       />
 
       <label
-        class="block font-medium mb-1 text-gray-500 dark:text-gray-400 text-sm"
+        class="mb-1 block text-sm font-medium text-gray-500 dark:text-gray-400"
         >To</label
       >
       <input-component
-        placeholder="Date"
         v-model="to"
+        placeholder="Date"
         :error="errorTo"
-        class="w-full mb-2"
+        class="mb-2 w-full"
       />
       <slot />
     </div>
-    <div v-if="Array.isArray(modelValue)" class="flex flex-col w-full">
+    <div v-if="Array.isArray(modelValue)" class="flex w-full flex-col">
       <div class="flex flex-row sm:flex-col">
         <div>
           <div
-            class="
-              cursor-pointer
-              p-1
-              rounded-md
-              hover:bg-gray-300
-              dark:hover:bg-gray-500
-            "
+            class="cursor-pointer rounded-md p-1 hover:bg-gray-300 dark:hover:bg-gray-500"
             @click="todayRange"
           >
             Today
           </div>
           <div
-            class="
-              cursor-pointer
-              p-1
-              rounded-md
-              hover:bg-gray-300
-              dark:hover:bg-gray-500
-            "
+            class="cursor-pointer rounded-md p-1 hover:bg-gray-300 dark:hover:bg-gray-500"
             @click="yesterDay"
           >
             Yesterday
           </div>
           <div
-            class="
-              cursor-pointer
-              p-1
-              rounded-md
-              hover:bg-gray-300
-              dark:hover:bg-gray-500
-            "
+            class="cursor-pointer rounded-md p-1 hover:bg-gray-300 dark:hover:bg-gray-500"
             @click="thisMonthSoFar"
           >
             This month so far
           </div>
           <div
-            class="
-              cursor-pointer
-              p-1
-              rounded-md
-              hover:bg-gray-300
-              dark:hover:bg-gray-500
-            "
+            class="cursor-pointer rounded-md p-1 hover:bg-gray-300 dark:hover:bg-gray-500"
             @click="thisMonth"
           >
             This month
           </div>
           <div
-            class="
-              cursor-pointer
-              p-1
-              rounded-md
-              hover:bg-gray-300
-              dark:hover:bg-gray-500
-            "
+            class="cursor-pointer rounded-md p-1 hover:bg-gray-300 dark:hover:bg-gray-500"
             @click="thisYear"
           >
             This year
@@ -309,49 +221,25 @@
 
         <div>
           <div
-            class="
-              cursor-pointer
-              p-1
-              rounded-md
-              hover:bg-gray-300
-              dark:hover:bg-gray-500
-            "
+            class="cursor-pointer rounded-md p-1 hover:bg-gray-300 dark:hover:bg-gray-500"
             @click="thisYearSoFar"
           >
             This year so far
           </div>
           <div
-            class="
-              cursor-pointer
-              p-1
-              rounded-md
-              hover:bg-gray-300
-              dark:hover:bg-gray-500
-            "
+            class="cursor-pointer rounded-md p-1 hover:bg-gray-300 dark:hover:bg-gray-500"
             @click="lastWeek"
           >
             Last week
           </div>
           <div
-            class="
-              cursor-pointer
-              p-1
-              rounded-md
-              hover:bg-gray-300
-              dark:hover:bg-gray-500
-            "
+            class="cursor-pointer rounded-md p-1 hover:bg-gray-300 dark:hover:bg-gray-500"
             @click="lastMonth"
           >
             Last month
           </div>
           <div
-            class="
-              cursor-pointer
-              p-1
-              rounded-md
-              hover:bg-gray-300
-              dark:hover:bg-gray-500
-            "
+            class="cursor-pointer rounded-md p-1 hover:bg-gray-300 dark:hover:bg-gray-500"
             @click="lastYear"
           >
             Last year
@@ -362,7 +250,7 @@
   </div>
 </template>
 
-<script>
+<script lang="ts">
 import InputComponent from '../Input/Input.vue'
 import {
   subYears,
@@ -388,13 +276,22 @@ import {
   endOfWeek,
   isValid,
 } from 'date-fns'
-import { computed, nextTick, onMounted, ref, toRefs, watch } from 'vue'
+import {
+  computed,
+  defineComponent,
+  nextTick,
+  onMounted,
+  PropType,
+  ref,
+  toRefs,
+  watch,
+} from 'vue'
 
-export default {
-  inheritAttrs: false,
+export default defineComponent({
   components: {
     InputComponent,
   },
+  inheritAttrs: false,
   props: {
     date: {
       type: Date,
@@ -413,12 +310,11 @@ export default {
       default: true,
     },
     modelValue: {
-      type: [Array, Date],
-    },
-    rangeColors: {
-      type: Object,
+      type: [Array, Date] as PropType<[Date, Date] | Date>,
+      default: undefined,
     },
   },
+  emits: ['update:modelValue', 'click:relativeDate'],
   setup(props, { emit }) {
     const { future, past, today, modelValue } = toRefs(props)
 
@@ -975,5 +871,5 @@ export default {
       yearSelectionYears,
     }
   },
-}
+})
 </script>

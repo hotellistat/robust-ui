@@ -3,17 +3,17 @@
     <label>
       <span class="label-name">{{ label }}</span>
       <div class="input-section">
-        <div class="prefix" :class="{ small }" v-if="prefix">{{ prefix }}</div>
+        <div v-if="prefix" class="prefix" :class="{ small }">{{ prefix }}</div>
 
         <textarea
-          @input="onInput"
           v-bind="$attrs"
           :class="{ small, prefixed: prefix, suffixed: suffix }"
+          @input="onInput"
         ></textarea>
 
-        <div class="suffix" :class="{ small }" v-if="suffix">{{ suffix }}</div>
+        <div v-if="suffix" class="suffix" :class="{ small }">{{ suffix }}</div>
       </div>
-      <div class="helper" v-if="helper">{{ helper }}</div>
+      <div v-if="helper" class="helper">{{ helper }}</div>
     </label>
   </div>
 </template>
@@ -23,6 +23,9 @@ import { defineComponent } from 'vue'
 
 export default defineComponent({
   inheritAttrs: false,
+  model: {
+    event: 'update',
+  },
   props: {
     label: {
       type: String,
@@ -41,17 +44,14 @@ export default defineComponent({
     },
   },
 
-  setup(props, {emit}){
+  setup(props, { emit }) {
     const onInput = (event: any) => {
       emit('update', event.value)
     }
 
     return {
-      onInput
+      onInput,
     }
-  },
-  model: {
-    event: 'update',
   },
 })
 </script>

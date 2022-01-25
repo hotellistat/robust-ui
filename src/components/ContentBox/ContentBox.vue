@@ -1,13 +1,6 @@
 <template>
   <div
-    class="
-      bg-white
-      dark:bg-gray-800
-      rounded-md
-      overflow-hidden
-      border border-gray-200
-      dark:border-gray-700
-    "
+    class="overflow-hidden rounded-md border border-gray-200 bg-white dark:border-gray-700 dark:bg-gray-800"
   >
     <div class="p-4 sm:p-6">
       <div class="flex">
@@ -34,7 +27,8 @@
   </div>
 </template>
 
-<script lang="ts">import { defineComponent } from "vue"
+<script lang="ts">
+import { defineComponent } from 'vue'
 
 export default defineComponent({
   props: {

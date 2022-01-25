@@ -5,20 +5,25 @@ export default {
   component: BaseButton,
   argTypes: {
     onClick: { action: 'clicked' },
-    variant: { control: { type: 'select', options: ['primary', 'warn', 'muted', 'transparent'] } },
+    variant: {
+      control: {
+        type: 'select',
+        options: ['primary', 'warn', 'muted', 'transparent'],
+      },
+    },
     loading: { control: { type: 'boolean' } },
     disabled: { control: { type: 'boolean' } },
     condensed: { control: { type: 'boolean' } },
-    rounded: { control: { type: 'boolean' } }
-  }
+    rounded: { control: { type: 'boolean' } },
+  },
 }
 
 const DefaultTemplate = (args) => ({
   components: { BaseButton },
   template: '<base-button v-bind="args">Click here</base-button>',
-  setup () {
+  setup() {
     return { args }
-  }
+  },
 })
 
 export const Default = DefaultTemplate.bind({})
@@ -31,9 +36,9 @@ const PrefixTemplate = (args) => ({
   Click here
   </base-button>`,
   components: { BaseButton },
-  setup () {
+  setup() {
     return { args }
-  }
+  },
 })
 
 export const Prefix = PrefixTemplate.bind()
@@ -46,9 +51,9 @@ const SuffixTemplate = (args) => ({
   </template>
   </base-button>`,
   components: { BaseButton },
-  setup () {
+  setup() {
     return { args }
-  }
+  },
 })
 
 export const Suffix = SuffixTemplate.bind()

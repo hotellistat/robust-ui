@@ -5,27 +5,20 @@
     :error="(error as any)"
     :condensed="condensed"
   >
-    <template v-slot:default="slotProps">
+    <template #default="slotProps">
       <div
-        class="select-none h-full flex items-center pr-2 text-gray-400"
-        :class="[slotProps.condensed ? 'pl-2' : 'pl-3']"
         v-if="$slots.prefix"
+        class="flex h-full select-none items-center pr-2 text-gray-400"
+        :class="[slotProps.condensed ? 'pl-2' : 'pl-3']"
       >
         <slot tag="div" name="prefix" />
       </div>
       <input
-        size="8"
         :id="'input_' + slotProps.uid"
         ref="inputRef"
-        class="
-          bg-transparent
-          block
-          w-full
-          h-full
-          text-current
-          outline-none
-          dark:placeholder-gray-600
-        "
+        v-model="inputFieldValue"
+        size="8"
+        class="block h-full w-full bg-transparent text-current outline-none dark:placeholder-gray-600"
         :class="[
           $slots.prefix || slotProps.condensed ? 'pl-2' : 'pl-3',
           $slots.suffix || slotProps.condensed ? 'pr-2' : 'pr-3',
@@ -35,14 +28,13 @@
         ]"
         :readonly="slotProps.readonly"
         v-bind="$attrs"
-        v-model="inputFieldValue"
       />
       <div
-        class="select-none h-full flex items-center pl-2 text-gray-400 ml-auto"
-        :class="[slotProps.condensed ? 'pr-2' : 'pr-3']"
         v-if="$slots.suffix || slotProps.error"
+        class="ml-auto flex h-full select-none items-center pl-2 text-gray-400"
+        :class="[slotProps.condensed ? 'pr-2' : 'pr-3']"
       >
-        <slot tag="div" name="suffix" v-if="!slotProps.error" />
+        <slot v-if="!slotProps.error" tag="div" name="suffix" />
         <div v-else class="text-red-400">
           <ph-warning-circle size="20" class="block" />
         </div>
@@ -56,9 +48,14 @@ import { computed, defineComponent, ref } from 'vue'
 import BaseInputWrapper from '../InputWrapper/InputWrapper.vue'
 
 export default defineComponent({
+  components: {
+    BaseInputWrapper,
+  },
   props: {
-
-    title: String,
+    title: {
+      type: String,
+      default: undefined,
+    },
     hint: String,
     error: String,
     inputClass: String,
@@ -68,9 +65,6 @@ export default defineComponent({
       type: Boolean,
       default: false,
     },
-  },
-  components: {
-    BaseInputWrapper,
   },
   emits: ['update:modelValue', 'input', 'change'],
   setup(props, { emit, attrs }) {

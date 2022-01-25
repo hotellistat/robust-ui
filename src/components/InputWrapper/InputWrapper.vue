@@ -1,36 +1,19 @@
 <template>
   <div>
     <label
-      :for="'input_' + cuid"
       v-if="title"
-      class="
-        select-none
-        block
-        font-medium
-        text-gray-500
-        dark:text-gray-400
-        mb-1
-        text-sm
-      "
+      :for="'input_' + cuid"
+      class="mb-1 block select-none text-sm font-medium text-gray-500 dark:text-gray-400"
       >{{ title }}</label
     >
     <div
       v-bind="attrs"
       ref="wrapperRef"
-      class="
-        bg-gray-50
-        dark:bg-gray-900
-        rounded-md
-        overflow-hidden
-        border border-gray-200
-        dark:border-gray-700
-        flex
-        min-w-52
-      "
+      class="flex min-w-52 overflow-hidden rounded-md border border-gray-200 bg-gray-50 dark:border-gray-700 dark:bg-gray-900"
       :class="[
         condensed ? 'h-8' : 'h-10',
         {
-          'focus-within:outline-none focus-within:border-primary-500 focus-within:ring ring-opacity-30 ring-primary-500':
+          'ring-primary-500 ring-opacity-30 focus-within:border-primary-500 focus-within:outline-none focus-within:ring':
             !readonly,
         },
       ]"
@@ -38,13 +21,13 @@
       <slot v-bind="props" :wrapperRef="wrapperRef" />
     </div>
     <transition-group name="fade">
-      <div class="pt-1" v-if="hint || error">
-        <div class="select-none text-xs text-gray-400" v-if="hint">
+      <div v-if="hint || error" class="pt-1">
+        <div v-if="hint" class="select-none text-xs text-gray-400">
           {{ hint }}
         </div>
         <div
-          class="select-none text-xs text-red-400 dark:text-red-400"
           v-if="error"
+          class="select-none text-xs text-red-400 dark:text-red-400"
         >
           {{ error }}
         </div>
@@ -54,7 +37,7 @@
 </template>
 
 <script lang="ts">
-import { defineComponent, ref } from "vue";
+import { defineComponent, ref } from 'vue'
 export default defineComponent({
   props: {
     uid: String,
@@ -71,18 +54,18 @@ export default defineComponent({
     },
   },
   setup(props, { attrs }) {
-    const cuid = "_" + Math.random().toString(36).substr(2, 9);
+    const cuid = '_' + Math.random().toString(36).substr(2, 9)
 
-    const wrapperRef = ref();
+    const wrapperRef = ref()
 
     return {
       props,
       wrapperRef,
       attrs,
       cuid,
-    };
+    }
   },
-});
+})
 </script>
 
 <style lang="postcss" scoped>
@@ -94,7 +77,7 @@ export default defineComponent({
 .fade-enter-to,
 .fade-leave {
   opacity: 1;
-  padding-top: theme("spacing.1");
+  padding-top: theme('spacing.1');
 }
 .fade-enter-from,
 .fade-leave-to {

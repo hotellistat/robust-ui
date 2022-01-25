@@ -1,8 +1,8 @@
 <template>
   <div
+    ref="slider"
     class="base-slider"
     role="slider"
-    ref="slider"
     :aria-valuemax="moderatedMax()"
     :aria-valuemin="moderatedMin()"
     :aria-valuenow="localValue"
@@ -16,32 +16,32 @@
     @keydown.up.prevent="incrementValue"
   >
     <input
+      v-if="name"
       class="base-slider__hidden-input"
       type="hidden"
       :name="name"
       :value="value"
-      v-if="name"
     />
 
-    <div class="base-slider__icon" v-if="hasIcon">
+    <div v-if="hasIcon" class="base-slider__icon">
       <slot name="icon">
         <feather :type="icon" size="20" />
       </slot>
     </div>
 
     <div
-      class="base-slider__track"
       ref="track"
+      class="base-slider__track"
       @mousedown="onDragStart"
       @touchstart="onDragStart"
     >
       <div class="base-slider__track-background bg-gray-300 dark:bg-gray-500">
         <div v-if="snapToSteps">
           <span
-            class="base-slider__snap-point"
-            :style="{ left: 100 * relativeValue(point) + '%' }"
             v-for="(point, idx) in snapPoints"
             :key="idx"
+            class="base-slider__snap-point"
+            :style="{ left: 100 * relativeValue(point) + '%' }"
           ></span>
         </div>
       </div>
@@ -52,11 +52,11 @@
       ></div>
 
       <div
-        class="base-slider__thumb bg-primary-400"
         ref="thumb"
+        class="base-slider__thumb bg-primary-400"
         :style="thumbStyle"
       >
-        <div class="base-slider__marker text-xs" v-if="showMarker">
+        <div v-if="showMarker" class="base-slider__marker text-xs">
           <svg
             xmlns="http://www.w3.org/2000/svg"
             viewBox="0 0 24 24"
@@ -76,9 +76,16 @@
 </template>
 
 <script lang="ts">
-import { computed, defineComponent, onBeforeUnmount, onMounted, ref, watch } from "vue";
+import {
+  computed,
+  defineComponent,
+  onBeforeUnmount,
+  onMounted,
+  ref,
+  watch,
+} from 'vue'
 export default defineComponent({
-  name: "base-slider",
+  name: 'BaseSlider',
 
   props: {
     name: String,
@@ -118,237 +125,237 @@ export default defineComponent({
     },
   },
   setup(props, { emit }) {
-    const initialValue = ref(props.modelValue);
-    const isActive = ref(false);
-    const isDragging = ref(false);
-    const localValue = ref(props.modelValue);
-    const slider = ref();
-    const track = ref();
-    const thumb = ref();
+    const initialValue = ref(props.modelValue)
+    const isActive = ref(false)
+    const isDragging = ref(false)
+    const localValue = ref(props.modelValue)
+    const slider = ref()
+    const track = ref()
+    const thumb = ref()
 
     const classes = computed(() => {
       return [
-        { "is-dragging": isDragging.value },
-        { "is-disabled": props.disabled },
-        { "is-active": isActive.value },
-        { "has-icon": hasIcon },
-        { "has-marker": props.showMarker },
-      ];
-    });
+        { 'is-dragging': isDragging.value },
+        { 'is-disabled': props.disabled },
+        { 'is-active': isActive.value },
+        { 'has-icon': hasIcon },
+        { 'has-marker': props.showMarker },
+      ]
+    })
 
     const hasIcon = computed(() => {
-      return Boolean(props.icon);
-    });
+      return Boolean(props.icon)
+    })
 
     const fillStyle = computed(() => {
-      return { transform: "scaleX(" + relativeValue(localValue.value) + ")" };
-    });
+      return { transform: 'scaleX(' + relativeValue(localValue.value) + ')' }
+    })
 
     const thumbStyle = computed(() => {
       return {
-        left: relativeValue(localValue.value) * 100 + "%",
-      };
-    });
+        left: relativeValue(localValue.value) * 100 + '%',
+      }
+    })
 
     const markerText = computed(() => {
       return props.markerValue === undefined
         ? props.modelValue
-        : props.markerValue;
-    });
+        : props.markerValue
+    })
 
     const snapPoints = computed(() => {
-      const points = [];
-      let point = props.step * Math.ceil(moderatedMin() / props.step);
+      const points = []
+      let point = props.step * Math.ceil(moderatedMin() / props.step)
 
       while (point <= moderatedMax()) {
-        points.push(point);
-        point += props.step;
+        points.push(point)
+        point += props.step
       }
 
-      return points;
-    });
+      return points
+    })
 
     const moderatedMin = () => {
-      return props.max > props.min ? props.min : 0;
-    };
+      return props.max > props.min ? props.min : 0
+    }
 
     const moderatedMax = () => {
-      return props.max > props.min ? props.max : 100;
-    };
+      return props.max > props.min ? props.max : 100
+    }
 
     const focus = () => {
-      slider.value.focus();
-    };
+      slider.value.focus()
+    }
 
     const reset = () => {
-      setValue(initialValue);
-    };
+      setValue(initialValue)
+    }
 
     const onFocus = () => {
-      isActive.value = true;
-      emit("focus");
-    };
+      isActive.value = true
+      emit('focus')
+    }
 
     const onBlur = () => {
-      isActive.value = false;
-      emit("blur");
-    };
+      isActive.value = false
+      emit('blur')
+    }
 
     const onExternalClick = (e) => {
       if (!slider.value.contains(e.target)) {
-        onBlur();
+        onBlur()
       }
-    };
+    }
 
     const setValueWithSnap = (value) => {
-      value = moderateValue(value);
+      value = moderateValue(value)
 
       if (props.snapToSteps) {
-        value = getNearestSnapPoint(value);
+        value = getNearestSnapPoint(value)
       }
 
-      setValue(value);
-    };
+      setValue(value)
+    }
 
     const setValue = (value) => {
-      value = moderateValue(value);
+      value = moderateValue(value)
 
       if (value === localValue.value) {
-        return;
+        return
       }
 
-      localValue.value = value;
-      emit("update:modelValue", value);
-      emit("change", value);
-    };
+      localValue.value = value
+      emit('update:modelValue', value)
+      emit('change', value)
+    }
 
     const incrementValue = () => {
-      setValueWithSnap(localValue.value + props.step);
-    };
+      setValueWithSnap(localValue.value + props.step)
+    }
 
     const decrementValue = () => {
-      setValueWithSnap(localValue.value - props.step);
-    };
+      setValueWithSnap(localValue.value - props.step)
+    }
 
     const getTrackOffset = () => {
-      let el = track.value;
-      let offset = el.offsetLeft;
+      let el = track.value
+      let offset = el.offsetLeft
 
       while (el.offsetParent) {
-        el = el.offsetParent;
-        offset += el.offsetLeft;
+        el = el.offsetParent
+        offset += el.offsetLeft
       }
 
-      return offset;
-    };
+      return offset
+    }
 
     const getPointStyle = (point) => {
       return {
-        left: point + "%",
-      };
-    };
+        left: point + '%',
+      }
+    }
 
     const initializeSlider = () => {
-      document.addEventListener("touchend", onDragStop);
-      document.addEventListener("mouseup", onDragStop);
-      document.addEventListener("click", onExternalClick);
-      document.addEventListener("touchstart", onExternalClick);
-      initializeDrag();
-    };
+      document.addEventListener('touchend', onDragStop)
+      document.addEventListener('mouseup', onDragStop)
+      document.addEventListener('click', onExternalClick)
+      document.addEventListener('touchstart', onExternalClick)
+      initializeDrag()
+    }
 
     const teardownSlider = () => {
-      document.removeEventListener("touchend", onDragStop);
-      document.removeEventListener("mouseup", onDragStop);
-      document.removeEventListener("click", onExternalClick);
-    };
+      document.removeEventListener('touchend', onDragStop)
+      document.removeEventListener('mouseup', onDragStop)
+      document.removeEventListener('click', onExternalClick)
+    }
 
     const initializeDrag = () => {
-      const value = moderateValue(localValue.value ? localValue.value : 0);
-      setValue(value);
-    };
+      const value = moderateValue(localValue.value ? localValue.value : 0)
+      setValue(value)
+    }
 
     const onDragStart = (e) => {
       if (props.disabled) {
-        return;
+        return
       }
 
       if (!isActive.value) {
-        onFocus();
+        onFocus()
       }
 
-      isDragging.value = true;
-      dragUpdate(e);
+      isDragging.value = true
+      dragUpdate(e)
 
-      document.addEventListener("touchmove", onDragMove);
-      document.addEventListener("mousemove", onDragMove);
+      document.addEventListener('touchmove', onDragMove)
+      document.addEventListener('mousemove', onDragMove)
 
-      emit("dragstart", localValue.value, e);
-    };
+      emit('dragstart', localValue.value, e)
+    }
 
     const onDragMove = (e) => {
-      dragUpdate(e);
-    };
+      dragUpdate(e)
+    }
 
     const dragUpdate = (e) => {
-      const position = e.touches ? e.touches[0].pageX : e.pageX;
-      const trackLength = track.value.offsetWidth;
-      const relativeValue = (position - getTrackOffset()) / trackLength;
+      const position = e.touches ? e.touches[0].pageX : e.pageX
+      const trackLength = track.value.offsetWidth
+      const relativeValue = (position - getTrackOffset()) / trackLength
       const value = moderateValue(
         moderatedMin() + relativeValue * (moderatedMax() - moderatedMin())
-      );
+      )
 
       if (isDragging.value) {
-        setValue(Math.round(value));
+        setValue(Math.round(value))
       }
-    };
+    }
 
     const onDragStop = (e) => {
       if (isDragging.value) {
-        isDragging.value = false;
+        isDragging.value = false
 
         if (props.snapToSteps && props.modelValue % props.step !== 0) {
-          setValueWithSnap(props.modelValue);
+          setValueWithSnap(props.modelValue)
         }
 
-        document.removeEventListener("touchmove", onDragMove);
-        document.removeEventListener("mousemove", onDragMove);
+        document.removeEventListener('touchmove', onDragMove)
+        document.removeEventListener('mousemove', onDragMove)
 
-        emit("dragend", localValue.value, e);
+        emit('dragend', localValue.value, e)
       }
-    };
+    }
 
     const getNearestSnapPoint = (value) => {
-      const previousSnapPoint = Math.floor(value / props.step) * props.step;
-      const nextSnapPoint = previousSnapPoint + props.step;
-      const midpoint = (previousSnapPoint + nextSnapPoint) / 2;
+      const previousSnapPoint = Math.floor(value / props.step) * props.step
+      const nextSnapPoint = previousSnapPoint + props.step
+      const midpoint = (previousSnapPoint + nextSnapPoint) / 2
 
       if (previousSnapPoint < moderatedMin()) {
         if (nextSnapPoint > moderatedMax()) {
-          return value;
+          return value
         }
-        return nextSnapPoint;
+        return nextSnapPoint
       }
       if (value >= midpoint && nextSnapPoint <= moderatedMax()) {
-        return nextSnapPoint;
+        return nextSnapPoint
       }
-      return previousSnapPoint;
-    };
+      return previousSnapPoint
+    }
 
     const relativeValue = (value) => {
-      return (value - moderatedMin()) / (moderatedMax() - moderatedMin());
-    };
+      return (value - moderatedMin()) / (moderatedMax() - moderatedMin())
+    }
 
     const moderateValue = (value) => {
       if (value < moderatedMin()) {
-        return moderatedMin();
+        return moderatedMin()
       }
 
       if (value > moderatedMax()) {
-        return moderatedMax();
+        return moderatedMax()
       }
 
-      return value;
-    };
+      return value
+    }
 
     // debugging needs to be done
     /*watch(props.value, () => {
@@ -356,12 +363,12 @@ export default defineComponent({
     });*/
 
     onMounted(() => {
-      initializeSlider();
-    });
+      initializeSlider()
+    })
 
     onBeforeUnmount(() => {
-      teardownSlider();
-    });
+      teardownSlider()
+    })
 
     return {
       slider,
@@ -400,7 +407,7 @@ export default defineComponent({
       getNearestSnapPoint,
       relativeValue,
       moderateValue,
-    };
+    }
   },
 })
 </script>
@@ -465,7 +472,7 @@ export default defineComponent({
 }
 .base-slider__track-background,
 .base-slider__track-fill {
-  content: "";
+  content: '';
   display: block;
   height: 3px;
   left: 0;
@@ -503,7 +510,7 @@ export default defineComponent({
   background-color: #93c5fd;
   opacity: 0.3;
   border-radius: 50%;
-  content: "";
+  content: '';
   display: block;
   height: 36px;
   margin-left: -12px;

@@ -11,19 +11,22 @@ export default {
     perspectiveDate: { control: { type: 'date' } },
     comparePerspectiveDate: { control: { type: 'date' } },
     compareDate: { control: { type: 'array' } },
-    modelValue: { control: { type: 'array' }, default: [new Date(), new Date()] },
+    modelValue: {
+      control: { type: 'array' },
+      default: [new Date(), new Date()],
+    },
     outline: { control: { type: 'boolean' } },
-
-  }
+  },
 }
 
 const Template = (args) => ({
-  template: '<compound-datepicker class="p-2 col-span-2 sm:col-span-1" v-bind="args"></compound-datepicker>',
+  template:
+    '<compound-datepicker class="p-2 col-span-2 sm:col-span-1" v-bind="args"></compound-datepicker>',
   components: { CompoundDatepicker },
-  setup () {
+  setup() {
     console.log(args)
     return { args }
-  }
+  },
 })
 
 const date = [new Date(), new Date()]
@@ -35,5 +38,5 @@ Default.args = {
   daterange: modelValue,
   'onUpdate:daterange': (val) => {
     daterange.value = val
-  }
+  },
 }

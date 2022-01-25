@@ -4,8 +4,8 @@ export default {
   title: 'Ui/FormRenderer',
   components: { FormRenderer },
   argTypes: {
-    title: { control: { type: 'text' } }
-  }
+    title: { control: { type: 'text' } },
+  },
 }
 
 const DefaultTemplate = (args) => ({
@@ -14,17 +14,14 @@ const DefaultTemplate = (args) => ({
   `,
   components: { FormRenderer },
   setup() {
-
-    let schema = ref({
-
-    })
+    let schema = ref({})
 
     console.log(args)
     return {
       args,
-      schema
+      schema,
     }
-  }
+  },
 })
 
 export const Default = DefaultTemplate.bind()
@@ -35,8 +32,8 @@ Default.args = {
       name: 'name_first',
       rules: 'required',
       options: {
-        label: 'First name'
-      }
-    }
-  ]
+        label: 'First name',
+      },
+    },
+  ],
 }

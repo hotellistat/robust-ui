@@ -5,17 +5,17 @@ export default {
   title: 'Ui/BaseTabs',
   component: BaseTabs,
   argTypes: {
-    rounded: { control: { type: 'boolean' } }
-  }
+    rounded: { control: { type: 'boolean' } },
+  },
 }
 
 const DefaultTemplate = (args) => ({
   template: '<base-tabs v-bind="args" v-model="value"></base-tabs>',
   components: { BaseTabs },
-  setup () {
+  setup() {
     const value = ref('item_1')
     return { args, value }
-  }
+  },
 })
 
 export const Default = DefaultTemplate.bind()
@@ -24,17 +24,17 @@ Default.args = {
   tabs: [
     {
       title: 'Item 1',
-      value: 'item_1'
+      value: 'item_1',
     },
     {
       title: 'Item 2',
-      value: 'item_2'
+      value: 'item_2',
     },
     {
       title: 'Super long label that migh overflow on mobile',
-      value: 'item_3'
-    }
-  ]
+      value: 'item_3',
+    },
+  ],
 }
 
 const SlotTemplate = (args) => ({
@@ -50,10 +50,10 @@ const SlotTemplate = (args) => ({
 
   </base-tabs>`,
   components: { BaseTabs },
-  setup () {
+  setup() {
     const value = ref('item_1')
     return { args, value }
-  }
+  },
 })
 
 export const Slotted = SlotTemplate.bind()
@@ -62,15 +62,15 @@ Slotted.args = {
   tabs: [
     {
       title: 'Item 1',
-      value: 'item_1'
+      value: 'item_1',
     },
     {
       title: 'Item 2',
-      value: 'item_2'
+      value: 'item_2',
     },
     {
       title: 'Super long label that migh overflow on mobile',
-      value: 'item_3'
-    }
-  ]
+      value: 'item_3',
+    },
+  ],
 }

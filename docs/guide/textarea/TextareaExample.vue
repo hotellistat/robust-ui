@@ -5,13 +5,13 @@
   </div>
   <div style="margin-bottom: 16px">
     <p>Example with label - {{ labelText }}</p>
-    <Textarea label="Example text" v-model="labelText" />
+    <Textarea v-model="labelText" label="Example text" />
   </div>
   <div style="margin-bottom: 16px">
     <p>Example with placeholder - {{ placeholderLabelText }}</p>
     <Textarea
-      placeholder="Write something here"
       v-model="placeholderLabelText"
+      placeholder="Write something here"
     />
   </div>
   <div style="margin-bottom: 16px">
@@ -20,7 +20,7 @@
   </div>
   <div style="margin-bottom: 16px">
     <p>Example with required - {{ requiredText }}</p>
-    <Textarea label="I am required" v-model="requiredText" required />
+    <Textarea v-model="requiredText" label="I am required" required />
   </div>
   <div style="margin-bottom: 16px">
     <p>Resize Vertical</p>
@@ -50,7 +50,7 @@
     <p>Disabled with a label</p>
     <Textarea
       label="Oh :("
-      modelValue="Resize horizontalResize horizontalResize horizontalResize horizontalResize horizontalResize horizontalResize horizontalResize horizontalResize horizontalResize horizontalResize horizontalResize horizontalResize horizontalResize horizontalResize horizontalResize horizontalResize horizontalResize horizontalResize horizontalResize horizontalResize horizontalResize horizontalResize horizontalResize horizontalResize horizontalResize horizontalResize horizontalResize horizontalResize horizontalResize horizontalResize horizontalResize horizontalResize horizontalResize horizontalResize horizontalResize horizontalResize horizontalResize horizontalResize horizontalResize horizontalResize horizontalResize horizontalResize horizontal"
+      model-value="Resize horizontalResize horizontalResize horizontalResize horizontalResize horizontalResize horizontalResize horizontalResize horizontalResize horizontalResize horizontalResize horizontalResize horizontalResize horizontalResize horizontalResize horizontalResize horizontalResize horizontalResize horizontalResize horizontalResize horizontalResize horizontalResize horizontalResize horizontalResize horizontalResize horizontalResize horizontalResize horizontalResize horizontalResize horizontalResize horizontalResize horizontalResize horizontalResize horizontalResize horizontalResize horizontalResize horizontalResize horizontalResize horizontalResize horizontalResize horizontalResize horizontalResize horizontalResize horizontal"
       disabled
     />
   </div>

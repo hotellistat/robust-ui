@@ -37,7 +37,7 @@ export default defineComponent({
       default: '#000000',
     },
     colorsDefault: {
-      type: Array as PropType<String[]>,
+      type: Array as PropType<string[]>,
       required: true,
     },
     colorsHistoryKey: {

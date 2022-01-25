@@ -1,37 +1,16 @@
 <template>
-  <label class="cursor-pointer flex items-center gap-x-3">
-    <input class="hidden" type="checkbox" v-model="isChecked" />
+  <label class="flex cursor-pointer items-center gap-x-3">
+    <input v-model="isChecked" class="hidden" type="checkbox" />
     <div
-      class="
-        rounded-2xl
-        w-8
-        h-4
-        relative
-        border-4
-        box-content
-        shadow-md
-        transition-colors
-        duration-250
-      "
+      class="duration-250 relative box-content h-4 w-8 rounded-2xl border-4 shadow-md transition-colors"
       :class="
         isChecked
-          ? 'bg-primary-500 border-primary-500'
-          : 'bg-gray-400 border-gray-400'
+          ? 'border-primary-500 bg-primary-500'
+          : 'border-gray-400 bg-gray-400'
       "
     >
       <div
-        class="
-          absolute
-          top-0
-          left-0
-          bg-white
-          w-4
-          h-4
-          rounded-full
-          transition
-          duration-250
-          ease-in-out
-        "
+        class="duration-250 absolute top-0 left-0 h-4 w-4 rounded-full bg-white transition ease-in-out"
         :class="[isChecked ? 'translate-x-4' : '']"
       ></div>
     </div>

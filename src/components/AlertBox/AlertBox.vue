@@ -1,6 +1,6 @@
 <template>
   <div class="py-4 text-gray-500 dark:text-gray-400">
-    <div class="flex justify-center mb-2">
+    <div class="mb-2 flex justify-center">
       <component :is="icon" size="40" />
     </div>
     <div class="mx-auto text-center text-xl font-bold">

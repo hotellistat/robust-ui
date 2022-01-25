@@ -1,14 +1,14 @@
 <template>
   <div style="margin-bottom: 16px">
     <p>Selected value: {{ selectedValue }}</p>
-    <Radio name="example" :items="items" v-model="selectedValue" />
+    <Radio v-model="selectedValue" name="example" :items="items" />
   </div>
   <div style="margin-bottom: 16px">
     <p>Here is an example of a disabled radio group</p>
     <Radio
+      v-model="selectedValue"
       name="disabled-example"
       :items="items"
-      v-model="selectedValue"
       disabled
     />
   </div>

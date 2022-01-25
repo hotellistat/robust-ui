@@ -6,8 +6,8 @@ export default {
   component: BaseSwitch,
   argTypes: {
     title: { control: { type: 'text' } },
-    description: { control: { type: 'text' } }
-  }
+    description: { control: { type: 'text' } },
+  },
 }
 
 const DefaultTemplate = (args) => ({
@@ -16,7 +16,7 @@ const DefaultTemplate = (args) => ({
   setup() {
     const value = ref(false)
     return { args, value }
-  }
+  },
 })
 
 export const Default = DefaultTemplate.bind({})

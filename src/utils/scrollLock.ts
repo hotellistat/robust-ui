@@ -14,7 +14,7 @@ let previousBodyHeight
 let previousBodyPosition
 let previousScrollTop
 
-const isMobileOS = (userAgent) => {
+const isMobileOS = (userAgent?: string) => {
   const ua = userAgent || navigator.userAgent
   const ipad = /(iPad).*OS\s([\d_]+)/.test(ua)
   const iphone = !ipad && /(iPhone\sOS)\s([\d_]+)/.test(ua)

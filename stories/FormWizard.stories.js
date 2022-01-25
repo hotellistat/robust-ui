@@ -9,8 +9,8 @@ export default {
   title: 'Ui/FormWizard',
   components: { FormWizard },
   argTypes: {
-    title: { control: { type: 'text' } }
-  }
+    title: { control: { type: 'text' } },
+  },
 }
 
 const DefaultTemplate = (args) => ({
@@ -28,10 +28,10 @@ const DefaultTemplate = (args) => ({
   </FormWizard>
   `,
   components: { FormWizard, FormWizardFrame, BaseButton, BaseInput },
-  setup () {
+  setup() {
     console.log(args)
     return { args }
-  }
+  },
 })
 
 export const Default = DefaultTemplate.bind()
@@ -42,8 +42,8 @@ Default.args = {
       name: 'name_first',
       rules: 'required',
       options: {
-        label: 'First name'
-      }
-    }
-  ]
+        label: 'First name',
+      },
+    },
+  ],
 }

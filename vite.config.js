@@ -18,7 +18,7 @@ export default defineConfig({
         // Provide global variables to use in the UMD build
         // for externalized deps
         globals: {
-          'date-fns': "date-fns",
+          'date-fns': 'date-fns',
           vue: 'Vue',
         },
       },

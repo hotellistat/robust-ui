@@ -2,40 +2,30 @@
   <component
     :is="(tag as any)"
     :disabled="disabled"
-    class="
-      flex
-      items-center
-      justify-center
-      truncate
-      transition-color
-      duration-75
-      focus:ring
-      ring-opacity-50
-      font-medium
-    "
+    class="transition-color flex items-center justify-center truncate font-medium ring-opacity-50 duration-75 focus:ring"
     :class="[
       disabled
-        ? 'bg-gray-200 dark:bg-gray-700 text-gray-400 dark:text-gray-400'
+        ? 'bg-gray-200 text-gray-400 dark:bg-gray-700 dark:text-gray-400'
         : variantStyles,
       condensed ? 'h-8 px-3' : 'h-10 px-4',
       rounded ? 'rounded-full' : 'rounded-md',
     ]"
   >
     <div
-      class="transition-all duration-150 flex items-center select-none"
+      class="flex select-none items-center transition-all duration-150"
       :class="[loading ? 'opacity-0' : 'opacity-1']"
     >
-      <div class="mr-2" v-if="$slots.prefix">
+      <div v-if="$slots.prefix" class="mr-2">
         <slot tag="div" name="prefix" />
       </div>
       <div class="whitespace-no-wrap truncate">
         <slot />
       </div>
-      <div class="ml-2" v-if="$slots.suffix">
+      <div v-if="$slots.suffix" class="ml-2">
         <slot tag="div" name="suffix" />
       </div>
     </div>
-    <spinner v-if="loading" size="20px" class="absolute spinner" />
+    <spinner v-if="loading" size="20px" class="spinner absolute" />
   </component>
 </template>
 

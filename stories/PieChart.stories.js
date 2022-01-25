@@ -4,16 +4,16 @@ export default {
   title: 'Charts/PieChart',
   component: PieChart,
   argTypes: {
-    data: { control: { type: 'array' } }
-  }
+    data: { control: { type: 'array' } },
+  },
 }
 
 const Template = (args) => ({
   template: '<pie-chart v-bind="args"></pie-chart>',
   components: { PieChart },
-  setup () {
+  setup() {
     return { args }
-  }
+  },
 })
 
 export const Default = Template.bind({})
@@ -26,7 +26,7 @@ Default.args = {
     { display: 'wednesday', value: 200, disabled: false },
     { display: 'thusday', value: 150, disabled: false },
     { display: 'friday', value: 100, disabled: false },
-    { display: 'saturday', value: 310, disabled: false }
+    { display: 'saturday', value: 310, disabled: false },
   ],
-  overview: 'Test'
+  overview: 'Test',
 }

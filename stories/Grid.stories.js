@@ -1,29 +1,29 @@
 import Grid from '@/components/common/Grid.vue'
-import { ref, defineComponent, markRaw, watch } from "vue"
+import { ref, defineComponent, markRaw, watch } from 'vue'
 export default {
   title: 'Ui/Grid',
   component: Grid,
   parameters: {
-    layout: "fullscreen"
+    layout: 'fullscreen',
   },
   argTypes: {
     locked: {
       control: {
         type: 'boolean',
-        default: false
-      }
+        default: false,
+      },
     },
-  }
+  },
 }
 
 let component = defineComponent({
   props: {
     options: {
-      type: Object
-    }
+      type: Object,
+    },
   },
   render(h) {
-    return "hi" + JSON.stringify(this.options)
+    return 'hi' + JSON.stringify(this.options)
   },
 })
 
@@ -33,42 +33,42 @@ const DefaultTemplate = (args) => ({
   setup() {
     let widgets = ref([
       {
-        id: "test",
+        id: 'test',
         component: markRaw(component),
         options: {
-          key: "one"
+          key: 'one',
         },
         gridstack: {
           x: 1,
           y: 0,
           w: 3,
           h: 1,
-        }
+        },
       },
       {
-        id: "test1",
+        id: 'test1',
         component: markRaw(component),
         options: {
-          key: "one"
+          key: 'one',
         },
         gridstack: {
           x: 4,
           y: 4,
           w: 2,
-          h: 4
-        }
-      }
+          h: 4,
+        },
+      },
     ])
 
     watch(widgets, () => {
-      console.log("widgets update", widgets);
+      console.log('widgets update', widgets)
     })
 
     return {
       args,
-      widgets
+      widgets,
     }
-  }
+  },
 })
 
 export const Default = DefaultTemplate.bind()
