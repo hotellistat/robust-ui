@@ -4,6 +4,7 @@
   "description": "A lightweight Vue 3 component library",
   "repository": "hotellistat/robust-ui",
   "author": "Daniel Schneider <daniel.schneider@hotellistat.de>",
+  "license": "MIT",
   "files": [
     "dist"
   ],
