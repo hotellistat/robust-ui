@@ -2805,7 +2805,7 @@
     vscode-nls "^5.0.0"
     vscode-uri "^2.1.2"
 
-"@vue/compiler-core@3.2.28", "@vue/compiler-core@^3.2.27":
+"@vue/compiler-core@3.2.28":
   version "3.2.28"
   resolved "https://registry.npmjs.org/@vue/compiler-core/-/compiler-core-3.2.28.tgz"
   integrity sha512-mQpfEjmHVxmWKaup0HL6tLMv2HqjjJu7XT4/q0IoUXYXC4xKG8lIVn5YChJqxBTLPuQjzas7u7i9L4PAWJZRtA==
@@ -2815,7 +2815,7 @@
     estree-walker "^2.0.2"
     source-map "^0.6.1"
 
-"@vue/compiler-core@3.2.29":
+"@vue/compiler-core@3.2.29", "@vue/compiler-core@^3.2.27":
   version "3.2.29"
   resolved "https://registry.npmjs.org/@vue/compiler-core/-/compiler-core-3.2.29.tgz"
   integrity sha512-RePZ/J4Ub3sb7atQw6V6Rez+/5LCRHGFlSetT3N4VMrejqJnNPXKUt5AVm/9F5MJriy2w/VudEIvgscCfCWqxw==
@@ -2825,7 +2825,7 @@
     estree-walker "^2.0.2"
     source-map "^0.6.1"
 
-"@vue/compiler-dom@3.2.28", "@vue/compiler-dom@^3.2.0", "@vue/compiler-dom@^3.2.27":
+"@vue/compiler-dom@3.2.28":
   version "3.2.28"
   resolved "https://registry.npmjs.org/@vue/compiler-dom/-/compiler-dom-3.2.28.tgz"
   integrity sha512-KA4yXceLteKC7VykvPnViUixemQw3A+oii+deSbZJOQKQKVh1HLosI10qxa8ImPCyun41+wG3uGR+tW7eu1W6Q==
@@ -2833,7 +2833,7 @@
     "@vue/compiler-core" "3.2.28"
     "@vue/shared" "3.2.28"
 
-"@vue/compiler-dom@3.2.29":
+"@vue/compiler-dom@3.2.29", "@vue/compiler-dom@^3.2.0", "@vue/compiler-dom@^3.2.27":
   version "3.2.29"
   resolved "https://registry.npmjs.org/@vue/compiler-dom/-/compiler-dom-3.2.29.tgz"
   integrity sha512-y26vK5khdNS9L3ckvkqJk/78qXwWb75Ci8iYLb67AkJuIgyKhIOcR1E8RIt4mswlVCIeI9gQ+fmtdhaiTAtrBQ==
@@ -2965,12 +2965,12 @@
     "@vue/compiler-ssr" "3.2.28"
     "@vue/shared" "3.2.28"
 
-"@vue/shared@3.2.28", "@vue/shared@^3.2.27":
+"@vue/shared@3.2.28":
   version "3.2.28"
   resolved "https://registry.npmjs.org/@vue/shared/-/shared-3.2.28.tgz"
   integrity sha512-eMQ8s9j8FpbGHlgUAaj/coaG3Q8YtMsoWL/RIHTsE3Ex7PUTyr7V91vB5HqWB5Sn8m4RXTHGO22/skoTUYvp0A==
 
-"@vue/shared@3.2.29":
+"@vue/shared@3.2.29", "@vue/shared@^3.2.27":
   version "3.2.29"
   resolved "https://registry.npmjs.org/@vue/shared/-/shared-3.2.29.tgz"
   integrity sha512-BjNpU8OK6Z0LVzGUppEk0CMYm/hKDnZfYdjSmPOs0N+TR1cLKJAkDwW8ASZUvaaSLEi6d3hVM7jnWnX+6yWnHw==
