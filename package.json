@@ -73,6 +73,7 @@
     "autoprefixer": "^10.4.2",
     "cssnano": "^5.0.16",
     "date-fns": "^2.28.0",
+    "gridstack": "^5.0.0",
     "gsap": "^3.9.1",
     "mitt": "^3.0.0",
     "tabbable": "^5.2.1",
