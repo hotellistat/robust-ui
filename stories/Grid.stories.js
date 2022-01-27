@@ -1,4 +1,4 @@
-import Grid from '@/components/common/Grid.vue'
+import Grid from '@/components/Grid/Grid.vue'
 import { ref, defineComponent, markRaw, watch } from 'vue'
 export default {
   title: 'Ui/Grid',

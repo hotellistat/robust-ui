@@ -1,4 +1,4 @@
-import PieChart from '@/components/charts/PieChart.vue'
+import PieChart from '@/components/Charts/PieChart.vue'
 
 export default {
   title: 'Charts/PieChart',
