@@ -1,4 +1,4 @@
-import BaseCalendar from '@/components/common/BaseCalendar.vue'
+import BaseCalendar from '@/components/Calendar/Calendar.vue'
 
 export default {
   title: 'Ui/BaseCalendar',

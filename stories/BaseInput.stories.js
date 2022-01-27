@@ -9,6 +9,8 @@ export default {
     condensed: { control: { type: 'boolean' } },
     modelValue: { control: { type: 'text' } },
     outline: { control: { type: 'boolean' } },
+    hint: { control: { type: 'text' } },
+    error: { control: { type: 'text' } },
   },
 }
 

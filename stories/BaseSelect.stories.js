@@ -1,4 +1,4 @@
-import BaseSelect from '@/components/common/BaseSelect.vue'
+import BaseSelect from '@/components/Select/Select.vue'
 import { ref } from 'vue'
 export default {
   title: 'Ui/BaseSelect',
@@ -8,7 +8,8 @@ export default {
     readonly: { control: { type: 'boolean' } },
     condensed: { control: { type: 'boolean' } },
     modelValue: { control: { type: 'text' } },
-    outline: { control: { type: 'boolean' } },
+    hint: { control: { type: 'text' } },
+    error: { control: { type: 'text' } },
   },
 }
 

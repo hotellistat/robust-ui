@@ -1,5 +1,5 @@
-import CompoundDatepicker from '@/components/common/CompoundDatepicker.vue'
-import BaseSeparator from '@/components/common/BaseSeparator.vue'
+import CompoundDatepicker from '@/components/DatePicker/DatePicker.vue'
+import BaseSeparator from '@/components/Separator/Separator.vue'
 import { computed, ref } from 'vue'
 
 export default {

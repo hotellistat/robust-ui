@@ -1,4 +1,4 @@
-import BaseBox from '@/components/common/BaseBox.vue'
+import BaseBox from '@/components/ContentBox/ContentBox.vue'
 
 export default {
   title: 'Ui/BaseBox',

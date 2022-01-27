@@ -1,5 +1,5 @@
 import { computed } from '@vue/runtime-core'
-import BaseCheckbox from '@/components/common/BaseCheckbox.vue'
+import BaseCheckbox from '@/components/Checkbox/Checkbox.vue'
 
 export default {
   title: 'Ui/BaseCheckbox',

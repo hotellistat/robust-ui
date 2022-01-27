@@ -1,4 +1,4 @@
-import BaseButton from '@/components/common/BaseButton.vue'
+import BaseButton from '@/components/Button/Button.vue'
 
 export default {
   title: 'Ui/BaseButton',

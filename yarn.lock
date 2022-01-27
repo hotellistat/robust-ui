@@ -1519,11 +1519,6 @@
     unist-builder "2.0.3"
     unist-util-visit "2.0.3"
 
-"@mdx-js/preact@^1.6.22":
-  version "1.6.22"
-  resolved "https://registry.yarnpkg.com/@mdx-js/preact/-/preact-1.6.22.tgz#98b9f5f865eb44d768ffea93497f7cb0c1e5f463"
-  integrity sha512-ZVq6uvfVGSAphYNuD+9MVcoRSF8yi6RlZIQDVIkgc3ZnUwqYdLheCkPZ+nIG1Mil8Kanah5tgPHLNmA7HwfGLw==
-
 "@mdx-js/react@1.6.22", "@mdx-js/react@^1.6.22":
   version "1.6.22"
   resolved "https://registry.npmjs.org/@mdx-js/react/-/react-1.6.22.tgz"
@@ -1660,7 +1655,7 @@
 
 "@storybook/addon-docs@6.4.14", "@storybook/addon-docs@^6.4.14":
   version "6.4.14"
-  resolved "https://registry.yarnpkg.com/@storybook/addon-docs/-/addon-docs-6.4.14.tgz#0be1faf6d0b4deae93e37a838a2aae197cead74a"
+  resolved "https://registry.npmjs.org/@storybook/addon-docs/-/addon-docs-6.4.14.tgz"
   integrity sha512-MIZWfDG80kolo1lOGfMOzQlE3d0I3PBvz04u8v2UMB6k99msC55ZigZcyaKRQs3lwlVM6uUflNVnpTVuTUZNHA==
   dependencies:
     "@babel/core" "^7.12.10"
@@ -1807,7 +1802,7 @@
     prop-types "^15.7.2"
     regenerator-runtime "^0.13.7"
 
-"@storybook/addons@6.4.14", "@storybook/addons@^6.0.0", "@storybook/addons@^6.4.14":
+"@storybook/addons@6.4.14", "@storybook/addons@^6.4.14":
   version "6.4.14"
   resolved "https://registry.npmjs.org/@storybook/addons/-/addons-6.4.14.tgz"
   integrity sha512-Snu42ejLyBAh6PWdlrdI72HKN1oKY7q0R9qEID2wk953WrqgGu4URakp14YLxghJCyKTSfGPs6LNZRRI6H5xgA==
@@ -1824,7 +1819,7 @@
     global "^4.4.0"
     regenerator-runtime "^0.13.7"
 
-"@storybook/api@6.4.14", "@storybook/api@^6.0.0":
+"@storybook/api@6.4.14":
   version "6.4.14"
   resolved "https://registry.npmjs.org/@storybook/api/-/api-6.4.14.tgz"
   integrity sha512-GGGwB5+EquoausTXYx4dnLBBk2sOiS1Z58mDj0swBXCZdjfyUfLyxjxvvb/hl65ltufWP3IdmlKKaLiuARXNtw==
@@ -1989,7 +1984,7 @@
     core-js "^3.8.2"
     global "^4.4.0"
 
-"@storybook/components@6.4.14", "@storybook/components@^6.0.0":
+"@storybook/components@6.4.14":
   version "6.4.14"
   resolved "https://registry.npmjs.org/@storybook/components/-/components-6.4.14.tgz"
   integrity sha512-M7unerbOnvg+UN7qPxBCBWzK/boVdSSQxRiPAr1OL3M4OyEU8+TNPdQeAG0aF4zqtU0BrsDf4E85EznoMXUiFQ==
@@ -2100,7 +2095,7 @@
     util-deprecate "^1.0.2"
     webpack "4"
 
-"@storybook/core-events@6.4.14", "@storybook/core-events@^6.0.0":
+"@storybook/core-events@6.4.14":
   version "6.4.14"
   resolved "https://registry.npmjs.org/@storybook/core-events/-/core-events-6.4.14.tgz"
   integrity sha512-9QFltg2mxTDjMBfmVtFHtrAEPY/i0oVp2kVdTWo6g05cPffYKAjNUnUVjUl7yiqcQmdEcdqUUQ0ut3xgmcYi/A==
@@ -2337,7 +2332,7 @@
     ts-dedent "^2.0.0"
     util-deprecate "^1.0.2"
 
-"@storybook/theming@6.4.14", "@storybook/theming@^6.0.0", "@storybook/theming@^6.4.14":
+"@storybook/theming@6.4.14", "@storybook/theming@^6.4.14":
   version "6.4.14"
   resolved "https://registry.npmjs.org/@storybook/theming/-/theming-6.4.14.tgz"
   integrity sha512-kqmXNnIoOSAS4cgr9PitMgVrOps725O99eTsJNxB6J1Ide0CsA5v2tV6AmQn/scnpCQNr8uSjZerNlEcl/ensg==
@@ -4480,7 +4475,7 @@ core-js-pure@^3.8.2:
   resolved "https://registry.npmjs.org/core-js-pure/-/core-js-pure-3.20.3.tgz"
   integrity sha512-Q2H6tQ5MtPtcC7f3HxJ48i4Q7T9ybPKgvWyuH7JXIoNa2pm0KuBnycsET/qw1SLLZYfbsbrZQNMeIOClb+6WIA==
 
-core-js@^3.0.4, core-js@^3.6.4, core-js@^3.6.5, core-js@^3.8.2:
+core-js@^3.0.4, core-js@^3.6.5, core-js@^3.8.2:
   version "3.20.3"
   resolved "https://registry.npmjs.org/core-js/-/core-js-3.20.3.tgz"
   integrity sha512-vVl8j8ph6tRS3B8qir40H7yw7voy17xL0piAjlbBUsH7WIfzoedL/ZOr1OV9FyZQLWXsayOJyV4tnRyXR85/ag==
@@ -10343,20 +10338,6 @@ store2@^2.12.0:
   version "2.13.1"
   resolved "https://registry.npmjs.org/store2/-/store2-2.13.1.tgz"
   integrity sha512-iJtHSGmNgAUx0b/MCS6ASGxb//hGrHHRgzvN+K5bvkBTN7A9RTpPSf1WSp+nPGvWCJ1jRnvY7MKnuqfoi3OEqg==
-
-storybook-addon-themes@^6.1.0:
-  version "6.1.0"
-  resolved "https://registry.yarnpkg.com/storybook-addon-themes/-/storybook-addon-themes-6.1.0.tgz#5d7afe293cd4bc28a8f634aa466dbd8fd2f9222e"
-  integrity sha512-ZT8aNgrwFVNEOmOPBLNS0WBacjvMFo/bZ83P8MmsJ3Ewqt0AbmPioghTZccARUn/EQ+LrDxyh2D0QgmLaKo07Q==
-  dependencies:
-    "@storybook/addons" "^6.0.0"
-    "@storybook/api" "^6.0.0"
-    "@storybook/components" "^6.0.0"
-    "@storybook/core-events" "^6.0.0"
-    "@storybook/theming" "^6.0.0"
-    core-js "^3.6.4"
-    global "^4.4.0"
-    memoizerific "^1.11.3"
 
 storybook-builder-vite@^0.1.13:
   version "0.1.13"
