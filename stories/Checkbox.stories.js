@@ -1,9 +1,9 @@
 import { computed } from '@vue/runtime-core'
-import BaseCheckbox from '@/components/Checkbox/Checkbox.vue'
+import Checkbox from '@/components/Checkbox/Checkbox.vue'
 
 export default {
-  title: 'Ui/BaseCheckbox',
-  component: BaseCheckbox,
+  title: 'Ui/Checkbox',
+  component: Checkbox,
   argTypes: {
     modelValue: { control: { type: 'boolean' } },
     title: { control: { type: 'text' } },
@@ -12,8 +12,8 @@ export default {
 
 const DefaultTemplate = (args) => ({
   template:
-    '<base-checkbox v-bind="computedArgs" v-model="args.modelValue"></base-checkbox>',
-  components: { BaseCheckbox },
+    '<Checkbox v-bind="computedArgs" v-model="args.modelValue"></Checkbox>',
+  components: { Checkbox },
   setup() {
     const computedArgs = computed(() => {
       const { modelValue, ...all } = args
@@ -31,8 +31,8 @@ Default.args = {
 
 const SlotTemplate = (args) => ({
   template:
-    '<base-checkbox v-bind="argsWithoutTitle"><template v-slot:title>{{args.title}}</template></base-checkbox>',
-  components: { BaseCheckbox },
+    '<Checkbox v-bind="argsWithoutTitle"><template v-slot:title>{{args.title}}</template></Checkbox>',
+  components: { Checkbox },
   setup() {
     const argsWithoutTitle = computed(() => {
       const { title, ...all } = args

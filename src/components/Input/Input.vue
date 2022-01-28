@@ -1,8 +1,8 @@
 <template>
   <base-input-wrapper
-    :title="(title as any)"
-    :hint="(hint as any)"
-    :error="(error as any)"
+    :title="title"
+    :hint="hint"
+    :error="error"
     :condensed="condensed"
   >
     <template #default="slotProps">

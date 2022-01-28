@@ -1,8 +1,8 @@
-import BaseCalendar from '@/components/Calendar/Calendar.vue'
+import Calendar from '@/components/Calendar/Calendar.vue'
 
 export default {
-  title: 'Ui/BaseCalendar',
-  component: BaseCalendar,
+  title: 'Ui/Calendar',
+  component: Calendar,
   argTypes: {
     variant: {
       control: { type: 'select', options: ['primary', 'warn', 'muted'] },
@@ -14,8 +14,8 @@ export default {
 }
 
 const Template = (args) => ({
-  template: '<base-calendar v-bind="args"></base-calendar>',
-  components: { BaseCalendar },
+  template: '<Calendar v-bind="args"></Calendar>',
+  components: { Calendar },
   setup() {
     return { args }
   },

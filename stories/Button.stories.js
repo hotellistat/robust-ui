@@ -1,8 +1,8 @@
-import BaseButton from '@/components/Button/Button.vue'
+import Button from '../src/components/Button/Button.vue'
 
 export default {
-  title: 'Ui/BaseButton',
-  component: BaseButton,
+  title: 'Ui/Button',
+  component: Button,
   argTypes: {
     onClick: { action: 'clicked' },
     variant: {
@@ -19,8 +19,8 @@ export default {
 }
 
 const DefaultTemplate = (args) => ({
-  components: { BaseButton },
-  template: '<base-button v-bind="args">Click here</base-button>',
+  components: { Button },
+  template: '<Button v-bind="args">Click here</Button>',
   setup() {
     return { args }
   },
@@ -29,13 +29,13 @@ const DefaultTemplate = (args) => ({
 export const Default = DefaultTemplate.bind({})
 
 const PrefixTemplate = (args) => ({
-  template: `<base-button v-bind="args">
+  template: `<Button v-bind="args">
   <template v-slot:prefix>
   <ph-smiley size="20" />
   </template>
   Click here
-  </base-button>`,
-  components: { BaseButton },
+  </Button>`,
+  components: { Button },
   setup() {
     return { args }
   },
@@ -44,16 +44,26 @@ const PrefixTemplate = (args) => ({
 export const Prefix = PrefixTemplate.bind()
 
 const SuffixTemplate = (args) => ({
-  template: `<base-button v-bind="args">
+  template: `<Button v-bind="args">
   Click here
   <template v-slot:suffix>
   <ph-paper-plane-tilt size="20" />
   </template>
-  </base-button>`,
-  components: { BaseButton },
+  </Button>`,
+  components: { Button },
   setup() {
     return { args }
   },
 })
 
 export const Suffix = SuffixTemplate.bind()
+
+const LoadingTemplate = (args) => ({
+  template: `<Button loading v-bind="args">Click here</Button>`,
+  components: { Button },
+  setup() {
+    return { args }
+  },
+})
+
+export const Loading = LoadingTemplate.bind()

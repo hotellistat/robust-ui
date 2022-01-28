@@ -1,9 +1,9 @@
 import { computed, ref } from 'vue'
-import BaseSwitch from '@/components/Switch/Switch.vue'
+import Switch from '@/components/Switch/Switch.vue'
 
 export default {
-  title: 'Ui/BaseSwitch',
-  component: BaseSwitch,
+  title: 'Ui/Switch',
+  component: Switch,
   argTypes: {
     title: { control: { type: 'text' } },
     description: { control: { type: 'text' } },
@@ -11,8 +11,8 @@ export default {
 }
 
 const DefaultTemplate = (args) => ({
-  template: '<base-switch v-bind="args" v-model="value"></base-switch>',
-  components: { BaseSwitch },
+  template: '<Switch v-bind="args" v-model="value"></Switch>',
+  components: { Switch },
   setup() {
     const value = ref(false)
     return { args, value }

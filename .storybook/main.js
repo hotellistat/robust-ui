@@ -10,15 +10,15 @@ module.exports = {
     return config
   },
   stories: [
-    '../stories/**/*.stories.mdx',
-    '../stories/**/*.stories.@(js|jsx|ts|tsx)',
+    // '../stories/**/*.stories.md',
+    '../stories/**/*.stories.@(js|ts)',
   ],
   addons: [
-    'storybook-addon-themes',
+    'storybook-addon-themes/register',
     '@storybook/addon-links',
     '@storybook/addon-essentials',
-    '@storybook/addon-docs',
   ],
+  framework: '@storybook/vue3',
   core: {
     builder: 'storybook-builder-vite',
   },

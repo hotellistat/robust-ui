@@ -1,8 +1,8 @@
-import BaseSelect from '@/components/Select/Select.vue'
+import Select from '@/components/Select/Select.vue'
 import { ref } from 'vue'
 export default {
-  title: 'Ui/BaseSelect',
-  component: BaseSelect,
+  title: 'Ui/Select',
+  component: Select,
   argTypes: {
     onInput: { action: 'input' },
     readonly: { control: { type: 'boolean' } },
@@ -15,8 +15,8 @@ export default {
 
 const DefaultTemplate = (args) => ({
   template:
-    '<base-select :outline="outline" :title="title" :options="options" v-model="value"/>',
-  components: { BaseSelect },
+    '<Select :outline="outline" :title="title" :options="options" v-model="value"/>',
+  components: { Select },
   setup() {
     let value = ref(undefined)
 

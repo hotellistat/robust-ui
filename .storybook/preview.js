@@ -1,12 +1,12 @@
-import '../src/styles/main.postcss'
-import '../src/styles/storybook.postcss'
+import '../src/styles/tailwindcss.css'
+import '../src/styles/storybook.css'
 
 import { app } from '@storybook/vue3'
-import clickOutside from '../src/directives/click-outside'
+// import clickOutside from '../src/directives/click-outside'
 import PhosphorVue from 'phosphor-vue'
 
 app.use(PhosphorVue)
-app.directive('click-outside', clickOutside)
+// app.directive('click-outside', clickOutside)
 
 export const parameters = {
   actions: { argTypesRegex: '^on[A-Z].*' },
@@ -14,6 +14,7 @@ export const parameters = {
   backgrounds: {
     disable: true,
   },
+
   themes: {
     clearable: false,
     default: 'Light',

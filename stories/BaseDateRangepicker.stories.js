@@ -1,4 +1,4 @@
-import BaseDateRangepicker from '@/components/DatePicker/DaterangePicker.vue.vue'
+import BaseDateRangepicker from '@/components/DatePicker/DaterangePicker.vue'
 import BaseSeparator from '@/components/Separator/Separator.vue'
 import { computed, ref } from 'vue'
 

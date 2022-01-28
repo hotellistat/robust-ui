@@ -1,17 +1,17 @@
 import { ref } from '@vue/reactivity'
-import BaseTabs from '@/components/Tabs/Tabs.vue'
+import Tabs from '@/components/Tabs/Tabs.vue'
 
 export default {
-  title: 'Ui/BaseTabs',
-  component: BaseTabs,
+  title: 'Ui/Tabs',
+  component: Tabs,
   argTypes: {
     rounded: { control: { type: 'boolean' } },
   },
 }
 
 const DefaultTemplate = (args) => ({
-  template: '<base-tabs v-bind="args" v-model="value"></base-tabs>',
-  components: { BaseTabs },
+  template: '<Tabs v-bind="args" v-model="value"></Tabs>',
+  components: { Tabs },
   setup() {
     const value = ref('item_1')
     return { args, value }
@@ -38,7 +38,7 @@ Default.args = {
 }
 
 const SlotTemplate = (args) => ({
-  template: `<base-tabs v-bind="args" v-model="value">
+  template: `<Tabs v-bind="args" v-model="value">
   <template v-slot:tab="data">
   <div @click="data.select" class="px-4 py-3 flex items-center">
   <div class="w-2 h-2 rounded-full bg-green-500 mr-3"></div>
@@ -48,8 +48,8 @@ const SlotTemplate = (args) => ({
   </div>
   </template>
 
-  </base-tabs>`,
-  components: { BaseTabs },
+  </Tabs>`,
+  components: { Tabs },
   setup() {
     const value = ref('item_1')
     return { args, value }

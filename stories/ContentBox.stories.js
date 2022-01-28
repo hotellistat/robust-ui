@@ -1,18 +1,18 @@
-import BaseBox from '@/components/ContentBox/ContentBox.vue'
+import ContentBox from '@/components/ContentBox/ContentBox.vue'
 
 export default {
-  title: 'Ui/BaseBox',
-  component: BaseBox,
+  title: 'Ui/ContentBox',
+  component: ContentBox,
   argTypes: {
     title: { control: { type: 'text' } },
   },
 }
 
 const DefaultTemplate = (args) => ({
-  template: `<BaseBox v-bind="args" >
-      <div class="p-8 bg-gray-400 text-gray-600">content</div>
-  </BaseBox>`,
-  components: { BaseBox },
+  template: `<ContentBox v-bind="args" >
+      <div class="p-8 text-gray-600">content</div>
+  </ContentBox>`,
+  components: { ContentBox },
   setup() {
     console.log(args)
     return { args }
@@ -22,13 +22,13 @@ const DefaultTemplate = (args) => ({
 export const Default = DefaultTemplate.bind()
 
 const TitleTemplate = (args) => ({
-  template: `<BaseBox v-bind="args" >
+  template: `<ContentBox v-bind="args" >
   <template v-slot:title>
   <div class="text-red-500">some prefix</div>
   {{args.title}}</template>
-      <div class="p-8 bg-gray-400 text-gray-600">content</div>
-  </BaseBox>`,
-  components: { BaseBox },
+      <div class="p-8 text-gray-600">content</div>
+  </ContentBox>`,
+  components: { ContentBox },
   setup() {
     console.log(args)
     return { args }
@@ -42,10 +42,10 @@ Title.args = {
 }
 
 const TitlePropTemplate = (args) => ({
-  template: `<BaseBox v-bind="args" >
+  template: `<ContentBox v-bind="args" >
       <div class="p-8 bg-gray-400 text-gray-600">content</div>
-  </BaseBox>`,
-  components: { BaseBox },
+  </ContentBox>`,
+  components: { ContentBox },
   setup() {
     console.log(args)
     return { args }
@@ -59,10 +59,10 @@ TitleProp.args = {
 }
 
 const StripeTemplate = (args) => ({
-  template: `<BaseBox v-bind="args" stripe stripe-class="bg-primary-500">
+  template: `<ContentBox v-bind="args" stripe stripe-class="bg-primary-500">
       <div class="p-8 bg-gray-400 text-gray-600">content</div>
-  </BaseBox>`,
-  components: { BaseBox },
+  </ContentBox>`,
+  components: { ContentBox },
   setup() {
     console.log(args)
     return { args }

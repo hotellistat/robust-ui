@@ -32,12 +32,4 @@ export default defineConfig({
       },
     },
   },
-  optimizeDeps: {
-    include: [
-      '@vue/runtime-core',
-      '@vue/reactivity',
-      'preact',
-      '@mdx-js/preact',
-    ],
-  },
 })

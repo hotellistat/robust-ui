@@ -2,7 +2,10 @@
   <div
     class="overflow-hidden rounded-md border border-gray-200 bg-white dark:border-gray-700 dark:bg-gray-800"
   >
-    <div class="p-4 sm:p-6">
+    <div
+      v-if="description !== undefined || title !== undefined"
+      class="p-4 sm:p-6"
+    >
       <div class="flex">
         <div
           class="text-xl font-semibold"

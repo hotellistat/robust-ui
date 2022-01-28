@@ -1,17 +1,17 @@
 import { computed, ref } from 'vue'
-import BaseRadio from '@/components/Radio/Radio.vue';
+import Radio from '@/components/Radio/Radio.vue'
 
 export default {
-  title: 'Ui/BaseRadio',
-  component: BaseRadio,
+  title: 'Ui/Radio',
+  component: Radio,
   argTypes: {
     title: { control: { type: 'text' } },
   },
 }
 
 const DefaultTemplate = (args) => ({
-  template: '<base-radio v-bind="args" v-model="value"></base-radio>',
-  components: { BaseRadio },
+  template: '<Radio v-bind="args" v-model="value"></Radio>',
+  components: { Radio },
   setup() {
     const value = ref(false)
     return { args, value }

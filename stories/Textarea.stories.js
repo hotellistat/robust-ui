@@ -1,8 +1,8 @@
-import BaseInput from '@/components/common/BaseInput.vue'
+import Textarea from '@/components/Textarea/Textarea.vue'
 
 export default {
-  title: 'Ui/BaseInput',
-  component: BaseInput,
+  title: 'Ui/Textarea',
+  component: Textarea,
   argTypes: {
     onInput: { action: 'input' },
     readonly: { control: { type: 'boolean' } },
@@ -15,7 +15,7 @@ export default {
 }
 
 const DefaultTemplate = (args) => ({
-  template: '<base-input v-bind="args"/>',
+  template: '<Textarea v-bind="args"/>',
   components: { BaseInput },
   setup() {
     return { args }

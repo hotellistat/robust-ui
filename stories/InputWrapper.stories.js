@@ -1,8 +1,8 @@
-import BaseInputWrapper from '@/components/InputWrapper/InputWrapper.vue'
+import InputWrapper from '@/components/InputWrapper/InputWrapper.vue'
 
 export default {
-  title: 'Ui/BaseInputWrapper',
-  component: BaseInputWrapper,
+  title: 'Ui/InputWrapper',
+  component: InputWrapper,
   argTypes: {
     condensed: { control: { type: 'boolean' } },
     outline: { control: { type: 'boolean' } },
@@ -10,8 +10,8 @@ export default {
 }
 
 const DefaultTemplate = (args) => ({
-  template: '<base-input-wrapper v-bind="args"/>',
-  components: { BaseInputWrapper },
+  template: '<InputWrapper v-bind="args"/>',
+  components: { InputWrapper },
   setup() {
     return { args }
   },
