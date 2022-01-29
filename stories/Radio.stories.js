@@ -10,10 +10,14 @@ export default {
 }
 
 const DefaultTemplate = (args) => ({
-  template: '<Radio v-bind="args" v-model="value"></Radio>',
+  template: `
+    <div><Radio value="test" title="Radio title 1" v-model="value"/></div>
+    <div><Radio value="arg" title="Radio title 2" v-model="value"/></div>
+    <div><Radio value="more" title="Radio title 3" v-model="value"/></div>
+    `,
   components: { Radio },
   setup() {
-    const value = ref(false)
+    const value = ref('test')
     return { args, value }
   },
 })

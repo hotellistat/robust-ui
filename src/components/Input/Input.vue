@@ -14,14 +14,18 @@
         <slot tag="div" name="prefix" />
       </div>
       <input
-        :id="'input_' + slotProps.uid"
+        :id="slotProps.cuid"
         ref="inputRef"
         v-model="inputFieldValue"
         size="8"
         class="block h-full w-full bg-transparent text-current outline-none dark:placeholder-gray-600"
         :class="[
           $slots.prefix || slotProps.condensed ? 'pl-2' : 'pl-3',
-          $slots.suffix || slotProps.condensed ? 'pr-2' : 'pr-3',
+          slotProps.error
+            ? 'pr-10'
+            : $slots.suffix || slotProps.condensed
+            ? 'pr-2'
+            : 'pr-3',
           {
             'cursor-not-allowed': slotProps.readonly,
           },
@@ -31,7 +35,7 @@
       />
       <div
         v-if="$slots.suffix || slotProps.error"
-        class="ml-auto flex h-full select-none items-center pl-2 text-gray-400"
+        class="pointer-events-none absolute inset-y-0 right-0 ml-auto flex h-full select-none items-center pl-2 text-gray-400"
         :class="[slotProps.condensed ? 'pr-2' : 'pr-3']"
       >
         <slot v-if="!slotProps.error" tag="div" name="suffix" />
@@ -103,22 +107,3 @@ export default defineComponent({
   },
 })
 </script>
-
-<style lang="postcss" scoped>
-.fade-enter-active,
-.fade-leave-active {
-  transition: all 200ms ease-in-out;
-  overflow: hidden;
-}
-.fade-enter-to,
-.fade-leave {
-  opacity: 1;
-  padding-top: theme('spacing.1');
-}
-.fade-enter-from,
-.fade-leave-to {
-  padding-top: 0;
-  opacity: 0;
-  line-height: 0;
-}
-</style>

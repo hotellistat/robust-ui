@@ -25,7 +25,7 @@
         <slot tag="div" name="suffix" />
       </div>
     </div>
-    <spinner v-if="loading" size="20px" class="spinner absolute" />
+    <spinner v-if="loading" :size="20" :stroke="2" class="spinner absolute" />
   </component>
 </template>
 

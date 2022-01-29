@@ -1,5 +1,5 @@
 <template>
-  <base-input-wrapper
+  <input-wrapper
     :title="title"
     :hint="hint"
     :error="error"
@@ -51,7 +51,7 @@
         v-if="slotProps.wrapperRef"
         v-model:open="open"
         v-click-outside="{ handler: blurDropdown, active: open }"
-        class="z-[100] origin-top-left"
+        class="z-[100] origin-top"
         :append-to="slotProps.wrapperRef"
         :modifiers="popperModifiers"
         :options="{
@@ -77,7 +77,7 @@
         <div v-else class="py-2 text-center text-gray-400">No options</div>
       </base-popper>
     </template>
-  </base-input-wrapper>
+  </input-wrapper>
 </template>
 
 <script lang="ts">
@@ -91,16 +91,19 @@ import {
   defineComponent,
   PropType,
 } from 'vue'
-import BaseInputWrapper from '../InputWrapper/InputWrapper.vue'
+import InputWrapper from '../InputWrapper/InputWrapper.vue'
 import { debouncedWatch } from '@vueuse/core'
 import { Modifier } from '@popperjs/core'
-
+import clickOutside from '../../utils/clickOutside'
 export default defineComponent({
   components: {
     BasePopper,
-    BaseInputWrapper,
+    InputWrapper,
   },
   inheritAttrs: false,
+  directives: {
+    clickOutside,
+  },
   props: {
     title: {
       type: String,
@@ -119,13 +122,12 @@ export default defineComponent({
       type: String,
     },
     modelValue: {
-      type: String,
+      type: [String, Boolean, Number],
     },
     options: {
       type: Array as PropType<Array<{ title: string; value: string | number }>>,
       required: true,
     },
-
     condensed: {
       type: Boolean,
       default: false,
@@ -182,7 +184,9 @@ export default defineComponent({
       await filterBySearchTerm('')
     })
 
-    const popperModifiers: Array<Modifier<string, Record<string, unknown>>> = [
+    const popperModifiers: Array<
+      Partial<Modifier<string, Record<string, unknown>>>
+    > = [
       {
         name: 'sameWidth',
         enabled: true,
@@ -198,6 +202,12 @@ export default defineComponent({
           args.state.elements.popper.style.width = `${
             args.state.elements.reference.getBoundingClientRect().width
           }px`
+        },
+      },
+      {
+        name: 'offset',
+        options: {
+          offset: [0, 2],
         },
       },
     ]

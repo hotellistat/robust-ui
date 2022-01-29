@@ -1,4 +1,4 @@
-import Select from '@/components/Select/Select.vue'
+import Select from '../src/components/Select/Select.vue'
 import { ref } from 'vue'
 export default {
   title: 'Ui/Select',
@@ -15,7 +15,7 @@ export default {
 
 const DefaultTemplate = (args) => ({
   template:
-    '<Select :outline="outline" :title="title" :options="options" v-model="value"/>',
+    '<Select v-bind="args" :options="options" v-model="value"/><br/>Value: {{value}}',
   components: { Select },
   setup() {
     let value = ref(undefined)
@@ -42,12 +42,11 @@ const DefaultTemplate = (args) => ({
         value: 0,
       },
     ])
-    console.log(args)
 
     return {
       value,
       options,
-      ...args,
+      args,
     }
   },
 })
@@ -70,7 +69,6 @@ export const ErrorHint = DefaultTemplate.bind()
 ErrorHint.args = {
   title: 'Input title',
   hint: 'This is an input hint. It is supposed to help the user understand the reason this input exists and what it does',
-
   error:
     'This is an input error. It tells the user, that there is something wrong with the current input state',
 }

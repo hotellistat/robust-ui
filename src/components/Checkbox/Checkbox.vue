@@ -1,29 +1,32 @@
 <template>
   <div class="inline-block">
-    <label
-      :class="[$slots.title ? 'items-start' : 'items-center']"
-      class="vue-checkbox flex cursor-pointer items-center"
-    >
+    <label class="flex cursor-pointer items-start">
       <input :id="cuid" v-model="isChecked" type="checkbox" class="hidden" />
       <div
+        class="relative mr-2 box-content h-4 w-4 flex-shrink-0 flex-grow-0 cursor-pointer rounded border text-white transition-all duration-100"
         :class="[
           isChecked
-            ? 'border-primary-500 bg-primary-500 text-white'
+            ? 'border-primary-500 bg-primary-500 '
             : 'border-gray-300  bg-gray-100 dark:border-gray-600 dark:bg-gray-700',
         ]"
-        class="vue-checkbox__inner relative mr-2 box-content h-4 w-4 flex-shrink-0 flex-grow-0 cursor-pointer rounded border transition-all duration-100"
       >
         <ph-check
-          v-show="isChecked"
+          :class="[isChecked ? 'opacity-1' : 'opacity-0']"
           size="14"
-          class="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 transform"
+          weight="bold"
+          class="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 transform transition-all duration-100"
         />
       </div>
-
-      <div v-if="title && !$slots.title" class="w-full select-none leading-4">
+      <div
+        v-if="title && !$slots.title"
+        class="w-full select-none pt-px leading-4"
+      >
         {{ title }}
       </div>
-      <div v-if="!title && $slots.title" class="w-full select-none leading-4">
+      <div
+        v-if="!title && $slots.title"
+        class="w-full select-none pt-px leading-4"
+      >
         <slot name="title" />
       </div>
     </label>
@@ -33,6 +36,7 @@
 <script lang="ts">
 import { computed, defineComponent } from 'vue'
 export default defineComponent({
+  emits: ['update:modelValue', 'change'],
   props: {
     modelValue: {
       type: [Array, String, Number, Boolean],
@@ -48,14 +52,13 @@ export default defineComponent({
     },
     title: {
       type: String,
-      default: '',
+      default: undefined,
     },
     disabled: {
       type: Boolean,
       default: false,
     },
   },
-  emits: ['update:modelValue', 'change'],
   setup(props, { emit, attrs }) {
     const cuid = '_' + Math.random().toString(36).substr(2, 9)
 

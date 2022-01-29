@@ -2,11 +2,11 @@
   <label class="flex cursor-pointer items-center gap-x-3">
     <input v-model="isChecked" class="hidden" type="checkbox" />
     <div
-      class="duration-250 relative box-content h-4 w-8 rounded-2xl border-4 shadow-md transition-colors"
+      class="duration-250 relative box-content h-4 w-8 rounded-2xl border-4 transition-colors"
       :class="
         isChecked
           ? 'border-primary-500 bg-primary-500'
-          : 'border-gray-400 bg-gray-400'
+          : 'border-gray-300 bg-gray-300 dark:border-gray-500 dark:bg-gray-500'
       "
     >
       <div

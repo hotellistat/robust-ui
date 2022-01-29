@@ -41,7 +41,7 @@ export default defineComponent({
       default: false,
     },
     modifiers: {
-      type: Array as PropType<Array<Modifier<string, Record<string, unknown>>>>,
+      type: Array as PropType<Array<Partial<Modifier<string, Record<string, unknown>>>>>,
       default: () => [],
     },
   },

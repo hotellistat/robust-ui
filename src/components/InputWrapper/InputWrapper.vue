@@ -2,45 +2,45 @@
   <div>
     <label
       v-if="title"
-      :for="'input_' + cuid"
+      :for="cuid"
       class="mb-1 block select-none text-sm font-medium text-gray-500 dark:text-gray-400"
       >{{ title }}</label
     >
     <div
       v-bind="attrs"
       ref="wrapperRef"
-      class="flex min-w-52 overflow-hidden rounded-md border border-gray-200 bg-gray-50 dark:border-gray-700 dark:bg-gray-900"
+      class="relative flex min-w-52 overflow-hidden rounded-md border border-gray-200 bg-gray-50 dark:border-gray-700 dark:bg-gray-900"
       :class="[
         condensed ? 'h-8' : 'h-10',
         {
-          'ring-primary-500 ring-opacity-30 focus-within:border-primary-500 focus-within:outline-none focus-within:ring':
+          'ring-primary-500 ring-opacity-30 focus-within:border-primary-500 focus-within:outline-none focus-within:ring focus-within:dark:border-primary-500':
             !readonly,
         },
       ]"
     >
-      <slot v-bind="props" :wrapperRef="wrapperRef" />
+      <slot v-bind="props" :cuid="cuid" :wrapperRef="wrapperRef" />
     </div>
-    <transition-group name="fade">
-      <div v-if="hint || error" class="pt-1">
-        <div v-if="hint" class="select-none text-xs text-gray-400">
-          {{ hint }}
-        </div>
-        <div
-          v-if="error"
-          class="select-none text-xs text-red-400 dark:text-red-400"
-        >
-          {{ error }}
-        </div>
+    <div v-if="hint || error" class="pt-1">
+      <div v-if="hint" class="select-none text-xs text-gray-400">
+        {{ hint }}
       </div>
-    </transition-group>
+      <div
+        v-if="error"
+        class="select-none text-xs text-red-400 dark:text-red-400"
+      >
+        {{ error }}
+      </div>
+    </div>
   </div>
 </template>
 
 <script lang="ts">
 import { defineComponent, ref } from 'vue'
+
+let uid = 0
+
 export default defineComponent({
   props: {
-    uid: String,
     title: String,
     hint: String,
     error: String,
@@ -54,7 +54,7 @@ export default defineComponent({
     },
   },
   setup(props, { attrs }) {
-    const cuid = '_' + Math.random().toString(36).substr(2, 9)
+    const cuid = 'input_' + ++uid
 
     const wrapperRef = ref()
 
@@ -67,22 +67,3 @@ export default defineComponent({
   },
 })
 </script>
-
-<style lang="postcss" scoped>
-.fade-enter-active,
-.fade-leave-active {
-  transition: all 200ms ease-in-out;
-  overflow: hidden;
-}
-.fade-enter-to,
-.fade-leave {
-  opacity: 1;
-  padding-top: theme('spacing.1');
-}
-.fade-enter-from,
-.fade-leave-to {
-  padding-top: 0;
-  opacity: 0;
-  line-height: 0;
-}
-</style>
