@@ -55,7 +55,7 @@ export default defineComponent({
     }
 
     async function close() {
-      modalOpen.value = true
+      modalOpen.value = false
       emit('close')
     }
 
