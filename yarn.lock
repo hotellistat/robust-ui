@@ -1807,7 +1807,7 @@
     prop-types "^15.7.2"
     regenerator-runtime "^0.13.7"
 
-"@storybook/addons@6.4.14", "@storybook/addons@^6.0.0":
+"@storybook/addons@6.4.14":
   version "6.4.14"
   resolved "https://registry.npmjs.org/@storybook/addons/-/addons-6.4.14.tgz"
   integrity sha512-Snu42ejLyBAh6PWdlrdI72HKN1oKY7q0R9qEID2wk953WrqgGu4URakp14YLxghJCyKTSfGPs6LNZRRI6H5xgA==
@@ -1824,7 +1824,7 @@
     global "^4.4.0"
     regenerator-runtime "^0.13.7"
 
-"@storybook/addons@6.4.16":
+"@storybook/addons@6.4.16", "@storybook/addons@^6.0.0":
   version "6.4.16"
   resolved "https://registry.yarnpkg.com/@storybook/addons/-/addons-6.4.16.tgz#9024dcbf586574c142e2567c9e795f5a537e5322"
   integrity sha512-/WFlNKohu7ME9Y/LwW8LunlBjjgmeT4uEE+0qXS++csH9RitJNh0SbtaJd7c3QQR0epHyZ4ubp3qRmSt+jdYKg==
@@ -1841,7 +1841,7 @@
     global "^4.4.0"
     regenerator-runtime "^0.13.7"
 
-"@storybook/api@6.4.14", "@storybook/api@^6.0.0":
+"@storybook/api@6.4.14":
   version "6.4.14"
   resolved "https://registry.npmjs.org/@storybook/api/-/api-6.4.14.tgz"
   integrity sha512-GGGwB5+EquoausTXYx4dnLBBk2sOiS1Z58mDj0swBXCZdjfyUfLyxjxvvb/hl65ltufWP3IdmlKKaLiuARXNtw==
@@ -1864,7 +1864,7 @@
     ts-dedent "^2.0.0"
     util-deprecate "^1.0.2"
 
-"@storybook/api@6.4.16":
+"@storybook/api@6.4.16", "@storybook/api@^6.0.0":
   version "6.4.16"
   resolved "https://registry.yarnpkg.com/@storybook/api/-/api-6.4.16.tgz#8ec04b9013a27fc7b2633a5b5794531bebbde51e"
   integrity sha512-GQup6tdFHUwUYzn2GmAnL+bN4yMv4fc/V3aGY3njMDteWr6/bsvsTF9VecJEqEEwnr3SKpqRAY79fq8TTFdnzg==
