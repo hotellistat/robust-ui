@@ -26,11 +26,11 @@ import { computed } from 'vue'
 const props = defineProps({
   size: {
     type: Number,
-    default: 32,
+    default: 24,
   },
   stroke: {
     type: Number,
-    default: 3,
+    default: 2,
   },
   safeMargin: {
     type: Number,

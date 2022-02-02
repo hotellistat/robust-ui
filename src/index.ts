@@ -1,5 +1,3 @@
-import './styles/tailwindcss.css'
-
 export { lockScroll, unlockScroll } from './utils/scrollLock'
 
 export { default as ContentPlaceholder } from './components/ContentPlaceholder/ContentPlaceholder.vue'
