@@ -1,68 +1,19 @@
-<template>
-  <hs-input-wrapper
-    :title="title"
-    :hint="hint"
-    :error="error"
-    :condensed="condensed"
-    @click.stop="open = !open"
-    class="cursor-pointer"
-  >
-    <template v-slot:default="slotProps">
-      <div
-        class="flex h-full items-center pr-2 text-gray-400"
-        :class="[condensed ? 'pl-2' : 'pl-3']"
-      >
-        <ph-calendar size="20" />
-      </div>
-      <div
-        :id="'select_' + cuid"
-        ref="select"
-        class="flex h-full w-full items-center bg-transparent pl-2 text-current outline-none"
-        v-bind="$attrs"
-      >
-        <div class="min-w-0 truncate font-courier">{{ displayDate }}</div>
-      </div>
-
-      <div
-        class="flex h-full flex-shrink-0 items-center pr-2 text-gray-400"
-        :class="[condensed ? 'pl-2' : 'pl-3']"
-      >
-        <ph-caret-down
-          size="18"
-          class="transition-transform duration-200"
-          :class="{ 'rotate-180 transform': open }"
-        />
-      </div>
-
-      <hs-popper
-        v-if="slotProps.wrapperRef"
-        class="z-[100] origin-top-left"
-        :append-to="slotProps.wrapperRef"
-        v-click-outside="{ handler: closeDropdown, active: open }"
-        v-model:open="open"
-        :options="{
-          placement: 'bottom-start',
-        }"
-      >
-        <hs-calendar v-model="computedValue" />
-      </hs-popper>
-    </template>
-  </hs-input-wrapper>
-</template>
-
 <script lang="ts">
-import HsPopper from '../Popper/Popper'
-import HsCalendar from '../Calendar/Calendar.vue'
+import Popper from '../Popper/Popper'
+import Calendar from '../Calendar/Calendar.vue'
 import { format } from 'date-fns'
-import HsInputWrapper from '../InputWrapper/InputWrapper.vue'
-
-import { computed, defineComponent, ref, toRefs } from 'vue'
+import InputWrapper from '../InputWrapper/InputWrapper.vue'
+import { PhCaretDown, PhCalendar } from 'phosphor-vue'
+import { computed, defineComponent, ref, toRefs, PropType } from 'vue'
+import { onClickOutside } from '@vueuse/core'
 
 export default defineComponent({
   components: {
-    HsPopper,
-    HsCalendar,
-    HsInputWrapper,
+    Popper,
+    Calendar,
+    InputWrapper,
+    PhCaretDown,
+    PhCalendar,
   },
   props: {
     title: {
@@ -72,7 +23,7 @@ export default defineComponent({
       type: String,
     },
     modelValue: {
-      type: [Date, String],
+      type: Date as PropType<Date>,
     },
     error: {
       type: String,
@@ -94,11 +45,24 @@ export default defineComponent({
     const refSelectContainer = ref()
     const { modelValue } = toRefs(props)
     const open = ref(false)
-    const cuid = '_' + Math.random().toString(36).substr(2, 9)
+    const popperRef = ref()
 
-    const computedValue = computed<Date | undefined>({
+    const inputWrapper = ref()
+
+    onClickOutside(popperRef, (event) => {
+      if (open.value) {
+        if (inputWrapper.value.wrapperRef.contains(event.target)) {
+          event.stopPropagation()
+          event.preventDefault()
+        }
+        closeDropdown()
+        emit('blur')
+      }
+    })
+
+    const computedValue = computed<Date>({
       get() {
-        return modelValue?.value ? new Date(modelValue.value) : undefined
+        return modelValue?.value ? modelValue.value : new Date()
       },
       set(value) {
         open.value = false
@@ -132,13 +96,68 @@ export default defineComponent({
       attrs,
       refSelectContainer,
       open,
-      cuid,
       displayDate,
       computedValue,
       closeDropdown,
+      popperRef,
+      inputWrapper,
     }
   },
 
   methods: {},
 })
 </script>
+
+<template>
+  <InputWrapper
+    ref="inputWrapper"
+    :title="title"
+    :hint="hint"
+    :error="error"
+    :condensed="condensed"
+    @click.stop="open = !open"
+    class="cursor-pointer"
+  >
+    <template #default="slotProps">
+      <div
+        class="flex h-full items-center pr-2 text-gray-400"
+        :class="[condensed ? 'pl-2' : 'pl-3']"
+      >
+        <PhCalendar size="20" />
+      </div>
+      <div
+        :id="slotProps.cuid"
+        ref="select"
+        class="flex h-full w-full items-center bg-transparent pl-2 text-current outline-none"
+        v-bind="$attrs"
+      >
+        <div class="min-w-0 truncate tabular-nums">{{ displayDate }}</div>
+      </div>
+
+      <div
+        class="flex h-full flex-shrink-0 items-center pr-3 text-gray-400"
+        :class="[condensed ? 'pl-2' : 'pl-3']"
+      >
+        <PhCaretDown
+          :size="14"
+          weight="bold"
+          class="transition-transform duration-200"
+          :class="{ 'rotate-180 transform': open }"
+        />
+      </div>
+
+      <Popper
+        v-if="slotProps.wrapperRef"
+        ref="popperRef"
+        class="z-[100] origin-top-left"
+        :append-to="slotProps.wrapperRef"
+        v-model:open="open"
+        :options="{
+          placement: 'bottom-start',
+        }"
+      >
+        <Calendar v-model="computedValue" />
+      </Popper>
+    </template>
+  </InputWrapper>
+</template>

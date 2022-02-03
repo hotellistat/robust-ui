@@ -1,6 +1,5 @@
 import { createPopper } from '@popperjs/core'
 import type {
-  StrictModifiers,
   Instance,
   Options,
   Modifier,
@@ -63,12 +62,14 @@ export default defineComponent({
               x: Math.round(x),
               y: Math.round(y),
             }),
+            adaptive: true,
+            gpuAcceleration: props.gpu
           },
         },
         {
           name: 'offset',
           options: {
-            offset: [0, 8],
+            offset: [0, 2],
           },
         },
         {
@@ -76,10 +77,6 @@ export default defineComponent({
           options: {
             padding: 8,
           },
-        },
-        {
-          name: 'computeStyles',
-          options: { adaptive: true, gpuAcceleration: props.gpu },
         },
         ...props.modifiers,
       ],
@@ -104,11 +101,17 @@ export default defineComponent({
         return
       }
 
-      popper = createPopper<StrictModifiers>(
+      console.log(appendElement,
+        root.value,
+        mergedOptions);
+
+      popper = createPopper(
         appendElement,
         root.value,
         mergedOptions
       )
+
+      console.log("uppupp");
 
       await popper.update()
     }
@@ -116,7 +119,6 @@ export default defineComponent({
     onUnmounted(() => {
       console.log('popper unmounted')
       destroy()
-      root.value?.remove()
     })
 
     onMounted(() => {
@@ -129,14 +131,6 @@ export default defineComponent({
         nextTick(async () => {
           if (value === true) {
             if (root.value) {
-              const popperArea = document.getElementById('popper-area')
-              if (popperArea) {
-                popperArea.appendChild(root.value)
-              } else {
-                throw new Error(
-                  "No popper area found. Make sure to have an element with the id 'popper-area' in the HTML"
-                )
-              }
               nextTick(() => {
                 popper?.update()
               })
@@ -202,10 +196,11 @@ export default defineComponent({
         {
           ref: 'root',
           onClick: (event: MouseEvent) => {
+            event.preventDefault()
             event.stopPropagation()
           },
           class:
-            'bg-white border border-gray-200 dark:border-gray-700 dark:bg-gray-800 rounded-md overflow-hidden shadow-2xl',
+            'bg-white border border-gray-200 dark:border-gray-700 dark:bg-gray-800 rounded-md  shadow-2xl',
         },
         this.$slots.default ? this.$slots.default() : undefined
       )

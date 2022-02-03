@@ -76,8 +76,6 @@ export default defineComponent({
 
     const inputAttrs = attrs
 
-    const cuid = '_' + Math.random().toString(36).substr(2, 9)
-
     const inputFieldValue = computed({
       get() {
         return props.modelValue
@@ -99,7 +97,7 @@ export default defineComponent({
     return {
       inputFieldValue,
       inputAttrs,
-      cuid,
+
       inputRef,
       focus,
       clear,

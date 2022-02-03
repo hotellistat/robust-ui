@@ -15,7 +15,7 @@ export default {
 
 const DefaultTemplate = (args) => ({
   template:
-    '<Select v-bind="args" :options="options" v-model="value"/><br/>Value: {{value}}',
+    '<Select v-bind="args" :options="options" v-model="value"/><Select v-bind="args" :options="options" v-model="value"/><br/>Value: {{value}}',
   components: { Select },
   setup() {
     let value = ref(undefined)

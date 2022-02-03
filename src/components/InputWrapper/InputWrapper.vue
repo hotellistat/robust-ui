@@ -9,7 +9,7 @@
     <div
       v-bind="attrs"
       ref="wrapperRef"
-      class="relative flex min-w-52 overflow-hidden rounded-md border border-gray-200 bg-gray-50 dark:border-gray-700 dark:bg-gray-900"
+      class="relative flex min-w-52 rounded-md border border-gray-200 bg-gray-50 dark:border-gray-700 dark:bg-gray-900"
       :class="[
         condensed ? 'h-8' : 'h-10',
         {
@@ -58,11 +58,17 @@ export default defineComponent({
 
     const wrapperRef = ref()
 
+    function blurred() {}
+
+    function focused() {}
+
     return {
       props,
       wrapperRef,
       attrs,
       cuid,
+      blurred,
+      focused,
     }
   },
 })
