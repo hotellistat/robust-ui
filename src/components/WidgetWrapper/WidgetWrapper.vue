@@ -57,6 +57,7 @@ export default defineComponent({
 
 <template>
   <div
+    v-bind="$attrs"
     class="group relative flex flex-col rounded-md border border-gray-200 bg-white dark:border-gray-700 dark:bg-gray-800"
     :class="{ 'pl-1': stripe }"
   >

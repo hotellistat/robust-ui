@@ -110,6 +110,7 @@ export default defineComponent({
 
 <template>
   <InputWrapper
+    v-bind="$attrs"
     ref="inputWrapperRef"
     :title="title"
     :hint="hint"
