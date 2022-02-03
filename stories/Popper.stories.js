@@ -11,7 +11,7 @@ export default {
 }
 
 const DefaultTemplate = (args) => ({
-  template: '<Popper v-bind="args" v-model="value"></Popper>',
+  template: '<Popper v-bind="args" v-model="value">ldsajfk</Popper>',
   components: { Popper },
   setup() {
     const value = ref(false)

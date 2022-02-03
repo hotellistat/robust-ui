@@ -692,7 +692,7 @@ export default defineComponent({
         </div>
       </div>
     </div>
-    <section class="border-r border-gray-200 p-4 dark:border-gray-700">
+    <section class="p-4 dark:border-gray-700">
       <div class="mb-4 flex items-center text-center text-lg font-semibold">
         <div
           class="flex h-8 w-8 cursor-pointer items-center justify-center rounded-lg text-gray-700 hover:bg-gray-100 hover:text-gray-700 active:bg-gray-200 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-gray-100"
@@ -866,7 +866,7 @@ export default defineComponent({
     </section>
     <div
       v-if="Array.isArray(modelValue)"
-      class="flex flex-shrink-0 flex-col items-start p-4"
+      class="flex flex-shrink-0 flex-col items-start border-l border-gray-200 p-4"
     >
       <label
         class="mb-1 block text-sm font-medium text-gray-500 dark:text-gray-400"
