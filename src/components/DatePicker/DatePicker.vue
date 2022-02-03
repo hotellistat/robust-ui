@@ -47,11 +47,11 @@ export default defineComponent({
     const open = ref(false)
     const popperRef = ref()
 
-    const inputWrapper = ref()
+    const inputWrapperRef = ref()
 
     onClickOutside(popperRef, (event) => {
       if (open.value) {
-        if (inputWrapper.value.wrapperRef.contains(event.target)) {
+        if (inputWrapperRef.value.wrapperRef.contains(event.target)) {
           event.stopPropagation()
           event.preventDefault()
         }
@@ -100,7 +100,7 @@ export default defineComponent({
       computedValue,
       closeDropdown,
       popperRef,
-      inputWrapper,
+      inputWrapperRef,
     }
   },
 
@@ -110,7 +110,7 @@ export default defineComponent({
 
 <template>
   <InputWrapper
-    ref="inputWrapper"
+    ref="inputWrapperRef"
     :title="title"
     :hint="hint"
     :error="error"
@@ -145,19 +145,18 @@ export default defineComponent({
           :class="{ 'rotate-180 transform': open }"
         />
       </div>
-
-      <Popper
-        v-if="slotProps.wrapperRef"
-        ref="popperRef"
-        class="z-[100] origin-top-left"
-        :append-to="slotProps.wrapperRef"
-        v-model:open="open"
-        :options="{
-          placement: 'bottom-start',
-        }"
-      >
-        <Calendar v-model="computedValue" />
-      </Popper>
     </template>
   </InputWrapper>
+  <Popper
+    v-if="inputWrapperRef?.wrapperRef"
+    ref="popperRef"
+    class="z-[100] origin-top-left"
+    :append-to="inputWrapperRef?.wrapperRef"
+    v-model:open="open"
+    :options="{
+      placement: 'bottom-start',
+    }"
+  >
+    <Calendar v-model="computedValue" />
+  </Popper>
 </template>

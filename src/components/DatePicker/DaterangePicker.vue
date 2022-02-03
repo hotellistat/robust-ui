@@ -5,6 +5,7 @@ import Button from '../Button/Button.vue'
 import Checkbox from '../Checkbox/Checkbox.vue'
 import DatePicker from '../DatePicker/DatePicker.vue'
 import InputWrapper from '../InputWrapper/InputWrapper.vue'
+import { onClickOutside } from '@vueuse/core'
 
 import {
   PhCaretDown,
@@ -24,7 +25,6 @@ import {
   toRefs,
   watch,
 } from 'vue'
-import clickOutside from '../../utils/clickOutside'
 
 export default defineComponent({
   components: {
@@ -40,9 +40,7 @@ export default defineComponent({
     PhArrowRight,
     PhClockCounterClockwise,
   },
-  directives: {
-    clickOutside,
-  },
+
   props: {
     title: {
       type: String,
@@ -121,7 +119,7 @@ export default defineComponent({
     const displayCompare = ref()
     const dateConfig = ref()
     const storeHistory = ref(true)
-
+    const popperRef = ref()
     const pickedCompare = computed(() => {
       return compareDates.value.length > 1
     })
@@ -191,6 +189,17 @@ export default defineComponent({
         computedCompare.value = undefined
       }
     }
+
+    onClickOutside(popperRef, (event) => {
+      if (open.value) {
+        if (inputWrapperRef.value.wrapperRef.contains(event.target)) {
+          event.stopPropagation()
+          event.preventDefault()
+        }
+        closeDropdown()
+        emit('blur')
+      }
+    })
 
     // const updatePerspective = (val: Date) => {
     //   emit('update:perspectiveDate', val)
@@ -288,6 +297,7 @@ export default defineComponent({
       formatDate,
       enableStoringHistory,
       inputWrapperRef,
+      popperRef,
     }
   },
 
@@ -296,139 +306,137 @@ export default defineComponent({
 </script>
 
 <template>
-  <div>
-    <InputWrapper
-      :title="title"
-      ref="inputWrapperRef"
-      :hint="hint"
-      :error="error"
-      :condensed="condensed"
-      @click.stop="handleClick"
-      class="cursor-pointer"
-    >
-      <template #default="slotProps">
-        <div
-          class="flex h-full items-center pr-2 text-gray-400"
-          :class="[condensed ? 'pl-2' : 'pl-3']"
-        >
-          <PhCalendar size="20" />
+  <InputWrapper
+    :title="title"
+    ref="inputWrapperRef"
+    :hint="hint"
+    :error="error"
+    :condensed="condensed"
+    @click.stop="handleClick"
+    class="cursor-pointer"
+  >
+    <template #default="slotProps">
+      <div
+        class="flex h-full items-center pr-2 text-gray-400"
+        :class="[condensed ? 'pl-2' : 'pl-3']"
+      >
+        <PhCalendar size="20" />
+      </div>
+      <div
+        :id="slotProps.cuid"
+        ref="select"
+        class="flex h-full w-full items-center bg-transparent pl-2 text-current outline-none"
+        v-bind="$attrs"
+      >
+        <div class="min-w-0 truncate font-courier text-sm sm:text-base">
+          {{ displayDate }}
         </div>
-        <div
-          :id="slotProps.cuid"
-          ref="select"
-          class="flex h-full w-full items-center bg-transparent pl-2 text-current outline-none"
-          v-bind="$attrs"
-        >
-          <div class="min-w-0 truncate font-courier text-sm sm:text-base">
-            {{ displayDate }}
-          </div>
-        </div>
+      </div>
 
-        <div
-          class="flex h-full flex-shrink-0 items-center pr-2 text-gray-400"
-          :class="[condensed ? 'pl-2' : 'pl-3']"
-        >
-          <PhCaretDown
-            size="18"
-            class="transition-transform duration-150"
-            :class="{ 'rotate-180 transform': open }"
-          />
-        </div>
-      </template>
-    </InputWrapper>
-    <Popper
-      v-if="inputWrapperRef?.wrapperRef"
-      class="z-[100] origin-top-left"
-      :append-to="inputWrapperRef?.wrapperRef"
-      v-click-outside="{ handler: closeDropdown, active: open }"
-      v-model:open="open"
-      :options="{
-        placement: 'bottom-start',
-      }"
+      <div
+        class="flex h-full flex-shrink-0 items-center pr-2 text-gray-400"
+        :class="[condensed ? 'pl-2' : 'pl-3']"
+      >
+        <PhCaretDown
+          size="18"
+          class="transition-transform duration-150"
+          :class="{ 'rotate-180 transform': open }"
+        />
+      </div>
+    </template>
+  </InputWrapper>
+  <Popper
+    ref="popperRef"
+    v-if="inputWrapperRef?.wrapperRef"
+    class="z-[100] origin-top-left"
+    :append-to="inputWrapperRef?.wrapperRef"
+    v-model:open="open"
+    :options="{
+      placement: 'bottom-start',
+    }"
+  >
+    <div
+      class=""
+      :class="!enabledHistory ? 'translate-y-0' : 'translate-y-full'"
     >
       <div
-        class=""
-        :class="!enabledHistory ? 'translate-y-0' : 'translate-y-full'"
+        v-if="enableComparison"
+        class="flex items-center justify-between gap-x-2 px-4 py-2 hover:cursor-pointer"
       >
-        <div
-          v-if="enableComparison"
-          class="flex items-center justify-between gap-x-2 px-4 py-2 hover:cursor-pointer"
-        >
-          <PhArrowRight
-            @click="goBack"
-            size="24"
-            :class="displayCompare ? 'visible' : 'invisible'"
-          />
-          <div class="text-lg">
-            {{ displayCompare ? 'Compare' : 'Date range' }}
-          </div>
-          <PhArrowLeft
-            @click="displayCompare = true"
-            size="24"
-            :class="displayCompare ? 'invisible' : 'visible'"
-          />
+        <PhArrowRight
+          @click="goBack"
+          size="24"
+          :class="displayCompare ? 'visible' : 'invisible'"
+        />
+        <div class="text-lg">
+          {{ displayCompare ? 'Compare' : 'Date range' }}
         </div>
-        <div
-          class="flex"
-          :class="[
-            !displayCompare ? 'translate-x-0' : '-translate-x-full',
-            enableComparison ? 'absolute' : '',
-          ]"
+        <PhArrowLeft
+          @click="displayCompare = true"
+          size="24"
+          :class="displayCompare ? 'invisible' : 'visible'"
+        />
+      </div>
+      <div
+        class="flex"
+        :class="[
+          !displayCompare ? 'translate-x-0' : '-translate-x-full',
+          enableComparison ? 'absolute' : '',
+        ]"
+      >
+        <Calendar
+          ref="mainCalendar"
+          v-model="computedDateRange"
+          @click:relativeDate="enableStoringHistory(false)"
         >
-          <Calendar
-            ref="mainCalendar"
-            v-model="computedDateRange"
-            @click:relativeDate="enableStoringHistory(false)"
+          <div
+            v-if="enablePerspective"
+            class="flex flex-col items-start gap-y-3"
           >
-            <div
-              v-if="enablePerspective"
-              class="flex flex-col items-start gap-y-3"
-            >
-              <div>
-                <label
-                  class="mb-1 block text-sm font-medium text-gray-500 dark:text-gray-400"
-                  >Perspective of</label
-                >
-                <DatePicker placeholder="Date" v-model="perspectiveOf" />
-              </div>
-              <Checkbox
-                v-if="enableComparison"
-                v-model="compareWith"
-                title="Compare with"
-              />
-            </div>
-          </Calendar>
-        </div>
-        <div
-          v-if="enableComparison"
-          class="slide transform transition-all duration-150 ease-in-out"
-          :class="[!displayCompare ? 'translate-x-full' : 'translate-x-0']"
-        >
-          <Calendar
-            v-model="computedCompare"
-            @click:relativeDate="enableStoringHistory(false)"
-          >
-            <div v-if="enablePerspective" class="flex flex-col items-start">
+            <div>
               <label
                 class="mb-1 block text-sm font-medium text-gray-500 dark:text-gray-400"
                 >Perspective of</label
               >
-              <DatePicker placeholder="Date" v-model="comparePerspectiveOf" />
+              <DatePicker placeholder="Date" v-model="perspectiveOf" />
             </div>
-          </Calendar>
-        </div>
-        <div
-          class="flex items-start justify-between border-t border-gray-200 p-4 dark:border-gray-700"
-        >
-          <PhClockCounterClockwise
-            :class="dateHistory.length > 0 ? 'visible' : 'invisible'"
-            @click="enabledHistory = !enabledHistory"
-            class="hover:cursor-pointer"
-            :size="35"
-          />
-          <Button type="primary" @click="saveTime">Apply time range</Button>
-        </div>
+            <Checkbox
+              v-if="enableComparison"
+              v-model="compareWith"
+              title="Compare with"
+            />
+          </div>
+        </Calendar>
       </div>
-    </Popper>
-  </div>
+      <div
+        v-if="enableComparison"
+        class="slide transform transition-all duration-150 ease-in-out"
+        :class="[!displayCompare ? 'translate-x-full' : 'translate-x-0']"
+      >
+        <Calendar
+          v-model="computedCompare"
+          @click:relativeDate="enableStoringHistory(false)"
+        >
+          <div v-if="enablePerspective" class="flex flex-col items-start">
+            <label
+              class="mb-1 block text-sm font-medium text-gray-500 dark:text-gray-400"
+              >Perspective of</label
+            >
+            <DatePicker placeholder="Date" v-model="comparePerspectiveOf" />
+          </div>
+        </Calendar>
+      </div>
+      <div
+        class="flex items-start justify-between border-t border-gray-200 p-4 dark:border-gray-700"
+      >
+        <PhClockCounterClockwise
+          :class="dateHistory.length > 0 ? 'visible' : 'invisible'"
+          @click="enabledHistory = !enabledHistory"
+          class="hover:cursor-pointer"
+          :size="35"
+        />
+        <Button type="primary" @click="saveTime">Apply time range</Button>
+      </div>
+    </div>
+  </Popper>
 </template>

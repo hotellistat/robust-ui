@@ -1,5 +1,5 @@
 <script lang="ts">
-import BasePopper from '../Popper/Popper'
+import Popper from '../Popper/Popper'
 import {
   ref,
   computed,
@@ -16,7 +16,7 @@ import { onClickOutside } from '@vueuse/core'
 
 export default defineComponent({
   components: {
-    BasePopper,
+    Popper,
     InputWrapper,
   },
   inheritAttrs: false,
@@ -235,7 +235,7 @@ export default defineComponent({
       </div>
     </template>
   </input-wrapper>
-  <base-popper
+  <Popper
     v-if="inputWrapper?.wrapperRef"
     v-model:open="open"
     ref="popperRef"
@@ -264,5 +264,5 @@ export default defineComponent({
       </li>
     </ul>
     <div v-else class="py-2 text-center text-gray-400">No options</div>
-  </base-popper>
+  </Popper>
 </template>
