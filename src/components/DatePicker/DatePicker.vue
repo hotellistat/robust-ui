@@ -30,7 +30,7 @@ export default defineComponent({
     },
     inputClass: {
       type: String,
-      default: 'bg-gray-100 dark:bg-gray-700',
+      default: 'bg-gray-100 dark:bg-gray-600',
     },
     condensed: {
       type: Boolean,

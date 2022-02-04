@@ -16,7 +16,7 @@
           @keydown.esc="close"
         >
           <div
-            class="relative flex max-h-full min-h-0 w-full flex-col rounded-md bg-white shadow-xl dark:bg-gray-800"
+            class="relative flex max-h-full min-h-0 w-full flex-col rounded-md bg-white shadow-xl dark:bg-gray-700"
             :class="[modalClass]"
           >
             <div

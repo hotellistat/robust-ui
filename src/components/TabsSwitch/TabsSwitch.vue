@@ -1,7 +1,7 @@
 <template>
   <div
     ref="root"
-    class="transition-color text-shade-20 relative flex select-none items-center bg-gray-200 duration-100 ease-in-out dark:bg-gray-700"
+    class="transition-color text-shade-20 relative flex select-none items-center bg-gray-200 duration-100 ease-in-out dark:bg-gray-600"
     :class="[rounded ? 'rounded-full' : 'rounded-md']"
   >
     <div

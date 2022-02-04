@@ -200,7 +200,7 @@ export default defineComponent({
             event.stopPropagation()
           },
           class:
-            'bg-white border border-gray-200 dark:border-gray-700 dark:bg-gray-800 rounded-md  shadow-2xl',
+            'bg-white border border-gray-200 dark:border-gray-600 dark:bg-gray-700 rounded-md  shadow-2xl',
         },
         this.$slots.default ? this.$slots.default() : undefined
       )

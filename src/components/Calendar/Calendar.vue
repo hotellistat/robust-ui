@@ -631,7 +631,7 @@ export default defineComponent({
   <div class="flex w-max select-none">
     <div
       v-if="Array.isArray(modelValue)"
-      class="flex flex-shrink-0 flex-col border-r border-gray-200 py-2 text-sm dark:border-gray-700"
+      class="flex flex-shrink-0 flex-col border-r border-gray-200 py-2 text-sm dark:border-gray-600"
     >
       <div class="flex flex-row sm:flex-col">
         <div>
@@ -692,17 +692,11 @@ export default defineComponent({
         </div>
       </div>
     </div>
-    <section class="p-4 dark:border-gray-700">
+    <section class="p-4 dark:border-gray-600">
       <div class="mb-4 flex items-center text-center text-lg font-semibold">
-        <div
-          class="flex h-8 w-8 cursor-pointer items-center justify-center rounded-lg text-gray-700 hover:bg-gray-100 hover:text-gray-700 active:bg-gray-200 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-gray-100"
-          @click="subMonth"
-        >
-          <PhCaretLeft type="chevron-left" size="14" weight="bold" />
-        </div>
-        <div class="flex flex-1 justify-center">
+        <div class="flex flex-1">
           <div
-            class="flex h-8 cursor-pointer items-center rounded-lg px-3 tabular-nums hover:bg-gray-100 dark:hover:bg-gray-600"
+            class="flex h-8 cursor-pointer items-center rounded-lg px-2 tabular-nums hover:bg-gray-100 dark:hover:bg-gray-700"
             @click="
               () => {
                 showMonthSelection()
@@ -713,7 +707,7 @@ export default defineComponent({
             {{ monthHeading }}
           </div>
           <div
-            class="flex h-8 cursor-pointer items-center rounded-lg px-3 tabular-nums hover:bg-gray-100 dark:hover:bg-gray-600"
+            class="flex h-8 cursor-pointer items-center rounded-lg px-2 tabular-nums hover:bg-gray-100 dark:hover:bg-gray-700"
             @click="
               () => {
                 showYearSelection()
@@ -724,6 +718,13 @@ export default defineComponent({
             {{ yearHeading }}
           </div>
         </div>
+        <div
+          class="flex h-8 w-8 cursor-pointer items-center justify-center rounded-lg text-gray-700 hover:bg-gray-100 hover:text-gray-700 active:bg-gray-200 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-gray-100"
+          @click="subMonth"
+        >
+          <PhCaretLeft type="chevron-left" size="14" weight="bold" />
+        </div>
+
         <div
           class="flex h-8 w-8 cursor-pointer items-center justify-center rounded-lg text-gray-700 hover:bg-gray-100 hover:text-gray-700 active:bg-gray-200 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-gray-100"
           @click="addMonth"
@@ -792,39 +793,39 @@ export default defineComponent({
           ]"
         >
           <div
-            class="pb-2 text-center font-courier text-sm text-gray-500 dark:text-gray-400"
+            class="pb-2 text-center text-sm text-gray-400 dark:text-gray-400"
           >
-            Mon
+            M
           </div>
           <div
-            class="pb-2 text-center font-courier text-sm text-gray-500 dark:text-gray-400"
+            class="pb-2 text-center text-sm text-gray-400 dark:text-gray-400"
           >
-            Tue
+            T
           </div>
           <div
-            class="pb-2 text-center font-courier text-sm text-gray-500 dark:text-gray-400"
+            class="pb-2 text-center text-sm text-gray-400 dark:text-gray-400"
           >
-            Wed
+            W
           </div>
           <div
-            class="pb-2 text-center font-courier text-sm text-gray-500 dark:text-gray-400"
+            class="pb-2 text-center text-sm text-gray-400 dark:text-gray-400"
           >
-            Thu
+            T
           </div>
           <div
-            class="pb-2 text-center font-courier text-sm text-gray-500 dark:text-gray-400"
+            class="pb-2 text-center text-sm text-gray-400 dark:text-gray-400"
           >
-            Fri
+            F
           </div>
           <div
-            class="pb-2 text-center font-courier text-sm text-gray-500 dark:text-gray-400"
+            class="pb-2 text-center text-sm text-gray-400 dark:text-gray-400"
           >
-            Sat
+            S
           </div>
           <div
-            class="pb-2 text-center font-courier text-sm text-gray-500 dark:text-gray-400"
+            class="pb-2 text-center text-sm text-gray-400 dark:text-gray-400"
           >
-            Sun
+            S
           </div>
 
           <div v-for="offset in firstWeekday" :key="offset + '_offset'"></div>
@@ -866,7 +867,7 @@ export default defineComponent({
     </section>
     <div
       v-if="Array.isArray(modelValue)"
-      class="flex flex-shrink-0 flex-col items-start border-l border-gray-200 p-4"
+      class="flex flex-shrink-0 flex-col items-start border-l border-gray-200 p-4 dark:border-gray-600"
     >
       <label
         class="mb-1 block text-sm font-medium text-gray-500 dark:text-gray-400"

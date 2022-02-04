@@ -5,7 +5,7 @@
     class="transition-color flex items-center justify-center truncate font-medium ring-opacity-50 duration-75 focus:ring"
     :class="[
       disabled
-        ? 'bg-gray-200 text-gray-400 dark:bg-gray-700 dark:text-gray-400'
+        ? 'bg-gray-200 text-gray-400 dark:bg-gray-600 dark:text-gray-400'
         : variantStyles,
       condensed ? 'h-8 px-3' : 'h-10 px-4',
       rounded ? 'rounded-full' : 'rounded-md',

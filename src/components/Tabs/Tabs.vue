@@ -12,7 +12,7 @@
       :class="[
         tab.value === modelValue
           ? 'border-primary-500'
-          : 'text-gray-400 dark:border-gray-700 dark:text-gray-500',
+          : 'text-gray-400 dark:border-gray-600 dark:text-gray-500',
       ]"
     >
       <slot name="tab" :tab="tab" :select="() => select(tab.value)">
@@ -22,7 +22,7 @@
       </slot>
     </div>
 
-    <div class="flex-1 border-b-2 dark:border-gray-700"></div>
+    <div class="flex-1 border-b-2 dark:border-gray-600"></div>
   </div>
 </template>
 

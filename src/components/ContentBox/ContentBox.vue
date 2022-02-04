@@ -1,6 +1,6 @@
 <template>
   <section
-    class="overflow-hidden rounded-md border border-gray-200 bg-white dark:border-gray-700 dark:bg-gray-800"
+    class="overflow-hidden rounded-md border border-gray-200 bg-white dark:border-gray-600 dark:bg-gray-700"
   >
     <header
       v-if="description !== undefined || title !== undefined"

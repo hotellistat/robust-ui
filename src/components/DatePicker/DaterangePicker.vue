@@ -74,7 +74,7 @@ export default defineComponent({
     },
     inputClass: {
       type: String,
-      default: 'bg-gray-100 dark:bg-gray-700',
+      default: 'bg-gray-100 dark:bg-gray-600',
     },
     condensed: {
       type: Boolean,
@@ -428,7 +428,7 @@ export default defineComponent({
         </Calendar>
       </div>
       <div
-        class="flex items-start justify-between border-t border-gray-200 p-4 dark:border-gray-700"
+        class="flex items-start justify-between border-t border-gray-200 p-4 dark:border-gray-600"
       >
         <PhClockCounterClockwise
           :class="dateHistory.length > 0 ? 'visible' : 'invisible'"

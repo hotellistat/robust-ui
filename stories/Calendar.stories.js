@@ -1,4 +1,5 @@
 import Calendar from '@/components/Calendar/Calendar.vue'
+import { ref } from 'vue'
 
 export default {
   title: 'Ui/Calendar',
@@ -15,3 +16,14 @@ const Template = (args) => ({
 })
 
 export const Default = Template.bind({})
+
+const date = [new Date(), new Date()]
+const modelValue = ref(date)
+
+export const Range = Template.bind({})
+Range.args = {
+  modelValue: modelValue,
+  'onUpdate:modelValue': (val) => {
+    modelValue.value = val
+  },
+}

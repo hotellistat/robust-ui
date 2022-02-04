@@ -8,7 +8,7 @@
   <div
     v-bind="$attrs"
     ref="wrapperRef"
-    class="relative flex min-w-52 rounded-md border border-gray-200 bg-gray-50 dark:border-gray-700 dark:bg-gray-900"
+    class="relative flex min-w-52 rounded-md border border-gray-200 bg-gray-50 dark:border-gray-600 dark:bg-gray-800"
     :class="[
       condensed ? 'h-8' : 'h-10',
       {

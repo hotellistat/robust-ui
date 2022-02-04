@@ -16,7 +16,7 @@
         :class="[
           isChecked
             ? 'border-primary-500 bg-primary-500'
-            : 'border-gray-300 bg-gray-100 dark:border-gray-600 dark:bg-gray-700',
+            : 'border-gray-300 bg-gray-100 dark:border-gray-500 dark:bg-gray-600',
         ]"
       >
         <div
