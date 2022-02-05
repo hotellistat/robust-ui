@@ -7,6 +7,7 @@ import { PhCaretDown, PhCalendar } from 'phosphor-vue'
 import { computed, defineComponent, ref, toRefs, PropType } from 'vue'
 import { onClickOutside } from '@vueuse/core'
 
+let id = 0
 export default defineComponent({
   components: {
     Popper,
@@ -50,7 +51,7 @@ export default defineComponent({
     const { modelValue } = toRefs(props)
     const open = ref(false)
     const popperRef = ref()
-
+    const cuid = (++id).toString()
     const inputWrapperRef = ref()
 
     onClickOutside(popperRef, (event) => {
@@ -101,6 +102,7 @@ export default defineComponent({
       refSelectContainer,
       open,
       props,
+      cuid,
       displayDate,
       computedValue,
       closeDropdown,
@@ -125,34 +127,32 @@ export default defineComponent({
     @click.stop="open = !open"
     ref="inputWrapperRef"
   >
-    <template #default="{ cuid }">
-      <div
-        class="flex h-full items-center pr-2 text-gray-400"
-        :class="[condensed ? 'pl-2' : 'pl-3']"
-      >
-        <PhCalendar size="20" />
-      </div>
-      <div
-        :id="cuid"
-        ref="select"
-        class="flex h-full w-full items-center bg-transparent pl-2 text-current outline-none"
-        v-bind="$attrs"
-      >
-        <div class="min-w-0 truncate tabular-nums">{{ displayDate }}</div>
-      </div>
+    <div
+      class="flex h-full items-center pr-2 text-gray-400"
+      :class="[condensed ? 'pl-2' : 'pl-3']"
+    >
+      <PhCalendar size="20" />
+    </div>
+    <div
+      :id="cuid"
+      ref="select"
+      class="flex h-full w-full items-center bg-transparent pl-2 text-current outline-none"
+      v-bind="$attrs"
+    >
+      <div class="min-w-0 truncate tabular-nums">{{ displayDate }}</div>
+    </div>
 
-      <div
-        class="flex h-full flex-shrink-0 items-center pr-3 text-gray-400 dark:text-gray-600"
-        :class="[condensed ? 'pl-2' : 'pl-3']"
-      >
-        <PhCaretDown
-          :size="14"
-          weight="bold"
-          class="transition-transform duration-200"
-          :class="{ 'rotate-180 transform': open }"
-        />
-      </div>
-    </template>
+    <div
+      class="flex h-full flex-shrink-0 items-center pr-3 text-gray-400 dark:text-gray-600"
+      :class="[condensed ? 'pl-2' : 'pl-3']"
+    >
+      <PhCaretDown
+        :size="14"
+        weight="bold"
+        class="transition-transform duration-200"
+        :class="{ 'rotate-180 transform': open }"
+      />
+    </div>
   </InputWrapper>
   <Popper
     v-if="inputWrapperRef?.wrapperRef"

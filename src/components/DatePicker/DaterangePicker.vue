@@ -290,36 +290,34 @@ export default defineComponent({
     ref="inputWrapperRef"
     @click.stop="handleClick"
   >
-    <template #default="{ cuid }">
-      <div
-        class="flex h-full items-center pr-2 text-gray-400"
-        :class="[condensed ? 'pl-2' : 'pl-3']"
-      >
-        <PhCalendar size="20" />
+    <div
+      class="flex h-full items-center pr-2 text-gray-400"
+      :class="[condensed ? 'pl-2' : 'pl-3']"
+    >
+      <PhCalendar size="20" />
+    </div>
+    <div
+      :id="cuid"
+      ref="select"
+      class="flex h-full w-full items-center bg-transparent pl-2 text-current outline-none"
+      v-bind="$attrs"
+    >
+      <div class="min-w-0 truncate text-sm tabular-nums sm:text-base">
+        {{ displayDate }}
       </div>
-      <div
-        :id="cuid"
-        ref="select"
-        class="flex h-full w-full items-center bg-transparent pl-2 text-current outline-none"
-        v-bind="$attrs"
-      >
-        <div class="min-w-0 truncate text-sm tabular-nums sm:text-base">
-          {{ displayDate }}
-        </div>
-      </div>
+    </div>
 
-      <div
-        class="flex h-full flex-shrink-0 items-center pr-3 text-gray-400 dark:text-gray-600"
-        :class="[condensed ? 'pl-2' : 'pl-3']"
-      >
-        <PhCaretDown
-          :size="14"
-          weight="bold"
-          class="transition-transform duration-200"
-          :class="{ 'rotate-180 transform': open }"
-        />
-      </div>
-    </template>
+    <div
+      class="flex h-full flex-shrink-0 items-center pr-3 text-gray-400 dark:text-gray-600"
+      :class="[condensed ? 'pl-2' : 'pl-3']"
+    >
+      <PhCaretDown
+        :size="14"
+        weight="bold"
+        class="transition-transform duration-200"
+        :class="{ 'rotate-180 transform': open }"
+      />
+    </div>
   </InputWrapper>
   <Popper
     ref="popperRef"

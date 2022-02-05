@@ -28,6 +28,11 @@ export default defineConfig({
         // for externalized deps
         globals: {
           vue: 'Vue',
+          'phosphor-vue': 'phosphor-vue',
+          'date-fns': 'date-fns',
+          '@popperjs/core': '@popperjs/core',
+          gsap: 'gsap',
+          gridstack: 'gridstack',
         },
       },
     },

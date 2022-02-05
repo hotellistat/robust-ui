@@ -14,7 +14,7 @@ import { debouncedWatch } from '@vueuse/core'
 import { Modifier } from '@popperjs/core'
 import { onClickOutside } from '@vueuse/core'
 import { PhCheck, PhCaretDown } from 'phosphor-vue'
-
+let id = 0
 export default defineComponent({
   components: {
     Popper,
@@ -63,7 +63,7 @@ export default defineComponent({
   setup(props, { emit, attrs }) {
     const refSelectContainer = ref()
     const refSelectInput = ref()
-
+    const cuid = (++id).toString()
     const { options } = toRefs(props)
 
     const open = ref(false)
@@ -171,6 +171,7 @@ export default defineComponent({
       open,
       props,
       openDropdown,
+      cuid,
       inputWrapper,
       popperModifiers,
       activeItem,
@@ -199,47 +200,45 @@ export default defineComponent({
     @focus="openDropdown"
     @blur="closeDropdown"
   >
-    <template #default="{ cuid }">
-      <div
-        v-if="$slots.prefix"
-        class="flex h-full items-center pr-2 text-gray-400"
-        :class="[condensed ? 'pl-2' : 'pl-3']"
-      >
-        <slot tag="div" name="prefix" />
+    <div
+      v-if="$slots.prefix"
+      class="flex h-full items-center pr-2 text-gray-400"
+      :class="[condensed ? 'pl-2' : 'pl-3']"
+    >
+      <slot tag="div" name="prefix" />
+    </div>
+    <div
+      v-show="!open"
+      :id="cuid"
+      ref="select"
+      class="flex h-full w-full items-center bg-transparent text-current outline-none"
+      :class="[$slots.prefix || condensed ? 'pl-2' : 'pl-3']"
+      v-bind="attrs"
+    >
+      <div class="min-w-0 select-none truncate">
+        {{ activeItem ? activeItem.title : 'Select' }}
       </div>
-      <div
-        v-show="!open"
-        :id="cuid"
-        ref="select"
-        class="flex h-full w-full items-center bg-transparent text-current outline-none"
-        :class="[$slots.prefix || condensed ? 'pl-2' : 'pl-3']"
-        v-bind="attrs"
-      >
-        <div class="min-w-0 select-none truncate">
-          {{ activeItem ? activeItem.title : 'Select' }}
-        </div>
-      </div>
-      <input
-        v-show="open"
-        ref="refSelectInput"
-        v-model="search"
-        size="1"
-        class="block h-full w-full bg-transparent text-current outline-none"
-        :class="[$slots.prefix || condensed ? 'pl-2' : 'pl-3']"
-      />
+    </div>
+    <input
+      v-show="open"
+      ref="refSelectInput"
+      v-model="search"
+      size="1"
+      class="block h-full w-full bg-transparent text-current outline-none"
+      :class="[$slots.prefix || condensed ? 'pl-2' : 'pl-3']"
+    />
 
-      <div
-        class="flex h-full flex-shrink-0 items-center pr-3 text-gray-400 dark:text-gray-600"
-        :class="[condensed ? 'pl-2' : 'pl-3']"
-      >
-        <PhCaretDown
-          :size="14"
-          weight="bold"
-          class="transition-transform duration-200"
-          :class="{ 'rotate-180 transform': open }"
-        />
-      </div>
-    </template>
+    <div
+      class="flex h-full flex-shrink-0 items-center pr-3 text-gray-400 dark:text-gray-600"
+      :class="[condensed ? 'pl-2' : 'pl-3']"
+    >
+      <PhCaretDown
+        :size="14"
+        weight="bold"
+        class="transition-transform duration-200"
+        :class="{ 'rotate-180 transform': open }"
+      />
+    </div>
   </InputWrapper>
   <Popper
     v-if="inputWrapper?.wrapperRef"
