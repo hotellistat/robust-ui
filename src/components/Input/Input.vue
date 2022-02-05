@@ -3,6 +3,7 @@ import { computed, defineComponent, PropType, ref } from 'vue'
 import InputWrapper from '../InputWrapper/InputWrapper.vue'
 import { PhWarningCircle } from 'phosphor-vue'
 
+let id = 0
 export default defineComponent({
   inheritAttrs: false,
   components: {
@@ -39,6 +40,8 @@ export default defineComponent({
   },
   emits: ['update:modelValue', 'input', 'change'],
   setup(props, { emit, attrs }) {
+    const cuid = (++id).toString()
+
     const inputRef = ref()
 
     const inputAttrs = attrs
@@ -65,6 +68,7 @@ export default defineComponent({
       inputFieldValue,
       inputAttrs,
       props,
+      cuid,
       inputRef,
       focus,
       clear,
@@ -81,7 +85,6 @@ export default defineComponent({
     :class="$props.class"
     :readonly="readonly"
     :condensed="condensed"
-    v-slot="slotProps"
   >
     <div
       v-if="$slots.prefix"
@@ -91,7 +94,7 @@ export default defineComponent({
       <slot tag="div" name="prefix" />
     </div>
     <input
-      :id="slotProps.cuid"
+      :id="cuid"
       ref="inputRef"
       v-model="inputFieldValue"
       size="8"
@@ -103,8 +106,7 @@ export default defineComponent({
           'cursor-not-allowed': readonly,
         },
       ]"
-      :readonly="!!readonly"
-      v-bind="$attrs"
+      :readonly="readonly"
     />
 
     <div

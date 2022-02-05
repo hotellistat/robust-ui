@@ -19,7 +19,7 @@
         },
       ]"
     >
-      <slot :cuid="cuid" :wrapperRef="wrapperRef" />
+      <slot :wrapperRef="wrapperRef"></slot>
     </div>
     <label v-if="hint !== undefined || error !== undefined" class="block pt-2">
       <div v-if="hint !== undefined" class="select-none text-xs text-gray-400">
@@ -65,8 +65,6 @@ export default defineComponent({
     },
   },
   setup(_, { attrs }) {
-    const cuid = ref(++uid).toString()
-
     const onRE = /^on[^a-z]/
     const isOn = (key: string) => onRE.test(key)
 
@@ -84,7 +82,6 @@ export default defineComponent({
 
     return {
       wrapperRef,
-      cuid,
       blurred,
       focused,
       listeners,
