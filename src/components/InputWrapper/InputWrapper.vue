@@ -2,7 +2,6 @@
   <fieldset>
     <legend
       v-if="title"
-      :for="cuid"
       class="mb-1 block select-none text-sm font-medium text-gray-500 dark:text-gray-400"
     >
       {{ title }}
@@ -66,7 +65,7 @@ export default defineComponent({
     },
   },
   setup(_, { attrs }) {
-    const cuid = 'input_' + ++uid
+    const cuid = ref(++uid).toString()
 
     const onRE = /^on[^a-z]/
     const isOn = (key: string) => onRE.test(key)
