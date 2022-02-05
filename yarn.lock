@@ -1912,7 +1912,7 @@
     prop-types "^15.7.2"
     regenerator-runtime "^0.13.7"
 
-"@storybook/addons@6.4.16", "@storybook/addons@^6.0.0":
+"@storybook/addons@6.4.16":
   version "6.4.16"
   resolved "https://registry.npmjs.org/@storybook/addons/-/addons-6.4.16.tgz"
   integrity sha512-/WFlNKohu7ME9Y/LwW8LunlBjjgmeT4uEE+0qXS++csH9RitJNh0SbtaJd7c3QQR0epHyZ4ubp3qRmSt+jdYKg==
@@ -1929,7 +1929,7 @@
     global "^4.4.0"
     regenerator-runtime "^0.13.7"
 
-"@storybook/addons@6.4.18":
+"@storybook/addons@6.4.18", "@storybook/addons@^6.0.0":
   version "6.4.18"
   resolved "https://registry.yarnpkg.com/@storybook/addons/-/addons-6.4.18.tgz#fc92a4a608680f2e182a5e896ed382792f6b774e"
   integrity sha512-fd3S79P4jJCYZNA2JxA1Xnkj0UlHGQ4Vg72aroWy4OQFlgGQor1LgPfM6RaJ9rh/4k4BXYPXsS7wzI0UWKG3Lw==
@@ -2292,14 +2292,14 @@
     util-deprecate "^1.0.2"
     webpack "4"
 
-"@storybook/core-events@6.4.16", "@storybook/core-events@^6.0.0":
+"@storybook/core-events@6.4.16":
   version "6.4.16"
   resolved "https://registry.npmjs.org/@storybook/core-events/-/core-events-6.4.16.tgz"
   integrity sha512-EP82FP9vYB6POdqj/Hq01O6YJClHV7C7Qf9hCnG8TNjwz1hzsTkkoXKwtSpZ35hGdVExiu62u5bpi/oCa4R7qA==
   dependencies:
     core-js "^3.8.2"
 
-"@storybook/core-events@6.4.18":
+"@storybook/core-events@6.4.18", "@storybook/core-events@^6.0.0":
   version "6.4.18"
   resolved "https://registry.yarnpkg.com/@storybook/core-events/-/core-events-6.4.18.tgz#630a19425eb387c6134f29b967c30458c65f7ea8"
   integrity sha512-lCT3l0rFs6CuVpD8+mwmj1lUTomGErySTxi0KmVd2AWQj8kJL90EfS0jHSU5JIXScDvuwXDXLLmvMfqNU+zHdg==
