@@ -225,6 +225,7 @@ export default defineComponent({
 
     function setDaterange(dateRange: [Date, Date]) {
       emit('update:modelValue', dateRange)
+      cursor.value = dateRange[1]
     }
     function addYear() {
       cursor.value = addYears(cursor.value, 1)
