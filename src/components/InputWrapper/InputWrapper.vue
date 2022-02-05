@@ -1,45 +1,7 @@
-<template>
-  <fieldset>
-    <legend
-      v-if="title"
-      class="mb-1 block select-none text-sm font-medium text-gray-500 dark:text-gray-400"
-    >
-      {{ title }}
-    </legend>
-    <div
-      v-bind="listeners"
-      ref="wrapperRef"
-      class="relative flex min-w-52 rounded-md border border-gray-200 bg-gray-50 dark:border-gray-600 dark:bg-gray-800"
-      :class="[
-        $props.class,
-        condensed ? 'h-9' : 'h-10',
-        {
-          'ring-primary-500 ring-opacity-30 focus-within:border-primary-500 focus-within:outline-none focus-within:ring focus-within:dark:border-primary-500':
-            !readonly,
-        },
-      ]"
-    >
-      <slot :wrapperRef="wrapperRef"></slot>
-    </div>
-    <label v-if="hint !== undefined || error !== undefined" class="block pt-2">
-      <div v-if="hint !== undefined" class="select-none text-xs text-gray-400">
-        {{ hint }}
-      </div>
-      <div
-        v-if="error !== undefined"
-        class="select-none text-xs text-red-400 dark:text-red-400"
-      >
-        {{ error }}
-      </div>
-    </label>
-  </fieldset>
-</template>
-
 <script lang="ts">
 import { computed, defineComponent, ref } from 'vue'
 
 let uid = 0
-
 export default defineComponent({
   inheritAttrs: false,
   props: {
@@ -65,6 +27,8 @@ export default defineComponent({
     },
   },
   setup(_, { attrs }) {
+    const cuid = (++uid).toString()
+
     const onRE = /^on[^a-z]/
     const isOn = (key: string) => onRE.test(key)
 
@@ -81,6 +45,7 @@ export default defineComponent({
     function focused() {}
 
     return {
+      cuid,
       wrapperRef,
       blurred,
       focused,
@@ -89,3 +54,40 @@ export default defineComponent({
   },
 })
 </script>
+
+<template>
+  <fieldset>
+    <legend
+      v-if="title"
+      class="mb-1 block select-none text-sm font-medium text-gray-500 dark:text-gray-400"
+    >
+      {{ title }}
+    </legend>
+    <div
+      v-bind="listeners"
+      ref="wrapperRef"
+      class="relative flex min-w-52 rounded-md border border-gray-200 bg-gray-50 dark:border-gray-600 dark:bg-gray-800"
+      :class="[
+        $props.class,
+        condensed ? 'h-9' : 'h-10',
+        {
+          'ring-primary-500 ring-opacity-30 focus-within:border-primary-500 focus-within:outline-none focus-within:ring focus-within:dark:border-primary-500':
+            !readonly,
+        },
+      ]"
+    >
+      <slot :cuid="cuid" :wrapperRef="wrapperRef"></slot>
+    </div>
+    <label v-if="hint !== undefined || error !== undefined" class="block pt-2">
+      <div v-if="hint !== undefined" class="select-none text-xs text-gray-400">
+        {{ hint }}
+      </div>
+      <div
+        v-if="error !== undefined"
+        class="select-none text-xs text-red-400 dark:text-red-400"
+      >
+        {{ error }}
+      </div>
+    </label>
+  </fieldset>
+</template>

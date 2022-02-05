@@ -1,7 +1,7 @@
 {
   "name": "@hotellistat/robust-ui",
   "homepage": "https://hotellistat.github.io/robust-ui",
-  "version": "0.2.15",
+  "version": "0.2.16",
   "description": "A lightweight Vue 3 component library",
   "repository": "hotellistat/robust-ui",
   "author": "Daniel Schneider <daniel.schneider@hotellistat.de>",
@@ -26,6 +26,7 @@
     "build": "build-storybook",
     "deploy": "gh-pages -d storybook-static",
     "build:library": "vite build && vue-tsc --emitDeclarationOnly ",
+    "test": "vite",
     "analyze": "vite build --config analyze.config.js",
     "format": "prettier --write \"src/**/*.{vue,ts,js}\"",
     "lint": "eslint --ext .ts,vue --ignore-path .gitignore . --fix",

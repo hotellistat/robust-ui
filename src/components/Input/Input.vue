@@ -85,6 +85,7 @@ export default defineComponent({
     :class="$props.class"
     :readonly="readonly"
     :condensed="condensed"
+    v-slot="slotProps"
   >
     <div
       v-if="$slots.prefix"
@@ -94,7 +95,7 @@ export default defineComponent({
       <slot tag="div" name="prefix" />
     </div>
     <input
-      :id="cuid"
+      :id="slotProps.cuid"
       ref="inputRef"
       v-model="inputFieldValue"
       size="8"

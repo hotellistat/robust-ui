@@ -1,4 +1,4 @@
-import '../src/styles/tailwindcss.css'
+import '../src/styles/tailwind.css'
 import '../src/styles/storybook.css'
 
 import { app } from '@storybook/vue3'
