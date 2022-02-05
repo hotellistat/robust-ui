@@ -93,6 +93,7 @@ export default defineComponent({
     <input
       :id="slotProps.cuid"
       ref="inputRef"
+      v-bind="$attrs"
       v-model="inputFieldValue"
       size="8"
       class="block h-full w-full bg-transparent text-current outline-none dark:placeholder-gray-600"
