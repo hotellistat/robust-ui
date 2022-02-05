@@ -6,15 +6,11 @@ export default {
   title: 'Ui/DaterangePicker',
   component: DaterangePicker,
   argTypes: {
-    compare: { control: { type: 'boolean' } },
-    perspective: { control: { type: 'boolean' } },
+    condensed: { control: { type: 'boolean' } },
+    enableComparison: { control: { type: 'boolean' } },
+    enablePerspective: { control: { type: 'boolean' } },
     perspectiveDate: { control: { type: 'date' } },
     comparePerspectiveDate: { control: { type: 'date' } },
-    compareDate: { control: { type: 'array' } },
-    modelValue: {
-      control: { type: 'array' },
-      default: [new Date(), new Date()],
-    },
     outline: { control: { type: 'boolean' } },
   },
 }
@@ -30,12 +26,17 @@ const Template = (args) => ({
 })
 
 const date = [new Date(), new Date()]
-const modelValue = ref(date)
+const dateRange = ref(date)
+const compareDateRange = ref(date)
 
 export const Default = Template.bind({})
 Default.args = {
-  dateRange: modelValue,
+  dateRange: dateRange,
   'onUpdate:dateRange': (val) => {
-    modelValue.value = val
+    dateRange.value = val
+  },
+  compareDateRange: compareDateRange,
+  'onUpdate:compareDateRange': (val) => {
+    compareDateRange.value = val
   },
 }

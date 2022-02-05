@@ -5,7 +5,11 @@ import { ref } from 'vue'
 export default {
   title: 'Ui/DatePicker',
   component: DatePicker,
-  argTypes: {},
+  argTypes: {
+    title: { control: { type: 'text' } },
+    hint: { control: { type: 'text' } },
+    error: { control: { type: 'text' } },
+  },
 }
 
 const Template = (args) => ({

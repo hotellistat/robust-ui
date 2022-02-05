@@ -166,6 +166,7 @@ export default defineComponent({
       refSelectContainer,
       closeDropdown,
       open,
+      props,
       openDropdown,
       inputWrapper,
       popperModifiers,
@@ -184,10 +185,7 @@ export default defineComponent({
 <template>
   <input-wrapper
     ref="inputWrapper"
-    :title="title"
-    :hint="hint"
-    :error="error"
-    :condensed="condensed"
+    v-bind="props"
     class="cursor-pointer"
     @click="openDropdown"
     @focus="openDropdown"

@@ -96,6 +96,7 @@ export default defineComponent({
       attrs,
       refSelectContainer,
       open,
+      props,
       displayDate,
       computedValue,
       closeDropdown,
@@ -110,12 +111,8 @@ export default defineComponent({
 
 <template>
   <InputWrapper
-    v-bind="$attrs"
+    v-bind="props"
     ref="inputWrapperRef"
-    :title="title"
-    :hint="hint"
-    :error="error"
-    :condensed="condensed"
     @click.stop="open = !open"
     class="cursor-pointer"
   >

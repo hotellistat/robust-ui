@@ -108,12 +108,6 @@ export default defineComponent({
     const comparePerspectiveOf = ref<Date | undefined>(
       comparePerspectiveDate.value
     )
-    const compareWith = computed({
-      get: () => computedCompare.value.length > 1,
-      set: (value) => {
-        showCompare(value)
-      },
-    })
 
     const enabledHistory = ref(false)
     const displayCompare = ref()
@@ -133,17 +127,17 @@ export default defineComponent({
       return props.dateHistory || []
     })
 
-    const computedDateRange = computed<[Date, Date]>({
-      get() {
-        return dateRange.value
-      },
-      set(value) {
-        emit('update:dateRange', value)
-        emit('change', value)
-        emit('blur')
-        // if (value.length > 1) open.value = false
-      },
-    })
+    let tmpDateRange = ref<[Date, Date]>()
+
+    // const computedDateRange = computed<[Date, Date]>({
+    //   get() {
+    //     return dateRange.value
+    //   },
+    //   set(value) {
+    //     // if (value.length > 1) open.value = false
+    //     tmpDateRange.value = value
+    //   },
+    // })
 
     const compareDates = ref<[Date, Date] | undefined>(compareDateRange.value)
 
@@ -158,16 +152,23 @@ export default defineComponent({
       },
     })
 
+    const compareWith = computed({
+      get: () => computedCompare.value.length > 1,
+      set: (value) => {
+        showCompare(value)
+      },
+    })
+
     const displayDate = computed(() => {
-      if (!computedDateRange.value) {
+      if (!dateRange.value) {
         return 'Select date'
       }
 
-      const realDate = computedDateRange.value
+      const realDate = dateRange.value
       try {
         return realDate.length > 1
           ? format(realDate[0], 'P') + ' - ' + format(realDate[1], 'P')
-          : format(realDate[0], 'P') + ' - ' + '-- -- ----'
+          : format(realDate[0], 'P') + ' - ' + format(realDate[0], 'P')
       } catch (e) {
         return undefined
       }
@@ -201,15 +202,16 @@ export default defineComponent({
       }
     })
 
-    // const updatePerspective = (val: Date) => {
-    //   emit('update:perspectiveDate', val)
-    // }
+    const updatePerspective = (val: Date) => {
+      emit('update:perspectiveDate', val)
+    }
 
-    // const updateComparePerspective = (val: Date) => {
-    //   emit('update:comparePerspectiveDate', val)
-    // }
+    const updateComparePerspective = (val: Date) => {
+      emit('update:comparePerspectiveDate', val)
+    }
 
     const handleClick = () => {
+      tmpDateRange.value = dateRange.value
       open.value = !open.value
     }
 
@@ -219,48 +221,15 @@ export default defineComponent({
     }
 
     const saveTime = async () => {
-      // if (store) {
-      //   store.commit('SET_DATE_MODULE_DETAILS', {
-      //     module: route.matched[1].meta.title
-      //       ? route.matched[1].meta.title
-      //       : 'Default',
-      //     subpage: route.meta.title,
-      //     class: route.meta.color ? route.meta.color : 'text-gray',
-      //   })
-      //   store.commit('SET_DATE_CONFIG')
-      //   if (storeHistory.value) await store.dispatch('set_date_history')
-      // }
+      emit('update:dateRange', tmpDateRange.value)
+      emit('change', tmpDateRange.value)
+      emit('blur')
+      open.value = false
     }
 
     const enableStoringHistory = (enable: boolean) => {
       storeHistory.value = enable
     }
-
-    const prefillDates = (item: any) => {
-      // if (store) {
-      //   if (item.global_date)
-      //     store.commit(
-      //       'SET_GLOBAL_DATE',
-      //       item.global_date.map((date: Date) => new Date(date))
-      //     )
-      //   if (item.perspective_date)
-      //     perspectiveOf.value = new Date(item.perspective_date)
-
-      //   if (item.compare_date)
-      //     store.commit(
-      //       'SET_COMPARE_DATE',
-      //       item.compare_date.map((date: Date) => new Date(date))
-      //     )
-      //   if (item.compare_perspective_date)
-      //     comparePerspectiveOf.value = new Date(item.compare_perspective_date)
-      // }
-      enabledHistory.value = !enabledHistory.value
-      enableStoringHistory(false)
-    }
-
-    // watch(compareDate, (val: any) => {
-    //   compareDates.value = val
-    // })
 
     watch(perspectiveOf, (val) => {
       emit('update:perspectiveDate', val)
@@ -274,14 +243,14 @@ export default defineComponent({
       displayCompare,
       computedCompare,
       attrs,
+      props,
       refSelectContainer,
       pickedCompare,
       open,
       cuid,
       displayDate,
       saveTime,
-      computedDateRange,
-      prefillDates,
+      tmpDateRange,
       dateConfig,
       closeDropdown,
       showCompare,
@@ -307,12 +276,8 @@ export default defineComponent({
 
 <template>
   <InputWrapper
-    v-bind="$attrs"
-    :title="title"
+    v-bind="props"
     ref="inputWrapperRef"
-    :hint="hint"
-    :error="error"
-    :condensed="condensed"
     @click.stop="handleClick"
     class="cursor-pointer"
   >
@@ -329,7 +294,7 @@ export default defineComponent({
         class="flex h-full w-full items-center bg-transparent pl-2 text-current outline-none"
         v-bind="$attrs"
       >
-        <div class="min-w-0 truncate font-courier text-sm sm:text-base">
+        <div class="min-w-0 truncate text-sm tabular-nums sm:text-base">
           {{ displayDate }}
         </div>
       </div>
@@ -356,88 +321,62 @@ export default defineComponent({
       placement: 'bottom-start',
     }"
   >
-    <div
-      class=""
-      :class="!enabledHistory ? 'translate-y-0' : 'translate-y-full'"
-    >
-      <div
-        v-if="enableComparison"
-        class="flex items-center justify-between gap-x-2 px-4 py-2 hover:cursor-pointer"
+    <h3 class="font-lg border-b border-gray-200 p-4 font-medium text-gray-500">
+      Date range
+    </h3>
+    <div>
+      <Calendar
+        ref="mainCalendar"
+        v-model="tmpDateRange"
+        @click:relativeDate="enableStoringHistory(false)"
       >
-        <PhArrowRight
-          @click="goBack"
-          size="24"
-          :class="displayCompare ? 'visible' : 'invisible'"
-        />
-        <div class="text-lg">
-          {{ displayCompare ? 'Compare' : 'Date range' }}
-        </div>
-        <PhArrowLeft
-          @click="displayCompare = true"
-          size="24"
-          :class="displayCompare ? 'invisible' : 'visible'"
-        />
-      </div>
-      <div
-        class="flex"
-        :class="[
-          !displayCompare ? 'translate-x-0' : '-translate-x-full',
-          enableComparison ? 'absolute' : '',
-        ]"
-      >
-        <Calendar
-          ref="mainCalendar"
-          v-model="computedDateRange"
-          @click:relativeDate="enableStoringHistory(false)"
-        >
-          <div
-            v-if="enablePerspective"
-            class="flex flex-col items-start gap-y-3"
-          >
-            <div>
-              <label
-                class="mb-1 block text-sm font-medium text-gray-500 dark:text-gray-400"
-                >Perspective of</label
-              >
-              <DatePicker placeholder="Date" v-model="perspectiveOf" />
-            </div>
-            <Checkbox
-              v-if="enableComparison"
-              v-model="compareWith"
-              title="Compare with"
-            />
-          </div>
-        </Calendar>
-      </div>
-      <div
-        v-if="enableComparison"
-        class="slide transform transition-all duration-150 ease-in-out"
-        :class="[!displayCompare ? 'translate-x-full' : 'translate-x-0']"
-      >
-        <Calendar
-          v-model="computedCompare"
-          @click:relativeDate="enableStoringHistory(false)"
-        >
-          <div v-if="enablePerspective" class="flex flex-col items-start">
+        <div v-if="enablePerspective" class="flex flex-col items-start gap-y-3">
+          <div>
             <label
               class="mb-1 block text-sm font-medium text-gray-500 dark:text-gray-400"
               >Perspective of</label
             >
-            <DatePicker placeholder="Date" v-model="comparePerspectiveOf" />
+            <DatePicker placeholder="Date" v-model="perspectiveOf" />
           </div>
-        </Calendar>
-      </div>
-      <div
-        class="flex items-start justify-between border-t border-gray-200 p-4 dark:border-gray-600"
+          <Checkbox
+            v-if="enableComparison"
+            v-model="compareWith"
+            title="Compare with"
+          />
+        </div>
+      </Calendar>
+    </div>
+    <h3
+      v-if="enableComparison"
+      class="font-lg border-b border-t border-gray-200 p-4 font-medium text-gray-500"
+    >
+      Comparison date range
+    </h3>
+    <div v-if="enableComparison">
+      <Calendar
+        variant="secondary"
+        v-model="computedCompare"
+        @click:relativeDate="enableStoringHistory(false)"
       >
-        <PhClockCounterClockwise
-          :class="dateHistory.length > 0 ? 'visible' : 'invisible'"
-          @click="enabledHistory = !enabledHistory"
-          class="hover:cursor-pointer"
-          :size="35"
-        />
-        <Button type="primary" @click="saveTime">Apply time range</Button>
-      </div>
+        <div v-if="enablePerspective" class="flex flex-col items-start">
+          <label
+            class="mb-1 block text-sm font-medium text-gray-500 dark:text-gray-400"
+            >Perspective of</label
+          >
+          <DatePicker placeholder="Date" v-model="comparePerspectiveOf" />
+        </div>
+      </Calendar>
+    </div>
+    <div
+      class="flex items-start justify-between border-t border-gray-200 p-4 dark:border-gray-600"
+    >
+      <!-- <PhClockCounterClockwise
+        :class="dateHistory.length > 0 ? 'visible' : 'invisible'"
+        @click="enabledHistory = !enabledHistory"
+        class="hover:cursor-pointer"
+        :size="35"
+      /> -->
+      <Button type="primary" @click="saveTime">Apply time range</Button>
     </div>
   </Popper>
 </template>

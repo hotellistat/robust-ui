@@ -12,16 +12,9 @@ import {
   differenceInDays,
   isSameDay,
   getDaysInMonth,
-  subDays,
   min,
   max,
   set,
-  endOfMonth,
-  startOfMonth,
-  startOfYear,
-  endOfYear,
-  startOfWeek,
-  endOfWeek,
   isValid,
 } from 'date-fns'
 import {
@@ -35,6 +28,8 @@ import {
   watch,
 } from 'vue'
 import { PhCaretLeft, PhCaretRight } from 'phosphor-vue'
+import QuickActionPresets from './quickActionPresets'
+import variants from './variants'
 
 export default defineComponent({
   components: {
@@ -56,6 +51,10 @@ export default defineComponent({
       type: Boolean,
       default: true,
     },
+    variant: {
+      type: String,
+      default: 'primary',
+    },
     modelValue: {
       type: [Array, Date] as PropType<[Date, Date] | Date>,
       default: () => new Date(),
@@ -74,11 +73,17 @@ export default defineComponent({
     const selectedDate = ref()
     const refYearEntry = ref({})
 
+    const quickActions = QuickActionPresets
+
     console.log('isarray', modelValue.value, Array.isArray(modelValue.value))
 
     cursor.value = Array.isArray(modelValue.value)
       ? new Date()
       : new Date(modelValue.value)
+
+    const variantStyling = computed(() => {
+      return variants[props.variant]
+    })
 
     const daysInMonth = computed(() => {
       const date = new Date(cursor.value)
@@ -220,6 +225,9 @@ export default defineComponent({
       }
     }
 
+    function setDaterange(dateRange: [Date, Date]) {
+      emit('update:modelValue', dateRange)
+    }
     function addYear() {
       cursor.value = addYears(cursor.value, 1)
     }
@@ -242,154 +250,6 @@ export default defineComponent({
 
     function setMonth(month) {
       cursor.value = setFnsMonth(cursor.value, month)
-    }
-
-    const todayRange = () => {
-      if (!Array.isArray(modelValue.value)) {
-        selectedDate.value = set(new Date(), {
-          hours: 23,
-          minutes: 59,
-          seconds: 59,
-        })
-        emit('update:modelValue', selectedDate.value)
-      } else {
-        const today = set(new Date(), {
-          hours: 0,
-          minutes: 0,
-          seconds: 0,
-          milliseconds: 0,
-        })
-        const newDates = [
-          today,
-          set(new Date(today), {
-            hours: 23,
-            minutes: 59,
-            seconds: 59,
-          }),
-        ]
-        from.value = format(newDates[0], 'MM/dd/yyyy')
-        to.value = format(newDates[1], 'MM/dd/yyyy')
-        emit('update:modelValue', newDates)
-      }
-      emit('click:relativeDate')
-    }
-
-    const yesterday = () => {
-      if (!Array.isArray(modelValue.value)) {
-        selectedDate.value = set(subDays(new Date(), 1), {
-          hours: 23,
-          minutes: 59,
-          seconds: 59,
-        })
-        emit('update:modelValue', selectedDate.value)
-      } else {
-        const yesterday = set(subDays(new Date(), 1), {
-          hours: 0,
-          minutes: 0,
-          seconds: 0,
-          milliseconds: 0,
-        })
-        const newDates = [
-          yesterday,
-          set(new Date(yesterday), {
-            hours: 23,
-            minutes: 59,
-            seconds: 59,
-          }),
-        ]
-        from.value = format(newDates[0], 'MM/dd/yyyy')
-        to.value = format(newDates[1], 'MM/dd/yyyy')
-        cursor.value = newDates[1]
-        emit('update:modelValue', newDates)
-      }
-      emit('click:relativeDate')
-    }
-
-    const thisMonthSoFar = () => {
-      const monthStart = startOfMonth(new Date())
-      const newDates = [
-        monthStart,
-        set(new Date(), {
-          hours: 23,
-          minutes: 59,
-          seconds: 59,
-        }),
-      ]
-      from.value = format(newDates[0], 'MM/dd/yyyy')
-      to.value = format(newDates[1], 'MM/dd/yyyy')
-      cursor.value = newDates[1]
-      emit('update:modelValue', newDates)
-      emit('click:relativeDate')
-    }
-
-    const thisMonth = () => {
-      const monthStart = startOfMonth(new Date())
-      const monthEnd = endOfMonth(new Date())
-      const newDates = [monthStart, monthEnd]
-      from.value = format(newDates[0], 'MM/dd/yyyy')
-      to.value = format(newDates[1], 'MM/dd/yyyy')
-      cursor.value = newDates[1]
-      emit('update:modelValue', newDates)
-      emit('click:relativeDate')
-    }
-
-    const thisYear = () => {
-      const yearStart = startOfYear(new Date())
-      const yearEnd = endOfYear(new Date())
-      const newDates = [yearStart, yearEnd]
-      from.value = format(newDates[0], 'MM/dd/yyyy')
-      to.value = format(newDates[1], 'MM/dd/yyyy')
-      cursor.value = newDates[1]
-      emit('update:modelValue', newDates)
-      emit('click:relativeDate')
-    }
-
-    const thisYearSoFar = () => {
-      const yearStart = startOfYear(new Date())
-      const yearEnd = set(new Date(), {
-        hours: 23,
-        minutes: 59,
-        seconds: 59,
-      })
-      const newDates = [yearStart, yearEnd]
-      from.value = format(newDates[0], 'MM/dd/yyyy')
-      to.value = format(newDates[1], 'MM/dd/yyyy')
-      cursor.value = newDates[1]
-      emit('update:modelValue', newDates)
-      emit('click:relativeDate')
-    }
-
-    const lastWeek = () => {
-      const startDay = startOfWeek(subDays(new Date(), 7))
-      const endDay = endOfWeek(new Date(startDay))
-      const newDates = [startDay, endDay]
-      from.value = format(newDates[0], 'MM/dd/yyyy')
-      to.value = format(newDates[1], 'MM/dd/yyyy')
-      cursor.value = newDates[1]
-      emit('update:modelValue', newDates)
-      emit('click:relativeDate')
-    }
-
-    const lastMonth = () => {
-      const startDay = startOfMonth(subDays(startOfMonth(new Date()), 1))
-      const endDay = endOfMonth(new Date(startDay))
-      const newDates = [startDay, endDay]
-      from.value = format(newDates[0], 'MM/dd/yyyy')
-      to.value = format(newDates[1], 'MM/dd/yyyy')
-      cursor.value = newDates[1]
-      emit('update:modelValue', newDates)
-      emit('click:relativeDate')
-    }
-
-    const lastYear = () => {
-      const startDay = startOfYear(subDays(startOfYear(new Date()), 1))
-      const endDay = endOfYear(new Date(startDay))
-      const newDates = [startDay, endDay]
-      from.value = format(newDates[0], 'MM/dd/yyyy')
-      to.value = format(newDates[1], 'MM/dd/yyyy')
-      cursor.value = newDates[1]
-      emit('update:modelValue', newDates)
-      emit('click:relativeDate')
     }
 
     const dayAllowed = (day) => {
@@ -608,90 +468,37 @@ export default defineComponent({
       subYear,
       addMonth,
       subMonth,
-      todayRange,
-      yesterday,
-      thisMonthSoFar,
-      thisMonth,
-      thisYear,
-      thisYearSoFar,
-      lastWeek,
-      lastMonth,
-      lastYear,
       dayAllowed,
       daySelect,
       reset,
       submit,
       yearSelectionYears,
+      quickActions,
+      setDaterange,
+      variantStyling,
     }
   },
 })
 </script>
 
 <template>
-  <div class="flex w-max select-none">
+  <div class="relative flex w-max select-none">
     <div
       v-if="Array.isArray(modelValue)"
-      class="flex flex-shrink-0 flex-col border-r border-gray-200 py-2 text-sm dark:border-gray-600"
+      class="border-200 relative w-48 border-r"
     >
-      <div class="flex flex-row sm:flex-col">
-        <div>
-          <div
-            class="cursor-pointer py-2 pl-4 pr-8 hover:bg-gray-50 dark:hover:bg-gray-700"
-            @click="todayRange"
-          >
-            Today
-          </div>
-          <div
-            class="cursor-pointer py-2 pl-4 pr-8 hover:bg-gray-50 dark:hover:bg-gray-700"
-            @click="yesterday"
-          >
-            Yesterday
-          </div>
-          <div
-            class="cursor-pointer py-2 pl-4 pr-8 hover:bg-gray-50 dark:hover:bg-gray-700"
-            @click="thisMonthSoFar"
-          >
-            This month so far
-          </div>
-          <div
-            class="cursor-pointer py-2 pl-4 pr-8 hover:bg-gray-50 dark:hover:bg-gray-700"
-            @click="thisMonth"
-          >
-            This month
-          </div>
-          <div
-            class="cursor-pointer py-2 pl-4 pr-8 hover:bg-gray-50 dark:hover:bg-gray-700"
-            @click="thisYear"
-          >
-            This year
-          </div>
-          <div
-            class="cursor-pointer py-2 pl-4 pr-8 hover:bg-gray-50 dark:hover:bg-gray-700"
-            @click="thisYearSoFar"
-          >
-            This year so far
-          </div>
-          <div
-            class="cursor-pointer py-2 pl-4 pr-8 hover:bg-gray-50 dark:hover:bg-gray-700"
-            @click="lastWeek"
-          >
-            Last week
-          </div>
-          <div
-            class="cursor-pointer py-2 pl-4 pr-8 hover:bg-gray-50 dark:hover:bg-gray-700"
-            @click="lastMonth"
-          >
-            Last month
-          </div>
-          <div
-            class="cursor-pointer py-2 pl-4 pr-8 hover:bg-gray-50 dark:hover:bg-gray-700"
-            @click="lastYear"
-          >
-            Last year
-          </div>
+      <div class="absolute inset-0 overflow-auto py-2">
+        <div
+          v-for="action in quickActions"
+          :key="action.title"
+          class="cursor-pointer py-2 px-4 hover:bg-gray-50 dark:hover:bg-gray-700"
+          @click="setDaterange(action.preset())"
+        >
+          {{ action.title }}
         </div>
       </div>
     </div>
+
     <section class="p-4 dark:border-gray-600">
       <div class="mb-4 flex items-center text-center text-lg font-semibold">
         <div class="flex flex-1">
@@ -744,7 +551,7 @@ export default defineComponent({
             class="flex cursor-pointer items-center justify-center rounded-lg py-2 text-center"
             :class="[
               activeMonth === index
-                ? 'bg-primary-500 text-white'
+                ? variantStyling.background
                 : 'hover:bg-gray-100 dark:hover:bg-gray-600',
             ]"
             @click="
@@ -769,7 +576,7 @@ export default defineComponent({
             class="cursor-pointer rounded-lg py-2 text-center tabular-nums"
             :class="[
               activeYear === year
-                ? 'bg-primary-500 text-white'
+                ? variantStyling.background
                 : 'hover:bg-gray-100 dark:hover:bg-gray-600',
             ]"
             :data-year="year"
@@ -834,13 +641,14 @@ export default defineComponent({
             :key="day + '_day'"
             class="relative"
             :disabled="!dayAllowed(day)"
-            :class="[isBetweenRange(day) ? 'bg-primary-500 text-white' : '']"
+            :class="[isBetweenRange(day) ? variantStyling.background : '']"
             @click="daySelect(day)"
           >
             <div
               v-if="isLast(day) || isFirst(day)"
-              class="absolute z-0 h-full bg-primary-500"
+              class="absolute z-0 h-full"
               :class="[
+                variantStyling.background,
                 isFirst(day)
                   ? 'right-0 w-1/2'
                   : isLast(day)
@@ -855,7 +663,7 @@ export default defineComponent({
                 isLast(day) ||
                 isFirst(day) ||
                 isSelectedDay(day)
-                  ? 'rounded-0 bg-primary-500 text-white hover:bg-primary-600'
+                  ? `rounded-0 ${variantStyling.background}`
                   : 'hover:bg-gray-200 dark:hover:bg-gray-700',
               ]"
             >

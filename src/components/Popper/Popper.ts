@@ -18,6 +18,8 @@ import {
   watch,
 } from 'vue'
 
+import defaultModifiers from './defaultModifiers'
+
 export default defineComponent({
   props: {
     appendTo: {
@@ -40,7 +42,7 @@ export default defineComponent({
       default: false,
     },
     modifiers: {
-      type: Array as PropType<Array<Partial<Modifier<string, Record<string, unknown>>>>>,
+      type: Array as PropType<Array<Partial<Modifier<any, any>>>>,
       default: () => [],
     },
   },
@@ -55,29 +57,7 @@ export default defineComponent({
       strategy: 'absolute',
       placement: 'bottom-start',
       modifiers: [
-        {
-          name: 'computeStyles',
-          options: {
-            roundOffsets: ({ x, y }: { x: number; y: number }) => ({
-              x: Math.round(x),
-              y: Math.round(y),
-            }),
-            adaptive: true,
-            gpuAcceleration: props.gpu
-          },
-        },
-        {
-          name: 'offset',
-          options: {
-            offset: [0, 2],
-          },
-        },
-        {
-          name: 'preventOverflow',
-          options: {
-            padding: 8,
-          },
-        },
+        ...defaultModifiers,
         ...props.modifiers,
       ],
     }
@@ -111,8 +91,6 @@ export default defineComponent({
         mergedOptions
       )
 
-      console.log("uppupp");
-
       await popper.update()
     }
 
@@ -121,6 +99,52 @@ export default defineComponent({
       destroy()
     })
 
+    async function mountPopper() {
+      await init(appendTo.value)
+      if (root.value) {
+        popper?.update()
+        gsap
+          .fromTo(
+            root.value,
+            {
+              opacity: 0,
+            },
+            {
+              opacity: 1,
+              duration: 0.05,
+              ease: 'power1',
+            }
+          )
+          .then(() => {
+            emit('opened')
+          })
+      }
+    }
+
+    async function destroyPopper() {
+      await init(appendTo.value)
+      if (root.value) {
+        gsap
+          .fromTo(
+            root.value,
+            {
+              opacity: 1,
+            },
+            {
+              opacity: 0,
+              duration: 0.05,
+              ease: 'power1',
+            }
+          )
+          .then(() => {
+            if (root.value) {
+              destroy()
+              render.value = false
+            }
+          })
+      }
+    }
+
     onMounted(() => {
       if (!slots.default) {
         throw new Error('Popper does not have a child slot')
@@ -128,56 +152,14 @@ export default defineComponent({
 
       watch(open, (value) => {
         render.value = true
+        // Only mount popper in the next dom update cycle after
+        // popper content could be drawn, such that it can fetch the correct
+        // partent dimenstions etc.
         nextTick(async () => {
-          if (value === true) {
-            if (root.value) {
-              nextTick(() => {
-                popper?.update()
-              })
-            }
-            await init(appendTo.value)
-            if (root.value) {
-              gsap
-                .fromTo(
-                  root.value,
-                  {
-                    scale: 0.9,
-                    opacity: 0,
-                  },
-                  {
-                    opacity: 1,
-                    scale: 1,
-                    duration: 0.1,
-                    ease: 'power1',
-                  }
-                )
-                .then(() => {
-                  emit('opened')
-                })
-            }
+          if (value) {
+            mountPopper()
           } else {
-            if (root.value) {
-              gsap
-                .fromTo(
-                  root.value,
-                  {
-                    scale: 1,
-                    opacity: 1,
-                  },
-                  {
-                    opacity: 0,
-                    scale: 0.9,
-                    duration: 0.1,
-                    ease: 'power1',
-                  }
-                )
-                .then(() => {
-                  if (root.value) {
-                    destroy()
-                    render.value = false
-                  }
-                })
-            }
+            destroyPopper()
           }
         })
       })
@@ -200,7 +182,7 @@ export default defineComponent({
             event.stopPropagation()
           },
           class:
-            'bg-white border border-gray-200 dark:border-gray-600 dark:bg-gray-700 rounded-md  shadow-2xl',
+            'absolute bg-white border border-gray-200 dark:border-gray-600 dark:bg-gray-700 rounded-md shadow-2xl',
         },
         this.$slots.default ? this.$slots.default() : undefined
       )

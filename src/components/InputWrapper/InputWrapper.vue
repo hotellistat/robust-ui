@@ -10,14 +10,14 @@
     ref="wrapperRef"
     class="relative flex min-w-52 rounded-md border border-gray-200 bg-gray-50 dark:border-gray-600 dark:bg-gray-800"
     :class="[
-      condensed ? 'h-8' : 'h-10',
+      props.condensed ? 'h-9' : 'h-10',
       {
         'ring-primary-500 ring-opacity-30 focus-within:border-primary-500 focus-within:outline-none focus-within:ring focus-within:dark:border-primary-500':
-          !readonly,
+          !props.readonly,
       },
     ]"
   >
-    <slot v-bind="props" :cuid="cuid" :wrapperRef="wrapperRef" />
+    <slot v-bind="$attrs" :cuid="cuid" :wrapperRef="wrapperRef" />
   </div>
   <div v-if="hint || error" class="pt-1">
     <div v-if="hint" class="select-none text-xs text-gray-400">
@@ -38,10 +38,17 @@ import { defineComponent, ref } from 'vue'
 let uid = 0
 
 export default defineComponent({
+  inheritAttrs: false,
   props: {
-    title: String,
-    hint: String,
-    error: String,
+    title: {
+      type: String,
+    },
+    hint: {
+      type: String,
+    },
+    error: {
+      type: String,
+    },
     readonly: {
       type: Boolean,
       default: false,
@@ -61,11 +68,11 @@ export default defineComponent({
     function focused() {}
 
     return {
-      props,
       wrapperRef,
       cuid,
       blurred,
       focused,
+      props,
     }
   },
 })
