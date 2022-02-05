@@ -328,7 +328,9 @@ export default defineComponent({
       placement: 'bottom-start',
     }"
   >
-    <h3 class="font-lg border-b border-gray-200 p-4 font-medium text-gray-500">
+    <h3
+      class="font-lg border-b border-gray-200 p-4 font-medium text-gray-500 dark:border-gray-600"
+    >
       Date range
     </h3>
     <div>
@@ -355,7 +357,7 @@ export default defineComponent({
     </div>
     <h3
       v-if="enableComparison"
-      class="font-lg border-b border-t border-gray-200 p-4 font-medium text-gray-500"
+      class="font-lg border-b border-t border-gray-200 p-4 font-medium text-gray-500 dark:border-gray-600"
     >
       Comparison date range
     </h3>

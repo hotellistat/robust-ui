@@ -6,5 +6,5 @@
     "declaration": true,
     "types": ["vite/client"]
   },
-  "files": ["./src/index.ts"]
+  "include": ["./src"]
 }
