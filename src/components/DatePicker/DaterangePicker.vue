@@ -49,11 +49,11 @@ export default defineComponent({
       type: String,
     },
     dateRange: {
-      type: Array as unknown as PropType<[Date, Date]>,
+      type: Object as PropType<[Date, Date]>,
       required: true,
     },
     compareDateRange: {
-      type: Array as unknown as PropType<[Date, Date]>,
+      type: Object as PropType<[Date, Date]>,
     },
     enableComparison: {
       type: Boolean,
@@ -276,7 +276,7 @@ export default defineComponent({
 
 <template>
   <InputWrapper
-    v-bind="props"
+    v-bind="$attrs"
     ref="inputWrapperRef"
     @click.stop="handleClick"
     class="cursor-pointer"

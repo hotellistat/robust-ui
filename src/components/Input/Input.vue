@@ -1,10 +1,12 @@
 <script lang="ts">
 import { computed, defineComponent, ref } from 'vue'
 import InputWrapper from '../InputWrapper/InputWrapper.vue'
+import { PhWarningCircle } from 'phosphor-vue'
 
 export default defineComponent({
   components: {
     InputWrapper,
+    PhWarningCircle,
   },
   props: {
     title: {
@@ -97,6 +99,7 @@ export default defineComponent({
         :readonly="!!slotProps.readonly"
         v-bind="$attrs"
       />
+
       <div
         v-if="$slots.suffix || slotProps.error"
         class="pointer-events-none absolute inset-y-0 right-0 ml-auto flex h-full select-none items-center pl-2 text-gray-400"
@@ -104,7 +107,7 @@ export default defineComponent({
       >
         <slot v-if="!slotProps.error" tag="div" name="suffix" />
         <div v-else class="text-red-400">
-          <ph-warning-circle size="20" class="block" />
+          <PhWarningCircle size="20" class="block" />
         </div>
       </div>
     </template>

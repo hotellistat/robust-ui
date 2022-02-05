@@ -20,7 +20,6 @@ const Template = (args) => ({
     '<DaterangePicker class="p-2 col-span-2 sm:col-span-1" v-bind="args"></DaterangePicker>',
   components: { DaterangePicker, BaseSeparator },
   setup() {
-    console.log(args)
     return { args }
   },
 })

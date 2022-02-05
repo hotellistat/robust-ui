@@ -75,8 +75,6 @@ export default defineComponent({
 
     const quickActions = QuickActionPresets
 
-    console.log('isarray', modelValue.value, Array.isArray(modelValue.value))
-
     cursor.value = Array.isArray(modelValue.value)
       ? new Date()
       : new Date(modelValue.value)
@@ -382,9 +380,7 @@ export default defineComponent({
     function showYearSelection() {
       showYearSelectionActive.value = true
       nextTick(() => {
-        console.log(refYearEntry, activeYear.value)
         const yearEntry = refYearEntry.value[activeYear.value]
-        console.log(yearEntry)
         yearEntry.scrollIntoView({ block: 'start', behavior: 'auto' })
       })
     }

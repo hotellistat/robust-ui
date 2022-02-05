@@ -69,8 +69,6 @@ export default defineComponent({
 
     const { loading, variant } = toRefs(props)
 
-    console.log(variants)
-
     const variantStyles = computed<string>(() => {
       return variants[variant.value]
     })

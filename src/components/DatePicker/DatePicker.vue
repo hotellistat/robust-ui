@@ -23,7 +23,7 @@ export default defineComponent({
       type: String,
     },
     modelValue: {
-      type: Date as PropType<Date>,
+      type: Object as PropType<Date>,
     },
     error: {
       type: String,
@@ -111,7 +111,7 @@ export default defineComponent({
 
 <template>
   <InputWrapper
-    v-bind="props"
+    v-bind="$attrs"
     ref="inputWrapperRef"
     @click.stop="open = !open"
     class="cursor-pointer"

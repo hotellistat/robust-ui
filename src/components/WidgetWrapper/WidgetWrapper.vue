@@ -96,7 +96,7 @@ export default defineComponent({
   </div>
   <Popper
     ref="popperRef"
-    class="z-[100] origin-top-right"
+    class="z-[100]"
     :append-to="contextButtonRef"
     v-model:open="open"
     :options="{

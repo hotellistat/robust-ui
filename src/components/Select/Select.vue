@@ -13,11 +13,13 @@ import InputWrapper from '../InputWrapper/InputWrapper.vue'
 import { debouncedWatch } from '@vueuse/core'
 import { Modifier } from '@popperjs/core'
 import { onClickOutside } from '@vueuse/core'
+import { PhCheck } from 'phosphor-vue'
 
 export default defineComponent({
   components: {
     Popper,
     InputWrapper,
+    PhCheck,
   },
   inheritAttrs: false,
   props: {
@@ -59,8 +61,6 @@ export default defineComponent({
 
     const { options } = toRefs(props)
 
-    console.log(options.value)
-
     const open = ref(false)
     const popperRef = ref()
     const inputWrapper = ref()
@@ -83,8 +83,6 @@ export default defineComponent({
             value.toLowerCase()
         )
       }
-
-      console.log(computedOptions.value)
     }
 
     debouncedWatch(
@@ -183,10 +181,10 @@ export default defineComponent({
 </script>
 
 <template>
-  <input-wrapper
+  <InputWrapper
     ref="inputWrapper"
-    v-bind="props"
     class="cursor-pointer"
+    v-bind="props"
     @click="openDropdown"
     @focus="openDropdown"
     @blur="closeDropdown"
@@ -232,7 +230,7 @@ export default defineComponent({
         />
       </div>
     </template>
-  </input-wrapper>
+  </InputWrapper>
   <Popper
     v-if="inputWrapper?.wrapperRef"
     v-model:open="open"
@@ -245,7 +243,7 @@ export default defineComponent({
     }"
     @closed="resetFields"
   >
-    <ul v-if="computedOptions.length > 0" class="max-h-40 overflow-auto">
+    <ul v-if="computedOptions.length > 0" class="max-h-72 overflow-auto">
       <li
         v-for="option in computedOptions"
         :key="option.value"
@@ -253,7 +251,7 @@ export default defineComponent({
         @click="selectItem(option)"
       >
         <span>{{ option.title }}</span>
-        <ph-check
+        <PhCheck
           v-if="modelValue === option.value"
           class="ml-auto text-gray-400"
           weight="bold"

@@ -64,6 +64,7 @@ export default defineComponent({
 
     function destroy() {
       popper?.destroy()
+      render.value = false
     }
 
     async function init(appendElement: HTMLElement) {
@@ -81,9 +82,6 @@ export default defineComponent({
         return
       }
 
-      console.log(appendElement,
-        root.value,
-        mergedOptions);
 
       popper = createPopper(
         appendElement,
@@ -95,7 +93,6 @@ export default defineComponent({
     }
 
     onUnmounted(() => {
-      console.log('popper unmounted')
       destroy()
     })
 
@@ -122,7 +119,6 @@ export default defineComponent({
     }
 
     async function destroyPopper() {
-      await init(appendTo.value)
       if (root.value) {
         gsap
           .fromTo(
@@ -137,10 +133,8 @@ export default defineComponent({
             }
           )
           .then(() => {
-            if (root.value) {
-              destroy()
-              render.value = false
-            }
+            destroy()
+
           })
       }
     }
@@ -149,7 +143,6 @@ export default defineComponent({
       if (!slots.default) {
         throw new Error('Popper does not have a child slot')
       }
-
       watch(open, (value) => {
         render.value = true
         // Only mount popper in the next dom update cycle after
