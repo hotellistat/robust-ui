@@ -7,7 +7,6 @@ import { PhCaretDown, PhCalendar } from 'phosphor-vue'
 import { computed, defineComponent, ref, toRefs, PropType } from 'vue'
 import { onClickOutside } from '@vueuse/core'
 
-let id = 0
 export default defineComponent({
   components: {
     Popper,
@@ -51,7 +50,6 @@ export default defineComponent({
     const { modelValue } = toRefs(props)
     const open = ref(false)
     const popperRef = ref()
-    const cuid = (++id).toString()
     const inputWrapperRef = ref()
 
     onClickOutside(popperRef, (event) => {
@@ -102,7 +100,6 @@ export default defineComponent({
       refSelectContainer,
       open,
       props,
-      cuid,
       displayDate,
       computedValue,
       closeDropdown,
@@ -126,6 +123,7 @@ export default defineComponent({
     :condensed="condensed"
     @click.stop="open = !open"
     ref="inputWrapperRef"
+    v-slot="slotProps"
   >
     <div
       class="flex h-full items-center pr-2 text-gray-400"
@@ -134,7 +132,7 @@ export default defineComponent({
       <PhCalendar size="20" />
     </div>
     <div
-      :id="cuid"
+      :id="slotProps.cuid"
       ref="select"
       class="flex h-full w-full items-center bg-transparent pl-2 text-current outline-none"
       v-bind="$attrs"

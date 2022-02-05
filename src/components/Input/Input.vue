@@ -3,7 +3,6 @@ import { computed, defineComponent, PropType, ref } from 'vue'
 import InputWrapper from '../InputWrapper/InputWrapper.vue'
 import { PhWarningCircle } from 'phosphor-vue'
 
-let id = 0
 export default defineComponent({
   inheritAttrs: false,
   components: {
@@ -40,8 +39,6 @@ export default defineComponent({
   },
   emits: ['update:modelValue', 'input', 'change'],
   setup(props, { emit, attrs }) {
-    const cuid = (++id).toString()
-
     const inputRef = ref()
 
     const inputAttrs = attrs
@@ -68,7 +65,6 @@ export default defineComponent({
       inputFieldValue,
       inputAttrs,
       props,
-      cuid,
       inputRef,
       focus,
       clear,

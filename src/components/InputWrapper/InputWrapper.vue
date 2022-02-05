@@ -76,7 +76,7 @@ export default defineComponent({
         },
       ]"
     >
-      <slot :cuid="cuid" :wrapperRef="wrapperRef"></slot>
+      <slot :cuid="cuid" :wrapperRef="wrapperRef" />
     </div>
     <label v-if="hint !== undefined || error !== undefined" class="block pt-2">
       <div v-if="hint !== undefined" class="select-none text-xs text-gray-400">

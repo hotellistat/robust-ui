@@ -14,7 +14,6 @@ import { debouncedWatch } from '@vueuse/core'
 import { Modifier } from '@popperjs/core'
 import { onClickOutside } from '@vueuse/core'
 import { PhCheck, PhCaretDown } from 'phosphor-vue'
-let id = 0
 export default defineComponent({
   components: {
     Popper,
@@ -63,7 +62,6 @@ export default defineComponent({
   setup(props, { emit, attrs }) {
     const refSelectContainer = ref()
     const refSelectInput = ref()
-    const cuid = (++id).toString()
     const { options } = toRefs(props)
 
     const open = ref(false)
@@ -171,7 +169,6 @@ export default defineComponent({
       open,
       props,
       openDropdown,
-      cuid,
       inputWrapper,
       popperModifiers,
       activeItem,
@@ -199,6 +196,7 @@ export default defineComponent({
     @click="openDropdown"
     @focus="openDropdown"
     @blur="closeDropdown"
+    v-slot="slotProps"
   >
     <div
       v-if="$slots.prefix"
@@ -209,7 +207,7 @@ export default defineComponent({
     </div>
     <div
       v-show="!open"
-      :id="cuid"
+      :id="slotProps.cuid"
       ref="select"
       class="flex h-full w-full items-center bg-transparent text-current outline-none"
       :class="[$slots.prefix || condensed ? 'pl-2' : 'pl-3']"

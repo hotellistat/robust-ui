@@ -95,7 +95,6 @@ export default defineComponent({
   },
 
   setup(props, { emit, attrs }) {
-    const cuid = '_' + Math.random().toString(36).substr(2, 9)
     const {
       dateRange,
       compareDateRange,
@@ -251,7 +250,6 @@ export default defineComponent({
       refSelectContainer,
       pickedCompare,
       open,
-      cuid,
       displayDate,
       saveTime,
       tmpDateRange,
@@ -289,6 +287,7 @@ export default defineComponent({
     :condensed="condensed"
     ref="inputWrapperRef"
     @click.stop="handleClick"
+    v-slot="slotProps"
   >
     <div
       class="flex h-full items-center pr-2 text-gray-400"
@@ -297,7 +296,7 @@ export default defineComponent({
       <PhCalendar size="20" />
     </div>
     <div
-      :id="cuid"
+      :id="slotProps.cuid"
       ref="select"
       class="flex h-full w-full items-center bg-transparent pl-2 text-current outline-none"
       v-bind="$attrs"
