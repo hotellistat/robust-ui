@@ -56,7 +56,7 @@ export default defineComponent({
       default: 'primary',
     },
     modelValue: {
-      type: [Array, Date] as PropType<[Date, Date] | Date>,
+      type: Object as PropType<[Date, Date] | Date>,
       default: () => new Date(),
     },
   },

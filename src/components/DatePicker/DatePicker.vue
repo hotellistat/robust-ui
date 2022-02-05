@@ -28,11 +28,15 @@ export default defineComponent({
     error: {
       type: String,
     },
-    inputClass: {
+    class: {
       type: String,
       default: 'bg-gray-100 dark:bg-gray-600',
     },
     condensed: {
+      type: Boolean,
+      default: false,
+    },
+    readonly: {
       type: Boolean,
       default: false,
     },
@@ -111,12 +115,17 @@ export default defineComponent({
 
 <template>
   <InputWrapper
-    v-bind="$attrs"
-    ref="inputWrapperRef"
-    @click.stop="open = !open"
+    :title="title"
+    :hint="hint"
+    :error="error"
+    :class="$props.class"
     class="cursor-pointer"
+    :readonly="readonly"
+    :condensed="condensed"
+    @click.stop="open = !open"
+    ref="inputWrapperRef"
   >
-    <template #default="slotProps">
+    <template #default="{ cuid }">
       <div
         class="flex h-full items-center pr-2 text-gray-400"
         :class="[condensed ? 'pl-2' : 'pl-3']"
@@ -124,7 +133,7 @@ export default defineComponent({
         <PhCalendar size="20" />
       </div>
       <div
-        :id="slotProps.cuid"
+        :id="cuid"
         ref="select"
         class="flex h-full w-full items-center bg-transparent pl-2 text-current outline-none"
         v-bind="$attrs"
@@ -133,7 +142,7 @@ export default defineComponent({
       </div>
 
       <div
-        class="flex h-full flex-shrink-0 items-center pr-3 text-gray-400"
+        class="flex h-full flex-shrink-0 items-center pr-3 text-gray-400 dark:text-gray-600"
         :class="[condensed ? 'pl-2' : 'pl-3']"
       >
         <PhCaretDown

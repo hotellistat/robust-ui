@@ -13,13 +13,14 @@ import InputWrapper from '../InputWrapper/InputWrapper.vue'
 import { debouncedWatch } from '@vueuse/core'
 import { Modifier } from '@popperjs/core'
 import { onClickOutside } from '@vueuse/core'
-import { PhCheck } from 'phosphor-vue'
+import { PhCheck, PhCaretDown } from 'phosphor-vue'
 
 export default defineComponent({
   components: {
     Popper,
     InputWrapper,
     PhCheck,
+    PhCaretDown,
   },
   inheritAttrs: false,
   props: {
@@ -36,7 +37,7 @@ export default defineComponent({
     error: {
       type: String,
     },
-    inputClass: {
+    class: {
       type: String,
     },
     modelValue: {
@@ -47,6 +48,10 @@ export default defineComponent({
       required: true,
     },
     condensed: {
+      type: Boolean,
+      default: false,
+    },
+    readonly: {
       type: Boolean,
       default: false,
     },
@@ -183,13 +188,18 @@ export default defineComponent({
 <template>
   <InputWrapper
     ref="inputWrapper"
+    :title="title"
+    :hint="hint"
+    :error="error"
+    :class="$props.class"
     class="cursor-pointer"
-    v-bind="props"
+    :readonly="readonly"
+    :condensed="condensed"
     @click="openDropdown"
     @focus="openDropdown"
     @blur="closeDropdown"
   >
-    <template #default="slotProps">
+    <template #default="{ cuid }">
       <div
         v-if="$slots.prefix"
         class="flex h-full items-center pr-2 text-gray-400"
@@ -199,7 +209,7 @@ export default defineComponent({
       </div>
       <div
         v-show="!open"
-        :id="slotProps.cuid"
+        :id="cuid"
         ref="select"
         class="flex h-full w-full items-center bg-transparent text-current outline-none"
         :class="[$slots.prefix || condensed ? 'pl-2' : 'pl-3']"
@@ -222,7 +232,7 @@ export default defineComponent({
         class="flex h-full flex-shrink-0 items-center pr-3 text-gray-400 dark:text-gray-600"
         :class="[condensed ? 'pl-2' : 'pl-3']"
       >
-        <ph-caret-down
+        <PhCaretDown
           :size="14"
           weight="bold"
           class="transition-transform duration-200"

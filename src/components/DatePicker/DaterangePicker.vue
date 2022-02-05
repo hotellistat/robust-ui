@@ -72,11 +72,15 @@ export default defineComponent({
     error: {
       type: String,
     },
-    inputClass: {
+    class: {
       type: String,
       default: 'bg-gray-100 dark:bg-gray-600',
     },
     condensed: {
+      type: Boolean,
+      default: false,
+    },
+    readonly: {
       type: Boolean,
       default: false,
     },
@@ -276,12 +280,17 @@ export default defineComponent({
 
 <template>
   <InputWrapper
-    v-bind="$attrs"
+    :title="title"
+    :hint="hint"
+    :error="error"
+    :class="$props.class"
+    class="cursor-pointer"
+    :readonly="readonly"
+    :condensed="condensed"
     ref="inputWrapperRef"
     @click.stop="handleClick"
-    class="cursor-pointer"
   >
-    <template #default="slotProps">
+    <template #default="{ cuid }">
       <div
         class="flex h-full items-center pr-2 text-gray-400"
         :class="[condensed ? 'pl-2' : 'pl-3']"
@@ -289,7 +298,7 @@ export default defineComponent({
         <PhCalendar size="20" />
       </div>
       <div
-        :id="slotProps.cuid"
+        :id="cuid"
         ref="select"
         class="flex h-full w-full items-center bg-transparent pl-2 text-current outline-none"
         v-bind="$attrs"
@@ -300,12 +309,13 @@ export default defineComponent({
       </div>
 
       <div
-        class="flex h-full flex-shrink-0 items-center pr-2 text-gray-400"
+        class="flex h-full flex-shrink-0 items-center pr-3 text-gray-400 dark:text-gray-600"
         :class="[condensed ? 'pl-2' : 'pl-3']"
       >
         <PhCaretDown
-          size="18"
-          class="transition-transform duration-150"
+          :size="14"
+          weight="bold"
+          class="transition-transform duration-200"
           :class="{ 'rotate-180 transform': open }"
         />
       </div>
@@ -376,7 +386,9 @@ export default defineComponent({
         class="hover:cursor-pointer"
         :size="35"
       /> -->
-      <Button type="primary" @click="saveTime">Apply time range</Button>
+      <Button type="primary" class="ml-auto" @click="saveTime"
+        >Apply time range</Button
+      >
     </div>
   </Popper>
 </template>

@@ -14,7 +14,6 @@ const DefaultTemplate = (args) => ({
   </ContentBox>`,
   components: { ContentBox },
   setup() {
-    console.log(args)
     return { args }
   },
 })
@@ -30,7 +29,6 @@ const TitleTemplate = (args) => ({
   </ContentBox>`,
   components: { ContentBox },
   setup() {
-    console.log(args)
     return { args }
   },
 })
@@ -47,7 +45,6 @@ const TitlePropTemplate = (args) => ({
   </ContentBox>`,
   components: { ContentBox },
   setup() {
-    console.log(args)
     return { args }
   },
 })
@@ -64,7 +61,6 @@ const StripeTemplate = (args) => ({
   </ContentBox>`,
   components: { ContentBox },
   setup() {
-    console.log(args)
     return { args }
   },
 })
