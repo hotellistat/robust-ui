@@ -38,7 +38,9 @@
   </teleport>
 </template>
 <script lang="ts">
-import { defineComponent, ref } from 'vue'
+import { defineComponent, ref, watch } from 'vue'
+import { lockScroll, unlockScroll } from '../../utils/scrollLock'
+
 export default defineComponent({
   inheritAttrs: false,
   props: {
@@ -48,6 +50,14 @@ export default defineComponent({
   },
   setup(props, { emit }) {
     const modalOpen = ref(false)
+
+    watch(modalOpen, (value) => {
+      if (value) {
+        lockScroll()
+      } else {
+        unlockScroll()
+      }
+    })
 
     async function open() {
       modalOpen.value = true
