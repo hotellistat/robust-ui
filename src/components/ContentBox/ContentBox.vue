@@ -1,16 +1,16 @@
 <template>
   <section
-    class="relative overflow-hidden rounded-md border border-gray-200 bg-white dark:border-gray-600 dark:bg-gray-700"
+    class="relative rounded-md border border-gray-200 bg-white dark:border-gray-600 dark:bg-gray-700"
   >
-    <div
-      v-if="stripe"
-      class="absolute inset-x-0 top-0 h-1"
-      :class="stripeClass"
-    ></div>
     <header
       v-if="description !== undefined || title !== undefined"
-      class="p-4 sm:p-6"
+      class="relative overflow-hidden rounded-md p-4 sm:p-6"
     >
+      <div
+        v-if="stripe"
+        class="absolute inset-x-0 top-0 h-1"
+        :class="stripeClass"
+      ></div>
       <h1 class="flex">
         <div
           class="text-xl font-semibold"
