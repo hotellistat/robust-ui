@@ -15,7 +15,15 @@ const Template = (args) => ({
   },
 })
 
+const modelValueDefault = ref(new Date())
 export const Default = Template.bind({})
+Default.args = {
+  modelValue: modelValueDefault,
+  'onUpdate:modelValue': (val) => {
+    modelValueDefault.value = val
+    console.log(val)
+  },
+}
 
 const date = [new Date(), new Date()]
 const modelValue = ref(date)
@@ -25,5 +33,6 @@ Range.args = {
   modelValue: modelValue,
   'onUpdate:modelValue': (val) => {
     modelValue.value = val
+    console.log(val)
   },
 }

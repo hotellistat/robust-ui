@@ -121,6 +121,8 @@ export default defineComponent({
     })
 
     const applyTime = () => {
+      console.log('applying time')
+
       if (from.value != '' && !isValid(new Date(from.value))) {
         errorFrom.value = 'Please enter a valid date.'
       }
@@ -223,7 +225,7 @@ export default defineComponent({
       }
     }
 
-    function setDaterange(dateRange: [Date, Date]) {
+    function setQuickAction(dateRange: [Date, Date]) {
       emit('update:modelValue', dateRange)
       cursor.value = dateRange[1]
     }
@@ -270,38 +272,17 @@ export default defineComponent({
         return
       }
       const tmpDate = new Date(cursor.value)
-      cursor.value = set(new Date(tmpDate.setDate(day)), {
-        hours: 0,
-        minutes: 0,
-        seconds: 0,
-        milliseconds: 0,
-      })
-      if (!Array.isArray(modelValue.value)) {
-        selectedDate.value = new Date(cursor.value)
-        emit('update:modelValue', cursor.value)
-      } else {
+      cursor.value = new Date(tmpDate.setDate(day))
+      if (Array.isArray(modelValue.value)) {
         errorFrom.value = ''
         errorTo.value = ''
         let newModelValue = []
-        if (modelValue.value.length > 1) {
-          newModelValue.push(
-            set(new Date(cursor.value), {
-              hours: 0,
-              minutes: 0,
-              seconds: 0,
-              milliseconds: 0,
-            })
-          )
+        if (modelValue.value.length >= 2) {
+          newModelValue.push(new Date(cursor.value))
           to.value = ''
         } else {
           newModelValue = modelValue.value
-          newModelValue.push(
-            set(new Date(cursor.value), {
-              hours: 23,
-              minutes: 59,
-              seconds: 59,
-            })
-          )
+          newModelValue.push(new Date(cursor.value))
           if (newModelValue.length > 1) {
             newModelValue = [
               set(min(newModelValue), {
@@ -315,11 +296,14 @@ export default defineComponent({
                 seconds: 59,
               }),
             ]
-            to.value = format(newModelValue[1], 'MM/dd/yyyy')
+            to.value = newModelValue[1].toLocaleDateString()
           }
         }
-        from.value = format(newModelValue[0], 'MM/dd/yyyy')
+        from.value = newModelValue[0].toLocaleDateString()
         emit('update:modelValue', newModelValue)
+      } else {
+        selectedDate.value = new Date(cursor.value)
+        emit('update:modelValue', cursor.value)
       }
     }
 
@@ -327,37 +311,32 @@ export default defineComponent({
       cursor.value = new Date(new Date().setHours(12))
     }
 
-    function submit() {
-      emit('update:modelValue', cursor.value)
-      this.$refs.modal.close()
-    }
-
-    watch([from, to], () => {
-      applyTime()
-    })
+    // watch([from, to], () => {
+    //   applyTime()
+    // })
 
     watch(modelValue, (val) => {
       const f = val[0] || undefined
       const t = val[1] || undefined
-      if (f) from.value = format(f, 'MM/dd/yyyy')
+      if (f) from.value = f.toLocaleDateString()
       else from.value = ''
-      if (t) to.value = format(t, 'MM/dd/yyyy')
+      if (t) to.value = t.toLocaleDateString()
       else to.value = ''
     })
 
     onMounted(() => {
-      if (!Array.isArray(modelValue.value)) {
-        cursor.value = new Date(modelValue.value || new Date())
-        selectedDate.value = new Date(cursor.value)
-      } else {
+      if (Array.isArray(modelValue.value)) {
         cursor.value = new Date(modelValue.value[1] || new Date())
-        selectedDate.value = new Date(cursor.value)
+        selectedDate.value = cursor.value
         const f = modelValue.value[0] || undefined
         const t = modelValue.value[1] || undefined
-        if (f) from.value = format(f, 'MM/dd/yyyy')
+        if (f) from.value = f.toLocaleDateString()
         else from.value = ''
-        if (t) to.value = format(t, 'MM/dd/yyyy')
+        if (t) to.value = t.toLocaleDateString()
         else to.value = ''
+      } else {
+        cursor.value = new Date(modelValue.value || new Date())
+        selectedDate.value = cursor.value
       }
     })
 
@@ -468,10 +447,9 @@ export default defineComponent({
       dayAllowed,
       daySelect,
       reset,
-      submit,
       yearSelectionYears,
       quickActions,
-      setDaterange,
+      setQuickAction,
       variantStyling,
     }
   },
@@ -489,7 +467,7 @@ export default defineComponent({
           v-for="action in quickActions"
           :key="action.title"
           class="cursor-pointer py-2 px-4 hover:bg-gray-50 dark:hover:bg-gray-700"
-          @click="setDaterange(action.preset())"
+          @click="setQuickAction(action.preset())"
         >
           {{ action.title }}
         </div>
