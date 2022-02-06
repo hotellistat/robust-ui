@@ -1,5 +1,5 @@
 import { computed, ref } from 'vue'
-import Switch from '@/components/Switch/Switch.vue'
+import Switch from '../src/components/Switch/Switch.vue'
 
 export default {
   title: 'Ui/Switch',

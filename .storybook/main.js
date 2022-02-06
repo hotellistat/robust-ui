@@ -7,6 +7,8 @@ module.exports = {
       { find: 'vue', replacement: 'vue/dist/vue.esm-bundler.js' },
     ]
 
+    config.base = '/robust-ui/'
+
     return config
   },
   stories: [

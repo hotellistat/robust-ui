@@ -1,0 +1,20 @@
+name: Publish to GitHub Pages
+on:
+  push:
+    paths: ["stories/**", "src/components/**"]
+jobs:
+  build-and-deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@main
+      - name: Build Storybook
+        run: |
+          npm install
+          npm run build-storybook
+      - name: Deploy to GitHub Pages
+        uses: JamesIves/github-pages-deploy-action@4.1.0
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }}
+          branch: gh-pages
+          folder: storybook-static

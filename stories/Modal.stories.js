@@ -1,4 +1,4 @@
-import Input from '@/components/Input/Input.vue'
+import Input from '../src/components/Input/Input.vue'
 
 export default {
   title: 'Ui/Input',

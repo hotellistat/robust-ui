@@ -1,4 +1,4 @@
-import Img from '@/components/Img/Img'
+import Img from '../src/components/Img/Img'
 
 export default {
   title: 'Ui/Img',

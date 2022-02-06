@@ -1,5 +1,5 @@
 import { computed, ref } from 'vue'
-import Radio from '@/components/Radio/Radio.vue'
+import Radio from '../src/components/Radio/Radio.vue'
 
 export default {
   title: 'Ui/Radio',

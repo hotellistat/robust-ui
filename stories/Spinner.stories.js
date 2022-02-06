@@ -1,4 +1,4 @@
-import Spinner from '@/components/Spinner/Spinner.vue'
+import Spinner from '../src/components/Spinner/Spinner.vue'
 
 export default {
   title: 'Ui/Spinner',

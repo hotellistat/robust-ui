@@ -1,4 +1,4 @@
-import ContentBox from '@/components/ContentBox/ContentBox.vue'
+import ContentBox from '../src/components/ContentBox/ContentBox.vue'
 
 export default {
   title: 'Ui/ContentBox',

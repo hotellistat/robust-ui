@@ -1,4 +1,4 @@
-import Calendar from '@/components/Calendar/Calendar.vue'
+import Calendar from '../src/components/Calendar/Calendar.vue'
 import { ref } from 'vue'
 
 export default {

@@ -1,4 +1,4 @@
-import Textarea from '@/components/Textarea/Textarea.vue'
+import Textarea from '../src/components/Textarea/Textarea.vue'
 
 export default {
   title: 'Ui/Textarea',

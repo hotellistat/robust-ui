@@ -1,4 +1,4 @@
-import InputWrapper from '@/components/InputWrapper/InputWrapper.vue'
+import InputWrapper from '../src/components/InputWrapper/InputWrapper.vue'
 
 export default {
   title: 'Ui/InputWrapper',
@@ -10,7 +10,7 @@ export default {
 }
 
 const DefaultTemplate = (args) => ({
-  template: `<InputWrapper v-bind="args"></InputWrapper>`,
+  template: `<InputWrapper v-bind="args">any input</InputWrapper>`,
   components: { InputWrapper },
   setup() {
     return { args }
