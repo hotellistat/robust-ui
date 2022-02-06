@@ -32,14 +32,19 @@ then you can import the available components like so
 import { HsButton } from '@hotellistat/robust-ui'
 ```
 
+## Development
+
+To develop new components for robust-ui, you should create new feature branches
+that hold the code of a specific components. As soon as you are finished with working on, and
+testing the components, you can create a PR to merge it into the main branch.
+
 ## Publishing a new version
 
 To publish a new version you will need to follow these simple steps:
 
-1. Bump the version in the package.json (e.g. 1.0.2) and commit it
-2. Tag you commit with the corresponding version. Tags need to be prefixed with a "v" (e.g. `git tag -a v1.0.2`) and give it a description
-3. Run `git push --follow-tags` to push the tags and your commit at the same time
-4. The github action should take care of publishing the new version to npm
+1. Create a PR to merge your feature branch into the main branch
+2. As soon as the PR was merged, a automated pipeline takes care of bumping the
+   next patch version and publishing the package to npm
 
 ## Available commands
 
