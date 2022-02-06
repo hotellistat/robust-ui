@@ -1,6 +1,8 @@
 name: Publish Package latest to npmjs
 on:
   push:
+    branches:
+      - main
   workflow_dispatch:
 jobs:
   build-container:
@@ -11,6 +13,12 @@ jobs:
         with:
           node-version: '16.x'
           registry-url: 'https://registry.npmjs.org'
+      - name:  'Automated Version Bump'
+        uses:  'phips28/gh-action-bump-version@master'
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          tag-prefix:  'v'
       - run: npm ci --force
       - run: npm run build
       - run: npm publish --access public
