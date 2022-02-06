@@ -32,8 +32,9 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
           tag-prefix:  'v'
-      - run: npm ci --force
-      - run: npm run build
-      - run: npm publish --access public
+      - run: |
+          npm ci --force
+          npm run build
+          npm publish --access public
         env:
           NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
