@@ -1,8 +1,6 @@
-name: Publish Package to npmjs
+name: Publish Package latest to npmjs
 on:
-  create:
-    tags:
-      - v*
+  push:
   workflow_dispatch:
 jobs:
   build-container:
@@ -14,7 +12,7 @@ jobs:
           node-version: '16.x'
           registry-url: 'https://registry.npmjs.org'
       - run: npm ci --force
-      - run: npm run build:library
+      - run: npm run build
       - run: npm publish --access public
         env:
           NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
