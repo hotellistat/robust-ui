@@ -1,4 +1,4 @@
-import CircularProgress from '../src/components/CircularProgress/CircularProgress.vue'
+import CircularProgress from './CircularProgress.vue'
 
 export default {
   title: 'Ui/CircularProgress',

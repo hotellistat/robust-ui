@@ -1,5 +1,4 @@
-import DatePicker from '../src/components/DatePicker/DatePicker.vue'
-import BaseSeparator from '../src/components/Separator/Separator.vue'
+import DatePicker from './DatePicker.vue'
 import { ref } from 'vue'
 
 export default {
@@ -15,7 +14,7 @@ export default {
 const Template = (args) => ({
   template:
     '<DatePicker class="p-2 col-span-2 sm:col-span-1" v-bind="args"></DatePicker>',
-  components: { DatePicker, BaseSeparator },
+  components: { DatePicker },
   setup() {
     return { args }
   },

@@ -24,7 +24,7 @@ export default defineComponent({
       type: String,
     },
     icon: {
-      type: String,
+      type: Object,
     },
   },
 })

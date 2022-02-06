@@ -1,4 +1,4 @@
-import LinearProgress from '../src/components/LinearProgress/LinearProgress.vue'
+import LinearProgress from './LinearProgress.vue'
 
 export default {
   title: 'Ui/LinearProgress',

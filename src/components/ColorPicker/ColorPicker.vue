@@ -1,6 +1,6 @@
 <template>
   <div
-    class="hu-color-picker shadow"
+    class="hu-color-picker rounded bg-gray-700 shadow"
     :class="{ light: isLightTheme }"
     :style="{ width: totalWidth + 'px' }"
   >
@@ -310,8 +310,6 @@ export default defineComponent({
 <style>
 .hu-color-picker {
   padding: 10px;
-  background: #1d2024;
-  border-radius: 4px;
   z-index: 1;
 }
 

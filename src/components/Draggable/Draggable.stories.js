@@ -1,4 +1,4 @@
-import Draggable from '../src/components/Draggable/Draggable.vue'
+import Draggable from './Draggable.vue'
 import { ref } from 'vue'
 
 export default {

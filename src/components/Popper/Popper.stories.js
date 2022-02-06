@@ -1,5 +1,5 @@
 import { computed, ref } from 'vue'
-import Popper from '../src/components/Popper/Popper'
+import Popper from './Popper'
 
 export default {
   title: 'Ui/Popper',

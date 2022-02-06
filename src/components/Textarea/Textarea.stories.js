@@ -1,17 +1,22 @@
-import InputWrapper from '../src/components/InputWrapper/InputWrapper.vue'
+import Textarea from './Textarea.vue'
 
 export default {
-  title: 'Ui/InputWrapper',
-  component: InputWrapper,
+  title: 'Ui/Textarea',
+  component: Textarea,
   argTypes: {
+    onInput: { action: 'input' },
+    readonly: { control: { type: 'boolean' } },
     condensed: { control: { type: 'boolean' } },
+    modelValue: { control: { type: 'text' } },
     outline: { control: { type: 'boolean' } },
+    hint: { control: { type: 'text' } },
+    error: { control: { type: 'text' } },
   },
 }
 
 const DefaultTemplate = (args) => ({
-  template: `<InputWrapper v-bind="args">any input</InputWrapper>`,
-  components: { InputWrapper },
+  template: '<Textarea v-bind="args"/>',
+  components: { BaseInput },
   setup() {
     return { args }
   },
@@ -21,7 +26,6 @@ export const Default = DefaultTemplate.bind()
 
 Default.args = {
   title: 'Input title',
-  outline: false,
 }
 
 export const Hint = DefaultTemplate.bind()
@@ -29,7 +33,6 @@ export const Hint = DefaultTemplate.bind()
 Hint.args = {
   title: 'Input title',
   hint: 'This is an input hint. It is supposed to help the user understand the reason this input exists and what it does',
-  outline: false,
 }
 
 export const ErrorHint = DefaultTemplate.bind()

@@ -11,10 +11,7 @@ module.exports = {
 
     return config
   },
-  stories: [
-    // '../stories/**/*.stories.md',
-    '../stories/**/*.stories.@(js|ts)',
-  ],
+  stories: ['../src/**/*.stories.md', '../src/**/*.stories.@(js|ts)'],
   addons: [
     'storybook-addon-themes/register',
     '@storybook/addon-links',

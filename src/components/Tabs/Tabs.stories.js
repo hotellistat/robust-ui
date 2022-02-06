@@ -1,5 +1,5 @@
 import { ref } from '@vue/reactivity'
-import Tabs from '../src/components/Tabs/Tabs.vue'
+import Tabs from './Tabs.vue'
 
 export default {
   title: 'Ui/Tabs',

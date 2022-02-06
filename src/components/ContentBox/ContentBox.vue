@@ -1,7 +1,12 @@
 <template>
   <section
-    class="overflow-hidden rounded-md border border-gray-200 bg-white dark:border-gray-600 dark:bg-gray-700"
+    class="relative overflow-hidden rounded-md border border-gray-200 bg-white dark:border-gray-600 dark:bg-gray-700"
   >
+    <div
+      v-if="stripe"
+      class="absolute inset-x-0 top-0 h-1"
+      :class="stripeClass"
+    ></div>
     <header
       v-if="description !== undefined || title !== undefined"
       class="p-4 sm:p-6"
@@ -44,6 +49,14 @@ export default defineComponent({
     },
     description: {
       type: String,
+    },
+    stripe: {
+      type: Boolean,
+      default: false,
+    },
+    stripeClass: {
+      type: String,
+      default: 'bg-primary-500',
     },
   },
 })

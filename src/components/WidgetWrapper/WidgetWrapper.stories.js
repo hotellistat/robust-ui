@@ -1,5 +1,5 @@
 import { computed, ref } from 'vue'
-import WidgetWrapper from '../src/components/WidgetWrapper/WidgetWrapper.vue'
+import WidgetWrapper from './WidgetWrapper.vue'
 
 export default {
   title: 'Ui/WidgetWrapper',

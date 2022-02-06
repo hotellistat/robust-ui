@@ -227,7 +227,7 @@ export default defineComponent({
     />
 
     <div
-      class="flex h-full flex-shrink-0 items-center pr-3 text-gray-400 dark:text-gray-600"
+      class="flex h-full flex-shrink-0 items-center pr-3 text-gray-400 dark:text-gray-500"
       :class="[condensed ? 'pl-2' : 'pl-3']"
     >
       <PhCaretDown

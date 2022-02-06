@@ -1,4 +1,4 @@
-import ContentBox from '../src/components/ContentBox/ContentBox.vue'
+import ContentBox from './ContentBox.vue'
 
 export default {
   title: 'Ui/ContentBox',
@@ -10,7 +10,7 @@ export default {
 
 const DefaultTemplate = (args) => ({
   template: `<ContentBox v-bind="args" >
-      <div class="p-8 text-gray-600">content</div>
+      <div class="p-8">content</div>
   </ContentBox>`,
   components: { ContentBox },
   setup() {
@@ -25,7 +25,7 @@ const TitleTemplate = (args) => ({
   <template v-slot:title>
   <div class="text-red-500">some prefix</div>
   {{args.title}}</template>
-      <div class="p-8 text-gray-600">content</div>
+      <div class="p-8 ">content</div>
   </ContentBox>`,
   components: { ContentBox },
   setup() {
@@ -41,7 +41,7 @@ Title.args = {
 
 const TitlePropTemplate = (args) => ({
   template: `<ContentBox v-bind="args" >
-      <div class="p-8 bg-gray-400 text-gray-600">content</div>
+      <div class="p-8 bg-gray-400 ">content</div>
   </ContentBox>`,
   components: { ContentBox },
   setup() {
@@ -57,7 +57,7 @@ TitleProp.args = {
 
 const StripeTemplate = (args) => ({
   template: `<ContentBox v-bind="args" stripe stripe-class="bg-primary-500">
-      <div class="p-8 bg-gray-400 text-gray-600">content</div>
+      <div class="p-8 bg-gray-400 ">content</div>
   </ContentBox>`,
   components: { ContentBox },
   setup() {
