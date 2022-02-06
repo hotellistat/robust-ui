@@ -1,4 +1,4 @@
-name: Publish Package latest to npmjs
+name: Publish Package npm
 on:
   push:
     branches:
