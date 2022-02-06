@@ -271,7 +271,7 @@ export default defineComponent({
       if (!dayAllowed(day)) {
         return
       }
-      const tmpDate = new Date(cursor.value)
+      const tmpDate = new Date()
       cursor.value = new Date(tmpDate.setDate(day))
       if (Array.isArray(modelValue.value)) {
         errorFrom.value = ''

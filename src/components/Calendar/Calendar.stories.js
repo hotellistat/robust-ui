@@ -21,7 +21,7 @@ Default.args = {
   modelValue: modelValueDefault,
   'onUpdate:modelValue': (val) => {
     modelValueDefault.value = val
-    console.log(val)
+    console.log(val.toISOString())
   },
 }
 
