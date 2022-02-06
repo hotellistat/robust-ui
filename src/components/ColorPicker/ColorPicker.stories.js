@@ -18,10 +18,3 @@ const DefaultTemplate = (args) => ({
 })
 
 export const Default = DefaultTemplate.bind()
-
-Default.args = {
-  title: 'Input title',
-  description:
-    'This is an input hint. It is supposed to help the user understand the reason this input exists and what it does',
-  icon: PhWarning,
-}
