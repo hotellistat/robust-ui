@@ -69,15 +69,17 @@ export default defineComponent({
     const errorFrom = ref()
     const errorTo = ref()
     const now = ref()
-    const cursor = ref()
+    // const cursor = ref<Date>()
+    const cursor = Array.isArray(modelValue.value)
+      ? ref<Date>(new Date())
+      : ref<Date>(new Date(modelValue.value))
+
+
     const selectedDate = ref()
     const refYearEntry = ref({})
 
     const quickActions = QuickActionPresets
 
-    cursor.value = Array.isArray(modelValue.value)
-      ? new Date()
-      : new Date(modelValue.value)
 
     const variantStyling = computed(() => {
       return variants[props.variant]
@@ -160,13 +162,15 @@ export default defineComponent({
 
       if (!compareDates(...modelValue.value)) return false
 
-      const tmpDate = new Date(cursor.value)
-      const newDate = new Date(tmpDate.setDate(day))
+      const tmpDate = new Date()
+      tmpDate.setDate(day)
+      tmpDate.setMonth(cursor.value.getMonth())
+      tmpDate.setFullYear(cursor.value.getFullYear())
 
       const minDate = min(modelValue.value)
 
       // minimal value
-      if (!compareDates(newDate, minDate)) return true
+      if (!compareDates(tmpDate, minDate)) return true
       return false
     }
 
@@ -179,13 +183,15 @@ export default defineComponent({
 
       if (!compareDates(...modelValue.value)) return false
 
-      const tmpDate = new Date(cursor.value)
-      const newDate = new Date(tmpDate.setDate(day))
+      const tmpDate = new Date()
+      tmpDate.setDate(day)
+      tmpDate.setMonth(cursor.value.getMonth())
+      tmpDate.setFullYear(cursor.value.getFullYear())
 
       const maxDate = max(modelValue.value)
 
       // max value
-      if (!compareDates(newDate, maxDate)) return true
+      if (!compareDates(tmpDate, maxDate)) return true
       return false
     }
 
@@ -193,14 +199,16 @@ export default defineComponent({
       if (!Array.isArray(modelValue.value)) return false
       if (modelValue.value.length < 2) return false
 
-      const tmpDate = new Date(cursor.value)
-      const newDate = new Date(tmpDate.setDate(day))
+      const tmpDate = new Date()
+      tmpDate.setDate(day)
+      tmpDate.setMonth(cursor.value.getMonth())
+      tmpDate.setFullYear(cursor.value.getFullYear())
       const minDate = min(modelValue.value)
       const maxDate = max(modelValue.value)
 
       if (
-        compareDates(newDate, maxDate) === -1 &&
-        compareDates(newDate, minDate) === 1
+        compareDates(tmpDate, maxDate) === -1 &&
+        compareDates(tmpDate, minDate) === 1
       ) {
         return true
       }
@@ -208,18 +216,20 @@ export default defineComponent({
     }
 
     const isSelectedDay = (day) => {
-      const tmpDate = new Date(cursor.value)
-      const newDate = new Date(tmpDate.setDate(day))
+      const tmpDate = new Date()
+      tmpDate.setDate(day)
+      tmpDate.setMonth(cursor.value.getMonth())
+      tmpDate.setFullYear(cursor.value.getFullYear())
 
       if (Array.isArray(modelValue.value)) {
         const selectedDates = modelValue.value.map((date) => new Date(date))
         for (let i = 0; i < selectedDates.length; i++) {
-          if (!compareDates(selectedDates[i], newDate)) {
+          if (!compareDates(selectedDates[i], tmpDate)) {
             return true
           }
         }
       } else {
-        if (!compareDates(new Date(selectedDate.value), newDate)) {
+        if (!compareDates(new Date(selectedDate.value), tmpDate)) {
           return true
         }
       }
@@ -268,11 +278,17 @@ export default defineComponent({
     }
 
     const daySelect = (day) => {
+
       if (!dayAllowed(day)) {
         return
       }
+
       const tmpDate = new Date()
-      cursor.value = new Date(tmpDate.setDate(day))
+      tmpDate.setDate(day)
+      tmpDate.setMonth(cursor.value.getMonth())
+      tmpDate.setFullYear(cursor.value.getFullYear())
+      cursor.value = tmpDate
+
       if (Array.isArray(modelValue.value)) {
         errorFrom.value = ''
         errorTo.value = ''
@@ -468,9 +484,7 @@ export default defineComponent({
           :key="action.title"
           class="cursor-pointer py-2 px-4 hover:bg-gray-50 dark:hover:bg-gray-700"
           @click="setQuickAction(action.preset())"
-        >
-          {{ action.title }}
-        </div>
+        >{{ action.title }}</div>
       </div>
     </div>
 
@@ -485,9 +499,7 @@ export default defineComponent({
                 hideYearSelection()
               }
             "
-          >
-            {{ monthHeading }}
-          </div>
+          >{{ monthHeading }}</div>
           <div
             class="flex h-8 cursor-pointer items-center rounded-lg px-2 tabular-nums hover:bg-gray-100 dark:hover:bg-gray-700"
             @click="
@@ -496,9 +508,7 @@ export default defineComponent({
                 hideMonthSelection()
               }
             "
-          >
-            {{ yearHeading }}
-          </div>
+          >{{ yearHeading }}</div>
         </div>
         <div
           class="flex h-8 w-8 cursor-pointer items-center justify-center rounded-lg text-gray-700 hover:bg-gray-100 hover:text-gray-700 active:bg-gray-200 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-gray-100"
@@ -535,9 +545,7 @@ export default defineComponent({
                 hideMonthSelection()
               }
             "
-          >
-            {{ month.title }}
-          </div>
+          >{{ month.title }}</div>
         </div>
 
         <div
@@ -561,9 +569,7 @@ export default defineComponent({
                 hideYearSelection()
               }
             "
-          >
-            {{ year }}
-          </div>
+          >{{ year }}</div>
         </div>
 
         <div
@@ -576,39 +582,25 @@ export default defineComponent({
         >
           <div
             class="pb-2 text-center text-sm text-gray-400 dark:text-gray-400"
-          >
-            M
-          </div>
+          >M</div>
           <div
             class="pb-2 text-center text-sm text-gray-400 dark:text-gray-400"
-          >
-            T
-          </div>
+          >T</div>
           <div
             class="pb-2 text-center text-sm text-gray-400 dark:text-gray-400"
-          >
-            W
-          </div>
+          >W</div>
           <div
             class="pb-2 text-center text-sm text-gray-400 dark:text-gray-400"
-          >
-            T
-          </div>
+          >T</div>
           <div
             class="pb-2 text-center text-sm text-gray-400 dark:text-gray-400"
-          >
-            F
-          </div>
+          >F</div>
           <div
             class="pb-2 text-center text-sm text-gray-400 dark:text-gray-400"
-          >
-            S
-          </div>
+          >S</div>
           <div
             class="pb-2 text-center text-sm text-gray-400 dark:text-gray-400"
-          >
-            S
-          </div>
+          >S</div>
 
           <div v-for="offset in firstWeekday" :key="offset + '_offset'"></div>
           <div
@@ -627,23 +619,21 @@ export default defineComponent({
                 isFirst(day)
                   ? 'right-0 w-1/2'
                   : isLast(day)
-                  ? 'left-0 w-1/2'
-                  : '',
+                    ? 'left-0 w-1/2'
+                    : '',
               ]"
             ></div>
             <div
               class="relative z-10 flex h-8 w-8 min-w-8 cursor-pointer items-center justify-center rounded-lg text-sm font-medium tabular-nums"
               :class="[
                 isBetweenRange(day) ||
-                isLast(day) ||
-                isFirst(day) ||
-                isSelectedDay(day)
+                  isLast(day) ||
+                  isFirst(day) ||
+                  isSelectedDay(day)
                   ? `rounded-0 ${variantStyling.background}`
                   : 'hover:bg-gray-200 dark:hover:bg-gray-700',
               ]"
-            >
-              {{ day }}
-            </div>
+            >{{ day }}</div>
           </div>
         </div>
       </div>
@@ -654,8 +644,7 @@ export default defineComponent({
     >
       <label
         class="mb-1 block text-sm font-medium text-gray-500 dark:text-gray-400"
-        >From</label
-      >
+      >From</label>
       <Input
         v-model="from"
         placeholder="Date"
@@ -665,8 +654,7 @@ export default defineComponent({
 
       <label
         class="mb-1 block text-sm font-medium text-gray-500 dark:text-gray-400"
-        >To</label
-      >
+      >To</label>
       <Input
         v-model="to"
         placeholder="Date"

@@ -10,8 +10,6 @@ module.exports = {
     'plugin:san/recommended',
     'eslint:recommended',
     '@vue/typescript/recommended',
-    '@vue/prettier',
-    '@vue/prettier/@typescript-eslint',
     'plugin:storybook/recommended',
   ],
   parserOptions: {
@@ -32,12 +30,12 @@ module.exports = {
         argsIgnorePattern: '^_',
       },
     ],
-    'prettier/prettier': [
-      'error',
-      {},
-      {
-        usePrettierrc: true,
-      },
-    ],
+    // 'prettier/prettier': [
+    //   'error',
+    //   {},
+    //   {
+    //     usePrettierrc: true,
+    //   },
+    // ],
   },
 }
