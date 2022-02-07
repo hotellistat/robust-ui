@@ -18,29 +18,33 @@
       :cx="size / 2"
       :cy="size / 2"
       :r="size / 2 - stroke / 2 - safeMargin"
-    ></circle>
+    />
   </svg>
 </template>
 
-<script setup lang="ts">
-import { computed } from 'vue'
+<script lang="ts">
+import { defineComponent } from 'vue'
 
-const props = defineProps({
-  size: {
-    type: Number,
-    default: 32,
-  },
-  stroke: {
-    type: Number,
-    default: 4,
-  },
-  safeMargin: {
-    type: Number,
-    default: 1,
-  },
-  progress: {
-    type: Number,
-    default: 25,
-  },
+export default defineComponent({
+  name: "CircularProgress",
+  props: {
+    size: {
+      type: Number,
+      default: 32,
+    },
+    stroke: {
+      type: Number,
+      default: 4,
+    },
+    safeMargin: {
+      type: Number,
+      default: 1,
+    },
+    progress: {
+      type: Number,
+      default: 25,
+    },
+  }
+
 })
 </script>

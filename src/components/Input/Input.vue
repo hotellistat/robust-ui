@@ -4,6 +4,7 @@ import InputWrapper from '../InputWrapper/InputWrapper.vue'
 import { PhWarningCircle } from 'phosphor-vue'
 
 export default defineComponent({
+  name: "Input",
   inheritAttrs: false,
   components: {
     InputWrapper,

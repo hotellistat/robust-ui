@@ -46,10 +46,7 @@
         </div>
       </div>
 
-      <div
-        class="base-slider__track-fill bg-primary-400"
-        :style="fillStyle"
-      ></div>
+      <div class="base-slider__track-fill bg-primary-400" :style="fillStyle"></div>
 
       <div
         ref="thumb"
@@ -85,6 +82,7 @@ import {
   watch,
 } from 'vue'
 export default defineComponent({
+  name: "Slider",
   props: {
     name: String,
     tabindex: [String, Number],
@@ -470,7 +468,7 @@ export default defineComponent({
 }
 .base-slider__track-background,
 .base-slider__track-fill {
-  content: '';
+  content: "";
   display: block;
   height: 3px;
   left: 0;
@@ -508,7 +506,7 @@ export default defineComponent({
   background-color: #93c5fd;
   opacity: 0.3;
   border-radius: 50%;
-  content: '';
+  content: "";
   display: block;
   height: 36px;
   margin-left: -12px;

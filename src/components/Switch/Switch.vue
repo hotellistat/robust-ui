@@ -15,12 +15,8 @@
       ></div>
     </div>
     <div v-if="title">
-      <div>
-        {{ title }}
-      </div>
-      <div class="text-sm text-gray-400">
-        {{ description }}
-      </div>
+      <div>{{ title }}</div>
+      <div class="text-sm text-gray-400">{{ description }}</div>
     </div>
   </label>
 </template>
@@ -29,6 +25,7 @@
 import { computed, defineComponent, PropType, toRefs } from 'vue'
 
 export default defineComponent({
+  name: "Switch",
   props: {
     title: {
       type: String,

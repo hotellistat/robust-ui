@@ -58,6 +58,7 @@ import Box from './Box.vue'
 import Colors from './Colors.vue'
 
 export default defineComponent({
+  name: "ColorPicker",
   components: {
     Saturation,
     Hue,

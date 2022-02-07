@@ -21,6 +21,7 @@ import {
 import defaultModifiers from './defaultModifiers'
 
 export default defineComponent({
+  name: "Popper",
   props: {
     appendTo: {
       type: HTMLElement,

@@ -25,9 +25,10 @@
         ></div>
       </div>
 
-      <div v-if="title && !$slots.title" class="w-full select-none leading-4">
-        {{ title }}
-      </div>
+      <div
+        v-if="title && !$slots.title"
+        class="w-full select-none leading-4"
+      >{{ title }}</div>
       <div>
         <slot v-if="$slots.title" name="title" />
       </div>
@@ -41,6 +42,7 @@ import { computed, defineComponent } from 'vue'
 let uid = 0
 
 export default defineComponent({
+  name: "Radio",
   props: {
     modelValue: {
       type: [String, Number, Boolean, Object],

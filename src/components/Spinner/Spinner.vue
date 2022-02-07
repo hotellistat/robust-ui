@@ -16,35 +16,44 @@
       :cx="size / 2"
       :cy="size / 2"
       :r="size / 2 - stroke / 2 - safeMargin"
-    ></circle>
+    />
   </svg>
 </template>
 
-<script setup lang="ts">
-import { computed } from 'vue'
+<script lang="ts">
+import { computed, defineComponent } from 'vue'
 
-const props = defineProps({
-  size: {
-    type: Number,
-    default: 24,
+export default defineComponent({
+  name: "Spinner",
+  props: {
+    size: {
+      type: Number,
+      default: 24,
+    },
+    stroke: {
+      type: Number,
+      default: 2,
+    },
+    safeMargin: {
+      type: Number,
+      default: 1,
+    },
   },
-  stroke: {
-    type: Number,
-    default: 2,
-  },
-  safeMargin: {
-    type: Number,
-    default: 1,
-  },
+  setup(props) {
+    const minDashOffset = computed(() => {
+      return 0.666 * (props.size - 2 * props.safeMargin)
+    })
+
+    const maxDashOffset = computed(() => {
+      return 3.1415 * (props.size - 2 * props.safeMargin)
+    })
+    return {
+      minDashOffset,
+      maxDashOffset
+    }
+  }
 })
 
-const minDashOffset = computed(() => {
-  return 0.666 * (props.size - 2 * props.safeMargin)
-})
-
-const maxDashOffset = computed(() => {
-  return 3.1415 * (props.size - 2 * props.safeMargin)
-})
 </script>
 
 <style scoped>

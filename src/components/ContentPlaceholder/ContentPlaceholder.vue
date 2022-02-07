@@ -3,12 +3,8 @@
     <div class="mb-2 flex justify-center">
       <component :is="icon" size="40" />
     </div>
-    <div class="mx-auto text-center text-xl font-bold">
-      {{ title }}
-    </div>
-    <div class="mx-auto text-center">
-      {{ description }}
-    </div>
+    <div class="mx-auto text-center text-xl font-bold">{{ title }}</div>
+    <div class="mx-auto text-center">{{ description }}</div>
   </div>
 </template>
 
@@ -16,6 +12,8 @@
 import { defineComponent } from 'vue'
 
 export default defineComponent({
+  name: "ContentPlaceholder",
+
   props: {
     title: {
       type: String,

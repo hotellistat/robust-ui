@@ -19,9 +19,7 @@
       @click="select($event, tab.value)"
       class="whitespace-no-wrap z-10 flex-1 flex-shrink-0 flex-grow self-stretch whitespace-nowrap px-4 transition-colors duration-200"
       :class="{ 'text-white': modelValue === tab.value }"
-    >
-      {{ tab.title }}
-    </button>
+    >{{ tab.title }}</button>
   </div>
 </template>
 
@@ -42,6 +40,7 @@ interface Tab {
 }
 
 export default defineComponent({
+  name: "TabsSwitch",
   props: {
     tabs: {
       type: Array as PropType<Tab[]>,

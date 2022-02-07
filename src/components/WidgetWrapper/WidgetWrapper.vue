@@ -5,6 +5,7 @@ import { PhDotsThreeVertical } from 'phosphor-vue'
 import { onClickOutside } from '@vueuse/core'
 
 export default defineComponent({
+  name: "WidgetWrapper",
   components: {
     Popper,
     PhDotsThreeVertical,
@@ -71,9 +72,7 @@ export default defineComponent({
       class="relative mb-3 flex justify-between px-4 pt-3 text-gray-600 dark:text-gray-400"
     >
       <slot name="title" :title="title" v-if="$slots.title" />
-      <template v-else>
-        {{ title }}
-      </template>
+      <template v-else>{{ title }}</template>
       <button
         v-if="$slots.options"
         ref="contextButtonRef"

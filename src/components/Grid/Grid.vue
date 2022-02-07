@@ -29,6 +29,7 @@ import GridItem from './GridItem.vue'
 import { Widget } from './GridItem.vue'
 
 export default defineComponent({
+  name: "Grid",
   components: {
     GridItem,
   },

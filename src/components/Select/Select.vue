@@ -15,6 +15,7 @@ import { Modifier } from '@popperjs/core'
 import { onClickOutside } from '@vueuse/core'
 import { PhCheck, PhCaretDown } from 'phosphor-vue'
 export default defineComponent({
+  name: "Select",
   components: {
     Popper,
     InputWrapper,
@@ -103,24 +104,23 @@ export default defineComponent({
     const popperModifiers: Array<
       Partial<Modifier<string, Record<string, unknown>>>
     > = [
-      {
-        name: 'sameWidth',
-        enabled: true,
-        phase: 'beforeWrite',
-        requires: ['computeStyles'],
-        fn: (args) => {
-          args.state.styles.popper.width = `${Math.max(
-            args.state.rects.reference.width,
-            200
-          )}px`
+        {
+          name: 'sameWidth',
+          enabled: true,
+          phase: 'beforeWrite',
+          requires: ['computeStyles'],
+          fn: (args) => {
+            args.state.styles.popper.width = `${Math.max(
+              args.state.rects.reference.width,
+              200
+            )}px`
+          },
+          effect: (args) => {
+            args.state.elements.popper.style.width = `${args.state.elements.reference.getBoundingClientRect().width
+              }px`
+          },
         },
-        effect: (args) => {
-          args.state.elements.popper.style.width = `${
-            args.state.elements.reference.getBoundingClientRect().width
-          }px`
-        },
-      },
-    ]
+      ]
 
     const activeItem = computed(() => {
       return props.options.find((item) => item.value === props.modelValue)
@@ -213,9 +213,9 @@ export default defineComponent({
       :class="[$slots.prefix || condensed ? 'pl-2' : 'pl-3']"
       v-bind="attrs"
     >
-      <div class="min-w-0 select-none truncate">
-        {{ activeItem ? activeItem.title : 'Select' }}
-      </div>
+      <div
+        class="min-w-0 select-none truncate"
+      >{{ activeItem ? activeItem.title : 'Select' }}</div>
     </div>
     <input
       v-show="open"

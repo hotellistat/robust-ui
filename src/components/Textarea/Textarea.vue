@@ -22,6 +22,7 @@
 import { defineComponent } from 'vue'
 
 export default defineComponent({
+  name: "Textarea",
   inheritAttrs: false,
   model: {
     event: 'update',
@@ -133,11 +134,11 @@ textarea {
   }
 
   &:invalid {
-    border: 1px solid theme('colors.yellow.500');
+    border: 1px solid theme("colors.yellow.500");
   }
 
   &:focus {
-    border: 1px solid theme('colors.primary.500');
+    border: 1px solid theme("colors.primary.500");
   }
 
   &:disabled {
