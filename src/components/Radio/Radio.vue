@@ -42,7 +42,7 @@ import { computed, defineComponent } from 'vue'
 let uid = 0
 
 export default defineComponent({
-  name: "Radio",
+
   props: {
     modelValue: {
       type: [String, Number, Boolean, Object],

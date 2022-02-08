@@ -42,7 +42,7 @@ import { defineComponent, ref, watch } from 'vue'
 import { lockScroll, unlockScroll } from '../../utils/scrollLock'
 
 export default defineComponent({
-  name: "Modal",
+
   inheritAttrs: false,
   props: {
     modalClass: {

@@ -26,7 +26,7 @@
 import { defineComponent } from 'vue'
 
 export default defineComponent({
-  name: "CircularProgress",
+
   props: {
     size: {
       type: Number,

@@ -15,7 +15,7 @@ import { Modifier } from '@popperjs/core'
 import { onClickOutside } from '@vueuse/core'
 import { PhCheck, PhCaretDown } from 'phosphor-vue'
 export default defineComponent({
-  name: "Select",
+
   components: {
     Popper,
     InputWrapper,

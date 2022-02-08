@@ -9,7 +9,7 @@ import { computed, defineComponent, PropType } from 'vue'
 import variants from './variants'
 
 export default defineComponent({
-  name: "Notice",
+
   props: {
     variant: {
       type: String as PropType<'info' | 'warning' | 'error' | 'success'>,

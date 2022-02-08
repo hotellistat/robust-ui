@@ -26,7 +26,7 @@ export interface Widget {
 }
 
 export default defineComponent({
-  name: "GridItem",
+
   props: {
     widget: {
       type: Object as PropType<Widget>,

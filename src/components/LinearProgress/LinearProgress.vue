@@ -14,7 +14,7 @@
 import { computed, toRefs, defineComponent } from 'vue'
 
 export default defineComponent({
-  name: "LinearProgress",
+
   props: {
     height: {
       type: Number,

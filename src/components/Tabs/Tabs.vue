@@ -33,7 +33,7 @@ interface Tab {
 }
 
 export default defineComponent({
-  name: "Tabs",
+
   props: {
     tabs: {
       type: Array as PropType<Tab[]>,

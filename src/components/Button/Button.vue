@@ -35,7 +35,6 @@ import Spinner from '../Spinner/Spinner.vue'
 import variants from './variants'
 
 export default defineComponent({
-  name: "Button",
   components: {
     Spinner,
   },

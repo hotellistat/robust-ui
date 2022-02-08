@@ -27,7 +27,7 @@ import {
 } from 'vue'
 
 export default defineComponent({
-  name: "DateRangePicker",
+
   components: {
     Calendar,
     Popper,

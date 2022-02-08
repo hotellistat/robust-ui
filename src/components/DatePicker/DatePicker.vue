@@ -8,7 +8,7 @@ import { computed, defineComponent, ref, toRefs, PropType } from 'vue'
 import { onClickOutside } from '@vueuse/core'
 
 export default defineComponent({
-  name: "DatePicker",
+
   components: {
     Popper,
     Calendar,

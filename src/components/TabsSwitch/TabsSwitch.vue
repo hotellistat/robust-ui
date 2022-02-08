@@ -40,7 +40,7 @@ interface Tab {
 }
 
 export default defineComponent({
-  name: "TabsSwitch",
+
   props: {
     tabs: {
       type: Array as PropType<Tab[]>,
