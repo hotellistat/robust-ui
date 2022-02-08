@@ -37,6 +37,10 @@ export default defineComponent({
       type: Boolean,
       default: false,
     },
+    disabled: {
+      type: Boolean,
+      default: false
+    }
   },
   emits: ['update:modelValue', 'input', 'change'],
   setup(props, { emit, attrs }) {
@@ -81,6 +85,7 @@ export default defineComponent({
     :error="error"
     :class="$props.class"
     :readonly="readonly"
+    :disabled="disabled"
     :condensed="condensed"
     v-slot="slotProps"
   >
@@ -91,11 +96,13 @@ export default defineComponent({
     >
       <slot tag="div" name="prefix" />
     </div>
+
     <input
       :id="slotProps.cuid"
       ref="inputRef"
       v-bind="$attrs"
       v-model="inputFieldValue"
+      :disabled="disabled"
       size="8"
       class="block h-full w-full bg-transparent text-current outline-none dark:placeholder-gray-600"
       :class="[
@@ -104,10 +111,10 @@ export default defineComponent({
         {
           'cursor-not-allowed': readonly,
         },
+        disabled ? 'text-gray-500 cursor-not-allowed' : ''
       ]"
       :readonly="readonly"
     />
-
     <div
       v-if="$slots.suffix || error"
       class="pointer-events-none absolute inset-y-0 right-0 ml-auto flex h-full select-none items-center pl-2 text-gray-400"

@@ -26,6 +26,10 @@ export default defineComponent({
       type: Boolean,
       default: false,
     },
+    disabled: {
+      type: Boolean,
+      default: false
+    }
   },
   setup(_, { attrs }) {
     const cuid = (++uid).toString()
@@ -73,6 +77,7 @@ export default defineComponent({
           'ring-primary-500 ring-opacity-30 focus-within:border-primary-500 focus-within:outline-none focus-within:ring focus-within:dark:border-primary-500':
             !readonly,
         },
+        disabled ? 'text-gray-500' : ''
       ]"
     >
       <slot :cuid="cuid" :wrapperRef="wrapperRef" />
