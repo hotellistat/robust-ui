@@ -1,15 +1,15 @@
 export { lockScroll, unlockScroll } from './utils/scrollLock'
 
+import { App, Plugin } from 'vue'
 import * as components from './components'
 
-const plugin = {
-  install(Vue) {
-    for (const prop in components) {
-      if (components.hasOwnProperty(prop)) {
-        const component = components[prop]
-        Vue.component(component.name, component)
-      }
-    }
+const plugin: Plugin = {
+  install(app: App) {
+    if (this.installed) return;
+    this.installed = true;
+    Object.entries(components).forEach(([componentName, component]) =>
+      app.component(componentName, component)
+    );
   },
 }
 
