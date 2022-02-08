@@ -27,7 +27,7 @@ import {
 } from 'vue'
 
 export default defineComponent({
-  name: "RobustDaterangePicker",
+  name: 'RobustDaterangePicker',
 
   components: {
     Calendar,
@@ -303,9 +303,9 @@ export default defineComponent({
       class="flex h-full w-full items-center bg-transparent pl-2 text-current outline-none"
       v-bind="$attrs"
     >
-      <div
-        class="min-w-0 truncate text-sm tabular-nums sm:text-base"
-      >{{ displayDate }}</div>
+      <div class="min-w-0 truncate text-sm tabular-nums sm:text-base">
+        {{ displayDate }}
+      </div>
     </div>
 
     <div
@@ -332,7 +332,9 @@ export default defineComponent({
   >
     <h3
       class="font-lg border-b border-gray-200 p-4 font-medium text-gray-500 dark:border-gray-600"
-    >Date range</h3>
+    >
+      Date range
+    </h3>
     <div>
       <Calendar
         ref="mainCalendar"
@@ -343,7 +345,8 @@ export default defineComponent({
           <div>
             <label
               class="mb-1 block text-sm font-medium text-gray-500 dark:text-gray-400"
-            >Perspective of</label>
+              >Perspective of</label
+            >
             <DatePicker placeholder="Date" v-model="perspectiveOf" />
           </div>
           <Checkbox
@@ -357,7 +360,9 @@ export default defineComponent({
     <h3
       v-if="enableComparison"
       class="font-lg border-b border-t border-gray-200 p-4 font-medium text-gray-500 dark:border-gray-600"
-    >Comparison date range</h3>
+    >
+      Comparison date range
+    </h3>
     <div v-if="enableComparison">
       <Calendar
         variant="secondary"
@@ -367,7 +372,8 @@ export default defineComponent({
         <div v-if="enablePerspective" class="flex flex-col items-start">
           <label
             class="mb-1 block text-sm font-medium text-gray-500 dark:text-gray-400"
-          >Perspective of</label>
+            >Perspective of</label
+          >
           <DatePicker placeholder="Date" v-model="comparePerspectiveOf" />
         </div>
       </Calendar>
@@ -381,7 +387,9 @@ export default defineComponent({
         class="hover:cursor-pointer"
         :size="35"
       />-->
-      <Button type="primary" class="ml-auto" @click="saveTime">Apply time range</Button>
+      <Button type="primary" class="ml-auto" @click="saveTime"
+        >Apply time range</Button
+      >
     </div>
   </Popper>
 </template>

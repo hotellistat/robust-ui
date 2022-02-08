@@ -24,7 +24,7 @@
 import { computed, defineComponent } from 'vue'
 
 export default defineComponent({
-  name: "RobustSpinner",
+  name: 'RobustSpinner',
 
   props: {
     size: {
@@ -50,11 +50,10 @@ export default defineComponent({
     })
     return {
       minDashOffset,
-      maxDashOffset
+      maxDashOffset,
     }
-  }
+  },
 })
-
 </script>
 
 <style scoped>

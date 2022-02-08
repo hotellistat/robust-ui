@@ -4,6 +4,5 @@ export default {
   },
   secondary: {
     background: 'bg-emerald-500 text-white hover:bg-emerald-600',
-  }
-
+  },
 }

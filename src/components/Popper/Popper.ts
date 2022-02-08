@@ -1,9 +1,5 @@
 import { createPopper } from '@popperjs/core'
-import type {
-  Instance,
-  Options,
-  Modifier,
-} from '@popperjs/core'
+import type { Instance, Options, Modifier } from '@popperjs/core'
 import gsap from 'gsap'
 
 import {
@@ -21,7 +17,7 @@ import {
 import defaultModifiers from './defaultModifiers'
 
 export default defineComponent({
-  name: "RobustPopper",
+  name: 'RobustPopper',
 
   props: {
     appendTo: {
@@ -58,10 +54,7 @@ export default defineComponent({
     const defaultPopperOptions: Options = {
       strategy: 'absolute',
       placement: 'bottom-start',
-      modifiers: [
-        ...defaultModifiers,
-        ...props.modifiers,
-      ],
+      modifiers: [...defaultModifiers, ...props.modifiers],
     }
 
     function destroy() {
@@ -84,12 +77,7 @@ export default defineComponent({
         return
       }
 
-
-      popper = createPopper(
-        appendElement,
-        root.value,
-        mergedOptions
-      )
+      popper = createPopper(appendElement, root.value, mergedOptions)
 
       await popper.update()
     }
@@ -136,7 +124,6 @@ export default defineComponent({
           )
           .then(() => {
             destroy()
-
           })
       }
     }

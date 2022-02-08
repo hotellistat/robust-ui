@@ -4,7 +4,7 @@ import InputWrapper from '../InputWrapper/InputWrapper.vue'
 import { PhWarningCircle } from 'phosphor-vue'
 
 export default defineComponent({
-  name: "RobustInput",
+  name: 'RobustInput',
 
   inheritAttrs: false,
   components: {
@@ -40,8 +40,8 @@ export default defineComponent({
     },
     disabled: {
       type: Boolean,
-      default: false
-    }
+      default: false,
+    },
   },
   emits: ['update:modelValue', 'input', 'change'],
   setup(props, { emit, attrs }) {
@@ -112,7 +112,7 @@ export default defineComponent({
         {
           'cursor-not-allowed': readonly,
         },
-        disabled ? 'text-gray-500 cursor-not-allowed' : ''
+        disabled ? 'cursor-not-allowed text-gray-500' : '',
       ]"
       :readonly="readonly"
     />

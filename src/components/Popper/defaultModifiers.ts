@@ -1,4 +1,4 @@
-import { Modifier } from "@popperjs/core";
+import { Modifier } from '@popperjs/core'
 
 export default [
   {
@@ -9,7 +9,7 @@ export default [
         y: Math.round(y),
       }),
       adaptive: true,
-      gpuAcceleration: true
+      gpuAcceleration: true,
     },
   },
   {

@@ -25,7 +25,7 @@ const DefaultTemplate = (args) => ({
 export const Default = DefaultTemplate.bind()
 
 Default.args = {
-  modelValue: "Input text",
+  modelValue: 'Input text',
   title: 'Input title',
 }
 

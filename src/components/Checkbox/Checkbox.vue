@@ -20,7 +20,9 @@
       <div
         v-if="title && !$slots.title"
         class="w-full select-none pt-px leading-4"
-      >{{ title }}</div>
+      >
+        {{ title }}
+      </div>
       <div
         v-if="!title && $slots.title"
         class="w-full select-none pt-px leading-4"
@@ -34,7 +36,7 @@
 <script lang="ts">
 import { computed, defineComponent } from 'vue'
 export default defineComponent({
-  name: "RobustCheckbox",
+  name: 'RobustCheckbox',
 
   emits: ['update:modelValue', 'change'],
   props: {

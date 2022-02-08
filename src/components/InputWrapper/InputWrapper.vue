@@ -3,7 +3,7 @@ import { computed, defineComponent, ref } from 'vue'
 
 let uid = 0
 export default defineComponent({
-  name: "RobustInputWrapper",
+  name: 'RobustInputWrapper',
 
   inheritAttrs: false,
   props: {
@@ -29,8 +29,8 @@ export default defineComponent({
     },
     disabled: {
       type: Boolean,
-      default: false
-    }
+      default: false,
+    },
   },
   setup(_, { attrs }) {
     const cuid = (++uid).toString()
@@ -46,9 +46,9 @@ export default defineComponent({
 
     const wrapperRef = ref()
 
-    function blurred() { }
+    function blurred() {}
 
-    function focused() { }
+    function focused() {}
 
     return {
       cuid,
@@ -66,7 +66,9 @@ export default defineComponent({
     <legend
       v-if="title"
       class="mb-1 block select-none text-sm font-medium text-gray-500 dark:text-gray-400"
-    >{{ title }}</legend>
+    >
+      {{ title }}
+    </legend>
     <div
       v-bind="listeners"
       ref="wrapperRef"
@@ -78,20 +80,21 @@ export default defineComponent({
           'ring-primary-500 ring-opacity-30 focus-within:border-primary-500 focus-within:outline-none focus-within:ring focus-within:dark:border-primary-500':
             !readonly,
         },
-        disabled ? 'text-gray-500' : ''
+        disabled ? 'text-gray-500' : '',
       ]"
     >
       <slot :cuid="cuid" :wrapperRef="wrapperRef" />
     </div>
     <label v-if="hint !== undefined || error !== undefined" class="block pt-1">
-      <div
-        v-if="hint !== undefined"
-        class="select-none text-xs text-gray-400"
-      >{{ hint }}</div>
+      <div v-if="hint !== undefined" class="select-none text-xs text-gray-400">
+        {{ hint }}
+      </div>
       <div
         v-if="error !== undefined"
         class="select-none text-xs text-red-400 dark:text-red-400"
-      >{{ error }}</div>
+      >
+        {{ error }}
+      </div>
     </label>
   </fieldset>
 </template>

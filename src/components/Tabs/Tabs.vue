@@ -16,7 +16,9 @@
       ]"
     >
       <slot name="tab" :tab="tab" :select="() => select(tab.value)">
-        <div class="px-4 py-3" @click="() => select(tab.value)">{{ tab.title }}</div>
+        <div class="px-4 py-3" @click="() => select(tab.value)">
+          {{ tab.title }}
+        </div>
       </slot>
     </div>
 
@@ -33,7 +35,7 @@ interface Tab {
 }
 
 export default defineComponent({
-  name: "RobustTabs",
+  name: 'RobustTabs',
 
   props: {
     tabs: {

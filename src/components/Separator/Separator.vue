@@ -27,7 +27,7 @@
 import { defineComponent } from 'vue'
 
 export default defineComponent({
-  name: "RobustSeparator",
+  name: 'RobustSeparator',
 
   props: {
     vert: {

@@ -9,24 +9,24 @@
 </template>
 
 <script lang="ts">
-import { GridStackNode, GridStackOptions, GridStackPosition } from "gridstack";
+import { GridStackNode, GridStackOptions, GridStackPosition } from 'gridstack'
 import {
   computed,
   DefineComponent,
   defineComponent,
   PropType,
   toRefs,
-} from "vue";
+} from 'vue'
 
 export interface Widget {
-  id: number | string;
-  component: DefineComponent;
-  options: Record<string, unknown>;
-  gridstack: GridStackNode;
+  id: number | string
+  component: DefineComponent
+  options: Record<string, unknown>
+  gridstack: GridStackNode
 }
 
 export default defineComponent({
-  name: "RobustGridItem",
+  name: 'RobustGridItem',
 
   props: {
     widget: {
@@ -38,25 +38,25 @@ export default defineComponent({
     },
   },
   setup(props, { emit }) {
-    const { widget } = toRefs(props);
+    const { widget } = toRefs(props)
 
     const widgetAttributes = computed(() => {
       return {
-        "gs-id": widget.value?.id,
-        "gs-x": widget.value?.gridstack.x,
-        "gs-y": widget.value?.gridstack.y,
-        "gs-w": widget.value?.gridstack.w,
-        "gs-h": widget.value?.gridstack.h,
-        "gs-no-move": props.locked,
-        "gs-no-resize": props.locked,
-      };
-    });
+        'gs-id': widget.value?.id,
+        'gs-x': widget.value?.gridstack.x,
+        'gs-y': widget.value?.gridstack.y,
+        'gs-w': widget.value?.gridstack.w,
+        'gs-h': widget.value?.gridstack.h,
+        'gs-no-move': props.locked,
+        'gs-no-resize': props.locked,
+      }
+    })
 
     return {
       props,
 
       widgetAttributes,
-    };
+    }
   },
-});
+})
 </script>

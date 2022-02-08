@@ -1,7 +1,6 @@
 export { lockScroll, unlockScroll } from './utils/scrollLock'
 
-
-import * as components from "./components"
+import * as components from './components'
 
 const plugin = {
   install(Vue) {
@@ -11,8 +10,8 @@ const plugin = {
         Vue.component(component.name, component)
       }
     }
-  }
+  },
 }
 
 export default plugin
-export * from "./components"
+export * from './components'

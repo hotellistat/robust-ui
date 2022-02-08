@@ -1,8 +1,8 @@
 import { defineComponent, h, onMounted, ref } from 'vue'
 import HsSpinner from '../Spinner/Spinner.vue'
-import { PhWarning } from "phosphor-vue"
+import { PhWarning } from 'phosphor-vue'
 export default defineComponent({
-  name: "RobustImg",
+  name: 'RobustImg',
 
   props: {
     src: {
@@ -10,8 +10,8 @@ export default defineComponent({
       required: true,
     },
     fallbackSrc: {
-      type: String
-    }
+      type: String,
+    },
   },
 
   setup(props, { emit }) {
@@ -48,12 +48,10 @@ export default defineComponent({
         {
           class: 'flex items-center justify-center',
         },
-        h(HsSpinner,
-          {
-            size: 24,
-            stroke: 2
-          }
-        )
+        h(HsSpinner, {
+          size: 24,
+          stroke: 2,
+        })
       )
     } else if (this.error) {
       if (this.fallbackSrc) {
@@ -61,14 +59,10 @@ export default defineComponent({
           src: this.fallbackSrc,
         })
       } else {
-        return h(
-          PhWarning,
-          {
-            size: 20
-          },
-        )
+        return h(PhWarning, {
+          size: 20,
+        })
       }
-
     } else {
       return h('img', {
         src: this.src,

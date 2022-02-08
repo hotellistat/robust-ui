@@ -8,7 +8,7 @@ import { computed, defineComponent, ref, toRefs, PropType } from 'vue'
 import { onClickOutside } from '@vueuse/core'
 
 export default defineComponent({
-  name: "RobustDatePicker",
+  name: 'RobustDatePicker',
 
   components: {
     Popper,
@@ -48,8 +48,6 @@ export default defineComponent({
     },
   },
   setup(props, { emit, attrs }) {
-
-
     const refSelectContainer = ref()
     const { modelValue } = toRefs(props)
     const open = ref(false)

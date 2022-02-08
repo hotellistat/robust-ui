@@ -1,13 +1,22 @@
 export interface QuickActionPreset {
-  title: string,
+  title: string
   preset: () => [Date, Date]
 }
 
-import { endOfMonth, endOfWeek, endOfYear, set, startOfMonth, startOfWeek, startOfYear, subDays } from "date-fns"
+import {
+  endOfMonth,
+  endOfWeek,
+  endOfYear,
+  set,
+  startOfMonth,
+  startOfWeek,
+  startOfYear,
+  subDays,
+} from 'date-fns'
 
 export default [
   {
-    title: "today",
+    title: 'today',
     preset: () => {
       const today = set(new Date(), {
         hours: 0,
@@ -23,10 +32,10 @@ export default [
           seconds: 59,
         }),
       ]
-    }
+    },
   },
   {
-    title: "yesterday",
+    title: 'yesterday',
     preset: () => {
       const yesterday = set(subDays(new Date(), 1), {
         hours: 0,
@@ -42,10 +51,10 @@ export default [
           seconds: 59,
         }),
       ]
-    }
+    },
   },
   {
-    title: "this_month_so_far",
+    title: 'this_month_so_far',
     preset: () => {
       const monthStart = startOfMonth(new Date())
       return [
@@ -56,22 +65,22 @@ export default [
           seconds: 59,
         }),
       ]
-    }
+    },
   },
   {
-    title: "this_month",
+    title: 'this_month',
     preset: () => {
       return [startOfMonth(new Date()), endOfMonth(new Date())]
-    }
+    },
   },
   {
-    title: "this_year",
+    title: 'this_year',
     preset: () => {
       return [startOfYear(new Date()), endOfYear(new Date())]
-    }
+    },
   },
   {
-    title: "this_year_so_far",
+    title: 'this_year_so_far',
     preset: () => {
       return [
         startOfYear(new Date()),
@@ -79,30 +88,29 @@ export default [
           hours: 23,
           minutes: 59,
           seconds: 59,
-        })]
-    }
+        }),
+      ]
+    },
   },
   {
-    title: "last_week",
+    title: 'last_week',
     preset: () => {
       let startDay = startOfWeek(subDays(new Date(), 7))
-      return [startDay, endOfWeek(new Date(startDay))
-      ]
-    }
+      return [startDay, endOfWeek(new Date(startDay))]
+    },
   },
   {
-    title: "last_month",
+    title: 'last_month',
     preset: () => {
       let startDay = startOfMonth(subDays(startOfMonth(new Date()), 1))
-      return [startDay, endOfMonth(startDay)
-      ]
-    }
+      return [startDay, endOfMonth(startDay)]
+    },
   },
   {
-    title: "last_year",
+    title: 'last_year',
     preset: () => {
       const startDay = startOfYear(subDays(startOfYear(new Date()), 1))
       return [startDay, endOfYear(new Date(startDay))]
-    }
-  }
+    },
+  },
 ] as Array<QuickActionPreset>
