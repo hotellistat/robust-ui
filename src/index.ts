@@ -8,7 +8,7 @@ const plugin: Plugin = {
     if (this.installed) return;
     this.installed = true;
     Object.entries(components).forEach(([componentName, component]) =>
-      app.component(componentName, component)
+      app.component(component.name, component)
     );
   },
 }
