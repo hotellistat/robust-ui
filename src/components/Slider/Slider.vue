@@ -82,6 +82,7 @@ import {
   watch,
 } from 'vue'
 export default defineComponent({
+  name: "RobustSlider",
 
   props: {
     name: String,

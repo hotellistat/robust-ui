@@ -1,32 +1,18 @@
 export { lockScroll, unlockScroll } from './utils/scrollLock'
 
-export { default as Button } from './components/Button/Button.vue'
-export { default as Calendar } from './components/Calendar/Calendar.vue'
-export { default as Checkbox } from './components/Checkbox/Checkbox.vue'
-export { default as CircularProgress } from './components/CircularProgress/CircularProgress.vue'
-export { default as ColorPicker } from './components/ColorPicker/ColorPicker.vue'
-export { default as ColorPalette } from './components/ColorPicker/ColorPalette.vue'
-export { default as ContentBox } from './components/ContentBox/ContentBox.vue'
-export { default as ContentPlaceholder } from './components/ContentPlaceholder/ContentPlaceholder.vue'
-export { default as DatePicker } from './components/DatePicker/DatePicker.vue'
-export { default as DaterangePicker } from './components/DatePicker/DaterangePicker.vue'
-export { default as Draggable } from './components/Draggable/Draggable.vue'
-export { default as Grid } from './components/Grid/Grid.vue'
-export { default as GridItem } from './components/Grid/GridItem.vue'
-export { default as Img } from './components/Img/Img'
-export { default as Input } from './components/Input/Input.vue'
-export { default as InputWrapper } from './components/InputWrapper/InputWrapper.vue'
-export { default as LinearProgress } from './components/LinearProgress/LinearProgress.vue'
-export { default as Modal } from './components/Modal/Modal.vue'
-export { default as Notice } from './components/Notice/Notice.vue'
-export { default as Popper } from './components/Popper/Popper'
-export { default as Radio } from './components/Radio/Radio.vue'
-export { default as Select } from './components/Select/Select.vue'
-export { default as Separator } from './components/Separator/Separator.vue'
-export { default as Slider } from './components/Slider/Slider.vue'
-export { default as Spinner } from './components/Spinner/Spinner.vue'
-export { default as Switch } from './components/Switch/Switch.vue'
-export { default as Tabs } from './components/Tabs/Tabs.vue'
-export { default as TabsSwitch } from './components/TabsSwitch/TabsSwitch.vue'
-export { default as Textarea } from './components/Textarea/Textarea.vue'
-export { default as WidgetWrapper } from './components/WidgetWrapper/WidgetWrapper.vue'
+
+import * as components from "./components"
+
+const plugin = {
+  install(Vue) {
+    for (const prop in components) {
+      if (components.hasOwnProperty(prop)) {
+        const component = components[prop]
+        Vue.component(component.name, component)
+      }
+    }
+  }
+}
+
+export default plugin
+export * from "./components"

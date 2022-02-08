@@ -32,6 +32,8 @@ import QuickActionPresets from './quickActionPresets'
 import variants from './variants'
 
 export default defineComponent({
+  name: "RobustCalendar",
+
   components: {
     Input,
     PhCaretLeft,

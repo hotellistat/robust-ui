@@ -26,6 +26,7 @@ export interface Widget {
 }
 
 export default defineComponent({
+  name: "RobustGridItem",
 
   props: {
     widget: {

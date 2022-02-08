@@ -11,6 +11,7 @@ import { computed, defineComponent, nextTick, toRefs } from 'vue'
 import draggable from './directive'
 
 export default defineComponent({
+  name: "RobustDraggable",
 
   directives: {
     draggable,

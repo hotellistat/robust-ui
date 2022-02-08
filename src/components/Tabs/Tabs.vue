@@ -33,6 +33,7 @@ interface Tab {
 }
 
 export default defineComponent({
+  name: "RobustTabs",
 
   props: {
     tabs: {

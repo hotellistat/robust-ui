@@ -3,6 +3,7 @@ import { computed, defineComponent, ref } from 'vue'
 
 let uid = 0
 export default defineComponent({
+  name: "RobustInputWrapper",
 
   inheritAttrs: false,
   props: {

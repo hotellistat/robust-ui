@@ -39,6 +39,7 @@
 </template>
 
 <script lang="ts">
+
 import {
   computed,
   defineComponent,
@@ -58,6 +59,7 @@ import Box from './Box.vue'
 import Colors from './Colors.vue'
 
 export default defineComponent({
+  name: "RobustColorPicker",
 
   components: {
     Saturation,

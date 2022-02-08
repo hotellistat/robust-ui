@@ -42,6 +42,7 @@ import { computed, defineComponent } from 'vue'
 let uid = 0
 
 export default defineComponent({
+  name: "RobustRadio",
 
   props: {
     modelValue: {

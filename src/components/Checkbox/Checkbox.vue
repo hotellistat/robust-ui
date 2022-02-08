@@ -34,6 +34,7 @@
 <script lang="ts">
 import { computed, defineComponent } from 'vue'
 export default defineComponent({
+  name: "RobustCheckbox",
 
   emits: ['update:modelValue', 'change'],
   props: {

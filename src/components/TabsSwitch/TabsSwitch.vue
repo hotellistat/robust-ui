@@ -40,6 +40,7 @@ interface Tab {
 }
 
 export default defineComponent({
+  name: "RobustTabsSwitch",
 
   props: {
     tabs: {

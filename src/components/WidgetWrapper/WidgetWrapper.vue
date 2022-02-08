@@ -5,6 +5,7 @@ import { PhDotsThreeVertical } from 'phosphor-vue'
 import { onClickOutside } from '@vueuse/core'
 
 export default defineComponent({
+  name: "RobustWidgetWrapper",
 
   components: {
     Popper,

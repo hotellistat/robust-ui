@@ -33,17 +33,17 @@
     "tailwind-config-viewer": "tailwind-config-viewer -o"
   },
   "devDependencies": {
-    "@babel/core": "^7.17.0",
+    "@babel/core": "^7.17.2",
     "@mdx-js/preact": "^2.0.0",
     "@storybook/addon-actions": "^6.4.18",
     "@storybook/addon-essentials": "^6.4.18",
     "@storybook/addon-links": "^6.4.18",
     "@storybook/storybook-deployer": "^2.8.10",
     "@storybook/vue3": "^6.4.18",
-    "@typescript-eslint/eslint-plugin": "^5.10.2",
-    "@typescript-eslint/parser": "^5.10.2",
+    "@typescript-eslint/eslint-plugin": "^5.11.0",
+    "@typescript-eslint/parser": "^5.11.0",
     "@vitejs/plugin-vue": "^2.1.0",
-    "@vue/compiler-sfc": "^3.2.29",
+    "@vue/compiler-sfc": "^3.2.30",
     "@vue/eslint-config-prettier": "^7.0.0",
     "@vue/eslint-config-typescript": "^10.0.0",
     "babel-loader": "^8.2.3",
@@ -59,7 +59,7 @@
     "postcss": "^8.4.6",
     "postcss-import": "^14.0.2",
     "prettier": "^2.5.1",
-    "prettier-plugin-tailwindcss": "^0.1.5",
+    "prettier-plugin-tailwindcss": "^0.1.6",
     "rollup-plugin-visualizer": "^5.5.4",
     "storybook-addon-themes": "^6.1.0",
     "storybook-builder-vite": "^0.1.15",
@@ -69,24 +69,24 @@
     "vite": "^2.7.13",
     "vitepress": "^0.21.6",
     "vue-eslint-parser": "^8.2.0",
-    "vue-loader": "^16.8.3",
-    "vue-tsc": "^0.31.1"
+    "vue-loader": "^17.0.0",
+    "vue-tsc": "^0.31.2"
   },
   "dependencies": {
     "@popperjs/core": "^2.11.2",
-    "@vueuse/core": "^7.5.5",
+    "@vueuse/core": "^7.6.0",
     "autoprefixer": "^10.4.2",
-    "cssnano": "^5.0.16",
+    "cssnano": "^5.0.17",
     "d3": "^7.3.0",
     "date-fns": "^2.28.0",
     "gridstack": "^5.0.0",
     "gsap": "^3.9.1",
     "mitt": "^3.0.0",
     "tabbable": "^5.2.1",
-    "tailwindcss": "^3.0.18",
+    "tailwindcss": "^3.0.19",
     "tippy.js": "^6.3.7",
-    "vue": "^3.1.5",
-    "vue-router": "^4.0.0-0",
-    "vuex": "^4.0.0-0"
+    "vue": "^3.2.30",
+    "vue-router": "^4.0.12",
+    "vuex": "^4.0.2"
   }
 }

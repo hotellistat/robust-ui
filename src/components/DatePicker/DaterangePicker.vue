@@ -27,6 +27,7 @@ import {
 } from 'vue'
 
 export default defineComponent({
+  name: "RobustDaterangePicker",
 
   components: {
     Calendar,

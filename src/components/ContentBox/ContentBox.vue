@@ -25,7 +25,7 @@
       >
         <slot name="description" :description="description">
           {{
-          description
+            description
           }}
         </slot>
       </p>
@@ -42,6 +42,7 @@ import { defineComponent } from 'vue'
 import Separator from '../Separator/Separator.vue'
 
 export default defineComponent({
+  name: "RobustContentBox",
 
 
   components: {
