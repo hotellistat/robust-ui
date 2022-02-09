@@ -96,7 +96,7 @@ export default defineComponent({
 })
 </script>
 
-<style lang="postcss">
+<style lang="postcss" scoped>
 :root .grid-stack-item > .ui-resizable-handle {
   filter: none;
 }

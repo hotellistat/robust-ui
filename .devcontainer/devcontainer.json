@@ -19,7 +19,8 @@
 	// Add the IDs of extensions you want installed when the container is created.
 	"extensions": [
 		"johnsoncodehk.volar",
-		"bradlc.vscode-tailwindcss"
+		"bradlc.vscode-tailwindcss",
+		"esbenp.prettier-vscode"
 	],
 	// Use 'forwardPorts' to make a list of ports inside the container available locally.
 	// "forwardPorts": [],
