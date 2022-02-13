@@ -1,7 +1,7 @@
 <script lang="ts">
 import { computed, defineComponent, PropType, ref } from 'vue'
 import InputWrapper from '../InputWrapper/InputWrapper.vue'
-import { PhWarningCircle } from 'phosphor-vue'
+import { PhWarningCircle } from '@dnlsndr/vue-phosphor-icons'
 
 export default defineComponent({
   name: 'RobustInput',

@@ -3,7 +3,7 @@ import Popper from '../Popper/Popper'
 import Calendar from '../Calendar/Calendar.vue'
 import { format } from 'date-fns'
 import InputWrapper from '../InputWrapper/InputWrapper.vue'
-import { PhCaretDown, PhCalendar } from 'phosphor-vue'
+import { PhCaretDown, PhCalendar } from '@dnlsndr/vue-phosphor-icons'
 import { computed, defineComponent, ref, toRefs, PropType } from 'vue'
 import { onClickOutside } from '@vueuse/core'
 

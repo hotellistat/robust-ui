@@ -20,7 +20,7 @@ export default defineConfig({
         '@popperjs/core',
         'vue-router',
         'vuex',
-        'phosphor-vue',
+        '@dnlsndr/vue-phosphor-icons',
         'gridstack',
       ],
       output: {
@@ -28,7 +28,7 @@ export default defineConfig({
         // for externalized deps
         globals: {
           vue: 'Vue',
-          'phosphor-vue': 'phosphor-vue',
+          '@dnlsndr/vue-phosphor-icons': '@dnlsndr/vue-phosphor-icons',
           'date-fns': 'date-fns',
           '@popperjs/core': '@popperjs/core',
           gsap: 'gsap',

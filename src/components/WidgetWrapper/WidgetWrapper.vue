@@ -1,7 +1,7 @@
 <script lang="ts">
 import { defineComponent, ref } from 'vue'
 import Popper from '../Popper/Popper'
-import { PhDotsThreeVertical } from 'phosphor-vue'
+import { PhDotsThreeVertical } from '@dnlsndr/vue-phosphor-icons'
 import { onClickOutside } from '@vueuse/core'
 
 export default defineComponent({

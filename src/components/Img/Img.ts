@@ -1,6 +1,6 @@
 import { defineComponent, h, onMounted, ref } from 'vue'
 import HsSpinner from '../Spinner/Spinner.vue'
-import { PhWarning } from 'phosphor-vue'
+import { PhWarning } from '@dnlsndr/vue-phosphor-icons'
 export default defineComponent({
   name: 'RobustImg',
 

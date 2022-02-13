@@ -13,7 +13,7 @@ import InputWrapper from '../InputWrapper/InputWrapper.vue'
 import { debouncedWatch } from '@vueuse/core'
 import { Modifier } from '@popperjs/core'
 import { onClickOutside } from '@vueuse/core'
-import { PhCheck, PhCaretDown } from 'phosphor-vue'
+import { PhCheck, PhCaretDown } from '@dnlsndr/vue-phosphor-icons'
 export default defineComponent({
   name: 'RobustSelect',
 
@@ -215,9 +215,9 @@ export default defineComponent({
       :class="[$slots.prefix || condensed ? 'pl-2' : 'pl-3']"
       v-bind="attrs"
     >
-      <div class="min-w-0 select-none truncate">
-        {{ activeItem ? activeItem.title : 'Select' }}
-      </div>
+      <div
+        class="min-w-0 select-none truncate"
+      >{{ activeItem ? activeItem.title : 'Select' }}</div>
     </div>
     <input
       v-show="open"

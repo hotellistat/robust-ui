@@ -27,7 +27,7 @@ import {
   toRefs,
   watch,
 } from 'vue'
-import { PhCaretLeft, PhCaretRight } from 'phosphor-vue'
+import { PhCaretLeft, PhCaretRight } from '@dnlsndr/vue-phosphor-icons'
 import QuickActionPresets from './quickActionPresets'
 import variants from './variants'
 
@@ -483,9 +483,7 @@ export default defineComponent({
           :key="action.title"
           class="cursor-pointer py-2 px-4 hover:bg-gray-50 dark:hover:bg-gray-700"
           @click="setQuickAction(action.preset())"
-        >
-          {{ action.title }}
-        </div>
+        >{{ action.title }}</div>
       </div>
     </div>
 
@@ -500,9 +498,7 @@ export default defineComponent({
                 hideYearSelection()
               }
             "
-          >
-            {{ monthHeading }}
-          </div>
+          >{{ monthHeading }}</div>
           <div
             class="flex h-8 cursor-pointer items-center rounded-lg px-2 tabular-nums hover:bg-gray-100 dark:hover:bg-gray-700"
             @click="
@@ -511,9 +507,7 @@ export default defineComponent({
                 hideMonthSelection()
               }
             "
-          >
-            {{ yearHeading }}
-          </div>
+          >{{ yearHeading }}</div>
         </div>
         <div
           class="flex h-8 w-8 cursor-pointer items-center justify-center rounded-lg text-gray-700 hover:bg-gray-100 hover:text-gray-700 active:bg-gray-200 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-gray-100"
@@ -550,9 +544,7 @@ export default defineComponent({
                 hideMonthSelection()
               }
             "
-          >
-            {{ month.title }}
-          </div>
+          >{{ month.title }}</div>
         </div>
 
         <div
@@ -576,9 +568,7 @@ export default defineComponent({
                 hideYearSelection()
               }
             "
-          >
-            {{ year }}
-          </div>
+          >{{ year }}</div>
         </div>
 
         <div
@@ -591,39 +581,25 @@ export default defineComponent({
         >
           <div
             class="pb-2 text-center text-sm text-gray-400 dark:text-gray-400"
-          >
-            M
-          </div>
+          >M</div>
           <div
             class="pb-2 text-center text-sm text-gray-400 dark:text-gray-400"
-          >
-            T
-          </div>
+          >T</div>
           <div
             class="pb-2 text-center text-sm text-gray-400 dark:text-gray-400"
-          >
-            W
-          </div>
+          >W</div>
           <div
             class="pb-2 text-center text-sm text-gray-400 dark:text-gray-400"
-          >
-            T
-          </div>
+          >T</div>
           <div
             class="pb-2 text-center text-sm text-gray-400 dark:text-gray-400"
-          >
-            F
-          </div>
+          >F</div>
           <div
             class="pb-2 text-center text-sm text-gray-400 dark:text-gray-400"
-          >
-            S
-          </div>
+          >S</div>
           <div
             class="pb-2 text-center text-sm text-gray-400 dark:text-gray-400"
-          >
-            S
-          </div>
+          >S</div>
 
           <div v-for="offset in firstWeekday" :key="offset + '_offset'"></div>
           <div
@@ -642,23 +618,21 @@ export default defineComponent({
                 isFirst(day)
                   ? 'right-0 w-1/2'
                   : isLast(day)
-                  ? 'left-0 w-1/2'
-                  : '',
+                    ? 'left-0 w-1/2'
+                    : '',
               ]"
             ></div>
             <div
               class="relative z-10 flex h-8 w-8 min-w-8 cursor-pointer items-center justify-center rounded-lg text-sm font-medium tabular-nums"
               :class="[
                 isBetweenRange(day) ||
-                isLast(day) ||
-                isFirst(day) ||
-                isSelectedDay(day)
+                  isLast(day) ||
+                  isFirst(day) ||
+                  isSelectedDay(day)
                   ? `rounded-0 ${variantStyling.background}`
                   : 'hover:bg-gray-200 dark:hover:bg-gray-700',
               ]"
-            >
-              {{ day }}
-            </div>
+            >{{ day }}</div>
           </div>
         </div>
       </div>
@@ -669,8 +643,7 @@ export default defineComponent({
     >
       <label
         class="mb-1 block text-sm font-medium text-gray-500 dark:text-gray-400"
-        >From</label
-      >
+      >From</label>
       <Input
         v-model="from"
         placeholder="Date"
@@ -680,8 +653,7 @@ export default defineComponent({
 
       <label
         class="mb-1 block text-sm font-medium text-gray-500 dark:text-gray-400"
-        >To</label
-      >
+      >To</label>
       <Input
         v-model="to"
         placeholder="Date"

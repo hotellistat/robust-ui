@@ -1,5 +1,5 @@
 import Slider from './Slider.vue'
-import { PhWarning } from 'phosphor-vue'
+import { PhWarning } from '@dnlsndr/vue-phosphor-icons'
 
 export default {
   title: 'Ui/Slider',
