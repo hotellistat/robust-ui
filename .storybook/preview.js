@@ -2,9 +2,6 @@ import '../src/styles/tailwind.css'
 import '../src/styles/storybook.css'
 
 import { app } from '@storybook/vue3'
-import PhosphorVue from '@dnlsndr/vue-phosphor-icons'
-
-app.use(PhosphorVue)
 
 export const parameters = {
   actions: { argTypesRegex: '^on[A-Z].*' },
