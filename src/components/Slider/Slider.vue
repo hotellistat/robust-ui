@@ -35,7 +35,7 @@
       @mousedown="onDragStart"
       @touchstart="onDragStart"
     >
-      <div class="base-slider__track-background bg-gray-300 dark:bg-gray-500">
+      <div class="base-slider__track-background bg-gray-300 dark:bg-gray-400">
         <div v-if="snapToSteps">
           <span
             v-for="(point, idx) in snapPoints"
@@ -85,6 +85,8 @@ import {
   watch,
 } from 'vue'
 export default defineComponent({
+  name: 'RobustSlider',
+
   props: {
     name: String,
     tabindex: [String, Number],

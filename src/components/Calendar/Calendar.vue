@@ -1,257 +1,5 @@
-<template>
-  <div
-    class="grid select-none grid-cols-1 gap-8 p-4"
-    :class="{ 'lg:grid-cols-3': Array.isArray(modelValue) }"
-  >
-    <div class="text-center4 flex items-center text-lg font-semibold">
-      <div
-        class="flex h-7 w-7 cursor-pointer items-center justify-center rounded-full text-gray-500 hover:bg-gray-100 hover:text-gray-700 active:bg-gray-200 dark:hover:bg-gray-600 dark:hover:text-gray-200"
-        @click="subYear"
-      >
-        <ph-caret-double-left size="18" />
-      </div>
-      <div
-        class="flex h-7 w-7 cursor-pointer items-center justify-center rounded-full text-gray-500 hover:bg-gray-100 hover:text-gray-700 active:bg-gray-200 dark:hover:bg-gray-600 dark:hover:text-gray-200"
-        @click="subMonth"
-      >
-        <ph-caret-left type="chevron-left" size="18" />
-      </div>
-      <div class="flex flex-1 justify-center">
-        <div
-          class="cursor-pointer rounded-lg px-2 hover:bg-gray-100 dark:hover:bg-gray-600"
-          @click="
-            () => {
-              showMonthSelection()
-              hideYearSelection()
-            }
-          "
-        >
-          {{ monthHeading }}
-        </div>
-        <div
-          class="cursor-pointer rounded-lg px-2 hover:bg-gray-100 dark:hover:bg-gray-600"
-          @click="
-            () => {
-              showYearSelection()
-              hideMonthSelection()
-            }
-          "
-        >
-          {{ yearHeading }}
-        </div>
-      </div>
-      <div
-        class="flex h-7 w-7 cursor-pointer items-center justify-center rounded-full text-gray-500 hover:bg-gray-100 hover:text-gray-700 active:bg-gray-200 dark:hover:bg-gray-600 dark:hover:text-gray-200"
-        @click="addMonth"
-      >
-        <ph-caret-right type="chevron-right" size="18" />
-      </div>
-      <div
-        class="flex h-7 w-7 cursor-pointer items-center justify-center rounded-full text-gray-500 hover:bg-gray-100 hover:text-gray-700 active:bg-gray-200 dark:hover:bg-gray-600 dark:hover:text-gray-200"
-        @click="addYear"
-      >
-        <ph-caret-double-right type="chevrons-right" size="18" />
-      </div>
-    </div>
-    <h1 v-if="Array.isArray(modelValue)" class="self-center">
-      Absolute time range
-    </h1>
-    <h1 v-if="Array.isArray(modelValue)" class="self-center">
-      Relative time ranges
-    </h1>
-
-    <div>
-      <div v-if="showMonthSelectionActive" class="grid h-60 grid-cols-3 gap-4">
-        <div
-          v-for="(month, index) in months"
-          :key="index"
-          class="flex cursor-pointer items-center justify-center rounded-lg py-2 text-center"
-          :class="[
-            activeMonth === index
-              ? 'bg-primary-500 text-white'
-              : 'hover:bg-gray-100 dark:hover:bg-gray-600',
-          ]"
-          @click="
-            () => {
-              setMonth(index)
-              hideMonthSelection()
-            }
-          "
-        >
-          {{ month.title }}
-        </div>
-      </div>
-
-      <div
-        v-if="showYearSelectionActive"
-        class="flex h-60 flex-col gap-2 overflow-y-auto"
-      >
-        <div
-          v-for="year in yearSelectionYears"
-          :ref="(ref) => (refYearEntry[year] = ref)"
-          :key="year"
-          class="cursor-pointer rounded-lg py-2 text-center"
-          :class="[
-            activeYear === year
-              ? 'bg-primary-500 text-white'
-              : 'hover:bg-gray-100 dark:hover:bg-gray-600',
-          ]"
-          :data-year="year"
-          @click="
-            () => {
-              setYear(year)
-              hideYearSelection()
-            }
-          "
-        >
-          {{ year }}
-        </div>
-      </div>
-
-      <div
-        v-if="!showMonthSelectionActive && !showYearSelectionActive"
-        class="grid grid-cols-7 gap-y-2 font-courier"
-      >
-        <div class="pb-2 text-center text-gray-500 dark:text-gray-400">Mon</div>
-        <div class="pb-2 text-center text-gray-500 dark:text-gray-400">Tue</div>
-        <div class="pb-2 text-center text-gray-500 dark:text-gray-400">Wed</div>
-        <div class="pb-2 text-center text-gray-500 dark:text-gray-400">Thu</div>
-        <div class="pb-2 text-center text-gray-500 dark:text-gray-400">Fri</div>
-        <div class="pb-2 text-center text-gray-500 dark:text-gray-400">Sat</div>
-        <div class="pb-2 text-center text-gray-500 dark:text-gray-400">Sun</div>
-
-        <div
-          v-for="offset in firstWeekday"
-          :key="offset + '_offset'"
-          class="day__offset"
-        ></div>
-        <div
-          v-for="day in daysInMonth"
-          :key="day + '_day'"
-          class="relative flex justify-center"
-          :disabled="!dayAllowed(day)"
-          :class="[isBetweenRange(day) ? 'bg-primary-500 text-white' : '']"
-          @click="daySelect(day)"
-        >
-          <div
-            v-if="isLast(day) || isFirst(day)"
-            class="absolute z-0 h-full bg-primary-500"
-            :class="[
-              isFirst(day)
-                ? 'right-0 w-1/2'
-                : isLast(day)
-                ? 'left-0 w-1/2'
-                : '',
-            ]"
-          ></div>
-          <span
-            class="z-[10] flex h-8 w-8 cursor-pointer items-center justify-center rounded-full pt-0.5"
-            :class="[
-              activeDay(day) ? 'rounded-0 bg-primary-500 text-white' : '',
-              isBetweenRange(day) || isLast(day) || isFirst(day)
-                ? 'hover:bg-primary-400 dark:hover:bg-primary-400'
-                : 'hover:bg-gray-100 dark:hover:bg-gray-600',
-            ]"
-            >{{ day }}</span
-          >
-        </div>
-      </div>
-    </div>
-    <div
-      v-if="Array.isArray(modelValue)"
-      class="flex w-full flex-col items-start"
-    >
-      <label
-        class="mb-1 block text-sm font-medium text-gray-500 dark:text-gray-400"
-        >From</label
-      >
-      <input-component
-        v-model="from"
-        placeholder="Date"
-        :error="errorFrom"
-        class="mb-2 w-full"
-      />
-
-      <label
-        class="mb-1 block text-sm font-medium text-gray-500 dark:text-gray-400"
-        >To</label
-      >
-      <input-component
-        v-model="to"
-        placeholder="Date"
-        :error="errorTo"
-        class="mb-2 w-full"
-      />
-      <slot />
-    </div>
-    <div v-if="Array.isArray(modelValue)" class="flex w-full flex-col">
-      <div class="flex flex-row sm:flex-col">
-        <div>
-          <div
-            class="cursor-pointer rounded-md p-1 hover:bg-gray-300 dark:hover:bg-gray-500"
-            @click="todayRange"
-          >
-            Today
-          </div>
-          <div
-            class="cursor-pointer rounded-md p-1 hover:bg-gray-300 dark:hover:bg-gray-500"
-            @click="yesterDay"
-          >
-            Yesterday
-          </div>
-          <div
-            class="cursor-pointer rounded-md p-1 hover:bg-gray-300 dark:hover:bg-gray-500"
-            @click="thisMonthSoFar"
-          >
-            This month so far
-          </div>
-          <div
-            class="cursor-pointer rounded-md p-1 hover:bg-gray-300 dark:hover:bg-gray-500"
-            @click="thisMonth"
-          >
-            This month
-          </div>
-          <div
-            class="cursor-pointer rounded-md p-1 hover:bg-gray-300 dark:hover:bg-gray-500"
-            @click="thisYear"
-          >
-            This year
-          </div>
-        </div>
-
-        <div>
-          <div
-            class="cursor-pointer rounded-md p-1 hover:bg-gray-300 dark:hover:bg-gray-500"
-            @click="thisYearSoFar"
-          >
-            This year so far
-          </div>
-          <div
-            class="cursor-pointer rounded-md p-1 hover:bg-gray-300 dark:hover:bg-gray-500"
-            @click="lastWeek"
-          >
-            Last week
-          </div>
-          <div
-            class="cursor-pointer rounded-md p-1 hover:bg-gray-300 dark:hover:bg-gray-500"
-            @click="lastMonth"
-          >
-            Last month
-          </div>
-          <div
-            class="cursor-pointer rounded-md p-1 hover:bg-gray-300 dark:hover:bg-gray-500"
-            @click="lastYear"
-          >
-            Last year
-          </div>
-        </div>
-      </div>
-    </div>
-  </div>
-</template>
-
 <script lang="ts">
-import InputComponent from '../Input/Input.vue'
+import Input from '../Input/Input.vue'
 import {
   subYears,
   addYears,
@@ -264,16 +12,9 @@ import {
   differenceInDays,
   isSameDay,
   getDaysInMonth,
-  subDays,
   min,
   max,
   set,
-  endOfMonth,
-  startOfMonth,
-  startOfYear,
-  endOfYear,
-  startOfWeek,
-  endOfWeek,
   isValid,
 } from 'date-fns'
 import {
@@ -286,17 +27,20 @@ import {
   toRefs,
   watch,
 } from 'vue'
+import { PhCaretLeft, PhCaretRight } from '@dnlsndr/vue-phosphor-icons'
+import QuickActionPresets from './quickActionPresets'
+import variants from './variants'
 
 export default defineComponent({
+  name: 'RobustCalendar',
+
   components: {
-    InputComponent,
+    Input,
+    PhCaretLeft,
+    PhCaretRight,
   },
   inheritAttrs: false,
   props: {
-    date: {
-      type: Date,
-      default: () => new Date(),
-    },
     future: {
       type: Boolean,
       default: true,
@@ -309,9 +53,13 @@ export default defineComponent({
       type: Boolean,
       default: true,
     },
+    variant: {
+      type: String,
+      default: 'primary',
+    },
     modelValue: {
-      type: [Array, Date] as PropType<[Date, Date] | Date>,
-      default: undefined,
+      type: Object as PropType<[Date, Date] | Date>,
+      default: () => new Date(),
     },
   },
   emits: ['update:modelValue', 'click:relativeDate'],
@@ -323,56 +71,60 @@ export default defineComponent({
     const errorFrom = ref()
     const errorTo = ref()
     const now = ref()
-    const virtualDate = ref()
-    const selectedDate = ref()
-    // const perspectiveOf = ref(new Date(perspectiveDate.value))
+    // const cursor = ref<Date>()
+    const cursor = Array.isArray(modelValue.value)
+      ? ref<Date>(new Date())
+      : ref<Date>(new Date(modelValue.value))
 
+    const selectedDate = ref()
     const refYearEntry = ref({})
 
-    virtualDate.value = Array.isArray(modelValue.value)
-      ? new Date()
-      : new Date(modelValue.value)
+    const quickActions = QuickActionPresets
+
+    const variantStyling = computed(() => {
+      return variants[props.variant]
+    })
 
     const daysInMonth = computed(() => {
-      const date = new Date(virtualDate.value)
+      const date = new Date(cursor.value)
       return getDaysInMonth(date)
     })
 
-    console.log(daysInMonth.value)
-
     const monthHeading = computed(() => {
       try {
-        return format(virtualDate.value, 'MMM')
+        return format(cursor.value, 'MMM')
       } catch (e) {
         return undefined
       }
     })
     const yearHeading = computed(() => {
       try {
-        return format(virtualDate.value, 'yyyy')
+        return format(cursor.value, 'yyyy')
       } catch (e) {
         return undefined
       }
     })
 
     const firstWeekday = computed(() => {
-      const date = new Date(virtualDate.value)
+      const date = new Date(cursor.value)
       date.setDate(1)
       const day = date.getDay()
       return (day === 0 ? 7 : day) - 1
     })
 
     const activeMonth = computed(() => {
-      const date = new Date(virtualDate.value)
+      const date = new Date(cursor.value)
       return date.getMonth()
     })
 
     const activeYear = computed(() => {
-      const date = new Date(virtualDate.value)
+      const date = new Date(cursor.value)
       return date.getFullYear()
     })
 
     const applyTime = () => {
+      console.log('applying time')
+
       if (from.value != '' && !isValid(new Date(from.value))) {
         errorFrom.value = 'Please enter a valid date.'
       }
@@ -410,13 +162,15 @@ export default defineComponent({
 
       if (!compareDates(...modelValue.value)) return false
 
-      const tmpDate = new Date(virtualDate.value)
-      const newDate = new Date(tmpDate.setDate(day))
+      const tmpDate = new Date()
+      tmpDate.setDate(day)
+      tmpDate.setMonth(cursor.value.getMonth())
+      tmpDate.setFullYear(cursor.value.getFullYear())
 
       const minDate = min(modelValue.value)
 
       // minimal value
-      if (!compareDates(newDate, minDate)) return true
+      if (!compareDates(tmpDate, minDate)) return true
       return false
     }
 
@@ -429,13 +183,15 @@ export default defineComponent({
 
       if (!compareDates(...modelValue.value)) return false
 
-      const tmpDate = new Date(virtualDate.value)
-      const newDate = new Date(tmpDate.setDate(day))
+      const tmpDate = new Date()
+      tmpDate.setDate(day)
+      tmpDate.setMonth(cursor.value.getMonth())
+      tmpDate.setFullYear(cursor.value.getFullYear())
 
       const maxDate = max(modelValue.value)
 
       // max value
-      if (!compareDates(newDate, maxDate)) return true
+      if (!compareDates(tmpDate, maxDate)) return true
       return false
     }
 
@@ -443,204 +199,72 @@ export default defineComponent({
       if (!Array.isArray(modelValue.value)) return false
       if (modelValue.value.length < 2) return false
 
-      const tmpDate = new Date(virtualDate.value)
-      const newDate = new Date(tmpDate.setDate(day))
+      const tmpDate = new Date()
+      tmpDate.setDate(day)
+      tmpDate.setMonth(cursor.value.getMonth())
+      tmpDate.setFullYear(cursor.value.getFullYear())
       const minDate = min(modelValue.value)
       const maxDate = max(modelValue.value)
 
       if (
-        compareDates(newDate, maxDate) === -1 &&
-        compareDates(newDate, minDate) === 1
+        compareDates(tmpDate, maxDate) === -1 &&
+        compareDates(tmpDate, minDate) === 1
       ) {
         return true
       }
       return false
     }
 
-    const activeDay = (day) => {
-      const tmpDate = new Date(virtualDate.value)
-      const newDate = new Date(tmpDate.setDate(day))
+    const isSelectedDay = (day) => {
+      const tmpDate = new Date()
+      tmpDate.setDate(day)
+      tmpDate.setMonth(cursor.value.getMonth())
+      tmpDate.setFullYear(cursor.value.getFullYear())
 
       if (Array.isArray(modelValue.value)) {
         const selectedDates = modelValue.value.map((date) => new Date(date))
         for (let i = 0; i < selectedDates.length; i++) {
-          if (!compareDates(selectedDates[i], newDate)) {
+          if (!compareDates(selectedDates[i], tmpDate)) {
             return true
           }
         }
       } else {
-        if (!compareDates(new Date(selectedDate.value), newDate)) {
+        if (!compareDates(new Date(selectedDate.value), tmpDate)) {
           return true
         }
       }
     }
 
+    function setQuickAction(dateRange: [Date, Date]) {
+      emit('update:modelValue', dateRange)
+      cursor.value = dateRange[1]
+    }
     function addYear() {
-      virtualDate.value = addYears(virtualDate.value, 1)
+      cursor.value = addYears(cursor.value, 1)
     }
 
     function subYear() {
-      virtualDate.value = subYears(virtualDate.value, 1)
+      cursor.value = subYears(cursor.value, 1)
     }
 
     function setYear(year) {
-      virtualDate.value = setFnsYear(virtualDate.value, year)
+      cursor.value = setFnsYear(cursor.value, year)
     }
 
     function addMonth() {
-      virtualDate.value = addMonths(virtualDate.value, 1)
+      cursor.value = addMonths(cursor.value, 1)
     }
 
     function subMonth() {
-      virtualDate.value = subMonths(virtualDate.value, 1)
+      cursor.value = subMonths(cursor.value, 1)
     }
 
     function setMonth(month) {
-      virtualDate.value = setFnsMonth(virtualDate.value, month)
-    }
-
-    const todayRange = () => {
-      if (!Array.isArray(modelValue.value)) {
-        selectedDate.value = set(new Date(), {
-          hours: 23,
-          minutes: 59,
-          seconds: 59,
-        })
-        emit('update:modelValue', selectedDate.value)
-      } else {
-        const today = set(new Date(), {
-          hours: 0,
-          minutes: 0,
-          seconds: 0,
-          milliseconds: 0,
-        })
-        const newDates = [
-          today,
-          set(new Date(today), {
-            hours: 23,
-            minutes: 59,
-            seconds: 59,
-          }),
-        ]
-        from.value = format(newDates[0], 'MM/dd/yyyy')
-        to.value = format(newDates[1], 'MM/dd/yyyy')
-        emit('update:modelValue', newDates)
-      }
-      emit('click:relativeDate')
-    }
-
-    const yesterDay = () => {
-      if (!Array.isArray(modelValue.value)) {
-        selectedDate.value = set(subDays(new Date(), 1), {
-          hours: 23,
-          minutes: 59,
-          seconds: 59,
-        })
-        emit('update:modelValue', selectedDate.value)
-      } else {
-        const yesterday = set(subDays(new Date(), 1), {
-          hours: 0,
-          minutes: 0,
-          seconds: 0,
-          milliseconds: 0,
-        })
-        const newDates = [
-          yesterday,
-          set(new Date(yesterday), {
-            hours: 23,
-            minutes: 59,
-            seconds: 59,
-          }),
-        ]
-        from.value = format(newDates[0], 'MM/dd/yyyy')
-        to.value = format(newDates[1], 'MM/dd/yyyy')
-        emit('update:modelValue', newDates)
-      }
-      emit('click:relativeDate')
-    }
-
-    const thisMonthSoFar = () => {
-      const monthStart = startOfMonth(new Date())
-      const newDates = [
-        monthStart,
-        set(new Date(), {
-          hours: 23,
-          minutes: 59,
-          seconds: 59,
-        }),
-      ]
-      from.value = format(newDates[0], 'MM/dd/yyyy')
-      to.value = format(newDates[1], 'MM/dd/yyyy')
-      emit('update:modelValue', newDates)
-      emit('click:relativeDate')
-    }
-
-    const thisMonth = () => {
-      const monthStart = startOfMonth(new Date())
-      const monthEnd = endOfMonth(new Date())
-      const newDates = [monthStart, monthEnd]
-      from.value = format(newDates[0], 'MM/dd/yyyy')
-      to.value = format(newDates[1], 'MM/dd/yyyy')
-      emit('update:modelValue', newDates)
-      emit('click:relativeDate')
-    }
-
-    const thisYear = () => {
-      const yearStart = startOfYear(new Date())
-      const yearEnd = endOfYear(new Date())
-      const newDates = [yearStart, yearEnd]
-      from.value = format(newDates[0], 'MM/dd/yyyy')
-      to.value = format(newDates[1], 'MM/dd/yyyy')
-      emit('update:modelValue', newDates)
-      emit('click:relativeDate')
-    }
-
-    const thisYearSoFar = () => {
-      const yearStart = startOfYear(new Date())
-      const yearEnd = set(new Date(), {
-        hours: 23,
-        minutes: 59,
-        seconds: 59,
-      })
-      const newDates = [yearStart, yearEnd]
-      from.value = format(newDates[0], 'MM/dd/yyyy')
-      to.value = format(newDates[1], 'MM/dd/yyyy')
-      emit('update:modelValue', newDates)
-      emit('click:relativeDate')
-    }
-
-    const lastWeek = () => {
-      const startDay = startOfWeek(subDays(new Date(), 7))
-      const endDay = endOfWeek(new Date(startDay))
-      const newDates = [startDay, endDay]
-      from.value = format(newDates[0], 'MM/dd/yyyy')
-      to.value = format(newDates[1], 'MM/dd/yyyy')
-      emit('update:modelValue', newDates)
-      emit('click:relativeDate')
-    }
-
-    const lastMonth = () => {
-      const startDay = startOfMonth(subDays(startOfMonth(new Date()), 1))
-      const endDay = endOfMonth(new Date(startDay))
-      const newDates = [startDay, endDay]
-      from.value = format(newDates[0], 'MM/dd/yyyy')
-      to.value = format(newDates[1], 'MM/dd/yyyy')
-      emit('update:modelValue', newDates)
-      emit('click:relativeDate')
-    }
-
-    const lastYear = () => {
-      const startDay = startOfYear(subDays(startOfYear(new Date()), 1))
-      const endDay = endOfYear(new Date(startDay))
-      const newDates = [startDay, endDay]
-      from.value = format(newDates[0], 'MM/dd/yyyy')
-      to.value = format(newDates[1], 'MM/dd/yyyy')
-      emit('update:modelValue', newDates)
-      emit('click:relativeDate')
+      cursor.value = setFnsMonth(cursor.value, month)
     }
 
     const dayAllowed = (day) => {
-      const date = new Date(virtualDate.value).setDate(day)
+      const date = new Date(cursor.value).setDate(day)
       if (!today.value && isSameDay(now.value, date)) {
         return false
       }
@@ -657,39 +281,23 @@ export default defineComponent({
       if (!dayAllowed(day)) {
         return
       }
-      const tmpDate = new Date(virtualDate.value)
-      virtualDate.value = set(new Date(tmpDate.setDate(day)), {
-        hours: 0,
-        minutes: 0,
-        seconds: 0,
-        milliseconds: 0,
-      })
-      if (!Array.isArray(modelValue.value)) {
-        selectedDate.value = new Date(virtualDate.value)
-        emit('update:modelValue', virtualDate.value)
-      } else {
+
+      const tmpDate = new Date()
+      tmpDate.setDate(day)
+      tmpDate.setMonth(cursor.value.getMonth())
+      tmpDate.setFullYear(cursor.value.getFullYear())
+      cursor.value = tmpDate
+
+      if (Array.isArray(modelValue.value)) {
         errorFrom.value = ''
         errorTo.value = ''
         let newModelValue = []
-        if (modelValue.value.length > 1) {
-          newModelValue.push(
-            set(new Date(virtualDate.value), {
-              hours: 0,
-              minutes: 0,
-              seconds: 0,
-              milliseconds: 0,
-            })
-          )
+        if (modelValue.value.length >= 2) {
+          newModelValue.push(new Date(cursor.value))
           to.value = ''
         } else {
           newModelValue = modelValue.value
-          newModelValue.push(
-            set(new Date(virtualDate.value), {
-              hours: 23,
-              minutes: 59,
-              seconds: 59,
-            })
-          )
+          newModelValue.push(new Date(cursor.value))
           if (newModelValue.length > 1) {
             newModelValue = [
               set(min(newModelValue), {
@@ -703,49 +311,47 @@ export default defineComponent({
                 seconds: 59,
               }),
             ]
-            to.value = format(newModelValue[1], 'MM/dd/yyyy')
+            to.value = newModelValue[1].toLocaleDateString()
           }
         }
-        from.value = format(newModelValue[0], 'MM/dd/yyyy')
+        from.value = newModelValue[0].toLocaleDateString()
         emit('update:modelValue', newModelValue)
+      } else {
+        selectedDate.value = new Date(cursor.value)
+        emit('update:modelValue', cursor.value)
       }
     }
 
     const reset = () => {
-      virtualDate.value = new Date(new Date().setHours(12))
+      cursor.value = new Date(new Date().setHours(12))
     }
 
-    function submit() {
-      emit('update:modelValue', virtualDate.value)
-      this.$refs.modal.close()
-    }
-
-    watch([from, to], () => {
-      applyTime()
-    })
+    // watch([from, to], () => {
+    //   applyTime()
+    // })
 
     watch(modelValue, (val) => {
       const f = val[0] || undefined
       const t = val[1] || undefined
-      if (f) from.value = format(f, 'MM/dd/yyyy')
+      if (f) from.value = f.toLocaleDateString()
       else from.value = ''
-      if (t) to.value = format(t, 'MM/dd/yyyy')
+      if (t) to.value = t.toLocaleDateString()
       else to.value = ''
     })
 
     onMounted(() => {
-      if (!Array.isArray(modelValue.value)) {
-        virtualDate.value = new Date(modelValue.value || new Date())
-        selectedDate.value = new Date(virtualDate.value)
-      } else {
-        virtualDate.value = new Date(new Date())
-        selectedDate.value = new Date(virtualDate.value)
+      if (Array.isArray(modelValue.value)) {
+        cursor.value = new Date(modelValue.value[1] || new Date())
+        selectedDate.value = cursor.value
         const f = modelValue.value[0] || undefined
         const t = modelValue.value[1] || undefined
-        if (f) from.value = format(f, 'MM/dd/yyyy')
+        if (f) from.value = f.toLocaleDateString()
         else from.value = ''
-        if (t) to.value = format(t, 'MM/dd/yyyy')
+        if (t) to.value = t.toLocaleDateString()
         else to.value = ''
+      } else {
+        cursor.value = new Date(modelValue.value || new Date())
+        selectedDate.value = cursor.value
       }
     })
 
@@ -769,9 +375,7 @@ export default defineComponent({
     function showYearSelection() {
       showYearSelectionActive.value = true
       nextTick(() => {
-        console.log(refYearEntry, activeYear.value)
         const yearEntry = refYearEntry.value[activeYear.value]
-        console.log(yearEntry)
         yearEntry.scrollIntoView({ block: 'start', behavior: 'auto' })
       })
     }
@@ -829,7 +433,7 @@ export default defineComponent({
       showMonthSelectionActive,
       showYearSelectionActive,
       now,
-      virtualDate,
+      cursor,
       selectedDate,
       showMonthSelection,
       showYearSelection,
@@ -850,26 +454,213 @@ export default defineComponent({
       isFirst,
       isLast,
       isBetweenRange,
-      activeDay,
+      isSelectedDay,
       addYear,
       subYear,
       addMonth,
       subMonth,
-      todayRange,
-      yesterDay,
-      thisMonthSoFar,
-      thisMonth,
-      thisYear,
-      thisYearSoFar,
-      lastWeek,
-      lastMonth,
-      lastYear,
       dayAllowed,
       daySelect,
       reset,
-      submit,
       yearSelectionYears,
+      quickActions,
+      setQuickAction,
+      variantStyling,
     }
   },
 })
 </script>
+
+<template>
+  <div class="relative flex w-max select-none">
+    <div
+      v-if="Array.isArray(modelValue)"
+      class="relative w-48 border-r border-gray-200 dark:border-gray-600"
+    >
+      <div class="absolute inset-0 overflow-auto py-2">
+        <div
+          v-for="action in quickActions"
+          :key="action.title"
+          class="cursor-pointer py-2 px-4 hover:bg-gray-50 dark:hover:bg-gray-700"
+          @click="setQuickAction(action.preset())"
+        >{{ action.title }}</div>
+      </div>
+    </div>
+
+    <section class="p-4 dark:border-gray-600">
+      <div class="mb-4 flex items-center text-center text-lg font-semibold">
+        <div class="flex flex-1">
+          <div
+            class="flex h-8 cursor-pointer items-center rounded-lg px-2 tabular-nums hover:bg-gray-100 dark:hover:bg-gray-700"
+            @click="
+              () => {
+                showMonthSelection()
+                hideYearSelection()
+              }
+            "
+          >{{ monthHeading }}</div>
+          <div
+            class="flex h-8 cursor-pointer items-center rounded-lg px-2 tabular-nums hover:bg-gray-100 dark:hover:bg-gray-700"
+            @click="
+              () => {
+                showYearSelection()
+                hideMonthSelection()
+              }
+            "
+          >{{ yearHeading }}</div>
+        </div>
+        <div
+          class="flex h-8 w-8 cursor-pointer items-center justify-center rounded-lg text-gray-700 hover:bg-gray-100 hover:text-gray-700 active:bg-gray-200 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-gray-100"
+          @click="subMonth"
+        >
+          <PhCaretLeft type="chevron-left" size="14" weight="bold" />
+        </div>
+
+        <div
+          class="flex h-8 w-8 cursor-pointer items-center justify-center rounded-lg text-gray-700 hover:bg-gray-100 hover:text-gray-700 active:bg-gray-200 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-gray-100"
+          @click="addMonth"
+        >
+          <PhCaretRight type="chevron-right" size="14" weight="bold" />
+        </div>
+      </div>
+
+      <div class="relative w-max">
+        <div
+          v-if="showMonthSelectionActive"
+          class="absolute inset-0 z-10 grid grid-cols-3 gap-4"
+        >
+          <div
+            v-for="(month, index) in months"
+            :key="index"
+            class="flex cursor-pointer items-center justify-center rounded-lg py-2 text-center"
+            :class="[
+              activeMonth === index
+                ? variantStyling.background
+                : 'hover:bg-gray-100 dark:hover:bg-gray-600',
+            ]"
+            @click="
+              () => {
+                setMonth(index)
+                hideMonthSelection()
+              }
+            "
+          >{{ month.title }}</div>
+        </div>
+
+        <div
+          v-if="showYearSelectionActive"
+          class="absolute inset-0 z-10 flex flex-col gap-2 overflow-y-auto"
+        >
+          <div
+            v-for="year in yearSelectionYears"
+            :ref="(ref) => (refYearEntry[year] = ref)"
+            :key="year"
+            class="cursor-pointer rounded-lg py-2 text-center tabular-nums"
+            :class="[
+              activeYear === year
+                ? variantStyling.background
+                : 'hover:bg-gray-100 dark:hover:bg-gray-600',
+            ]"
+            :data-year="year"
+            @click="
+              () => {
+                setYear(year)
+                hideYearSelection()
+              }
+            "
+          >{{ year }}</div>
+        </div>
+
+        <div
+          class="grid grid-cols-7 gap-y-1"
+          :class="[
+            {
+              'opacity-0': showMonthSelectionActive || showYearSelectionActive,
+            },
+          ]"
+        >
+          <div
+            class="pb-2 text-center text-sm text-gray-400 dark:text-gray-400"
+          >M</div>
+          <div
+            class="pb-2 text-center text-sm text-gray-400 dark:text-gray-400"
+          >T</div>
+          <div
+            class="pb-2 text-center text-sm text-gray-400 dark:text-gray-400"
+          >W</div>
+          <div
+            class="pb-2 text-center text-sm text-gray-400 dark:text-gray-400"
+          >T</div>
+          <div
+            class="pb-2 text-center text-sm text-gray-400 dark:text-gray-400"
+          >F</div>
+          <div
+            class="pb-2 text-center text-sm text-gray-400 dark:text-gray-400"
+          >S</div>
+          <div
+            class="pb-2 text-center text-sm text-gray-400 dark:text-gray-400"
+          >S</div>
+
+          <div v-for="offset in firstWeekday" :key="offset + '_offset'"></div>
+          <div
+            v-for="day in daysInMonth"
+            :key="day + '_day'"
+            class="relative"
+            :disabled="!dayAllowed(day)"
+            :class="[isBetweenRange(day) ? variantStyling.background : '']"
+            @click="daySelect(day)"
+          >
+            <div
+              v-if="isLast(day) || isFirst(day)"
+              class="absolute z-0 h-full"
+              :class="[
+                variantStyling.background,
+                isFirst(day)
+                  ? 'right-0 w-1/2'
+                  : isLast(day)
+                    ? 'left-0 w-1/2'
+                    : '',
+              ]"
+            ></div>
+            <div
+              class="relative z-10 flex h-8 w-8 min-w-8 cursor-pointer items-center justify-center rounded-lg text-sm font-medium tabular-nums"
+              :class="[
+                isBetweenRange(day) ||
+                  isLast(day) ||
+                  isFirst(day) ||
+                  isSelectedDay(day)
+                  ? `rounded-0 ${variantStyling.background}`
+                  : 'hover:bg-gray-200 dark:hover:bg-gray-700',
+              ]"
+            >{{ day }}</div>
+          </div>
+        </div>
+      </div>
+    </section>
+    <div
+      v-if="Array.isArray(modelValue)"
+      class="flex flex-shrink-0 flex-col items-start border-l border-gray-200 p-4 dark:border-gray-600"
+    >
+      <label
+        class="mb-1 block text-sm font-medium text-gray-500 dark:text-gray-400"
+      >From</label>
+      <Input
+        v-model="from"
+        placeholder="Date"
+        :error="errorFrom"
+        class="mb-2 w-full"
+      />
+
+      <label
+        class="mb-1 block text-sm font-medium text-gray-500 dark:text-gray-400"
+      >To</label>
+      <Input
+        v-model="to"
+        placeholder="Date"
+        :error="errorTo"
+        class="mb-2 w-full"
+      />
+      <slot />
+    </div>
+  </div>
+</template>

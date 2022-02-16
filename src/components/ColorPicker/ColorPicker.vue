@@ -1,6 +1,6 @@
 <template>
   <div
-    class="hu-color-picker shadow"
+    class="hu-color-picker rounded bg-gray-700 shadow"
     :class="{ light: isLightTheme }"
     :style="{ width: totalWidth + 'px' }"
   >
@@ -58,6 +58,8 @@ import Box from './Box.vue'
 import Colors from './Colors.vue'
 
 export default defineComponent({
+  name: 'RobustColorPicker',
+
   components: {
     Saturation,
     Hue,
@@ -310,8 +312,6 @@ export default defineComponent({
 <style>
 .hu-color-picker {
   padding: 10px;
-  background: #1d2024;
-  border-radius: 4px;
   z-index: 1;
 }
 

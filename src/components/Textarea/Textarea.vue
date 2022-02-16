@@ -22,6 +22,8 @@
 import { defineComponent } from 'vue'
 
 export default defineComponent({
+  name: 'RobustTextarea',
+
   inheritAttrs: false,
   model: {
     event: 'update',

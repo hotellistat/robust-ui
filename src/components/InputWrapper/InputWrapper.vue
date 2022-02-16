@@ -1,49 +1,24 @@
-<template>
-  <div>
-    <label
-      v-if="title"
-      :for="'input_' + cuid"
-      class="mb-1 block select-none text-sm font-medium text-gray-500 dark:text-gray-400"
-      >{{ title }}</label
-    >
-    <div
-      v-bind="attrs"
-      ref="wrapperRef"
-      class="flex min-w-52 overflow-hidden rounded-md border border-gray-200 bg-gray-50 dark:border-gray-700 dark:bg-gray-900"
-      :class="[
-        condensed ? 'h-8' : 'h-10',
-        {
-          'ring-primary-500 ring-opacity-30 focus-within:border-primary-500 focus-within:outline-none focus-within:ring':
-            !readonly,
-        },
-      ]"
-    >
-      <slot v-bind="props" :wrapperRef="wrapperRef" />
-    </div>
-    <transition-group name="fade">
-      <div v-if="hint || error" class="pt-1">
-        <div v-if="hint" class="select-none text-xs text-gray-400">
-          {{ hint }}
-        </div>
-        <div
-          v-if="error"
-          class="select-none text-xs text-red-400 dark:text-red-400"
-        >
-          {{ error }}
-        </div>
-      </div>
-    </transition-group>
-  </div>
-</template>
-
 <script lang="ts">
-import { defineComponent, ref } from 'vue'
+import { computed, defineComponent, ref } from 'vue'
+
+let uid = 0
 export default defineComponent({
+  name: 'RobustInputWrapper',
+
+  inheritAttrs: false,
   props: {
-    uid: String,
-    title: String,
-    hint: String,
-    error: String,
+    title: {
+      type: String,
+    },
+    class: {
+      type: String,
+    },
+    hint: {
+      type: String,
+    },
+    error: {
+      type: String,
+    },
     readonly: {
       type: Boolean,
       default: false,
@@ -52,37 +27,74 @@ export default defineComponent({
       type: Boolean,
       default: false,
     },
+    disabled: {
+      type: Boolean,
+      default: false,
+    },
   },
-  setup(props, { attrs }) {
-    const cuid = '_' + Math.random().toString(36).substr(2, 9)
+  setup(_, { attrs }) {
+    const cuid = (++uid).toString()
+
+    const onRE = /^on[^a-z]/
+    const isOn = (key: string) => onRE.test(key)
+
+    let listeners = computed(() => {
+      return Object.fromEntries(
+        Object.entries(attrs).filter((entry) => isOn(entry[0]))
+      )
+    })
 
     const wrapperRef = ref()
 
+    function blurred() {}
+
+    function focused() {}
+
     return {
-      props,
-      wrapperRef,
-      attrs,
       cuid,
+      wrapperRef,
+      blurred,
+      focused,
+      listeners,
     }
   },
 })
 </script>
 
-<style lang="postcss" scoped>
-.fade-enter-active,
-.fade-leave-active {
-  transition: all 200ms ease-in-out;
-  overflow: hidden;
-}
-.fade-enter-to,
-.fade-leave {
-  opacity: 1;
-  padding-top: theme('spacing.1');
-}
-.fade-enter-from,
-.fade-leave-to {
-  padding-top: 0;
-  opacity: 0;
-  line-height: 0;
-}
-</style>
+<template>
+  <fieldset>
+    <legend
+      v-if="title"
+      class="mb-1 block select-none text-sm font-medium text-gray-500 dark:text-gray-400"
+    >
+      {{ title }}
+    </legend>
+    <div
+      v-bind="listeners"
+      ref="wrapperRef"
+      class="relative flex min-w-52 rounded-md border border-gray-200 bg-gray-50 dark:border-gray-600 dark:bg-gray-800"
+      :class="[
+        $props.class,
+        condensed ? 'h-9' : 'h-10',
+        {
+          'ring-primary-500 ring-opacity-30 focus-within:border-primary-500 focus-within:outline-none focus-within:ring focus-within:dark:border-primary-500':
+            !readonly,
+        },
+        disabled ? 'text-gray-500' : '',
+      ]"
+    >
+      <slot :cuid="cuid" :wrapperRef="wrapperRef" />
+    </div>
+    <label v-if="hint !== undefined || error !== undefined" class="block pt-1">
+      <div v-if="hint !== undefined" class="select-none text-xs text-gray-400">
+        {{ hint }}
+      </div>
+      <div
+        v-if="error !== undefined"
+        class="select-none text-xs text-red-400 dark:text-red-400"
+      >
+        {{ error }}
+      </div>
+    </label>
+  </fieldset>
+</template>

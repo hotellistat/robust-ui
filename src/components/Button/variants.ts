@@ -8,7 +8,7 @@ export default {
   warn: 'bg-yellow-500 active:bg-yellow-600 text-gray-900/75 shadow ring-yellow-500',
 
   muted:
-    'bg-gray-200 hover:bg-gray-300 dark:bg-gray-700 dark:hover:bg-gray-600 text-gray-900 dark:text-white',
+    'bg-gray-200 hover:bg-gray-300 dark:bg-gray-600 dark:hover:bg-gray-600 text-gray-900 dark:text-white',
 
   transparent:
     'hover:bg-gray-200 dark:hover:bg-gray-600 text-gray-800 dark:text-white',

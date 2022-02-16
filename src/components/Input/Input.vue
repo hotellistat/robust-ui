@@ -1,67 +1,44 @@
-<template>
-  <base-input-wrapper
-    :title="(title as any)"
-    :hint="(hint as any)"
-    :error="(error as any)"
-    :condensed="condensed"
-  >
-    <template #default="slotProps">
-      <div
-        v-if="$slots.prefix"
-        class="flex h-full select-none items-center pr-2 text-gray-400"
-        :class="[slotProps.condensed ? 'pl-2' : 'pl-3']"
-      >
-        <slot tag="div" name="prefix" />
-      </div>
-      <input
-        :id="'input_' + slotProps.uid"
-        ref="inputRef"
-        v-model="inputFieldValue"
-        size="8"
-        class="block h-full w-full bg-transparent text-current outline-none dark:placeholder-gray-600"
-        :class="[
-          $slots.prefix || slotProps.condensed ? 'pl-2' : 'pl-3',
-          $slots.suffix || slotProps.condensed ? 'pr-2' : 'pr-3',
-          {
-            'cursor-not-allowed': slotProps.readonly,
-          },
-        ]"
-        :readonly="slotProps.readonly"
-        v-bind="$attrs"
-      />
-      <div
-        v-if="$slots.suffix || slotProps.error"
-        class="ml-auto flex h-full select-none items-center pl-2 text-gray-400"
-        :class="[slotProps.condensed ? 'pr-2' : 'pr-3']"
-      >
-        <slot v-if="!slotProps.error" tag="div" name="suffix" />
-        <div v-else class="text-red-400">
-          <ph-warning-circle size="20" class="block" />
-        </div>
-      </div>
-    </template>
-  </base-input-wrapper>
-</template>
-
 <script lang="ts">
-import { computed, defineComponent, ref } from 'vue'
-import BaseInputWrapper from '../InputWrapper/InputWrapper.vue'
+import { computed, defineComponent, PropType, ref } from 'vue'
+import InputWrapper from '../InputWrapper/InputWrapper.vue'
+import { PhWarningCircle } from '@dnlsndr/vue-phosphor-icons'
 
 export default defineComponent({
+  name: 'RobustInput',
+
+  inheritAttrs: false,
   components: {
-    BaseInputWrapper,
+    InputWrapper,
+    PhWarningCircle,
   },
   props: {
     title: {
       type: String,
-      default: undefined,
     },
-    hint: String,
-    error: String,
-    inputClass: String,
-    modelValue: String,
-    readonly: Boolean,
+    hint: {
+      type: String,
+    },
+    error: {
+      type: String,
+    },
+    class: {
+      type: String,
+    },
+    readonly: {
+      type: Boolean,
+      default: false,
+    },
+    inputClass: {
+      type: String,
+    },
+    modelValue: {
+      type: String,
+    },
     condensed: {
+      type: Boolean,
+      default: false,
+    },
+    disabled: {
       type: Boolean,
       default: false,
     },
@@ -71,8 +48,6 @@ export default defineComponent({
     const inputRef = ref()
 
     const inputAttrs = attrs
-
-    const cuid = '_' + Math.random().toString(36).substr(2, 9)
 
     const inputFieldValue = computed({
       get() {
@@ -95,7 +70,7 @@ export default defineComponent({
     return {
       inputFieldValue,
       inputAttrs,
-      cuid,
+      props,
       inputRef,
       focus,
       clear,
@@ -104,21 +79,52 @@ export default defineComponent({
 })
 </script>
 
-<style lang="postcss" scoped>
-.fade-enter-active,
-.fade-leave-active {
-  transition: all 200ms ease-in-out;
-  overflow: hidden;
-}
-.fade-enter-to,
-.fade-leave {
-  opacity: 1;
-  padding-top: theme('spacing.1');
-}
-.fade-enter-from,
-.fade-leave-to {
-  padding-top: 0;
-  opacity: 0;
-  line-height: 0;
-}
-</style>
+<template>
+  <InputWrapper
+    :title="title"
+    :hint="hint"
+    :error="error"
+    :class="$props.class"
+    :readonly="readonly"
+    :disabled="disabled"
+    :condensed="condensed"
+    v-slot="slotProps"
+  >
+    <div
+      v-if="$slots.prefix"
+      class="flex h-full select-none items-center pr-2 text-gray-400"
+      :class="[condensed ? 'pl-2' : 'pl-3']"
+    >
+      <slot tag="div" name="prefix" />
+    </div>
+
+    <input
+      :id="slotProps.cuid"
+      ref="inputRef"
+      v-bind="$attrs"
+      v-model="inputFieldValue"
+      :disabled="disabled"
+      size="8"
+      class="block h-full w-full bg-transparent text-current outline-none dark:placeholder-gray-600"
+      :class="[
+        $slots.prefix || condensed ? 'pl-2' : 'pl-3',
+        error ? 'pr-10' : $slots.suffix || condensed ? 'pr-2' : 'pr-3',
+        {
+          'cursor-not-allowed': readonly,
+        },
+        disabled ? 'cursor-not-allowed text-gray-500' : '',
+      ]"
+      :readonly="readonly"
+    />
+    <div
+      v-if="$slots.suffix || error"
+      class="pointer-events-none absolute inset-y-0 right-0 ml-auto flex h-full select-none items-center pl-2 text-gray-400"
+      :class="[condensed ? 'pr-2' : 'pr-3']"
+    >
+      <slot v-if="!error" tag="div" name="suffix" />
+      <div v-else class="text-red-400">
+        <PhWarningCircle size="20" class="block" />
+      </div>
+    </div>
+  </InputWrapper>
+</template>
