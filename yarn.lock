@@ -1699,9 +1699,9 @@
     lodash "^4.17.21"
     ts-dedent "^2.0.0"
 
-"@storybook/addon-docs@6.4.19":
+"@storybook/addon-docs@6.4.19", "@storybook/addon-docs@^6.4.14":
   version "6.4.19"
-  resolved "https://registry.npmjs.org/@storybook/addon-docs/-/addon-docs-6.4.19.tgz"
+  resolved "https://registry.yarnpkg.com/@storybook/addon-docs/-/addon-docs-6.4.19.tgz#229deabc74ea478c34fee96b85edb73da439680e"
   integrity sha512-OEPyx/5ZXmZOPqIAWoPjlIP8Q/YfNjAmBosA8tmA8t5KCSiq/vpLcAvQhxqK6n0wk/B8Xp67Z8RpLfXjU8R3tw==
   dependencies:
     "@babel/core" "^7.12.10"
@@ -1848,7 +1848,7 @@
     prop-types "^15.7.2"
     regenerator-runtime "^0.13.7"
 
-"@storybook/addons@6.4.19", "@storybook/addons@^6.0.0":
+"@storybook/addons@6.4.19", "@storybook/addons@^6.0.0", "@storybook/addons@^6.4.14":
   version "6.4.19"
   resolved "https://registry.npmjs.org/@storybook/addons/-/addons-6.4.19.tgz"
   integrity sha512-QNyRYhpqmHV8oJxxTBdkRlLSbDFhpBvfvMfIrIT1UXb/eemdBZTaCGVvXZ9UixoEEI7f8VwAQ44IvkU5B1509w==
@@ -2396,7 +2396,7 @@
     shelljs "^0.8.1"
     yargs "^15.0.0"
 
-"@storybook/theming@6.4.19", "@storybook/theming@^6.0.0":
+"@storybook/theming@6.4.19", "@storybook/theming@^6.0.0", "@storybook/theming@^6.4.14":
   version "6.4.19"
   resolved "https://registry.npmjs.org/@storybook/theming/-/theming-6.4.19.tgz"
   integrity sha512-V4pWmTvAxmbHR6B3jA4hPkaxZPyExHvCToy7b76DpUTpuHihijNDMAn85KhOQYIeL9q14zP/aiz899tOHsOidg==
@@ -9068,9 +9068,9 @@ pbkdf2@^3.0.3:
     safe-buffer "^5.0.1"
     sha.js "^2.4.8"
 
-phosphor-vue@^4.4.0:
+phosphor-vue@^4.3.1:
   version "4.4.0"
-  resolved "https://registry.npmjs.org/phosphor-vue/-/phosphor-vue-4.4.0.tgz"
+  resolved "https://registry.yarnpkg.com/phosphor-vue/-/phosphor-vue-4.4.0.tgz#d6353c231fde67eb577313107d54a36f3264b7b3"
   integrity sha512-+7NBvWHgMaCN8AxLYdk5OJOmkTnPXOv5ZbYjHNnFQUrJ7Jg7VWiiFSgLRsnuAQIMNkYmTyWoUU7kspSm3nowVQ==
 
 picocolors@^0.2.1:
