@@ -85,7 +85,7 @@ export default defineComponent({
     :title="title"
     :hint="hint"
     :error="error"
-    :class="[condensed ? 'pt-1' : 'pt-2']"
+    :class="[condensed ? 'pt-1' : 'pt-2', $props.class]"
     :readonly="readonly"
     :disabled="disabled"
     :condensed="condensed"
