@@ -1,5 +1,5 @@
 <script lang="ts">
-import { computed, defineComponent, ref } from 'vue'
+import { computed, defineComponent, PropType, ref } from 'vue'
 
 let uid = 0
 export default defineComponent({
@@ -11,13 +11,17 @@ export default defineComponent({
       type: String,
     },
     class: {
-      type: String,
+      type: String as PropType<string | string[] | object>,
     },
     hint: {
       type: String,
     },
     error: {
       type: String,
+    },
+    fixedHeight: {
+      type: Boolean,
+      default: true
     },
     readonly: {
       type: Boolean,
@@ -46,9 +50,9 @@ export default defineComponent({
 
     const wrapperRef = ref()
 
-    function blurred() {}
+    function blurred() { }
 
-    function focused() {}
+    function focused() { }
 
     return {
       cuid,
@@ -66,16 +70,14 @@ export default defineComponent({
     <legend
       v-if="title"
       class="mb-1 block select-none text-sm font-medium text-gray-500 dark:text-gray-400"
-    >
-      {{ title }}
-    </legend>
+    >{{ title }}</legend>
     <div
       v-bind="listeners"
       ref="wrapperRef"
       class="relative flex min-w-52 rounded-md border border-gray-200 bg-gray-50 dark:border-gray-600 dark:bg-gray-800"
       :class="[
         $props.class,
-        condensed ? 'h-9' : 'h-10',
+        fixedHeight ? (condensed ? 'h-9' : 'h-10') : undefined,
         {
           'ring-primary-500 ring-opacity-30 focus-within:border-primary-500 focus-within:outline-none focus-within:ring focus-within:dark:border-primary-500':
             !readonly,
@@ -86,15 +88,14 @@ export default defineComponent({
       <slot :cuid="cuid" :wrapperRef="wrapperRef" />
     </div>
     <label v-if="hint !== undefined || error !== undefined" class="block pt-1">
-      <div v-if="hint !== undefined" class="select-none text-xs text-gray-400">
-        {{ hint }}
-      </div>
+      <div
+        v-if="hint !== undefined"
+        class="select-none text-xs text-gray-400"
+      >{{ hint }}</div>
       <div
         v-if="error !== undefined"
         class="select-none text-xs text-red-400 dark:text-red-400"
-      >
-        {{ error }}
-      </div>
+      >{{ error }}</div>
     </label>
   </fieldset>
 </template>
