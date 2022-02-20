@@ -472,12 +472,12 @@ export default defineComponent({
 </script>
 
 <template>
-  <div class="relative flex w-max select-none">
+  <div class="relative flex sm:flex-row flex-col w-max select-none">
     <div
       v-if="Array.isArray(modelValue)"
-      class="relative w-48 border-r border-gray-200 dark:border-gray-600"
+      class="relative border-r border-gray-200 dark:border-gray-600 h-36 sm:h-auto sm:w-48 w-full"
     >
-      <div class="absolute inset-0 overflow-auto py-2">
+      <div class="absolute inset-0 overflow-auto py-2 sm:h-auto w-full">
         <div
           v-for="action in quickActions"
           :key="action.title"
