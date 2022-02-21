@@ -6,7 +6,7 @@
     </div>
     <div class="text-xl text-gray-600 dark:text-gray-400 mb-2">{{ title }}</div>
     <div
-      class="text-gray-400 dark:text-gray-400"
+      class="text-gray-400 dark:text-gray-500"
       :class="[$slots.default ? 'mb-4' : null]"
     >{{ description }}</div>
     <div class="inline-block">
