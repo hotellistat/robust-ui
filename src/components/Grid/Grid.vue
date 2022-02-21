@@ -14,14 +14,11 @@
 
 <script lang="ts">
 import {
-  computed,
   defineComponent,
   onMounted,
   PropType,
   ref,
   toRefs,
-  watch,
-  watchEffect,
 } from 'vue'
 import { GridStack } from 'gridstack'
 import 'gridstack/dist/h5/gridstack-dd-native'
@@ -96,7 +93,7 @@ export default defineComponent({
 })
 </script>
 
-<style lang="postcss" scoped>
+<style lang="postcss">
 :root .grid-stack-item > .ui-resizable-handle {
   filter: none;
 }
