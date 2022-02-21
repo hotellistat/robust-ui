@@ -4,7 +4,7 @@ import InputWrapper from '../InputWrapper/InputWrapper.vue'
 import { PhWarningCircle } from '@dnlsndr/vue-phosphor-icons'
 
 export default defineComponent({
-  name: 'RobustInput',
+  name: 'RobustTextarea',
 
   inheritAttrs: false,
   components: {
