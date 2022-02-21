@@ -28,7 +28,7 @@
                 <slot name="title"></slot>
               </div>
               <div class="ml-auto cursor-pointer" @click="close">
-                <ph-x size="20" class="block" />
+                <PhX size="20" class="block" />
               </div>
             </div>
             <slot></slot>
@@ -41,11 +41,13 @@
 <script lang="ts">
 import { computed, defineComponent, onMounted, onUnmounted, ref, toRefs, watch } from 'vue'
 import { lockScroll, unlockScroll } from '../../utils/scrollLock'
-
+import { PhX } from "@dnlsndr/vue-phosphor-icons"
 export default defineComponent({
   name: 'RobustModal',
-
   inheritAttrs: false,
+  components: {
+    PhX
+  },
   props: {
     modalClass: {
       type: String,
@@ -66,8 +68,8 @@ export default defineComponent({
       }
     })
 
-    function keyPress(e: KeyboardEvent){
-      if(e.key === "Escape" && opened.value === true){
+    function keyPress(e: KeyboardEvent) {
+      if (e.key === "Escape" && opened.value === true) {
         e.stopPropagation()
         e.preventDefault()
         close()

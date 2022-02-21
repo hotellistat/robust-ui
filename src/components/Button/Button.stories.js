@@ -1,5 +1,5 @@
 import Button from './Button.vue'
-
+import { PhSmiley, PhPaperPlaneTilt } from "@dnlsndr/vue-phosphor-icons"
 export default {
   title: 'Ui/Button',
   component: Button,
@@ -31,11 +31,11 @@ export const Default = DefaultTemplate.bind({})
 const PrefixTemplate = (args) => ({
   template: `<Button v-bind="args">
   <template v-slot:prefix>
-  <ph-smiley size="20" />
+  <PhSmiley size="20" />
   </template>
   Click here
   </Button>`,
-  components: { Button },
+  components: { Button, PhSmiley },
   setup() {
     return { args }
   },
@@ -47,10 +47,10 @@ const SuffixTemplate = (args) => ({
   template: `<Button v-bind="args">
   Click here
   <template v-slot:suffix>
-  <ph-paper-plane-tilt size="20" />
+  <PhPaperPlaneTilt size="20" />
   </template>
   </Button>`,
-  components: { Button },
+  components: { Button, PhPaperPlaneTilt },
   setup() {
     return { args }
   },

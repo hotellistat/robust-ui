@@ -10,7 +10,7 @@
             : 'border-gray-300  bg-gray-100 dark:border-gray-500 dark:bg-gray-600',
         ]"
       >
-        <ph-check
+        <PhCheck
           :class="[isChecked ? 'opacity-1' : 'opacity-0']"
           size="14"
           weight="bold"
@@ -20,9 +20,7 @@
       <div
         v-if="title && !$slots.title"
         class="w-full select-none pt-px leading-4"
-      >
-        {{ title }}
-      </div>
+      >{{ title }}</div>
       <div
         v-if="!title && $slots.title"
         class="w-full select-none pt-px leading-4"
@@ -35,7 +33,11 @@
 
 <script lang="ts">
 import { computed, defineComponent } from 'vue'
+import { PhCheck } from "@dnlsndr/vue-phosphor-icons"
 export default defineComponent({
+  components: {
+    PhCheck
+  },
   name: 'RobustCheckbox',
 
   emits: ['update:modelValue', 'change'],

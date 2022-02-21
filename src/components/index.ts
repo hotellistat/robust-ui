@@ -5,7 +5,7 @@ export { default as RobustCircularProgress } from './CircularProgress/CircularPr
 export { default as RobustColorPicker } from './ColorPicker/ColorPicker.vue'
 export { default as RobustColorPalette } from './ColorPicker/ColorPalette.vue'
 export { default as RobustContentBox } from './ContentBox/ContentBox.vue'
-export { default as RobustContentPlaceholder } from './ContentPlaceholder/ContentPlaceholder.vue'
+export { default as RobustEmptyState } from './EmptyState/EmptyState.vue'
 export { default as RobustDatePicker } from './DatePicker/DatePicker.vue'
 export { default as RobustDaterangePicker } from './DatePicker/DaterangePicker.vue'
 export { default as RobustDraggable } from './Draggable/Draggable.vue'
