@@ -5,6 +5,7 @@
     </div>
     <div class="mx-auto text-center text-xl font-bold">{{ title }}</div>
     <div class="mx-auto text-center">{{ description }}</div>
+    <slot />
   </div>
 </template>
 
