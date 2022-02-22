@@ -21,7 +21,8 @@ export default defineConfig({
         'vue-router',
         'vuex',
         'gridstack',
-        "vee-validate"
+        "vee-validate",
+        "yup"
       ],
       output: {
         // Provide global variables to use in the UMD build
