@@ -7,8 +7,11 @@ const plugin: Plugin = {
   install(app) {
     if (this.installed) return;
     this.installed = true;
-    Object.entries(components).forEach(([componentName, component]) =>
-      app.component(component.name, component)
+    Object.entries(components).forEach(([componentName, component]) => {
+      if (component.isShim === undefined) {
+        app.component(component.name, component)
+      }
+    }
     );
   },
 }

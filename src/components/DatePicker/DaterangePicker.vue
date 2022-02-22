@@ -1,11 +1,6 @@
 <script lang="ts">
-import Popper from '../Popper/Popper'
-import Calendar from '../Calendar/Calendar.vue'
-import Button from '../Button/Button.vue'
-import Checkbox from '../Checkbox/Checkbox.vue'
-import DatePicker from '../DatePicker/DatePicker.vue'
-import InputWrapper from '../InputWrapper/InputWrapper.vue'
 import { onClickOutside } from '@vueuse/core'
+import { RobustPopper, RobustCalendar, RobustInputWrapper, RobustButton, RobustCheckbox, RobustDatePicker } from '..'
 
 import {
   PhCaretDown,
@@ -30,12 +25,12 @@ export default defineComponent({
   name: 'RobustDaterangePicker',
 
   components: {
-    Calendar,
-    Popper,
-    InputWrapper,
-    Button,
-    Checkbox,
-    DatePicker,
+    RobustCalendar,
+    RobustPopper,
+    RobustInputWrapper,
+    RobustButton,
+    RobustCheckbox,
+    RobustDatePicker,
     PhCaretDown,
     PhCalendar,
     PhArrowLeft,
@@ -279,7 +274,7 @@ export default defineComponent({
 </script>
 
 <template>
-  <InputWrapper
+  <RobustInputWrapper
     :title="title"
     :hint="hint"
     :error="error"
@@ -319,8 +314,8 @@ export default defineComponent({
         :class="{ 'rotate-180 transform': open }"
       />
     </div>
-  </InputWrapper>
-  <Popper
+  </RobustInputWrapper>
+  <RobustPopper
     ref="popperRef"
     v-if="inputWrapperRef?.wrapperRef"
     class="z-[100] origin-top-left"
@@ -334,7 +329,7 @@ export default defineComponent({
       class="font-lg border-b border-gray-200 p-4 font-medium text-gray-500 dark:border-gray-600"
     >Date range</h3>
     <div>
-      <Calendar
+      <RobustCalendar
         ref="mainCalendar"
         v-model="tmpDateRange"
         @click:relativeDate="enableStoringHistory(false)"
@@ -344,22 +339,22 @@ export default defineComponent({
             <label
               class="mb-1 block text-sm font-medium text-gray-500 dark:text-gray-400"
             >Perspective of</label>
-            <DatePicker placeholder="Date" v-model="perspectiveOf" />
+            <RobustDatePicker placeholder="Date" v-model="perspectiveOf" />
           </div>
-          <Checkbox
+          <RobustCheckbox
             v-if="enableComparison"
             v-model="compareWith"
             title="Compare with"
           />
         </div>
-      </Calendar>
+      </RobustCalendar>
     </div>
     <h3
       v-if="enableComparison"
       class="font-lg border-b border-t border-gray-200 p-4 font-medium text-gray-500 dark:border-gray-600"
     >Comparison date range</h3>
     <div v-if="enableComparison">
-      <Calendar
+      <RobustCalendar
         variant="secondary"
         v-model="computedCompare"
         @click:relativeDate="enableStoringHistory(false)"
@@ -368,20 +363,18 @@ export default defineComponent({
           <label
             class="mb-1 block text-sm font-medium text-gray-500 dark:text-gray-400"
           >Perspective of</label>
-          <DatePicker placeholder="Date" v-model="comparePerspectiveOf" />
+          <RobustDatePicker placeholder="Date" v-model="comparePerspectiveOf" />
         </div>
-      </Calendar>
+      </RobustCalendar>
     </div>
     <div
       class="flex items-start justify-between border-t border-gray-200 p-4 dark:border-gray-600"
     >
-      <!-- <PhClockCounterClockwise
-        :class="dateHistory.length > 0 ? 'visible' : 'invisible'"
-        @click="enabledHistory = !enabledHistory"
-        class="hover:cursor-pointer"
-        :size="35"
-      />-->
-      <Button type="primary" class="ml-auto" @click="saveTime">Apply time range</Button>
+      <RobustButton
+        type="primary"
+        class="ml-auto"
+        @click="saveTime"
+      >Apply time range</RobustButton>
     </div>
-  </Popper>
+  </RobustPopper>
 </template>

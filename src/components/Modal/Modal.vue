@@ -40,8 +40,8 @@
 </template>
 <script lang="ts">
 import { computed, defineComponent, onMounted, onUnmounted, ref, toRefs, watch } from 'vue'
-import { lockScroll, unlockScroll } from '../../utils/scrollLock'
 import { PhX } from "@dnlsndr/vue-phosphor-icons"
+import { useScrollLock } from '@vueuse/core'
 export default defineComponent({
   name: 'RobustModal',
   inheritAttrs: false,
@@ -60,11 +60,12 @@ export default defineComponent({
   setup(props, { emit }) {
     const { opened } = toRefs(props)
 
+    let scrollLocked = useScrollLock(document.body)
     watch(opened, (value) => {
       if (value) {
-        lockScroll()
+        scrollLocked.value = true
       } else {
-        unlockScroll()
+        scrollLocked.value = false
       }
     })
 

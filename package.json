@@ -85,6 +85,7 @@
     "tabbable": "^5.2.1",
     "tailwindcss": "^3.0.23",
     "tippy.js": "^6.3.7",
+    "vee-validate": "^4.5.9",
     "vue": "^3.2.31",
     "vue-router": "^4.0.12",
     "vuex": "^4.0.2"

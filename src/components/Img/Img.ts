@@ -1,5 +1,5 @@
 import { defineComponent, h, onMounted, ref } from 'vue'
-import HsSpinner from '../Spinner/Spinner.vue'
+import RobustSpinner from '../Spinner/Spinner.vue'
 import { PhWarning } from '@dnlsndr/vue-phosphor-icons'
 export default defineComponent({
   name: 'RobustImg',
@@ -48,7 +48,7 @@ export default defineComponent({
         {
           class: 'flex items-center justify-center',
         },
-        h(HsSpinner, {
+        h(RobustSpinner, {
           size: 24,
           stroke: 2,
         })

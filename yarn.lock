@@ -3112,6 +3112,11 @@
   resolved "https://registry.npmjs.org/@vue/devtools-api/-/devtools-api-6.0.0-beta.21.1.tgz"
   integrity sha512-FqC4s3pm35qGVeXRGOjTsRzlkJjrBLriDS9YXbflHLsfA9FrcKzIyWnLXoNm+/7930E8rRakXuAc2QkC50swAw==
 
+"@vue/devtools-api@^6.0.0-beta.15":
+  version "6.0.12"
+  resolved "https://registry.yarnpkg.com/@vue/devtools-api/-/devtools-api-6.0.12.tgz#7b57cce215ae9f37a86984633b3aa3d595aa5b46"
+  integrity sha512-iO/4FIezHKXhiDBdKySCvJVh8/mZPxHpiQrTy+PXVqJZgpTPTdHy4q8GXulaY+UKEagdkBb0onxNQZ0LNiqVhw==
+
 "@vue/eslint-config-prettier@^7.0.0":
   version "7.0.0"
   resolved "https://registry.npmjs.org/@vue/eslint-config-prettier/-/eslint-config-prettier-7.0.0.tgz"
@@ -11966,6 +11971,13 @@ vary@^1.1.2, vary@~1.1.2:
   version "1.1.2"
   resolved "https://registry.npmjs.org/vary/-/vary-1.1.2.tgz"
   integrity sha1-IpnwLG3tMNSllhsLn3RSShj2NPw=
+
+vee-validate@^4.5.9:
+  version "4.5.9"
+  resolved "https://registry.yarnpkg.com/vee-validate/-/vee-validate-4.5.9.tgz#db479b49b2946b4e599230bb6fe1e6b28e041aac"
+  integrity sha512-Ce0hE/5IpguKgnwthS+6S4+rjHoPjcDwORtExn+IJIHZXYURN3cgQrZFTudqgpfchpTJAZbJcKD936tzWn15Ag==
+  dependencies:
+    "@vue/devtools-api" "^6.0.0-beta.15"
 
 vfile-location@^3.0.0, vfile-location@^3.2.0:
   version "3.2.0"

@@ -1,6 +1,6 @@
 <script lang="ts">
 import { computed, defineComponent, PropType, ref } from 'vue'
-import InputWrapper from '../InputWrapper/InputWrapper.vue'
+import RobustInputWrapper from '../InputWrapper/InputWrapper.vue'
 import { PhWarningCircle } from '@dnlsndr/vue-phosphor-icons'
 
 export default defineComponent({
@@ -8,7 +8,7 @@ export default defineComponent({
 
   inheritAttrs: false,
   components: {
-    InputWrapper,
+    RobustInputWrapper,
     PhWarningCircle,
   },
   props: {
@@ -80,7 +80,7 @@ export default defineComponent({
 </script>
 
 <template>
-  <InputWrapper
+  <RobustInputWrapper
     :fixed-height="false"
     :title="title"
     :hint="hint"
@@ -127,5 +127,5 @@ export default defineComponent({
         <PhWarningCircle size="20" class="block" />
       </div>
     </div>
-  </InputWrapper>
+  </RobustInputWrapper>
 </template>

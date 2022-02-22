@@ -66,7 +66,7 @@ export default defineComponent({
 </script>
 
 <template>
-  <fieldset>
+  <fieldset :class="[$props.class,]">
     <legend
       v-if="title"
       class="mb-1 block select-none text-sm font-medium text-gray-500 dark:text-gray-400"
@@ -76,7 +76,7 @@ export default defineComponent({
       ref="wrapperRef"
       class="relative flex min-w-52 rounded-md border border-gray-200 bg-gray-50 dark:border-gray-600 dark:bg-gray-800"
       :class="[
-        $props.class,
+      
         fixedHeight ? (condensed ? 'h-9' : 'h-10') : undefined,
         {
           'ring-primary-500 ring-opacity-30 focus-within:border-primary-500 focus-within:outline-none focus-within:ring focus-within:dark:border-primary-500':

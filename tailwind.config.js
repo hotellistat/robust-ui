@@ -6,7 +6,7 @@ module.exports = {
     './index.html',
     './src/**/*.{vue,js,ts,jsx,tsx}',
     './docs/**/*.{vue,md}',
-  ],
+  ].filter(item => item),
   theme: {
     spacing: {
       0: '0px',
