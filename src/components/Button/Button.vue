@@ -2,7 +2,7 @@
   <component
     :is="(tag as any)"
     :disabled="disabled"
-    class="transition-color flex items-center justify-center truncate font-medium ring-opacity-50 duration-75 focus:ring"
+    class="flex items-center justify-center truncate font-medium ring-opacity-50 focus:ring"
     :class="[
       disabled
         ? 'bg-gray-200 text-gray-400 dark:bg-gray-600 dark:text-gray-400'
@@ -12,7 +12,7 @@
     ]"
   >
     <div
-      class="flex select-none items-center transition-all duration-150"
+      class="flex select-none items-center"
       :class="[loading ? 'opacity-0' : 'opacity-1']"
     >
       <div v-if="$slots.prefix" class="mr-2">
