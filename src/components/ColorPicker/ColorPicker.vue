@@ -1,6 +1,6 @@
 <template>
   <div
-    class="hu-color-picker rounded bg-gray-700 shadow"
+    class="hu-color-picker rounded bg-gray-800 shadow"
     :class="{ light: isLightTheme }"
     :style="{ width: totalWidth + 'px' }"
   >

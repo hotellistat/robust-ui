@@ -1,6 +1,6 @@
 <template>
   <section
-    class="relative rounded-md border border-gray-200 bg-white dark:border-gray-600 dark:bg-gray-700"
+    class="relative rounded-md border border-gray-200 bg-white dark:border-gray-700 dark:bg-gray-800"
   >
     <header
       v-if="description !== undefined || title !== undefined"

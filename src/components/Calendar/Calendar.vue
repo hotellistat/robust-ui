@@ -475,23 +475,23 @@ export default defineComponent({
   <div class="relative flex w-max select-none">
     <div
       v-if="Array.isArray(modelValue)"
-      class="relative w-48 border-r border-gray-200 dark:border-gray-600"
+      class="relative w-48 border-r border-gray-200 dark:border-gray-700"
     >
       <div class="absolute inset-0 overflow-auto py-2">
         <div
           v-for="action in quickActions"
           :key="action.title"
-          class="cursor-pointer py-2 px-4 hover:bg-gray-50 dark:hover:bg-gray-700"
+          class="cursor-pointer py-2 px-4 hover:bg-gray-50 dark:hover:bg-gray-800"
           @click="setQuickAction(action.preset())"
         >{{ action.title }}</div>
       </div>
     </div>
 
-    <section class="p-4 dark:border-gray-600">
+    <section class="p-4 dark:border-gray-700">
       <div class="mb-4 flex items-center text-center text-lg font-semibold">
         <div class="flex flex-1">
           <div
-            class="flex h-8 cursor-pointer items-center rounded-lg px-2 tabular-nums hover:bg-gray-100 dark:hover:bg-gray-700"
+            class="flex h-8 cursor-pointer items-center rounded-lg px-2 tabular-nums hover:bg-gray-100 dark:hover:bg-gray-800"
             @click="
               () => {
                 showMonthSelection()
@@ -500,7 +500,7 @@ export default defineComponent({
             "
           >{{ monthHeading }}</div>
           <div
-            class="flex h-8 cursor-pointer items-center rounded-lg px-2 tabular-nums hover:bg-gray-100 dark:hover:bg-gray-700"
+            class="flex h-8 cursor-pointer items-center rounded-lg px-2 tabular-nums hover:bg-gray-100 dark:hover:bg-gray-800"
             @click="
               () => {
                 showYearSelection()
@@ -510,14 +510,14 @@ export default defineComponent({
           >{{ yearHeading }}</div>
         </div>
         <div
-          class="flex h-8 w-8 cursor-pointer items-center justify-center rounded-lg text-gray-700 hover:bg-gray-100 hover:text-gray-700 active:bg-gray-200 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-gray-100"
+          class="flex h-8 w-8 cursor-pointer items-center justify-center rounded-lg text-gray-800 hover:bg-gray-100 hover:text-gray-800 active:bg-gray-200 dark:text-gray-400 dark:hover:bg-gray-800 dark:hover:text-gray-100"
           @click="subMonth"
         >
           <PhCaretLeft type="chevron-left" size="14" weight="bold" />
         </div>
 
         <div
-          class="flex h-8 w-8 cursor-pointer items-center justify-center rounded-lg text-gray-700 hover:bg-gray-100 hover:text-gray-700 active:bg-gray-200 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-gray-100"
+          class="flex h-8 w-8 cursor-pointer items-center justify-center rounded-lg text-gray-800 hover:bg-gray-100 hover:text-gray-800 active:bg-gray-200 dark:text-gray-400 dark:hover:bg-gray-800 dark:hover:text-gray-100"
           @click="addMonth"
         >
           <PhCaretRight type="chevron-right" size="14" weight="bold" />
@@ -536,7 +536,7 @@ export default defineComponent({
             :class="[
               activeMonth === index
                 ? variantStyling.background
-                : 'hover:bg-gray-100 dark:hover:bg-gray-600',
+                : 'hover:bg-gray-100 dark:hover:bg-gray-700',
             ]"
             @click="
               () => {
@@ -559,7 +559,7 @@ export default defineComponent({
             :class="[
               activeYear === year
                 ? variantStyling.background
-                : 'hover:bg-gray-100 dark:hover:bg-gray-600',
+                : 'hover:bg-gray-100 dark:hover:bg-gray-700',
             ]"
             :data-year="year"
             @click="
@@ -630,7 +630,7 @@ export default defineComponent({
                   isFirst(day) ||
                   isSelectedDay(day)
                   ? `rounded-0 ${variantStyling.background}`
-                  : 'hover:bg-gray-200 dark:hover:bg-gray-700',
+                  : 'hover:bg-gray-200 dark:hover:bg-gray-800',
               ]"
             >{{ day }}</div>
           </div>
@@ -639,7 +639,7 @@ export default defineComponent({
     </section>
     <div
       v-if="Array.isArray(modelValue)"
-      class="flex flex-shrink-0 flex-col items-start border-l border-gray-200 p-4 dark:border-gray-600"
+      class="flex flex-shrink-0 flex-col items-start border-l border-gray-200 p-4 dark:border-gray-700"
     >
       <label
         class="mb-1 block text-sm font-medium text-gray-500 dark:text-gray-400"

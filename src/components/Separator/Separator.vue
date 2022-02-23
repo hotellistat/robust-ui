@@ -7,7 +7,7 @@
   <div v-else class="flex items-center">
     <div
       :class="[
-        'flex-1 bg-gray-100 dark:bg-gray-600',
+        'flex-1 bg-gray-100 dark:bg-gray-700',
         vert ? 'w-px self-stretch' : 'h-px w-full',
       ]"
     ></div>
@@ -16,7 +16,7 @@
     </div>
     <div
       :class="[
-        'flex-1 bg-gray-100 dark:bg-gray-600',
+        'flex-1 bg-gray-100 dark:bg-gray-700',
         vert ? 'w-px self-stretch' : 'h-px w-full',
       ]"
     ></div>
@@ -36,7 +36,7 @@ export default defineComponent({
     },
     colorClass: {
       type: String,
-      default: 'bg-gray-100 dark:bg-gray-600 ',
+      default: 'bg-gray-100 dark:bg-gray-700 ',
     },
   },
 })

@@ -103,7 +103,7 @@ export default defineComponent({
       v-model="inputFieldValue"
       :disabled="disabled"
       size="8"
-      class="block h-full w-full bg-transparent text-current outline-none dark:placeholder-gray-600"
+      class="block h-full w-full bg-transparent text-current outline-none dark:placeholder-gray-700"
       :class="[
         $slots.prefix || condensed ? 'pl-2' : 'pl-3',
         error ? 'pr-10' : $slots.suffix || condensed ? 'pr-2' : 'pr-3',

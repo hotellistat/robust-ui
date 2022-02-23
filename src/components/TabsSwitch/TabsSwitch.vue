@@ -1,7 +1,7 @@
 <template>
   <div
     ref="root"
-    class="transition-color text-shade-20 relative flex select-none items-center bg-gray-200 duration-100 ease-in-out dark:bg-gray-600"
+    class="transition-color text-shade-20 relative flex select-none items-center bg-gray-200 duration-100 ease-in-out dark:bg-gray-700"
     :class="[rounded ? 'rounded-full' : 'rounded-md']"
   >
     <div
@@ -19,9 +19,7 @@
       @click="select($event, tab.value)"
       class="whitespace-no-wrap z-10 flex-1 flex-shrink-0 flex-grow self-stretch whitespace-nowrap px-4 transition-colors duration-200"
       :class="{ 'text-white': modelValue === tab.value }"
-    >
-      {{ tab.title }}
-    </button>
+    >{{ tab.title }}</button>
   </div>
 </template>
 
