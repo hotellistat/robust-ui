@@ -1,5 +1,5 @@
 <template>
-  <teleport to="#modal-area">
+  <teleport to="body">
     <transition v-bind="$attrs" :name="animationName">
       <div
         v-if="opened"
