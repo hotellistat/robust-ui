@@ -4,6 +4,15 @@ import DataTable from './DataTableContainer.vue'
 export default {
   title: 'Ui/DataTable',
   component: DataTable,
+  parameters: {
+    backgrounds: {
+      default: 'dark',
+      values: [
+        { name: 'light', value: '#00aced' },
+        { name: 'dark', value: '#111827' },
+      ],
+    },
+  },
 }
 const columns = [
   {
@@ -76,7 +85,7 @@ const columns = [
   {
     title: 'End Date',
     key: 'enddate_contract_formatted',
-    sortable: false,
+    sortable: true,
     editable: true,
     hidden: false,
     sortDirection: 0,
@@ -111,7 +120,7 @@ const data = [
     country_name: 'Germany',
     chain_name: 'Kautzer LLC',
     brand_name: 'Clarabelle',
-    enddate_contract_formatted: '05/04/2022',
+    enddate_contract_formatted: '06/04/2022',
     contract_name: 'Clever',
   },
   {
@@ -122,7 +131,7 @@ const data = [
     country_name: 'Germany',
     chain_name: 'Gerhold - Kris',
     brand_name: 'Andy',
-    enddate_contract_formatted: '05/04/2022',
+    enddate_contract_formatted: '07/04/2022',
     contract_name: 'Intelligent',
   },
 ]
@@ -134,7 +143,8 @@ const config = {
   isDirty: false,
 }
 const DefaultTemplate = (args) => ({
-  template: `<DataTable
+  template: `
+  <DataTable
       :totalCount="totalCount"
       v-model="tableData"
       :columns="tableColumns"
@@ -146,7 +156,7 @@ const DefaultTemplate = (args) => ({
     >
 
       <template #name="{row, value, column}">
-        <div class="flex items-center w-full">
+        <div class="flex items-center w-full pl-2">
           <span class="text-rose-500">{{value}}</span>
         </div>
       </template>
@@ -162,7 +172,8 @@ const DefaultTemplate = (args) => ({
         </div>
       </template>
 
-    </DataTable>`,
+    </DataTable>
+`,
   components: { DataTable },
   setup() {
     const totalCount = ref(200)
@@ -196,3 +207,6 @@ const DefaultTemplate = (args) => ({
 })
 
 export const Default = DefaultTemplate.bind()
+Default.parameters = {
+  backgrounds: { default: 'dark' },
+}

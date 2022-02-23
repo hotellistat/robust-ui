@@ -4,15 +4,14 @@
     class="inline-block relative"
     ref="containerRef"
   >
-    <div
-      class="flex bg-gray-200 dark:bg-gray-700 cursor-pointer rounded overflow-hidden flex focus-within:outline-none focus-within:ring shadow-outline h-8"
-      @click="toggleDropdown"
-    >
+    <div class="flex bg-gray-200 dark:bg-gray-700 cursor-pointer rounded overflow-hidden flex focus-within:outline-none focus-within:ring shadow-outline h-8" @click="toggleDropdown">
       <div
         class="bg-transparent w-full h-full text-current outline-none flex items-center"
         :class="[$slots.prefix || 'pl-2']"
       >
-        <div class="truncate min-w-0 select-none">Columns</div>
+        <div class="truncate min-w-0 select-none text-gray-700 dark:text-gray-50">
+          Columns
+        </div>
       </div>
 
       <div
@@ -28,17 +27,8 @@
       </div>
     </div>
 
-    <ul
-      v-if="isOpen"
-      class="absolute right-0 z-50 bg-white dark:bg-gray-700 shadow-2xl rounded-lg py-4"
-    >
-      <li
-        v-for="column in columns"
-        @click="selectItem(column.key)"
-        :class="isActive(column.key) ? '' : 'bg-gray-400 hover:bg-gray-500'"
-        class="px-4 py-2 w-32 cursor-pointer dark:hover:bg-gray-600 hover:bg-gray-100 transition-colors duration-200 flex items-center"
-        :key="column.key"
-      >
+    <ul v-if="isOpen" class="absolute right-0 z-50 bg-white dark:bg-gray-700 shadow-2xl rounded-lg py-4 text-gray-700 dark:text-gray-50">
+      <li v-for="column in columns" @click="selectItem(column.key)" class="px-4 py-2 w-32 cursor-pointer dark:hover:bg-gray-600 hover:bg-gray-100 transition-colors duration-200 flex items-center" :key="column.key">
         <ph-check
           class="text-gray-400 mr-1"
           :class="column.hidden ? 'opacity-0' : ''"
@@ -52,15 +42,16 @@
 
 <script>
 import { onMounted, onUnmounted, ref, toRefs, watch, watchEffect } from "vue";
+import { PhCheck, PhCaretDown } from "@dnlsndr/vue-phosphor-icons";
 
 export default {
+  components: { PhCheck, PhCaretDown },
   props: {
     columns: {
       type: Array,
       default: () => []
     },
     config: Object,
-    activeColumn: Array
   },
   emits: ["toggleColumn"],
   setup(props, { emit }) {
@@ -81,10 +72,6 @@ export default {
       emit("toggleColumn", key);
     };
 
-    const isActive = (key) => {
-      return !!props.activeColumn.filter(e => e.key === key).length
-    }
-
     onMounted(() => {
       document.addEventListener("click", outSideClickHandler);
     });
@@ -97,9 +84,7 @@ export default {
       isOpen,
       toggleDropdown,
       containerRef,
-      selectItem,
-      activeColumn: props.activeColumn,
-      isActive
+      selectItem
     };
   }
 };

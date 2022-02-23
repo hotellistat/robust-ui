@@ -3,10 +3,7 @@
     <div
       class="max-w-[14rem] min-w-[9rem] border border-gray-700 pl-2 rounded ml-2 flex items-center bg-gray-50 dark:bg-gray-800"
     >
-      <SearchIcon
-        class="text-gray-500 dark:text-gray-50"
-        :size="17"
-      />
+      <PhMagnifyingGlass class="text-gray-500 dark:text-gray-50" size="18" />
       <input
         v-model="keyword"
         placeholder="search..."
@@ -19,10 +16,10 @@
 <script>
 import { inject, ref, watch } from "vue";
 import { UpdateSymbol } from "../ProvideDataTableSettings";
-import SearchIcon  from '../common/icons/SearchIcon.vue';
+import { PhMagnifyingGlass } from "@dnlsndr/vue-phosphor-icons";
 
 export default {
-  components: {SearchIcon},
+  components: { PhMagnifyingGlass },
   emits: ["search-submit"],
   setup(props, { emit }) {
     const keyword = ref("");

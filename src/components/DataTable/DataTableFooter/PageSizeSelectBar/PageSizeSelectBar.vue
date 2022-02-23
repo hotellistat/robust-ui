@@ -28,13 +28,13 @@
 
       <ul
         v-if="isOpen"
-        class="absolute top-[60px] ml-0.5 z-50 border rounded-lg py-2"
+        class="absolute top-[60px] ml-0.5 z-50 bg-gray-700 shadow-2xl rounded-lg py-2"
       >
         <li
           v-for="size in [10, 25, 50]"
-          class="px-4 py-1.5 cursor-pointer hover:bg-gray-400 transition-colors duration-200 flex justify-center items-center"
+          class="px-4 py-1.5 cursor-pointer hover:bg-gray-600 transition-colors duration-200 flex justify-center items-center"
           :key="size"
-          :class="pageSize === size ? 'bg-gray-200' : ''"
+          :class="pageSize === size ? 'bg-gray-400' : ''"
           @click="selectItem(size)"
         >
           <span>{{ size }}</span>
@@ -46,8 +46,10 @@
 <script>
 import { inject, onMounted, onUnmounted, ref } from "vue";
 import { StateSymbol, UpdateSymbol } from "../../ProvideDataTableSettings";
+import { PhCaretDown } from "@dnlsndr/vue-phosphor-icons";
 
 export default {
+  components: { PhCaretDown },
   setup() {
     const isOpen = ref();
     const containerRef = ref(null);
