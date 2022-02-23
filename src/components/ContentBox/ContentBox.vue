@@ -23,12 +23,10 @@
         v-if="description !== undefined"
         class="text-gray-500 dark:text-gray-500"
       >
-        <slot name="description" :description="description">
-          {{ description }}
-        </slot>
+        <slot name="description" :description="description">{{ description }}</slot>
       </p>
     </header>
-    <Separator />
+    <RobustSeparator />
     <div class="p-4 sm:p-6">
       <slot />
     </div>
@@ -37,13 +35,13 @@
 
 <script lang="ts">
 import { defineComponent } from 'vue'
-import Separator from '../Separator/Separator.vue'
+import RobustSeparator from '../Separator/Separator.vue'
 
 export default defineComponent({
   name: 'RobustContentBox',
 
   components: {
-    Separator,
+    RobustSeparator,
   },
   props: {
     title: {

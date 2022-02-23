@@ -1,5 +1,5 @@
 <script lang="ts">
-import Input from '../Input/Input.vue'
+import RobustInput from '../Input/Input.vue'
 import {
   subYears,
   addYears,
@@ -35,7 +35,7 @@ export default defineComponent({
   name: 'RobustCalendar',
 
   components: {
-    Input,
+    RobustInput,
     PhCaretLeft,
     PhCaretRight,
   },
@@ -644,7 +644,7 @@ export default defineComponent({
       <label
         class="mb-1 block text-sm font-medium text-gray-500 dark:text-gray-400"
       >From</label>
-      <Input
+      <RobustInput
         v-model="from"
         placeholder="Date"
         :error="errorFrom"
@@ -654,7 +654,7 @@ export default defineComponent({
       <label
         class="mb-1 block text-sm font-medium text-gray-500 dark:text-gray-400"
       >To</label>
-      <Input
+      <RobustInput
         v-model="to"
         placeholder="Date"
         :error="errorTo"

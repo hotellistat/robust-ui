@@ -1,8 +1,8 @@
 <script lang="ts">
-import Popper from '../Popper/Popper'
-import Calendar from '../Calendar/Calendar.vue'
+import RobustPopper from "../Popper/Popper"
+import RobustCalendar from "../Calendar/Calendar.vue"
+import RobustInputWrapper from "../InputWrapper/InputWrapper.vue"
 import { format } from 'date-fns'
-import InputWrapper from '../InputWrapper/InputWrapper.vue'
 import { PhCaretDown, PhCalendar } from '@dnlsndr/vue-phosphor-icons'
 import { computed, defineComponent, ref, toRefs, PropType } from 'vue'
 import { onClickOutside } from '@vueuse/core'
@@ -11,9 +11,9 @@ export default defineComponent({
   name: 'RobustDatePicker',
 
   components: {
-    Popper,
-    Calendar,
-    InputWrapper,
+    RobustPopper,
+    RobustCalendar,
+    RobustInputWrapper,
     PhCaretDown,
     PhCalendar,
   },
@@ -115,7 +115,7 @@ export default defineComponent({
 </script>
 
 <template>
-  <InputWrapper
+  <RobustInputWrapper
     :title="title"
     :hint="hint"
     :error="error"
@@ -153,8 +153,8 @@ export default defineComponent({
         :class="{ 'rotate-180 transform': open }"
       />
     </div>
-  </InputWrapper>
-  <Popper
+  </RobustInputWrapper>
+  <RobustPopper
     v-if="inputWrapperRef?.wrapperRef"
     ref="popperRef"
     class="z-[100] origin-top-left"
@@ -164,6 +164,6 @@ export default defineComponent({
       placement: 'bottom-start',
     }"
   >
-    <Calendar v-model="computedValue" />
-  </Popper>
+    <RobustCalendar v-model="computedValue" />
+  </RobustPopper>
 </template>

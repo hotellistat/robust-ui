@@ -25,19 +25,24 @@
         <slot tag="div" name="suffix" />
       </div>
     </div>
-    <spinner v-if="loading" :size="20" :stroke="2" class="spinner absolute" />
+    <RobustSpinner
+      v-if="loading"
+      :size="20"
+      :stroke="2"
+      class="spinner absolute"
+    />
   </component>
 </template>
 
 <script lang="ts">
 import { computed, defineComponent, ref, toRefs } from 'vue'
-import Spinner from '../Spinner/Spinner.vue'
+import RobustSpinner from '../Spinner/Spinner.vue'
 import variants from './variants'
 
 export default defineComponent({
   name: 'RobustButton',
   components: {
-    Spinner,
+    RobustSpinner,
   },
   props: {
     tag: {

@@ -15,7 +15,7 @@ export default {
 }
 
 const DefaultTemplate = (args) => ({
-  template: '<Input v-bind="args"/>',
+  template: '<Input class="mb-4" :cthulu="true" v-bind="args"/>',
   components: { Input },
   setup() {
     return { args }

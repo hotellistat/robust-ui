@@ -1,6 +1,6 @@
 import { ref } from 'vue'
 import Modal from './Modal.vue'
-import Button from '../Button/Button.vue'
+import { RobustButton } from '..'
 
 export default {
   title: 'Ui/Modal',
@@ -17,8 +17,8 @@ export default {
 }
 
 const DefaultTemplate = (args) => ({
-  template: ' <Button @click="args.opened.value = true">modal open {{args.opened}}</Button><Modal v-bind="args">test</Modal>',
-  components: { Modal, Button },
+  template: ' <RobustButton @click="args.opened.value = true">modal open {{args.opened}}</RobustButton><Modal v-bind="args">test</Modal>',
+  components: { Modal, RobustButton },
   setup() {
     return { args }
   },

@@ -1,6 +1,6 @@
 <script lang="ts">
 import { defineComponent, ref } from 'vue'
-import Popper from '../Popper/Popper'
+import RobustPopper from '../Popper/Popper'
 import { PhDotsThreeVertical } from '@dnlsndr/vue-phosphor-icons'
 import { onClickOutside } from '@vueuse/core'
 
@@ -8,7 +8,7 @@ export default defineComponent({
   name: 'RobustWidgetWrapper',
 
   components: {
-    Popper,
+    RobustPopper,
     PhDotsThreeVertical,
   },
   props: {
@@ -94,7 +94,7 @@ export default defineComponent({
 
     <slot name="raw" />
   </div>
-  <Popper
+  <RobustPopper
     ref="popperRef"
     class="z-[100]"
     :append-to="contextButtonRef"
@@ -104,5 +104,5 @@ export default defineComponent({
     }"
   >
     <slot name="options" />
-  </Popper>
+  </RobustPopper>
 </template>

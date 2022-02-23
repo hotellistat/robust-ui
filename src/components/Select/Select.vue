@@ -1,5 +1,6 @@
 <script lang="ts">
-import Popper from '../Popper/Popper'
+import RobustInputWrapper from '../InputWrapper/InputWrapper.vue'
+import RobustPopper from '../Popper/Popper'
 import {
   ref,
   computed,
@@ -9,7 +10,6 @@ import {
   defineComponent,
   PropType,
 } from 'vue'
-import InputWrapper from '../InputWrapper/InputWrapper.vue'
 import { debouncedWatch } from '@vueuse/core'
 import { Modifier } from '@popperjs/core'
 import { onClickOutside } from '@vueuse/core'
@@ -18,8 +18,8 @@ export default defineComponent({
   name: 'RobustSelect',
 
   components: {
-    Popper,
-    InputWrapper,
+    RobustPopper,
+    RobustInputWrapper,
     PhCheck,
     PhCaretDown,
   },
@@ -105,24 +105,23 @@ export default defineComponent({
     const popperModifiers: Array<
       Partial<Modifier<string, Record<string, unknown>>>
     > = [
-      {
-        name: 'sameWidth',
-        enabled: true,
-        phase: 'beforeWrite',
-        requires: ['computeStyles'],
-        fn: (args) => {
-          args.state.styles.popper.width = `${Math.max(
-            args.state.rects.reference.width,
-            200
-          )}px`
+        {
+          name: 'sameWidth',
+          enabled: true,
+          phase: 'beforeWrite',
+          requires: ['computeStyles'],
+          fn: (args) => {
+            args.state.styles.popper.width = `${Math.max(
+              args.state.rects.reference.width,
+              200
+            )}px`
+          },
+          effect: (args) => {
+            args.state.elements.popper.style.width = `${args.state.elements.reference.getBoundingClientRect().width
+              }px`
+          },
         },
-        effect: (args) => {
-          args.state.elements.popper.style.width = `${
-            args.state.elements.reference.getBoundingClientRect().width
-          }px`
-        },
-      },
-    ]
+      ]
 
     const activeItem = computed(() => {
       return props.options.find((item) => item.value === props.modelValue)
@@ -186,7 +185,7 @@ export default defineComponent({
 </script>
 
 <template>
-  <InputWrapper
+  <RobustInputWrapper
     ref="inputWrapper"
     :title="title"
     :hint="hint"
@@ -239,8 +238,8 @@ export default defineComponent({
         :class="{ 'rotate-180 transform': open }"
       />
     </div>
-  </InputWrapper>
-  <Popper
+  </RobustInputWrapper>
+  <RobustPopper
     v-if="inputWrapper?.wrapperRef"
     v-model:open="open"
     ref="popperRef"
@@ -269,5 +268,5 @@ export default defineComponent({
       </li>
     </ul>
     <div v-else class="py-2 text-center text-gray-400">No options</div>
-  </Popper>
+  </RobustPopper>
 </template>
