@@ -10,7 +10,12 @@
       >
         <span class="sr-only">Previous</span>
         <!-- <chevron-left class="h-5 w-5" :size="24" /> -->
-        <PhCaretLeft type="chevron-left" class="h-5 w-5" size="24" weight="bold" />
+        <PhCaretLeft
+          type="chevron-left"
+          class="h-5 w-5"
+          size="24"
+          weight="bold"
+        />
       </span>
       <span
         v-for="index in pageCount"
@@ -18,16 +23,19 @@
         @click="() => setPage(index)"
         class="paginate-btn relative inline-flex items-center px-4 py-2 border border-gray-700 bg-white text-sm font-medium text-gray-700 hover:bg-gray-300"
         :class="index === page ? 'bg-gray-200 active' : ''"
-      >
-        {{ index }}
-      </span>
+      >{{ index }}</span>
       <span
         @click="() => page < pageCount && setPage(page + 1)"
         class="paginate-btn relative inline-flex items-center px-2 py-2 rounded-r-md border border-gray-700 bg-white text-sm font-medium text-gray-500 hover:bg-gray-50"
       >
         <span class="sr-only">Next</span>
         <!-- <chevron-right class="h-5 w-5" :size="24" /> -->
-        <PhCaretRight type="chevron-right" class="h-5 w-5" size="24" weight="bold"/>
+        <PhCaretRight
+          type="chevron-right"
+          class="h-5 w-5"
+          size="24"
+          weight="bold"
+        />
       </span>
     </nav>
   </div>

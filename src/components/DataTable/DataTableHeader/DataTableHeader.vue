@@ -1,8 +1,8 @@
 <template>
   <div
     v-for="key in hideFirst
-      ? Object.keys(headersData).slice(1)
-      : Object.keys(headersData)"
+    ? Object.keys(headersData).slice(1)
+    : Object.keys(headersData)"
     :key="key"
     class="data-table-header border-bottom-2 flex items-center justify-between sm:justify-center px-4 py-2 text-sm tracking-wider cursor-pointer"
     :class="isInlineEditMode ? 'h-12 sm:h-auto' : 'h-10 sm:h-auto'"
@@ -15,9 +15,7 @@
       v-if="!isInlineEditMode"
       class="data-table-header border-bottom-2 flex items-center justify-between sm:justify-center px-4 py-2 text-sm tracking-wider cursor-pointer"
     >
-    <span class="font-medium uppercase truncate" :title="'actions'">
-      actions
-    </span>
+      <span class="font-medium uppercase truncate" :title="'actions'">actions</span>
     </div>
   </div>
 </template>

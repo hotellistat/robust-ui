@@ -9,9 +9,7 @@
           class="bg-transparent w-full h-full text-current outline-none flex items-center"
           :class="[$slots.prefix || 'pl-2']"
         >
-          <div class="truncate min-w-0 select-none">
-            {{ pageSize }}
-          </div>
+          <div class="truncate min-w-0 select-none">{{ pageSize }}</div>
         </div>
 
         <div

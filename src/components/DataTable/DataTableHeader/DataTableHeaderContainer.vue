@@ -1,7 +1,5 @@
 <template>
-  <div
-    class="data-table-header-container grid sm:hidden col-span-1"
-  >
+  <div class="data-table-header-container grid sm:hidden col-span-1">
     <template v-if="config.groupBy">
       <template v-for="(group, groupKey) in data" :key="groupKey">
         <div
@@ -14,17 +12,17 @@
             />
             <minus-icon v-else size="16px" />
           </div>
-          <span class="truncate w-full">{{
-            `${config.groupBy.toUpperCase()}: ${groupKey}`
-          }}</span>
+          <span class="truncate w-full">
+            {{
+              `${config.groupBy.toUpperCase()}: ${groupKey}`
+            }}
+          </span>
         </div>
         <template v-if="!(config.collapsed && config.collapsed[groupKey])">
           <template v-for="record in data[groupKey].children" :key="record.id">
             <div
               class="data-table-header border-bottom-2 flex items-center justify-center px-4 py-2 text-sm tracking-wider cursor-pointer bg-gray-500"
-            >
-              Key
-            </div>
+            >Key</div>
             <table-header v-model="headersData" :hideFirst="true" />
           </template>
         </template>
@@ -33,9 +31,7 @@
     <div v-else v-for="record in data" :key="record.id">
       <div
         class="data-table-header border-bottom-2 flex items-center justify-center px-4 py-2 text-sm tracking-wider cursor-pointer bg-gray-500"
-      >
-        Key
-      </div>
+      >Key</div>
       <table-header v-model="headersData" :isInlineEditMode="isInlineEditMode" />
     </div>
   </div>

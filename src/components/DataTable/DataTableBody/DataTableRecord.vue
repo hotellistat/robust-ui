@@ -13,7 +13,12 @@
     v-for="column in columns.slice(isGrouped ? 1 : 0)"
     :key="column.key"
   >
-    <slot :name="column.key" :row="record" :value="record[column.key]" :column="column.key" >
+    <slot
+      :name="column.key"
+      :row="record"
+      :value="record[column.key]"
+      :column="column.key"
+    >
       <data-table-cell
         :type="column.type"
         :column="column.key"

@@ -1,11 +1,9 @@
 <template>
-  <span class="font-medium text-sm uppercase truncate" :title="cell.title">
-    {{ cell.title }}
-  </span>
-  <sort-toggle
-    v-if="cell.sortable"
-    v-model="cell['sortDirection']"
-  />
+  <span
+    class="font-medium text-sm uppercase truncate"
+    :title="cell.title"
+  >{{ cell.title }}</span>
+  <sort-toggle v-if="cell.sortable" v-model="cell['sortDirection']" />
 </template>
 <script>
 import { computed, toRefs } from "vue";

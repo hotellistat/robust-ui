@@ -14,9 +14,7 @@
         Update
         <span
           class="group-hover:bg-gray-800 ml-3 inline-block py-0.5 px-3 text-xs font-medium rounded-full bg-gray-500 text-gray-200"
-        >
-          {{ Object.keys(updatedRecords).length }}
-        </span>
+        >{{ Object.keys(updatedRecords).length }}</span>
       </button>
     </div>
   </div>

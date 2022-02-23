@@ -6,7 +6,12 @@
   >
     <div v-if="isInlineEditMode" class="flex w-full">
       <slot name="leftIcon"></slot>
-      <input v-if="type === 'text' || type === 'number'" type="{{type}}" v-model="cell" class="bg-transparent truncate" />
+      <input
+        v-if="type === 'text' || type === 'number'"
+        type="{{type}}"
+        v-model="cell"
+        class="bg-transparent truncate"
+      />
 
       <input
         v-if="type === 'checkbox'"
@@ -18,7 +23,7 @@
         v-if="type === 'date'"
         class="p-2 col-span-2 sm:col-span-1"
         :modelValue="new Date(cell)"
-        @update:modelValue="(v)=>cell=v"
+        @update:modelValue="(v) => cell = v"
       />
 
       <Select
@@ -28,7 +33,10 @@
         :options="options"
       />
     </div>
-    <div v-if="!isInlineEditMode" class="flex items-center class w-full truncate">
+    <div
+      v-if="!isInlineEditMode"
+      class="flex items-center class w-full truncate"
+    >
       <span>{{ cell }}</span>
     </div>
   </div>
