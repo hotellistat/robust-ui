@@ -71,7 +71,6 @@ export default defineComponent({
     },
     class: {
       type: String,
-      default: 'bg-gray-100 dark:bg-gray-700',
     },
     condensed: {
       type: Boolean,
