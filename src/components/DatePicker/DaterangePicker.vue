@@ -71,7 +71,6 @@ export default defineComponent({
     },
     class: {
       type: String,
-      default: 'bg-gray-100 dark:bg-gray-600',
     },
     condensed: {
       type: Boolean,
@@ -326,7 +325,7 @@ export default defineComponent({
     }"
   >
     <h3
-      class="font-lg border-b border-gray-200 p-4 font-medium text-gray-500 dark:border-gray-600"
+      class="font-lg border-b border-gray-200 p-4 font-medium text-gray-500 dark:border-gray-700"
     >Date range</h3>
     <div>
       <RobustCalendar
@@ -351,7 +350,7 @@ export default defineComponent({
     </div>
     <h3
       v-if="enableComparison"
-      class="font-lg border-b border-t border-gray-200 p-4 font-medium text-gray-500 dark:border-gray-600"
+      class="font-lg border-b border-t border-gray-200 p-4 font-medium text-gray-500 dark:border-gray-700"
     >Comparison date range</h3>
     <div v-if="enableComparison">
       <RobustCalendar
@@ -368,7 +367,7 @@ export default defineComponent({
       </RobustCalendar>
     </div>
     <div
-      class="flex items-start justify-between border-t border-gray-200 p-4 dark:border-gray-600"
+      class="flex items-start justify-between border-t border-gray-200 p-4 dark:border-gray-700"
     >
       <RobustButton
         type="primary"

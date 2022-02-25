@@ -60,7 +60,7 @@ export default defineComponent({
 <template>
   <div
     v-bind="$attrs"
-    class="group relative flex flex-col rounded-md border border-gray-200 bg-white dark:border-gray-600 dark:bg-gray-700"
+    class="group relative flex flex-col rounded-md border border-gray-200 bg-white dark:border-gray-700 dark:bg-gray-800"
     :class="{ 'pl-1': stripe }"
   >
     <div
@@ -70,7 +70,7 @@ export default defineComponent({
     ></div>
     <div
       v-if="title || $slots.title"
-      class="relative mb-3 flex justify-between px-4 pt-3 text-gray-600 dark:text-gray-400"
+      class="relative mb-3 flex justify-between px-4 pt-3 text-gray-700 dark:text-gray-400"
     >
       <slot name="title" :title="title" v-if="$slots.title" />
       <template v-else>{{ title }}</template>
@@ -78,7 +78,7 @@ export default defineComponent({
         v-if="$slots.options"
         ref="contextButtonRef"
         @click="open = !open"
-        class="ml-2 -mr-2 -mt-1 rounded-full border-none p-1 opacity-0 transition-all duration-150 hover:bg-gray-200 group-hover:opacity-100 dark:hover:bg-gray-700"
+        class="ml-2 -mr-2 -mt-1 rounded-full border-none p-1 opacity-0 transition-all duration-150 hover:bg-gray-200 group-hover:opacity-100 dark:hover:bg-gray-800"
       >
         <PhDotsThreeVertical size="24" weight="bold" />
       </button>

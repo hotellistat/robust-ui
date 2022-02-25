@@ -11,7 +11,7 @@ export default {
 }
 
 const DefaultTemplate = (args) => ({
-  template: '<Checkbox v-bind="args" v-model="value"></Checkbox>',
+  template: '<Checkbox v-bind="args" v-model="value"></Checkbox>{{value}}',
   components: { Checkbox },
   setup() {
     let value = ref(false)

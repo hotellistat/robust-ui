@@ -255,7 +255,7 @@ export default defineComponent({
       <li
         v-for="option in computedOptions"
         :key="option.value"
-        class="flex cursor-pointer items-center px-4 py-2 transition-colors duration-200 hover:bg-gray-100 dark:hover:bg-gray-600"
+        class="flex cursor-pointer items-center px-4 py-2 transition-colors duration-200 hover:bg-gray-100 dark:hover:bg-gray-700"
         @click="selectItem(option)"
       >
         <span>{{ option.title }}</span>

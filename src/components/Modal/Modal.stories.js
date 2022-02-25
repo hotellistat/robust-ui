@@ -35,3 +35,41 @@ Default.args = {
     opened.value = value
   }
 }
+
+const SlideRightTemplate = (args) => ({
+  template: ' <RobustButton @click="args.opened.value = true">modal open {{args.opened}}</RobustButton><Modal slide-out-right v-bind="args">test</Modal>',
+  components: { Modal, RobustButton },
+  setup() {
+    return { args }
+  },
+})
+
+export const SlideRight = SlideRightTemplate.bind()
+
+SlideRight.args = {
+  title: 'Modal title',
+  opened: opened,
+  "onUpdate:opened": (value) => {
+    console.log("opeone");
+    opened.value = value
+  }
+}
+
+const SlideLeftTemplate = (args) => ({
+  template: ' <RobustButton @click="args.opened.value = true">modal open {{args.opened}}</RobustButton><Modal slide-out-left v-bind="args">test</Modal>',
+  components: { Modal, RobustButton },
+  setup() {
+    return { args }
+  },
+})
+
+export const SlideLeft = SlideLeftTemplate.bind()
+
+SlideLeft.args = {
+  title: 'Modal title',
+  opened: opened,
+  "onUpdate:opened": (value) => {
+    console.log("opeone");
+    opened.value = value
+  }
+}

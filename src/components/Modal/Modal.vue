@@ -1,6 +1,6 @@
 <template>
-  <teleport to="#modal-area">
-    <transition v-bind="$attrs" name="slide">
+  <teleport to="body">
+    <transition v-bind="$attrs" :name="animationName">
       <div
         v-if="opened"
         ref="root"
@@ -8,17 +8,14 @@
         role="dialog"
       >
         <div
-          class="modal-backdrop absolute top-0 left-0 right-0 bottom-0 bg-gray-900 bg-opacity-75"
+          class="modal-backdrop absolute top-0 left-0 right-0 bottom-0 bg-gray-900 bg-opacity-50"
           @click.self="close"
         ></div>
 
-        <div
-          class="modal-box mx-auto h-full min-h-0 max-w-lg"
-          @keydown.esc="close"
-        >
+        <div :class="['modal-box', modalBoxClass]" @keydown.esc="close">
           <div
-            class="relative flex max-h-full min-h-0 w-full flex-col rounded-md bg-white shadow-xl dark:bg-gray-700"
-            :class="[modalClass]"
+            class="relative flex max-h-full min-h-0 w-full flex-col bg-white shadow-xl dark:bg-gray-800"
+            :class="[modalClass, !isSlideOut ? 'rounded-md' : 'h-full']"
           >
             <div
               v-if="$slots.title"
@@ -56,11 +53,46 @@ export default defineComponent({
       type: Boolean,
       default: false,
     },
+    slideOutLeft: {
+      type: Boolean,
+      default: false,
+    },
+    slideOutRight: {
+      type: Boolean,
+      default: false,
+    }
   },
   setup(props, { emit }) {
     const { opened } = toRefs(props)
-
     let scrollLocked = useScrollLock(document.body)
+
+
+    const animationName = computed(() => {
+      if (props.slideOutLeft) {
+        return "slide-left"
+      }
+      if (props.slideOutRight) {
+        return "slide-right"
+      }
+
+      return "fade"
+    })
+
+    const modalBoxClass = computed(() => {
+      if (props.slideOutLeft) {
+        return "absolute left-0 top-0 bottom-0 h-full min-h-0 max-w-lg w-full"
+      }
+      if (props.slideOutRight) {
+        return "absolute right-0 top-0 bottom-0 h-full min-h-0 max-w-lg w-full"
+      }
+
+      return "mx-auto h-full min-h-0 max-w-lg"
+    })
+
+    const isSlideOut = computed(() => {
+      return props.slideOutLeft || props.slideOutRight
+    })
+
     watch(opened, (value) => {
       if (value) {
         scrollLocked.value = true
@@ -101,6 +133,9 @@ export default defineComponent({
       open,
       close,
       opened,
+      animationName,
+      modalBoxClass,
+      isSlideOut
     }
   },
 })
@@ -108,34 +143,43 @@ export default defineComponent({
 
 <style lang="postcss" scoped>
 .modal-backdrop {
-  backdrop-filter: blur(60px) saturate(200%);
+  backdrop-filter: blur(2px);
 }
 
-.slide-enter-active {
-  transition: all 50ms cubic-bezier(0, 0, 0.2, 1);
+.fade-enter-active {
+  transition: all 200ms ease-in-out;
 
   .modal-backdrop {
-    transition: all 50ms cubic-bezier(0, 0, 0.2, 1);
+    transition: all 100ms ease-in-out;
   }
 
   .modal-box {
-    transition: all 300ms cubic-bezier(0, 0, 0.2, 1);
+    transition: all 200ms ease-in-out;
   }
 }
 
-.slide-leave-active {
-  transition: all 50ms cubic-bezier(0.4, 0, 0.2, 1);
+.fade-leave-active {
+  transition: all 50ms ease-in-out;
 
   .modal-backdrop {
-    transition: all 50ms cubic-bezier(0.4, 0, 0.2, 1);
+    transition: all 50ms ease-in-out;
   }
 
   .modal-box {
-    transition: all 50ms cubic-bezier(0.4, 0, 0.2, 1);
+    transition: all 50ms ease-in-out;
   }
 }
 
-.slide-enter-from {
+.fade-enter-from {
+  .modal-backdrop {
+    opacity: 0;
+  }
+  .modal-box {
+    opacity: 0;
+  }
+}
+
+.fade-leave-to {
   .modal-backdrop {
     opacity: 0;
   }
@@ -144,11 +188,68 @@ export default defineComponent({
   }
 }
 
-.slide-leave-to {
+.slide-right-enter-active,
+.slide-left-enter-active {
+  transition: all 150ms ease-in-out;
+
+  .modal-backdrop {
+    transition: all 150ms ease-in-out;
+  }
+
+  .modal-box {
+    transition: all 150ms ease-in-out;
+  }
+}
+
+.slide-right-leave-active,
+.slide-left-leave-active {
+  transition: all 150ms ease-in-out;
+
+  .modal-backdrop {
+    transition: all 150ms ease-in-out;
+  }
+
+  .modal-box {
+    transition: all 150ms ease-in-out;
+  }
+}
+
+.slide-right-enter-from {
   .modal-backdrop {
     opacity: 0;
   }
   .modal-box {
+    transform: translateX(100%);
+    opacity: 0;
+  }
+}
+
+.slide-right-leave-to {
+  .modal-backdrop {
+    opacity: 0;
+  }
+  .modal-box {
+    transform: translateX(100%);
+    opacity: 0;
+  }
+}
+
+.slide-left-enter-from {
+  .modal-backdrop {
+    opacity: 0;
+  }
+  .modal-box {
+    transform: translateX(-100%);
+    opacity: 0;
+  }
+}
+
+.slide-left-leave-to {
+  .modal-backdrop {
+    opacity: 0;
+  }
+  .modal-box {
+    transform: translateX(-100%);
     opacity: 0;
   }
 }
