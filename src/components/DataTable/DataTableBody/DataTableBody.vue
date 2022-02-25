@@ -6,9 +6,9 @@
     <template v-if="config.groupBy">
       <template v-for="(group, groupKey) in bodyData" :key="groupKey">
         <data-table-group-record
-          :modelValue="{ group: groupKey, count: group.children.length }"
+          :model-value="{ group: groupKey, count: group.children.length }"
           :columns="groupColumns"
-          :totalCount="columns.length"
+          :total-count="columns.length"
           :collapsed="config.collapsed && config.collapsed[groupKey]"
           @toggle="toggleGroup"
         />
@@ -29,9 +29,9 @@
         @click="$emit('clickRecord', bodyData[key])"
         v-model="bodyData[key]"
         :columns="columns"
-        :isInlineEditMode="isInlineEditMode"
-        :actionComponent="actionComponent"
-        :hasActionColumn="hasActionColumn"
+        :is-inline-edit-mode="isInlineEditMode"
+        :action-component="actionComponent"
+        :has-action-column="hasActionColumn"
         @reload="$emit('reload')"
         @action="(e) => $emit('action', e)"
       >
@@ -52,14 +52,14 @@
         <span class="flex items-center min-w-[5.6rem]">{{ column.title }}:</span>
         <div class="flex w-full overflow-hidden">
           <slot name="leftIcon"></slot>
-          <input
+          <Input
             v-if="column.type === 'text' || column.type === 'number'"
             :type="column.type"
             class="bg-transparent truncate"
             v-model="selectedRecord[column.key]"
           />
 
-          <input
+          <Checkbox
             v-if="column.type === 'checkbox'"
             type="checkbox"
             class="bg-transparent truncate"
@@ -83,11 +83,11 @@
       </div>
     </div>
     <div class="p-4 pt-0 flex justify-end">
-      <button @click="updateSelectedRecord">Save</button>
-      <button
+      <Button @click="updateSelectedRecord">Save</Button>
+      <Button
         @click="modalRef.close"
         class="ml-2 bg-gray-400 hover:bg-gray-500"
-      >Cancel</button>
+      >Cancel</Button>
     </div>
   </Modal>
 </template>
@@ -99,9 +99,11 @@ import { AddUpdatedRecordSymbol } from "../ProvideDataTableSettings";
 import DatePicker from '../../DatePicker/DatePicker.vue';
 import Modal from '../../Modal/Modal.vue';
 import Select from '../../Select/Select.vue';
-
+import Button from '../../Button/Button.vue';
+import Input from '../../Input/Input.vue';
+import Checkbox from '../../Checkbox/Checkbox.vue';
 export default {
-  components: { Record, DataTableGroupRecord, DatePicker, Modal, Select },
+  components: { Record, DataTableGroupRecord, DatePicker, Modal, Select, Button, Input, Checkbox },
   emits: ["update:modelData", "update:modelConfig", "toggleGroup", "clickRecord"],
   props: {
     columns: {

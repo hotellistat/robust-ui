@@ -4,25 +4,24 @@
     :class="isInlineEditMode ? 'h-12 sm:h-auto' : 'h-10 sm:h-auto'"
     @click="$emit('click')"
   >
-    <div v-if="isInlineEditMode" class="flex w-full">
+    <div v-if="isInlineEditMode" class="flex w-full items-center">
       <slot name="leftIcon"></slot>
-      <input
+      <Input
         v-if="type === 'text' || type === 'number'"
         type="{{type}}"
         v-model="cell"
         class="bg-transparent truncate"
       />
 
-      <input
+      <Checkbox
         v-if="type === 'checkbox'"
-        type="checkbox"
         class="bg-transparent truncate"
         v-model="cell"
       />
       <DatePicker
         v-if="type === 'date'"
         class="p-2 col-span-2 sm:col-span-1"
-        :modelValue="new Date(cell)"
+        :model-value="new Date(cell)"
         @update:modelValue="(v) => cell = v"
       />
 
@@ -45,8 +44,10 @@
 import { computed, toRefs } from "vue";
 import DatePicker from '../../DatePicker/DatePicker.vue';
 import Select from '../../Select/Select.vue';
+import Input from '../../Input/Input.vue';
+import Checkbox from '../../Checkbox/Checkbox.vue';
 export default {
-  components: { DatePicker, Select },
+  components: { DatePicker, Select, Input, Checkbox },
   props: {
     modelValue: {
       type: [String, Number]

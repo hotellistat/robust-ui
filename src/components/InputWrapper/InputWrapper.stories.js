@@ -10,7 +10,7 @@ export default {
 }
 
 const DefaultTemplate = (args) => ({
-  template: `<InputWrapper v-bind="args"></InputWrapper>`,
+  template: `<InputWrapper v-bind="args" class="min-w-52"></InputWrapper>`,
   components: { InputWrapper },
   setup() {
     return { args }

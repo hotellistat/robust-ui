@@ -3,17 +3,16 @@
     :class="['data-table-header__icon', sort ? 'visible' : 'sm:invisible']"
     @click="onToggle"
   >
-    <sort-asc-icon v-if="sort < 0" size="16px" />
-    <sort-desc-icon v-else-if="sort > 0" size="16px" />
-    <menu-icon v-else size="16px" />
+    <ph-sort-descending v-if="sort < 0" size="16px" />
+    <ph-sort-ascending v-else-if="sort > 0" size="16px" />
+    <ph-list v-else size="16px" />
   </div>
 </template>
 <script>
 import { computed, toRefs } from "vue";
-import { SortAscIcon, SortDescIcon, MenuIcon } from "../../common/icons";
-
+import { PhSortAscending, PhSortDescending, PhList } from '@dnlsndr/vue-phosphor-icons'
 export default {
-  components: { SortAscIcon, SortDescIcon, MenuIcon },
+  components: { PhSortDescending, PhSortAscending, PhList },
   props: {
     modelValue: {
       type: Number,

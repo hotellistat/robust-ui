@@ -27,6 +27,16 @@ const columns = [
   },
 
   {
+    title: 'Bool',
+    key: 'bool',
+    sortable: true,
+    editable: true,
+    hidden: false,
+    sortDirection: 0,
+    type: 'checkbox',
+    width: 30,
+  },
+  {
     title: 'City',
     key: 'city',
     sortable: true,
@@ -48,6 +58,10 @@ const columns = [
       {
         title: 'DEU',
         value: 'DEU',
+      },
+      {
+        title: 'EU',
+        value: 'EU',
       },
     ],
     width: 30,
@@ -111,6 +125,7 @@ const data = [
     brand_name: 'Megane',
     enddate_contract_formatted: '05/04/2022',
     contract_name: 'Intelligent',
+    bool: true,
   },
   {
     id: '1d6f17a9-0e4c-4839-8cab-0e2f59921a4b',
@@ -122,6 +137,7 @@ const data = [
     brand_name: 'Clarabelle',
     enddate_contract_formatted: '06/04/2022',
     contract_name: 'Clever',
+    bool: true,
   },
   {
     id: '83be9c92-ed3a-4875-825c-8db64e0ca7b9',
@@ -133,6 +149,7 @@ const data = [
     brand_name: 'Andy',
     enddate_contract_formatted: '07/04/2022',
     contract_name: 'Intelligent',
+    bool: false,
   },
 ]
 const config = {

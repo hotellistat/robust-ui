@@ -3,9 +3,14 @@
     class="sticky bottom-4 opacity-40 hover:opacity-100 sm:opacity-100 sm:flex"
   >
     <div class="flex items-start ml-auto mt-4 w-full">
-      <pagination-bar v-if="!config.hidePagination" />
-      <page-size-select-bar v-if="!config.hidePagination" />
-      <button
+      <pagination
+        :total-count="totalCount"
+        :page="page"
+        :page-size="pageSize"
+        @update:page="setPage"
+        @update:page-size="selectPageSize"
+      />
+      <Button
         v-if="isDirty && (!config.hideUpdateButton || config.hideUpdateButton === false)"
         type="button"
         @click="patchRecords"
@@ -15,40 +20,46 @@
         <span
           class="group-hover:bg-gray-800 ml-3 inline-block py-0.5 px-3 text-xs font-medium rounded-full bg-gray-500 text-gray-200"
         >{{ Object.keys(updatedRecords).length }}</span>
-      </button>
+      </Button>
     </div>
   </div>
 </template>
-<script>
+<script lang="ts">
 import { inject } from "vue";
-import PaginationBar from "./PaginationBar";
-import PageSizeSelectBar from "./PageSizeSelectBar";
 import { StateSymbol, UpdateSymbol } from "../ProvideDataTableSettings";
+import Button from '../../Button/Button.vue';
+import Pagination from '../../Pagination/Pagination.vue'
 
 export default {
   components: {
-    PageSizeSelectBar,
-    PaginationBar
+    Button,
+    Pagination
   },
   props: {
     config: Object,
   },
   emits: ["patch-records"],
   setup(_, { emit }) {
-    const { isDirty, updatedRecords } = inject(StateSymbol);
+    const { isDirty, updatedRecords, pageSize, totalCount, page } = inject(StateSymbol);
 
     const updateSettings = inject(UpdateSymbol);
     const clearUpdatedRecords = () => {
       updateSettings("updatedRecords", {});
       updateSettings("isDirty", false);
     }
-
+    const setPage = (value) => updateSettings("page", value);
+    const selectPageSize = (value) => {
+      if (value !== pageSize.value) {
+        pageSize.value = value;
+        updateSettings("pageSize", value);
+      }
+    };
     const patchRecords = () => {
       emit("patch-records", Object.values(updatedRecords.value));
       clearUpdatedRecords();
     }
 
-    return { isDirty, updatedRecords, patchRecords };
+    return { isDirty, updatedRecords, patchRecords, pageSize, totalCount, page, setPage, selectPageSize };
   }
 };
 </script>

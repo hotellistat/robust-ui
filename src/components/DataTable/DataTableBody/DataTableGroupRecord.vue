@@ -1,25 +1,25 @@
 <template>
   <data-table-cell
     key="role"
-    :modelValue="record['group']"
+    :model-value="record['group']"
     class="bg-gray-700 py-3 hidden sm:grid cursor-pointer border-b-2"
     @click="toggleGroup"
   >
     <template v-slot:leftIcon>
-      <plus-icon v-if="collapsed" size="16px" class="mr-2 text-white" />
-      <minus-icon v-else size="16px" class="mr-2 text-white" />
+      <ph-plus v-if="collapsed" size="16px" class="mr-2 text-white" />
+      <ph-minus v-else size="16px" class="mr-2 text-white" />
     </template>
   </data-table-cell>
   <data-table-cell
     key="count"
-    :modelValue="`Count: ${record.count}`"
+    :model-value="`Count: ${record.count}`"
     class="bg-gray-700 py-3 cursor-pointer border-b-2"
     @click="toggleGroup"
   />
   <data-table-cell
     v-for="key in Array(totalCount - 2).keys()"
     :key="`empty-${key}`"
-    modelValue=" "
+    model-value=" "
     class="bg-gray-700 hidden sm:grid cursor-pointer border-b-2"
     @click="toggleGroup"
   />
@@ -27,10 +27,10 @@
 <script>
 import { computed, toRefs } from "vue";
 import DataTableCell from "./DataTableCell.vue";
-import { PlusIcon, MinusIcon } from "../common/icons";
+import { PhPlus, PhMinus } from '@dnlsndr/vue-phosphor-icons';
 
 export default {
-  components: { DataTableCell, PlusIcon, MinusIcon },
+  components: { DataTableCell, PhPlus, PhMinus },
   props: {
     modelValue: {
       type: Object,

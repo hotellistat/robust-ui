@@ -6,11 +6,11 @@
           class="data-table-header border-bottom-2 flex items-center justify-center px-4 py-3 text-sm tracking-wider cursor-pointer bg-gray-700 border-b-2"
         >
           <div class="mr-2 text-white">
-            <plus-icon
+            <ph-plus
               v-if="config.collapsed && config.collapsed[groupKey]"
               size="16px"
             />
-            <minus-icon v-else size="16px" />
+            <ph-minus v-else size="16px" />
           </div>
           <span class="truncate w-full">
             {{
@@ -45,10 +45,11 @@
 <script>
 import { computed, toRefs, reactive } from "vue";
 import TableHeader from "../DataTableHeader/DataTableHeader.vue";
-import { PlusIcon, MinusIcon } from "../common/icons";
+import { PhPlus, PhMinus } from '@dnlsndr/vue-phosphor-icons'
+
 
 export default {
-  components: { TableHeader, PlusIcon, MinusIcon },
+  components: { TableHeader, PhPlus, PhMinus },
   emits: ["update:modelValue"],
   props: {
     modelValue: {

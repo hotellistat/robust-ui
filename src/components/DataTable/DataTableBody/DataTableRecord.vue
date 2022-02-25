@@ -2,12 +2,7 @@
   <div
     class="block sm:hidden data-table-header border-bottom-2 flex items-center justify-center text-center whitespace-nowrap px-4 py-2 text-sm tracking-wider cursor-pointer bg-gray-200 dark:bg-gray-500"
   >Value</div>
-  <data-table-cell
-    v-if="isGrouped"
-    :key="-1"
-    modelValue
-    class="hidden sm:grid"
-  />
+  <data-table-cell v-if="isGrouped" :key="-1" class="hidden sm:grid" />
 
   <template
     v-for="column in columns.slice(isGrouped ? 1 : 0)"
@@ -23,7 +18,7 @@
         :type="column.type"
         :column="column.key"
         :options="column.options"
-        :isInlineEditMode="isInlineEditMode"
+        :is-inline-edit-mode="isInlineEditMode"
         :class="column.fnClassRule ? column.fnClassRule(record[column.key], record) : null"
         @click="$emit('click')"
         @change="changeHandler"
@@ -44,13 +39,13 @@
         @reload="$emit('reload')"
         @action="(e) => $emit('action', e)"
       />
-      <button
+      <Button
         v-else
         @click="$emit('edit')"
         class="p-1.5 rounded bg-blue-500 text-gray-100"
       >
         <ph-pencil :size="15" />
-      </button>
+      </Button>
     </div>
   </div>
 </template>
@@ -58,9 +53,9 @@
 import { toRefs, inject } from "vue";
 import DataTableCell from "./DataTableCell.vue";
 import { AddUpdatedRecordSymbol } from "../ProvideDataTableSettings";
-
+import Button from '../../Button/Button.vue';
 export default {
-  components: { DataTableCell },
+  components: { DataTableCell, Button },
   props: {
     modelValue: {
       type: Object,

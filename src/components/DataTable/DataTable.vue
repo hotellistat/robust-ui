@@ -21,8 +21,8 @@
         <data-table-settings
           :columns="allColumns"
           :config="tableConfig"
-          :activeColumn="filteredColumns"
-          @toggleColumn="toggleColumn"
+          :active-column="filteredColumns"
+          @toggle-column="toggleColumn"
         />
       </div>
     </div>
@@ -34,20 +34,20 @@
         v-model="columnData"
         :data="bodyData"
         :config="tableConfig"
-        :gridTemplateColumnsCss="gridTemplateColumnsCss"
-        :isInlineEditMode="isInlineEditMode === 'true'"
-        :hasActionColumn="hasActionColumn"
+        :grid-template-columns-css="gridTemplateColumnsCss"
+        :is-inline-edit-mode="isInlineEditMode === 'true'"
+        :has-action-column="hasActionColumn"
       />
       <table-body
         :columns="columnData"
-        :isInlineEditMode="isInlineEditMode === 'true'"
+        :is-inline-edit-mode="isInlineEditMode === 'true'"
         v-model:data="bodyData"
         v-model:config="tableConfig"
         @toggleGroup="toggleGroup"
         @clickRecord="recordClickHandler"
-        :gridTemplateColumnsCss="gridTemplateColumnsCss"
-        :actionComponent="actionComponent"
-        :hasActionColumn="hasActionColumn"
+        :grid-template-columns-css="gridTemplateColumnsCss"
+        :action-component="actionComponent"
+        :has-action-column="hasActionColumn"
         @reload="$emit('reload')"
         @action="(e) => $emit('action', e)"
       >
@@ -61,13 +61,10 @@
       @patch-records="(records) => $emit('patch-records', records)"
     />
     <div v-if="isLoading" class="loading min-h-[400px]">
-      <div class="relative w-full h-full">
-        <img
-          src="@/components/DataTable/common/icons/loading.gif"
-          alt="Loading"
-          width="80"
-          style="position: absolute; top: 50%; left: 50%"
-        />
+      <div
+        class="relative w-full h-full flex items-center justify-center text-white"
+      >
+        <Spinner :size="100" />
       </div>
     </div>
   </div>
@@ -82,6 +79,7 @@ import DataTableSettings from "./DataTableSettings";
 import DataSearchBox from "./DataSearchBox/DataSearchBox.vue";
 import { useTableGroup } from "./composables";
 import { StateSymbol, UpdateSymbol } from "./ProvideDataTableSettings";
+import Spinner from '../Spinner/Spinner.vue'
 
 export default {
   components: {
@@ -89,7 +87,8 @@ export default {
     DataSearchBox,
     TableHeader,
     TableFooter,
-    TableBody
+    TableBody,
+    Spinner
   },
   emits: ["patch-records", "page", "search", "record-click", "search-submit"],
   data() {
