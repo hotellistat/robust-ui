@@ -8,7 +8,7 @@ export default {
     variant: {
       control: {
         type: 'select',
-        options: ['primary', 'warn', 'muted', 'transparent'],
+        options: ['primary', 'warn', 'muted', 'transparent', 'danger', 'danger-text', 'danger-outline'],
       },
     },
     loading: { control: { type: 'boolean' } },
