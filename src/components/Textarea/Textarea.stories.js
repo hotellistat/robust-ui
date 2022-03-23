@@ -15,7 +15,7 @@ export default {
 }
 
 const DefaultTemplate = (args) => ({
-  template: '<Textarea v-bind="args"/>',
+  template: '<Textarea v-bind="args" class="mb-5"/>',
   components: { Textarea },
   setup() {
     return { args }
