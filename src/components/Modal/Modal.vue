@@ -53,6 +53,10 @@ export default defineComponent({
       type: Boolean,
       default: false,
     },
+    size: {
+      type: String,
+      default: "md"
+    },
     slideOutLeft: {
       type: Boolean,
       default: false,
@@ -79,14 +83,32 @@ export default defineComponent({
     })
 
     const modalBoxClass = computed(() => {
+      let classString = "";
+
       if (props.slideOutLeft) {
-        return "absolute left-0 top-0 bottom-0 h-full min-h-0 max-w-lg w-full"
-      }
-      if (props.slideOutRight) {
-        return "absolute right-0 top-0 bottom-0 h-full min-h-0 max-w-lg w-full"
+        classString += "absolute left-0 top-0 bottom-0 h-full min-h-0 w-full"
+      } else if (props.slideOutRight) {
+        classString += "absolute right-0 top-0 bottom-0 h-full min-h-0 w-full"
+      } else {
+        classString += "mx-auto h-full min-h-0"
       }
 
-      return "mx-auto h-full min-h-0 max-w-lg"
+      switch(props.size) {
+        case "lg": {
+          classString += " max-w-4xl"
+          break;
+        }
+        case "sm": {
+          classString += " max-w-md"
+          break;
+        }
+        default: {
+          classString += " max-w-lg"
+          break;
+        }
+      }
+
+      return classString;
     })
 
     const isSlideOut = computed(() => {
