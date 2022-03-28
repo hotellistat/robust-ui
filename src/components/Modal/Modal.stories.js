@@ -73,3 +73,22 @@ SlideLeft.args = {
     opened.value = value
   }
 }
+
+const LargeTemplate = (args) => ({
+  template: ' <RobustButton @click="args.opened.value = true">modal open {{args.opened}}</RobustButton><Modal size="lg" v-bind="args">test</Modal>',
+  components: { Modal, RobustButton },
+  setup() {
+    return { args }
+  },
+})
+
+export const Large = LargeTemplate.bind()
+
+Large.args = {
+  title: 'Modal title',
+  opened: opened,
+  "onUpdate:opened": (value) => {
+    console.log("opeone");
+    opened.value = value
+  }
+}
