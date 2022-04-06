@@ -1,16 +1,13 @@
 <script lang="ts">
-import RobustInputWrapper from '../InputWrapper/InputWrapper.vue'
 import RobustPopper from '../Popper/Popper'
 import {
   ref,
   computed,
   nextTick,
   toRefs,
-  onMounted,
   defineComponent,
   PropType,
 } from 'vue'
-import { debouncedWatch } from '@vueuse/core'
 import { Modifier } from '@popperjs/core'
 import { onClickOutside } from '@vueuse/core'
 import { PhCheck, PhCaretDown } from '@dnlsndr/vue-phosphor-icons'
@@ -19,7 +16,6 @@ export default defineComponent({
 
   components: {
     RobustPopper,
-    RobustInputWrapper,
     PhCheck,
     PhCaretDown,
   },
@@ -31,12 +27,6 @@ export default defineComponent({
     zIndex: {
       type: String,
       default: 'z-[50]',
-    },
-    hint: {
-      type: String,
-    },
-    error: {
-      type: String,
     },
     class: {
       type: String,
@@ -55,10 +45,7 @@ export default defineComponent({
     readonly: {
       type: Boolean,
       default: false,
-    },
-    searchFunction: {
-      type: Function,
-    },
+    }
   },
 
   setup(props, { emit, attrs }) {
@@ -71,37 +58,6 @@ export default defineComponent({
     const currentActive = ref()
     const wrapperRef = ref()
 
-    const search = ref('')
-
-    let computedOptions = ref([])
-
-    async function filterBySearchTerm(value) {
-      if (props.searchFunction !== undefined) {
-        computedOptions.value = await props.searchFunction(value)
-      }
-
-      if (value === '') {
-        computedOptions.value = options.value
-      } else {
-        computedOptions.value = options.value.filter(
-          (option) =>
-            option.title.toLowerCase().substring(0, value.length) ===
-            value.toLowerCase()
-        )
-      }
-    }
-
-    debouncedWatch(
-      search,
-      async (value) => {
-        await filterBySearchTerm(value)
-      },
-      { debounce: 150 }
-    )
-
-    onMounted(async () => {
-      await filterBySearchTerm('')
-    })
 
     const popperModifiers: Array<
       Partial<Modifier<string, Record<string, unknown>>>
@@ -130,48 +86,35 @@ export default defineComponent({
 
     function selectItem(item) {
       nextTick(() => {
-        closeDropdown()
+        open.value = false
       })
       emit('update:modelValue', item.value)
       emit('change', item.value)
     }
 
-    function openDropdown() {
-      open.value = true
-      emit('focus')
+    function toggleDropdown() {
+      open.value = !open.value
     }
 
-    onClickOutside(popperRef, (event) => {
-      if (open.value) {
-        resetFields()
-        closeDropdown()
+    onClickOutside(wrapperRef, () => {
+      if(open.value) {
+        open.value = false
         emit('blur')
       }
     })
-
-    function closeDropdown() {
-      open.value = false
-    }
-
-    function resetFields() {
-      search.value = ''
-    }
+  
 
     return {
       refSelectFixInput,
       refSelectFixContainer,
-      closeDropdown,
       open,
       props,
-      openDropdown,
+      toggleDropdown,
       wrapperRef,
       popperModifiers,
       activeItem,
       selectItem,
-      computedOptions,
-      resetFields,
       attrs,
-      search,
       popperRef,
       currentActive
     }
@@ -193,9 +136,7 @@ export default defineComponent({
     focus-within:outline-none 
     focus-within:ring 
     focus-within:dark:border-primary-500"
-    @click="openDropdown"
-    @focus="openDropdown"
-    @blur="closeDropdown"
+    @click="toggleDropdown"
   >
     <div
       class="flex h-full w-full items-center bg-transparent text-current outline-none"
@@ -216,19 +157,20 @@ export default defineComponent({
         :class="{ 'rotate-180 transform': open }"
       />
     </div>
-    <RobustPopper
-
+    
+  </div>
+  <RobustPopper
       v-model:open="open"
       ref="popperRef"
-      :append-to="wrapperRef"
+      :append-to="wrapperRef?.value"
       :modifiers="popperModifiers"
       :options="{
         placement: 'bottom-start',
       }"
     >
-      <ul v-if="computedOptions.length > 0" class="max-h-72 overflow-auto">
+      <ul v-if="options.length > 0" class="max-h-72 overflow-auto">
         <li
-          v-for="option in computedOptions"
+          v-for="option in options"
           :key="option.value"
           class="flex cursor-pointer items-center px-4 py-2 transition-colors duration-200 hover:bg-gray-100 dark:hover:bg-gray-700"
           @click="selectItem(option)"
@@ -243,16 +185,6 @@ export default defineComponent({
       </li>
     </ul>
     <div v-else class="py-2 text-center text-gray-400">No options</div>
-    </RobustPopper>
-  </div>
-  <label v-if="hint !== undefined || error !== undefined" class="block pt-1">
-      <div
-        v-if="hint !== undefined"
-        class="select-none text-xs text-gray-400"
-      >{{ hint }}</div>
-      <div
-        v-if="error !== undefined"
-        class="select-none text-xs text-red-400 dark:text-red-400"
-      >{{ error }}</div>
-  </label>
+  </RobustPopper>
+  
 </template>

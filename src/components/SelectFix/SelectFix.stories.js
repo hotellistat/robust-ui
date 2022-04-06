@@ -9,8 +9,6 @@ export default {
     readonly: { control: { type: 'boolean' } },
     condensed: { control: { type: 'boolean' } },
     modelValue: { control: { type: 'text' } },
-    hint: { control: { type: 'text' } },
-    error: { control: { type: 'text' } },
   },
 }
 
@@ -58,21 +56,6 @@ Default.args = {
   title: 'Input title',
 }
 
-export const Hint = DefaultTemplate.bind()
-
-Hint.args = {
-  title: 'Input title',
-  hint: 'This is an input hint. It is supposed to help the user understand the reason this input exists and what it does',
-}
-
-export const ErrorHint = DefaultTemplate.bind()
-
-ErrorHint.args = {
-  title: 'Input title',
-  hint: 'This is an input hint. It is supposed to help the user understand the reason this input exists and what it does',
-  error:
-    'This is an input error. It tells the user, that there is something wrong with the current input state',
-}
 
 
 const OptionsTemplate = (args) => ({
