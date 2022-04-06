@@ -12,7 +12,7 @@ import { Modifier } from '@popperjs/core'
 import { onClickOutside } from '@vueuse/core'
 import { PhCheck, PhCaretDown } from '@dnlsndr/vue-phosphor-icons'
 export default defineComponent({
-  name: 'RobustSelectFix',
+  name: 'RobustSelectInline',
 
   components: {
     RobustPopper,
@@ -49,8 +49,8 @@ export default defineComponent({
   },
 
   setup(props, { emit, attrs }) {
-    const refSelectFixContainer = ref()
-    const refSelectFixInput = ref()
+    const refSelectInlineContainer = ref()
+    const refSelectInlineInput = ref()
     const { options } = toRefs(props)
 
     const open = ref(false)
@@ -105,8 +105,8 @@ export default defineComponent({
   
 
     return {
-      refSelectFixInput,
-      refSelectFixContainer,
+      refSelectInlineInput,
+      refSelectInlineContainer,
       open,
       props,
       toggleDropdown,

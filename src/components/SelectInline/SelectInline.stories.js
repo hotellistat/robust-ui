@@ -1,9 +1,9 @@
-import SelectFix from './SelectFix.vue'
-import SelectFixOption from './SelectFixOption.vue'
+import SelectInline from './SelectInline.vue'
+import SelectInlineOption from './SelectInlineOption.vue'
 import { ref } from 'vue'
 export default {
-  title: 'Ui/SelectFix',
-  component: SelectFix,
+  title: 'Ui/SelectInline',
+  component: SelectInline,
   argTypes: {
     onInput: { action: 'input' },
     readonly: { control: { type: 'boolean' } },
@@ -14,8 +14,8 @@ export default {
 
 const DefaultTemplate = (args) => ({
   template:
-    '<SelectFix v-bind="args" :options="options" v-model="value"/><br/>Value: {{value}}',
-  components: { SelectFix },
+    '<SelectInline v-bind="args" :options="options" v-model="value"/><br/>Value: {{value}}',
+  components: { SelectInline },
   setup() {
     let value = ref(undefined)
 
@@ -60,10 +60,10 @@ Default.args = {
 
 const OptionsTemplate = (args) => ({
   template:
-    `<SelectFix v-bind="args" v-model="value">
-      <SelectFixOption value="test" identifier="hello">Hello</SelectFixOption>
-    </SelectFix>`,
-  components: { SelectFix, SelectFixOption },
+    `<SelectInline v-bind="args" v-model="value">
+      <SelectInlineOption value="test" identifier="hello">Hello</SelectInlineOption>
+    </SelectInline>`,
+  components: { SelectInline, SelectInlineOption },
   setup() {
     let value = ref(undefined)
 
