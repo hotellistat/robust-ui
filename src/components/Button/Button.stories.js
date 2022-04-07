@@ -1,5 +1,5 @@
 import Button from './Button.vue'
-import { PhSmiley, PhPaperPlaneTilt } from "@dnlsndr/vue-phosphor-icons"
+import { PhSmiley, PhPaperPlaneTilt } from '@dnlsndr/vue-phosphor-icons'
 export default {
   title: 'Ui/Button',
   component: Button,
@@ -20,7 +20,7 @@ export default {
 
 const DefaultTemplate = (args) => ({
   components: { Button },
-  template: '<Button v-bind="args">Click here</Button>',
+  template: '<Button v-bind="args" >Click here</Button>',
   setup() {
     return { args }
   },

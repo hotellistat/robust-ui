@@ -77,7 +77,7 @@ export default defineComponent({
     <div
       v-bind="listeners"
       ref="wrapperRef"
-      class="relative flex min-w-52 rounded-md border border-gray-200 bg-gray-50 dark:border-gray-700 dark:bg-gray-900"
+      class="relative flex rounded-md border border-gray-200 bg-gray-50 dark:border-gray-600 dark:bg-gray-800"
       :class="[
         $props.boxClass,
         fixedHeight ? (condensed ? 'h-9' : 'h-10') : undefined,
