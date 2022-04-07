@@ -70,7 +70,7 @@
     "vitepress": "^0.22.2",
     "vue-eslint-parser": "^8.2.0",
     "vue-loader": "^17.0.0",
-    "vue-tsc": "^0.31.4"
+    "vue-tsc": "^0.33.9"
   },
   "dependencies": {
     "@popperjs/core": "^2.11.2",
