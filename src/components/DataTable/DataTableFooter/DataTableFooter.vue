@@ -1,3 +1,4 @@
+
 <template>
   <div
     class="sticky bottom-4 opacity-40 hover:opacity-100 sm:opacity-100 sm:flex"
@@ -25,12 +26,12 @@
   </div>
 </template>
 <script lang="ts">
-import { inject } from "vue";
+import { inject, defineComponent  } from "vue";
 import { StateSymbol, UpdateSymbol } from "../ProvideDataTableSettings";
 import Button from '../../Button/Button.vue';
 import Pagination from '../../Pagination/Pagination.vue'
 
-export default {
+export default defineComponent ({
   components: {
     Button,
     Pagination
@@ -42,7 +43,7 @@ export default {
   setup(_, { emit }) {
     const { isDirty, updatedRecords, pageSize, totalCount, page } = inject(StateSymbol);
 
-    const updateSettings = inject(UpdateSymbol);
+    const updateSettings: any = inject(UpdateSymbol);
     const clearUpdatedRecords = () => {
       updateSettings("updatedRecords", {});
       updateSettings("isDirty", false);
@@ -61,5 +62,5 @@ export default {
 
     return { isDirty, updatedRecords, patchRecords, pageSize, totalCount, page, setPage, selectPageSize };
   }
-};
+});
 </script>

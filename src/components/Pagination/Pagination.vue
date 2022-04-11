@@ -1,3 +1,4 @@
+
 <template>
   <div class="flex">
     <nav
@@ -85,11 +86,11 @@
   </div>
 </template>
 <script lang="ts">
-import { ref, watch, toRefs, onMounted } from "vue";
+import { ref, watch, toRefs, onMounted, defineComponent } from "vue";
 import { PhCaretLeft, PhCaretRight, PhCaretDown } from '@dnlsndr/vue-phosphor-icons';
 import { onClickOutside } from '@vueuse/core';
 
-export default {
+export default defineComponent ({
   components: {
     PhCaretLeft,
     PhCaretRight,
@@ -201,7 +202,7 @@ export default {
       containerRef
     };
   }
-};
+});
 </script>
 
 <style lang="postcss" scoped>

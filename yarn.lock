@@ -12306,10 +12306,10 @@
   "resolved" "https://registry.npmjs.org/vary/-/vary-1.1.2.tgz"
   "version" "1.1.2"
 
-"vee-validate@^4.5.9":
-  "integrity" "sha512-Ce0hE/5IpguKgnwthS+6S4+rjHoPjcDwORtExn+IJIHZXYURN3cgQrZFTudqgpfchpTJAZbJcKD936tzWn15Ag=="
-  "resolved" "https://registry.npmjs.org/vee-validate/-/vee-validate-4.5.9.tgz"
-  "version" "4.5.9"
+"vee-validate@^4.5.10":
+  "integrity" "sha512-7dZE0PZTNY3Ztp6Gz8iw+QS7Fz59vU1qkD0rBJkldkf9Faw2lFjWgE0tiCist5RQkLgt7/HaVbojzb/SCdutfA=="
+  "resolved" "https://registry.npmjs.org/vee-validate/-/vee-validate-4.5.10.tgz"
+  "version" "4.5.10"
   dependencies:
     "@vue/devtools-api" "^6.0.0-beta.15"
 

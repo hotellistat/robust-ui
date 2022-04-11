@@ -1,3 +1,4 @@
+
 <template>
   <div
     class="block sm:hidden data-table-header border-bottom-2 flex items-center justify-center text-center whitespace-nowrap px-4 py-2 text-sm tracking-wider cursor-pointer bg-gray-200 dark:bg-gray-500"
@@ -50,11 +51,11 @@
   </div>
 </template>
 <script lang="ts">
-import { toRefs, inject } from "vue";
+import { toRefs, inject, defineComponent, PropType } from "vue";
 import DataTableCell from "./DataTableCell.vue";
 import { AddUpdatedRecordSymbol } from "../ProvideDataTableSettings";
 import Button from '../../Button/Button.vue';
-export default {
+export default defineComponent({
   components: { DataTableCell, Button },
   props: {
     modelValue: {
@@ -62,7 +63,7 @@ export default {
       default: () => ({})
     },
     columns: {
-      type: Array,
+      type: Array as PropType<any[]>,
       default: () => []
     },
     isGrouped: {
@@ -80,11 +81,11 @@ export default {
       default: false
     }
   },
-  emits: ["update:modelValue", "click", "edit"],
+  emits: ["update:modelValue", "click", "edit", "reload", "action"],
   setup(props) {
     const { modelValue } = toRefs(props);
 
-    const addUpdatedRecord = inject(AddUpdatedRecordSymbol);
+    const addUpdatedRecord: any = inject(AddUpdatedRecordSymbol);
 
     const changeHandler = () => {
       addUpdatedRecord(modelValue.value);
@@ -92,8 +93,8 @@ export default {
 
     return {
       record: modelValue,
-      changeHandler
+      changeHandler,
     };
   }
-};
+});
 </script>

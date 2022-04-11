@@ -25,16 +25,16 @@
 </template>
 
 <script lang="ts">
-import { toRefs, computed } from "vue";
+import { toRefs, computed, defineComponent, PropType  } from "vue";
 import ProvideDataTableSettings from "./ProvideDataTableSettings";
 import DataTable from "./DataTable.vue";
 
-export default {
+export default defineComponent ({
   components: { ProvideDataTableSettings, DataTable },
-  emits: ["page", "update:modelValue", "patch-records", "record-click", "search-submit"],
+  emits: ["page", "update:modelValue", "patch-records", "record-click", "search-submit", "reload", "search", "action"],
   props: {
     columns: {
-      type: Array,
+      type: Array as PropType<any[]>,
       default: () => []
     },
     config: {
@@ -71,7 +71,7 @@ export default {
   },
   setup(props, { emit, slots }) {
     const { modelValue } = toRefs(props);
-    const slotNames = computed(() => props.columns.value.map(e => e.key))
+    const slotNames = computed(() => (props.columns as any).value.map(e => e.key))
     const bodyData = computed({
       get() {
         return modelValue.value;
@@ -88,8 +88,9 @@ export default {
       search,
       bodyData,
       slotNames,
-      $slots: slots
+      $slots: slots,
+      $props: props as any
     };
   }
-};
+});
 </script>
