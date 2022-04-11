@@ -1,3 +1,4 @@
+
 <template>
   <div
     class="data-table-body block sm:grid col-span-1"
@@ -45,7 +46,7 @@
   <Modal name="update-field" ref="modalRef">
     <div class="px-6 pt-8 pb-4 grid grid-cols-2">
       <div
-        v-for="column in columns"
+        v-for="column in (columns as any)"
         :key="column.key"
         class="flex items-center mx-2 my-4"
       >
@@ -92,7 +93,7 @@
   </Modal>
 </template>
 <script lang="ts">
-import { toRefs, reactive, computed, ref, inject } from "vue";
+import { toRefs, reactive, computed, ref, inject, defineComponent, Ref  } from "vue";
 import Record from "./DataTableRecord.vue";
 import DataTableGroupRecord from "./DataTableGroupRecord.vue";
 import { AddUpdatedRecordSymbol } from "../ProvideDataTableSettings";
@@ -102,9 +103,9 @@ import Select from '../../Select/Select.vue';
 import Button from '../../Button/Button.vue';
 import Input from '../../Input/Input.vue';
 import Checkbox from '../../Checkbox/Checkbox.vue';
-export default {
+export default defineComponent ({
   components: { Record, DataTableGroupRecord, DatePicker, Modal, Select, Button, Input, Checkbox },
-  emits: ["update:modelData", "update:modelConfig", "toggleGroup", "clickRecord"],
+  emits: ["update:modelData", "update:modelConfig", "toggleGroup", "clickRecord", "reload", "action"],
   props: {
     columns: {
       type: Array,
@@ -132,8 +133,8 @@ export default {
     const modalRef = ref(null);
     const selectedRecord = ref(null);
 
-    const addUpdatedRecord = inject(AddUpdatedRecordSymbol);
-    const bodyData = computed({
+    const addUpdatedRecord: any = inject(AddUpdatedRecordSymbol);
+    const bodyData: Ref<any> = computed({
       get() {
         return data.value;
       },
@@ -143,22 +144,20 @@ export default {
     });
 
     const groupColumns = config.value.groupBy
-      ? computed({
-        get() {
-          return [
-            columns.value.find(
-              (column) => column.key === config.value.groupBy
-            ),
-            {
-              title: "Count",
-              key: "count",
-              sortable: true,
-              editable: true,
-              hidden: false,
-              sortDirection: 0
-            }
-          ];
-        }
+      ? computed(() => {
+        return [
+          columns.value.find(
+            (column: any) => column.key === config.value.groupBy
+          ),
+          {
+            title: "Count",
+            key: "count",
+            sortable: true,
+            editable: true,
+            hidden: false,
+            sortDirection: 0
+          }
+        ];
       })
       : "";
 
@@ -181,6 +180,7 @@ export default {
     return {
       $slots: slots,
       bodyData,
+      config,
       groupColumns,
       toggleGroup,
       modalRef,
@@ -190,7 +190,7 @@ export default {
       ...reactive({ size: columns.value.length })
     };
   }
-};
+});
 </script>
 <style scoped>
 @media (min-width: 640px) {

@@ -1,3 +1,4 @@
+
 <template>
   <div>
     <div class="flex flex-wrap mb-1.5 items-center justify-between">
@@ -71,7 +72,7 @@
 </template>
 
 <script lang="ts">
-import { ref, toRefs, computed, inject, watch, onMounted } from "vue";
+import { ref, toRefs, computed, inject, watch, onMounted, defineComponent, Ref } from "vue";
 import TableHeader from "./DataTableHeader/DataTableHeaderContainer.vue";
 import TableFooter from "./DataTableFooter";
 import TableBody from "./DataTableBody/DataTableBody.vue";
@@ -81,7 +82,7 @@ import { useTableGroup } from "./composables";
 import { StateSymbol, UpdateSymbol } from "./ProvideDataTableSettings";
 import Spinner from '../Spinner/Spinner.vue'
 
-export default {
+export default defineComponent({
   components: {
     DataTableSettings,
     DataSearchBox,
@@ -90,7 +91,7 @@ export default {
     TableBody,
     Spinner
   },
-  emits: ["patch-records", "page", "search", "record-click", "search-submit"],
+  emits: ["patch-records", "page", "search", "record-click", "search-submit", "action", "reload"],
   data() {
     return {
       isInlineEditModeTabs: [
@@ -163,7 +164,7 @@ export default {
       isTurnOnInlineMode,
       hasActionColumn,
     } = toRefs(props);
-    const updateSettings = inject(UpdateSymbol);
+    const updateSettings: any = inject(UpdateSymbol);
     const { pageSize, page, keyword } = inject(StateSymbol);
     const isInlineEditMode = ref("true");
     if (!isTurnOnInlineMode.value) {
@@ -171,7 +172,7 @@ export default {
     }
     let defaultPageSize = pageSize.value;
 
-    const allColumns = ref(columns.value);
+    const allColumns: Ref<any> = ref(columns.value);
     const filteredColumns = ref(
       allColumns.value.filter((column) => !column.hidden)
     );
@@ -254,17 +255,15 @@ export default {
       }
     };
 
-    const tableConfig = computed({
-      get() {
-        return {
-          ...refConfig.value,
-          size: columnData.value.length
-        };
-      }
+    const tableConfig: Ref<any> = computed(() => {
+      return {
+        ...refConfig.value,
+        size: columnData.value.length
+      };
     });
 
     const toggleColumn = (key) => {
-      allColumns.value = allColumns.value.map((column) => {
+      allColumns.value = allColumns.value.map((column: any) => {
         if (column.key === key) column.hidden = !column.hidden;
         return column;
       });
@@ -293,11 +292,12 @@ export default {
       filteredColumns,
       toggleColumn,
       isInlineEditMode,
+      isTurnOnInlineMode,
       gridTemplateColumnsCss,
       recordClickHandler
     };
   }
-};
+});
 </script>
 
 <style scoped>
