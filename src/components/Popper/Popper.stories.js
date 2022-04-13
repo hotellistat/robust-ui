@@ -1,5 +1,5 @@
 import { computed, ref } from 'vue'
-import Popper from './Popper.vue'
+import Popper from './Popper'
 import { RobustButton } from '..'
 
 export default {
@@ -14,31 +14,36 @@ export default {
 const DefaultTemplate = (args) => ({
   template: `
   <div style="height: 400px">
-    <Popper v-bind="args" v-model:open="value" appendTo="btn">
-      <template #pop>
-        <div>Popcorn</div>
-        <div>sizes</div>
-        <div>&amp; Price</div>
-        <div>XXS: $1.99</div>
-        <div>XS: $2.99</div>
-        <div>S: $3.99</div>
-        <div>M: $4.99</div>
-        <div>L: $5.99</div>
-        <div>XL: $6.99</div>
-        <div>XXL: $7.99</div>
-      </template>
-      <template #root>
-        <RobustButton>show me!</RobustButton>
-      </template>
+    <RobustButton ref="btn" @click="open=!open">show me!</RobustButton>
+    <Popper ref="popperRef"
+      class="z-[100] origin-top-left"
+      :append-to="btnref"
+      v-model:open="open"
+      :options="{
+        placement: 'bottom-start',
+      }"
+      v-bind="args"
+      >
+      <div class="p-3">
+        <li>Lorem ipsum dolor sit amet</li>
+        <li>Lorem ipsum dolor sit amet</li>
+        <li>Lorem ipsum dolor sit amet</li>
+        <li>Lorem ipsum dolor sit amet</li>
+        <li>Lorem ipsum dolor sit amet</li>
+      </div>
     </Popper>
   </div>`,
   components: { Popper, RobustButton },
   setup() {
     const value = ref(false)
-    return { args, value }
+    const btnref = ref(null)
+    const open = ref(false)
+    return { args, value, btnref, open }
   },
 })
+
 export const Default = DefaultTemplate.bind({})
+
 Default.args = {
   title: 'Popper title',
   description: 'Popper description text to be placed here',
