@@ -1,26 +1,19 @@
 <template>
   <teleport to="body">
     <transition v-bind="$attrs" :name="animationName">
-      <div
-        v-if="opened"
-        ref="root"
+      <div v-if="opened" ref="root"
         class="fixed top-0 bottom-0 left-0 right-0 z-[100] p-4 lg:pt-24"
-        role="dialog"
-      >
+        role="dialog">
         <div
           class="modal-backdrop absolute top-0 left-0 right-0 bottom-0 bg-gray-900 bg-opacity-50"
-          @click.self="close"
-        ></div>
+          @click.self="close"></div>
 
         <div :class="['modal-box', modalBoxClass]" @keydown.esc="close">
           <div
             class="relative flex max-h-full min-h-0 w-full flex-col bg-white shadow-xl dark:bg-gray-800"
-            :class="[modalClass, !isSlideOut ? 'rounded-md' : 'h-full']"
-          >
-            <div
-              v-if="$slots.title"
-              class="flex flex-shrink-0 items-center p-4 text-xl"
-            >
+            :class="[modalClass, !isSlideOut ? 'rounded-md' : 'h-full']">
+            <div v-if="$slots.title"
+              class="flex flex-shrink-0 items-center p-4 text-xl">
               <div class="leading-4">
                 <slot name="title"></slot>
               </div>
@@ -93,7 +86,7 @@ export default defineComponent({
         classString += "mx-auto h-full min-h-0"
       }
 
-      switch(props.size) {
+      switch (props.size) {
         case "lg": {
           classString += " max-w-4xl"
           break;
@@ -115,13 +108,18 @@ export default defineComponent({
       return props.slideOutLeft || props.slideOutRight
     })
 
-    watch(opened, (value) => {
+    watch(opened, stateChange)
+
+    function stateChange(value) {
       if (value) {
+        window.addEventListener("keydown", keyPress)
         scrollLocked.value = true
       } else {
+        window.removeEventListener("keydown", keyPress)
         scrollLocked.value = false
       }
-    })
+    }
+
 
     function keyPress(e: KeyboardEvent) {
       if (e.key === "Escape" && opened.value === true) {
@@ -132,11 +130,7 @@ export default defineComponent({
     }
 
     onMounted(() => {
-      window.addEventListener("keydown", keyPress)
-    })
-
-    onUnmounted(() => {
-      window.removeEventListener("keydown", keyPress)
+      stateChange(opened.value)
     })
 
     async function open() {
@@ -196,6 +190,7 @@ export default defineComponent({
   .modal-backdrop {
     opacity: 0;
   }
+
   .modal-box {
     opacity: 0;
   }
@@ -205,6 +200,7 @@ export default defineComponent({
   .modal-backdrop {
     opacity: 0;
   }
+
   .modal-box {
     opacity: 0;
   }
@@ -240,6 +236,7 @@ export default defineComponent({
   .modal-backdrop {
     opacity: 0;
   }
+
   .modal-box {
     transform: translateX(100%);
     opacity: 0;
@@ -250,6 +247,7 @@ export default defineComponent({
   .modal-backdrop {
     opacity: 0;
   }
+
   .modal-box {
     transform: translateX(100%);
     opacity: 0;
@@ -260,6 +258,7 @@ export default defineComponent({
   .modal-backdrop {
     opacity: 0;
   }
+
   .modal-box {
     transform: translateX(-100%);
     opacity: 0;
@@ -270,6 +269,7 @@ export default defineComponent({
   .modal-backdrop {
     opacity: 0;
   }
+
   .modal-box {
     transform: translateX(-100%);
     opacity: 0;

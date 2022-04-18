@@ -27,6 +27,8 @@ const DefaultTemplate = (args) => ({
 export const Default = DefaultTemplate.bind()
 
 let opened = ref(true)
+
+
 Default.args = {
   title: 'Modal title',
   opened: opened,
@@ -87,6 +89,37 @@ export const Large = LargeTemplate.bind()
 Large.args = {
   title: 'Modal title',
   opened: opened,
+  "onUpdate:opened": (value) => {
+    console.log("opeone");
+    opened.value = value
+  }
+}
+
+
+
+
+const OverlayTemplate = (args) => ({
+  template: `<RobustButton @click="args.opened.value = true">modal open {{args.opened}}</RobustButton>
+  <Modal v-bind="args">
+  <RobustButton @click="args.overlayOpened.value = true">modal open {{args.overlayOpened}}</RobustButton>
+  </Modal>
+  <Modal :opened="args.overlayOpened">
+  overlay
+  </Modal>`,
+  components: { Modal, RobustButton },
+  setup() {
+    return { args }
+  },
+})
+
+export const Overlay = OverlayTemplate.bind()
+
+let overlayOpened = ref(false)
+
+Overlay.args = {
+  title: 'Modal title',
+  opened: opened,
+  overlayOpened,
   "onUpdate:opened": (value) => {
     console.log("opeone");
     opened.value = value
