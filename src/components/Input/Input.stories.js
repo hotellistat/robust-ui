@@ -29,6 +29,13 @@ Default.args = {
   title: 'Input title',
 }
 
+export const Placeholder = DefaultTemplate.bind()
+
+Placeholder.args = {
+  placeholder: "this is a placeholder",
+  title: 'Input title',
+}
+
 export const Hint = DefaultTemplate.bind()
 
 Hint.args = {
