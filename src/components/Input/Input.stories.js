@@ -4,7 +4,6 @@ export default {
   title: 'Ui/Input',
   component: Input,
   argTypes: {
-    onInput: { action: 'input' },
     readonly: { control: { type: 'boolean' } },
     condensed: { control: { type: 'boolean' } },
     modelValue: { control: { type: 'text' } },
@@ -14,11 +13,11 @@ export default {
   },
 }
 
-const DefaultTemplate = (args) => ({
-  template: '<Input class="mb-4" :cthulu="true" v-bind="args"/>',
+const DefaultTemplate = (args, { events }) => ({
+  template: '<Input class="mb-4" :cthulu="true" @="events" v-bind="args"/>',
   components: { Input },
   setup() {
-    return { args }
+    return { args, events }
   },
 })
 

@@ -63,7 +63,7 @@ const props = defineProps({
   },
 })
 
-const emit = defineEmits(["update:modelValue", "change", "focus", "blur"])
+const emit = defineEmits(["update:modelValue", "input", "change", "focus", "blur"])
 const refSelectContainer = ref()
 const refSelectInput = ref()
 const { options } = toRefs(props)
@@ -132,12 +132,15 @@ const activeItem = computed(() => {
 })
 
 function selectItem(item) {
+  emit('input', item.value)
+  if (item.value !== props.modelValue) {
+    emit('change', item.value)
+    emit('update:modelValue', item.value)
+  }
   nextTick(() => {
     closeDropdown()
+    emit('blur')
   })
-  emit('update:modelValue', item.value)
-  emit('change', item.value)
-  emit('blur')
 }
 
 function openDropdown() {

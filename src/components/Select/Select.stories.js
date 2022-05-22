@@ -4,7 +4,6 @@ export default {
   title: 'Ui/Select',
   component: Select,
   argTypes: {
-    onInput: { action: 'input' },
     readonly: { control: { type: 'boolean' } },
     condensed: { control: { type: 'boolean' } },
     modelValue: { control: { type: 'text' } },
@@ -13,9 +12,9 @@ export default {
   },
 }
 
-const DefaultTemplate = (args) => ({
+const DefaultTemplate = (args, { events }) => ({
   template:
-    '<Select v-bind="args" :options="options" v-model="value"/><br/>Value: {{value}}',
+    '<Select v-bind="args" :options="options" v-model="value" @="events"/><br/>Value: {{value}}',
   components: { Select },
   setup() {
     let value = ref(undefined)
@@ -47,6 +46,7 @@ const DefaultTemplate = (args) => ({
       value,
       options,
       args,
+      events
     }
   },
 })
