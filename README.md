@@ -14,7 +14,7 @@
 [![npm bundle size (scoped)](https://img.shields.io/bundlephobia/minzip/@hotellistat/robust-ui)](https://bundlephobia.com/result?p=@hotellistat/robust-ui@latest)
 [![NPM](https://img.shields.io/npm/l/@hotellistat/robust-ui)](https://github.com/hotellistat/robust-ui/blob/main/LICENSE)
 
-A lightweight Vue 3 component library.
+A lightweight Vue 3 component library that aims to invoke a native UI feel. This means that UI elements should behave similarly to other native OS applications, e.g. don't user cursor: pointer and don't use overloaded animations.
 
 When you are starting a new prototype you want to be able to develop features fast. We created this component library as a way for us to build products quickly without having to deal with complicated packages and a huge bundle sizes.
 

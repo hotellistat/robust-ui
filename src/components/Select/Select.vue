@@ -176,9 +176,9 @@ function resetFields() {
 <template>
   <div ref="anchorRef">
     <RobustInputWrapper v-if="searchable" :title="title" :hint="hint"
-      :error="error" :class="$props.class" class="cursor-pointer"
-      :readonly="readonly" :condensed="condensed" @click="openDropdown"
-      @focus="openDropdown" @blur="closeDropdown" v-slot="slotProps">
+      :error="error" :class="$props.class" class="" :readonly="readonly"
+      :condensed="condensed" @click="openDropdown" @focus="openDropdown"
+      @blur="closeDropdown" v-slot="slotProps">
       <div v-if="$slots.prefix"
         class="flex h-full items-center pr-2 text-gray-400"
         :class="[condensed ? 'pl-2' : 'pl-3']">
@@ -205,7 +205,7 @@ function resetFields() {
       </div>
     </RobustInputWrapper>
     <div v-else class="
-    cursor-pointer
+
     relative flex min-w-20 max-w-52
     rounded-md border border-gray-200
     bg-gray-50 dark:border-gray-700
@@ -240,7 +240,7 @@ function resetFields() {
     }" @closed="resetFields">
     <ul v-if="computedOptions.length > 0" class="max-h-72 overflow-auto">
       <li v-for="option in computedOptions" :key="option.value"
-        class="flex cursor-pointer items-center px-4 py-2 transition-colors duration-200 hover:bg-gray-100 dark:hover:bg-gray-700"
+        class="flex  items-center px-4 py-2 transition-colors duration-200 hover:bg-gray-100 dark:hover:bg-gray-700"
         @click="selectItem(option)">
         <span>{{ option.title }}</span>
         <PhCheck v-if="modelValue === option.value"

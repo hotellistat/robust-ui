@@ -1,30 +1,22 @@
 <template>
   <div class="inline-block">
-    <label class="flex cursor-pointer items-start">
+    <label class="flex  items-start">
       <input :id="cuid" v-model="isChecked" type="checkbox" class="hidden" />
       <div
-        class="relative mr-2 box-content h-4 w-4 flex-shrink-0 flex-grow-0 cursor-pointer rounded border text-white transition-all duration-100"
+        class="relative mr-2 box-content h-4 w-4 flex-shrink-0 flex-grow-0  rounded border text-white transition-all duration-100"
         :class="[
           isChecked
             ? 'border-primary-500 bg-primary-500 '
             : 'border-gray-300  bg-gray-100 dark:border-gray-500 dark:bg-gray-700',
-        ]"
-      >
-        <PhCheck
-          :class="[isChecked ? 'opacity-1' : 'opacity-0']"
-          size="14"
+        ]">
+        <PhCheck :class="[isChecked ? 'opacity-1' : 'opacity-0']" size="14"
           weight="bold"
-          class="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 transform transition-all duration-100"
-        />
+          class="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 transform transition-all duration-100" />
       </div>
-      <div
-        v-if="title && !$slots.title"
-        class="w-full select-none pt-px leading-4"
-      >{{ title }}</div>
-      <div
-        v-if="!title && $slots.title"
-        class="w-full select-none pt-px leading-4"
-      >
+      <div v-if="title && !$slots.title"
+        class="w-full select-none pt-px leading-4">{{ title }}</div>
+      <div v-if="!title && $slots.title"
+        class="w-full select-none pt-px leading-4">
         <slot name="title" />
       </div>
     </label>

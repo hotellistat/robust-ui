@@ -473,17 +473,12 @@ export default defineComponent({
 
 <template>
   <div class="relative flex w-max select-none">
-    <div
-      v-if="Array.isArray(modelValue)"
-      class="relative w-48 border-r border-gray-200 dark:border-gray-700"
-    >
+    <div v-if="Array.isArray(modelValue)"
+      class="relative w-48 border-r border-gray-200 dark:border-gray-700">
       <div class="absolute inset-0 overflow-auto py-2">
-        <div
-          v-for="action in quickActions"
-          :key="action.title"
-          class="cursor-pointer py-2 px-4 hover:bg-gray-50 dark:hover:bg-gray-800"
-          @click="setQuickAction(action.preset())"
-        >{{ action.title }}</div>
+        <div v-for="action in quickActions" :key="action.title"
+          class=" py-2 px-4 hover:bg-gray-50 dark:hover:bg-gray-800"
+          @click="setQuickAction(action.preset())">{{ action.title }}</div>
       </div>
     </div>
 
@@ -491,128 +486,101 @@ export default defineComponent({
       <div class="mb-4 flex items-center text-center text-lg font-semibold">
         <div class="flex flex-1">
           <div
-            class="flex h-8 cursor-pointer items-center rounded-lg px-2 tabular-nums hover:bg-gray-100 dark:hover:bg-gray-800"
+            class="flex h-8  items-center rounded-lg px-2 tabular-nums hover:bg-gray-100 dark:hover:bg-gray-800"
             @click="
               () => {
                 showMonthSelection()
                 hideYearSelection()
               }
-            "
-          >{{ monthHeading }}</div>
+            ">{{ monthHeading }}</div>
           <div
-            class="flex h-8 cursor-pointer items-center rounded-lg px-2 tabular-nums hover:bg-gray-100 dark:hover:bg-gray-800"
+            class="flex h-8  items-center rounded-lg px-2 tabular-nums hover:bg-gray-100 dark:hover:bg-gray-800"
             @click="
               () => {
                 showYearSelection()
                 hideMonthSelection()
               }
-            "
-          >{{ yearHeading }}</div>
+            ">{{ yearHeading }}</div>
         </div>
         <div
-          class="flex h-8 w-8 cursor-pointer items-center justify-center rounded-lg text-gray-800 hover:bg-gray-100 hover:text-gray-800 active:bg-gray-200 dark:text-gray-400 dark:hover:bg-gray-800 dark:hover:text-gray-100"
-          @click="subMonth"
-        >
+          class="flex h-8 w-8  items-center justify-center rounded-lg text-gray-800 hover:bg-gray-100 hover:text-gray-800 active:bg-gray-200 dark:text-gray-400 dark:hover:bg-gray-800 dark:hover:text-gray-100"
+          @click="subMonth">
           <PhCaretLeft type="chevron-left" size="14" weight="bold" />
         </div>
 
         <div
-          class="flex h-8 w-8 cursor-pointer items-center justify-center rounded-lg text-gray-800 hover:bg-gray-100 hover:text-gray-800 active:bg-gray-200 dark:text-gray-400 dark:hover:bg-gray-800 dark:hover:text-gray-100"
-          @click="addMonth"
-        >
+          class="flex h-8 w-8  items-center justify-center rounded-lg text-gray-800 hover:bg-gray-100 hover:text-gray-800 active:bg-gray-200 dark:text-gray-400 dark:hover:bg-gray-800 dark:hover:text-gray-100"
+          @click="addMonth">
           <PhCaretRight type="chevron-right" size="14" weight="bold" />
         </div>
       </div>
 
       <div class="relative w-max">
-        <div
-          v-if="showMonthSelectionActive"
-          class="absolute inset-0 z-10 grid grid-cols-3 gap-4"
-        >
-          <div
-            v-for="(month, index) in months"
-            :key="index"
-            class="flex cursor-pointer items-center justify-center rounded-lg py-2 text-center"
+        <div v-if="showMonthSelectionActive"
+          class="absolute inset-0 z-10 grid grid-cols-3 gap-4">
+          <div v-for="(month, index) in months" :key="index"
+            class="flex  items-center justify-center rounded-lg py-2 text-center"
             :class="[
               activeMonth === index
                 ? variantStyling.background
                 : 'hover:bg-gray-100 dark:hover:bg-gray-700',
-            ]"
-            @click="
-              () => {
-                setMonth(index)
-                hideMonthSelection()
-              }
-            "
-          >{{ month.title }}</div>
+            ]" @click="
+  () => {
+    setMonth(index)
+    hideMonthSelection()
+  }
+">{{ month.title }}</div>
         </div>
 
-        <div
-          v-if="showYearSelectionActive"
-          class="absolute inset-0 z-10 flex flex-col gap-2 overflow-y-auto"
-        >
-          <div
-            v-for="year in yearSelectionYears"
-            :ref="(ref) => (refYearEntry[year] = ref)"
-            :key="year"
-            class="cursor-pointer rounded-lg py-2 text-center tabular-nums"
-            :class="[
+        <div v-if="showYearSelectionActive"
+          class="absolute inset-0 z-10 flex flex-col gap-2 overflow-y-auto">
+          <div v-for="year in yearSelectionYears"
+            :ref="(ref) => (refYearEntry[year] = ref)" :key="year"
+            class=" rounded-lg py-2 text-center tabular-nums" :class="[
               activeYear === year
                 ? variantStyling.background
                 : 'hover:bg-gray-100 dark:hover:bg-gray-700',
-            ]"
-            :data-year="year"
-            @click="
-              () => {
-                setYear(year)
-                hideYearSelection()
-              }
-            "
-          >{{ year }}</div>
+            ]" :data-year="year" @click="
+  () => {
+    setYear(year)
+    hideYearSelection()
+  }
+">{{ year }}</div>
         </div>
 
-        <div
-          class="grid grid-cols-7 gap-y-1"
-          :class="[
-            {
-              'opacity-0': showMonthSelectionActive || showYearSelectionActive,
-            },
-          ]"
-        >
+        <div class="grid grid-cols-7 gap-y-1" :class="[
+          {
+            'opacity-0': showMonthSelectionActive || showYearSelectionActive,
+          },
+        ]">
           <div
-            class="pb-2 text-center text-sm text-gray-400 dark:text-gray-400"
-          >M</div>
+            class="pb-2 text-center text-sm text-gray-400 dark:text-gray-400">M
+          </div>
           <div
-            class="pb-2 text-center text-sm text-gray-400 dark:text-gray-400"
-          >T</div>
+            class="pb-2 text-center text-sm text-gray-400 dark:text-gray-400">T
+          </div>
           <div
-            class="pb-2 text-center text-sm text-gray-400 dark:text-gray-400"
-          >W</div>
+            class="pb-2 text-center text-sm text-gray-400 dark:text-gray-400">W
+          </div>
           <div
-            class="pb-2 text-center text-sm text-gray-400 dark:text-gray-400"
-          >T</div>
+            class="pb-2 text-center text-sm text-gray-400 dark:text-gray-400">T
+          </div>
           <div
-            class="pb-2 text-center text-sm text-gray-400 dark:text-gray-400"
-          >F</div>
+            class="pb-2 text-center text-sm text-gray-400 dark:text-gray-400">F
+          </div>
           <div
-            class="pb-2 text-center text-sm text-gray-400 dark:text-gray-400"
-          >S</div>
+            class="pb-2 text-center text-sm text-gray-400 dark:text-gray-400">S
+          </div>
           <div
-            class="pb-2 text-center text-sm text-gray-400 dark:text-gray-400"
-          >S</div>
+            class="pb-2 text-center text-sm text-gray-400 dark:text-gray-400">S
+          </div>
 
           <div v-for="offset in firstWeekday" :key="offset + '_offset'"></div>
-          <div
-            v-for="day in daysInMonth"
-            :key="day + '_day'"
-            class="relative"
+          <div v-for="day in daysInMonth" :key="day + '_day'" class="relative"
             :disabled="!dayAllowed(day)"
             :class="[isBetweenRange(day) ? variantStyling.background : '']"
-            @click="daySelect(day)"
-          >
-            <div
-              v-if="isLast(day) || isFirst(day)"
-              class="absolute z-0 h-full"
+            @click="daySelect(day)">
+            <div v-if="isLast(day) || isFirst(day)" class="absolute z-0 h-full"
               :class="[
                 variantStyling.background,
                 isFirst(day)
@@ -620,10 +588,9 @@ export default defineComponent({
                   : isLast(day)
                     ? 'left-0 w-1/2'
                     : '',
-              ]"
-            ></div>
+              ]"></div>
             <div
-              class="relative z-10 flex h-8 w-8 min-w-8 cursor-pointer items-center justify-center rounded-lg text-sm font-medium tabular-nums"
+              class="relative z-10 flex h-8 w-8 min-w-8  items-center justify-center rounded-lg text-sm font-medium tabular-nums"
               :class="[
                 isBetweenRange(day) ||
                   isLast(day) ||
@@ -631,35 +598,22 @@ export default defineComponent({
                   isSelectedDay(day)
                   ? `rounded-0 ${variantStyling.background}`
                   : 'hover:bg-gray-200 dark:hover:bg-gray-800',
-              ]"
-            >{{ day }}</div>
+              ]">{{ day }}</div>
           </div>
         </div>
       </div>
     </section>
-    <div
-      v-if="Array.isArray(modelValue)"
-      class="flex flex-shrink-0 flex-col items-start border-l border-gray-200 p-4 dark:border-gray-700"
-    >
+    <div v-if="Array.isArray(modelValue)"
+      class="flex flex-shrink-0 flex-col items-start border-l border-gray-200 p-4 dark:border-gray-700">
       <label
-        class="mb-1 block text-sm font-medium text-gray-500 dark:text-gray-400"
-      >From</label>
-      <RobustInput
-        v-model="from"
-        placeholder="Date"
-        :error="errorFrom"
-        class="mb-2 w-full"
-      />
+        class="mb-1 block text-sm font-medium text-gray-500 dark:text-gray-400">From</label>
+      <RobustInput v-model="from" placeholder="Date" :error="errorFrom"
+        class="mb-2 w-full" />
 
       <label
-        class="mb-1 block text-sm font-medium text-gray-500 dark:text-gray-400"
-      >To</label>
-      <RobustInput
-        v-model="to"
-        placeholder="Date"
-        :error="errorTo"
-        class="mb-2 w-full"
-      />
+        class="mb-1 block text-sm font-medium text-gray-500 dark:text-gray-400">To</label>
+      <RobustInput v-model="to" placeholder="Date" :error="errorTo"
+        class="mb-2 w-full" />
       <slot />
     </div>
   </div>

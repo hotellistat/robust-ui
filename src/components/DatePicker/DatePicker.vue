@@ -115,55 +115,32 @@ export default defineComponent({
 </script>
 
 <template>
-  <RobustInputWrapper
-    :title="title"
-    :hint="hint"
-    :error="error"
-    :class="$props.class"
-    class="cursor-pointer"
-    :readonly="readonly"
-    :condensed="condensed"
-    @click.stop="open = !open"
-    ref="inputWrapperRef"
-    v-slot="slotProps"
-  >
-    <div
-      class="flex h-full items-center pr-2 text-gray-400"
-      :class="[condensed ? 'pl-2' : 'pl-3']"
-    >
+  <RobustInputWrapper :title="title" :hint="hint" :error="error"
+    :class="$props.class" :readonly="readonly" :condensed="condensed"
+    @click.stop="open = !open" ref="inputWrapperRef" v-slot="slotProps">
+    <div class="flex h-full items-center pr-2 text-gray-400"
+      :class="[condensed ? 'pl-2' : 'pl-3']">
       <PhCalendar size="20" />
     </div>
-    <div
-      :id="slotProps.cuid"
-      ref="select"
-      class="flex h-full w-full items-center bg-transparent pl-2 text-current outline-none"
-      v-bind="$attrs"
-    >
+    <div :id="slotProps.cuid" ref="select"
+      class="flex h-full w-full items-center bg-transparent pl-2 text-current outline-none cursor-default"
+      v-bind="$attrs">
       <div class="min-w-0 truncate tabular-nums">{{ displayDate }}</div>
     </div>
 
     <div
       class="flex h-full flex-shrink-0 items-center pr-3 text-gray-400 dark:text-gray-500"
-      :class="[condensed ? 'pl-2' : 'pl-3']"
-    >
-      <PhCaretDown
-        :size="14"
-        weight="bold"
+      :class="[condensed ? 'pl-2' : 'pl-3']">
+      <PhCaretDown :size="14" weight="bold"
         class="transition-transform duration-200"
-        :class="{ 'rotate-180 transform': open }"
-      />
+        :class="{ 'rotate-180 transform': open }" />
     </div>
   </RobustInputWrapper>
-  <RobustPopper
-    v-if="inputWrapperRef?.wrapperRef"
-    ref="popperRef"
-    class="z-[100] origin-top-left"
-    :append-to="inputWrapperRef?.wrapperRef"
-    v-model:open="open"
-    :options="{
+  <RobustPopper v-if="inputWrapperRef?.wrapperRef" ref="popperRef"
+    class="z-[100] origin-top-left" :append-to="inputWrapperRef?.wrapperRef"
+    v-model:open="open" :options="{
       placement: 'bottom-start',
-    }"
-  >
+    }">
     <RobustCalendar v-model="computedValue" />
   </RobustPopper>
 </template>

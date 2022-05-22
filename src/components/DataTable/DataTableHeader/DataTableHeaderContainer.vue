@@ -3,26 +3,23 @@
     <template v-if="config.groupBy">
       <template v-for="(group, groupKey) in data" :key="groupKey">
         <div
-          class="data-table-header border-bottom-2 flex items-center justify-center px-4 py-3 text-sm tracking-wider cursor-pointer bg-gray-700 border-b-2"
-        >
+          class="data-table-header border-bottom-2 flex items-center justify-center px-4 py-3 text-sm tracking-wider bg-gray-700 border-b-2">
           <div class="mr-2 text-white">
-            <ph-plus
-              v-if="config.collapsed && config.collapsed[groupKey]"
-              size="16px"
-            />
+            <ph-plus v-if="config.collapsed && config.collapsed[groupKey]"
+              size="16px" />
             <ph-minus v-else size="16px" />
           </div>
           <span class="truncate w-full">
             {{
-              `${config.groupBy.toUpperCase()}: ${groupKey}`
+                `${config.groupBy.toUpperCase()}: ${groupKey}`
             }}
           </span>
         </div>
         <template v-if="!(config.collapsed && config.collapsed[groupKey])">
           <template v-for="record in data[groupKey].children" :key="record.id">
             <div
-              class="data-table-header border-bottom-2 flex items-center justify-center px-4 py-2 text-sm tracking-wider cursor-pointer bg-gray-500"
-            >Key</div>
+              class="data-table-header border-bottom-2 flex items-center justify-center px-4 py-2 text-sm tracking-wider bg-gray-500">
+              Key</div>
             <table-header v-model="headersData" :hideFirst="true" />
           </template>
         </template>
@@ -30,15 +27,15 @@
     </template>
     <div v-else v-for="record in data" :key="record.id">
       <div
-        class="data-table-header border-bottom-2 flex items-center justify-center px-4 py-2 text-sm tracking-wider cursor-pointer bg-gray-500"
-      >Key</div>
-      <table-header v-model="headersData" :isInlineEditMode="isInlineEditMode" />
+        class="data-table-header border-bottom-2 flex items-center justify-center px-4 py-2 text-sm tracking-wider bg-gray-500">
+        Key</div>
+      <table-header v-model="headersData"
+        :isInlineEditMode="isInlineEditMode" />
     </div>
   </div>
   <div
     class="data-table-header-container hidden sm:grid col-span-1 grid-cols-1 bg-gray-500"
-    :style="{ 'grid-template-columns': gridTemplateColumnsCss }"
-  >
+    :style="{ 'grid-template-columns': gridTemplateColumnsCss }">
     <table-header v-model="headersData" :isInlineEditMode="isInlineEditMode" />
   </div>
 </template>

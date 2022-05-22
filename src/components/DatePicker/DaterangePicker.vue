@@ -273,107 +273,70 @@ export default defineComponent({
 </script>
 
 <template>
-  <RobustInputWrapper
-    :title="title"
-    :hint="hint"
-    :error="error"
-    :class="$props.class"
-    class="cursor-pointer"
-    :readonly="readonly"
-    :condensed="condensed"
-    ref="inputWrapperRef"
-    @click.stop="handleClick"
-    v-slot="slotProps"
-  >
-    <div
-      class="flex h-full items-center pr-2 text-gray-400"
-      :class="[condensed ? 'pl-2' : 'pl-3']"
-    >
+  <RobustInputWrapper :title="title" :hint="hint" :error="error"
+    :class="$props.class" :readonly="readonly" :condensed="condensed"
+    ref="inputWrapperRef" @click.stop="handleClick" v-slot="slotProps">
+    <div class="flex h-full items-center pr-2 text-gray-400"
+      :class="[condensed ? 'pl-2' : 'pl-3']">
       <PhCalendar size="20" />
     </div>
-    <div
-      :id="slotProps.cuid"
-      ref="select"
-      class="flex h-full w-full items-center bg-transparent pl-2 text-current outline-none"
-      v-bind="$attrs"
-    >
-      <div
-        class="min-w-0 truncate text-sm tabular-nums sm:text-base"
-      >{{ displayDate }}</div>
+    <div :id="slotProps.cuid" ref="select"
+      class="flex h-full w-full items-center bg-transparent pl-2 text-current outline-none cursor-default"
+      v-bind="$attrs">
+      <div class="min-w-0 truncate text-sm tabular-nums sm:text-base">{{
+          displayDate
+      }}</div>
     </div>
 
     <div
       class="flex h-full flex-shrink-0 items-center pr-3 text-gray-400 dark:text-gray-500"
-      :class="[condensed ? 'pl-2' : 'pl-3']"
-    >
-      <PhCaretDown
-        :size="14"
-        weight="bold"
+      :class="[condensed ? 'pl-2' : 'pl-3']">
+      <PhCaretDown :size="14" weight="bold"
         class="transition-transform duration-200"
-        :class="{ 'rotate-180 transform': open }"
-      />
+        :class="{ 'rotate-180 transform': open }" />
     </div>
   </RobustInputWrapper>
-  <RobustPopper
-    ref="popperRef"
-    v-if="inputWrapperRef?.wrapperRef"
-    class="z-[100] origin-top-left"
-    :append-to="inputWrapperRef?.wrapperRef"
-    v-model:open="open"
-    :options="{
+  <RobustPopper ref="popperRef" v-if="inputWrapperRef?.wrapperRef"
+    class="z-[100] origin-top-left" :append-to="inputWrapperRef?.wrapperRef"
+    v-model:open="open" :options="{
       placement: 'bottom-start',
-    }"
-  >
+    }">
     <h3
-      class="font-lg border-b border-gray-200 p-4 font-medium text-gray-500 dark:border-gray-700"
-    >Date range</h3>
+      class="font-lg border-b border-gray-200 p-4 font-medium text-gray-500 dark:border-gray-700">
+      Date range</h3>
     <div>
-      <RobustCalendar
-        ref="mainCalendar"
-        v-model="tmpDateRange"
-        @click:relativeDate="enableStoringHistory(false)"
-      >
+      <RobustCalendar ref="mainCalendar" v-model="tmpDateRange"
+        @click:relativeDate="enableStoringHistory(false)">
         <div v-if="enablePerspective" class="flex flex-col items-start gap-y-3">
           <div>
             <label
-              class="mb-1 block text-sm font-medium text-gray-500 dark:text-gray-400"
-            >Perspective of</label>
+              class="mb-1 block text-sm font-medium text-gray-500 dark:text-gray-400">Perspective
+              of</label>
             <RobustDatePicker placeholder="Date" v-model="perspectiveOf" />
           </div>
-          <RobustCheckbox
-            v-if="enableComparison"
-            v-model="compareWith"
-            title="Compare with"
-          />
+          <RobustCheckbox v-if="enableComparison" v-model="compareWith"
+            title="Compare with" />
         </div>
       </RobustCalendar>
     </div>
-    <h3
-      v-if="enableComparison"
-      class="font-lg border-b border-t border-gray-200 p-4 font-medium text-gray-500 dark:border-gray-700"
-    >Comparison date range</h3>
+    <h3 v-if="enableComparison"
+      class="font-lg border-b border-t border-gray-200 p-4 font-medium text-gray-500 dark:border-gray-700">
+      Comparison date range</h3>
     <div v-if="enableComparison">
-      <RobustCalendar
-        variant="secondary"
-        v-model="computedCompare"
-        @click:relativeDate="enableStoringHistory(false)"
-      >
+      <RobustCalendar variant="secondary" v-model="computedCompare"
+        @click:relativeDate="enableStoringHistory(false)">
         <div v-if="enablePerspective" class="flex flex-col items-start">
           <label
-            class="mb-1 block text-sm font-medium text-gray-500 dark:text-gray-400"
-          >Perspective of</label>
+            class="mb-1 block text-sm font-medium text-gray-500 dark:text-gray-400">Perspective
+            of</label>
           <RobustDatePicker placeholder="Date" v-model="comparePerspectiveOf" />
         </div>
       </RobustCalendar>
     </div>
     <div
-      class="flex items-start justify-between border-t border-gray-200 p-4 dark:border-gray-700"
-    >
-      <RobustButton
-        type="primary"
-        class="ml-auto"
-        @click="saveTime"
-      >Apply time range</RobustButton>
+      class="flex items-start justify-between border-t border-gray-200 p-4 dark:border-gray-700">
+      <RobustButton type="primary" class="ml-auto" @click="saveTime">Apply time
+        range</RobustButton>
     </div>
   </RobustPopper>
 </template>

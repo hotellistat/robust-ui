@@ -1,21 +1,17 @@
 <template>
-  <div
-    v-for="key in hideFirst
-    ? Object.keys(headersData).slice(1)
-    : Object.keys(headersData)"
-    :key="key"
-    class="data-table-header border-bottom-2 flex items-center justify-between sm:justify-center px-4 py-2 text-sm tracking-wider cursor-pointer"
-    :class="isInlineEditMode ? 'h-12 sm:h-auto' : 'h-10 sm:h-auto'"
-  >
+  <div v-for="key in hideFirst
+  ? Object.keys(headersData).slice(1)
+  : Object.keys(headersData)" :key="key"
+    class="data-table-header border-bottom-2 flex items-center justify-between sm:justify-center px-4 py-2 text-sm tracking-wider "
+    :class="isInlineEditMode ? 'h-12 sm:h-auto' : 'h-10 sm:h-auto'">
     <header-cell v-model="headersData[key]" />
   </div>
 
   <div v-if="hasActionColumn">
-    <div
-      v-if="!isInlineEditMode"
-      class="data-table-header border-bottom-2 flex items-center justify-between sm:justify-center px-4 py-2 text-sm tracking-wider cursor-pointer"
-    >
-      <span class="font-medium uppercase truncate" :title="'actions'">actions</span>
+    <div v-if="!isInlineEditMode"
+      class="data-table-header border-bottom-2 flex items-center justify-between sm:justify-center px-4 py-2 text-sm tracking-wider ">
+      <span class="font-medium uppercase truncate"
+        :title="'actions'">actions</span>
     </div>
   </div>
 </template>

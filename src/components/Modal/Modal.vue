@@ -17,7 +17,7 @@
               <div class="leading-4">
                 <slot name="title"></slot>
               </div>
-              <div class="ml-auto cursor-pointer" @click="close">
+              <div class="ml-auto " @click="close">
                 <PhX size="20" class="block" />
               </div>
             </div>

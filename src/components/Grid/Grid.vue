@@ -1,13 +1,9 @@
 <template>
   <div>
-    {{ locked }}
+    Locked: {{ locked }}
     <section ref="gridContainer" class="grid-stack bg-gray-200">
-      <GridItem
-        v-for="widget in widgets"
-        :key="widget.id"
-        :widget="widget"
-        :locked="locked"
-      />
+      <GridItem v-for="widget in widgets" :key="widget.id" :widget="widget"
+        :locked="locked" />
     </section>
   </div>
 </template>
@@ -97,10 +93,12 @@ export default defineComponent({
 .grid-stack {
   position: relative;
 }
+
 .grid-stack.grid-stack-rtl {
   direction: ltr;
 }
-.grid-stack .grid-stack-placeholder > .placeholder-content {
+
+.grid-stack .grid-stack-placeholder>.placeholder-content {
   @apply bg-indigo-500/10;
   margin: 0;
   position: absolute;

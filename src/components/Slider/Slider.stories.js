@@ -10,7 +10,7 @@ export default {
 }
 
 const DefaultTemplate = (args) => ({
-  template: `<Slider v-bind="args" />`,
+  template: `<Slider v-bind="args" class="w-64" />`,
   components: { Slider },
   setup() {
     return { args }

@@ -29,7 +29,7 @@ export default {
 const Template = (args) => ({
   template: `
   <Draggable v-bind="args" v-model="list">
-    <template #element="{item}" class="cursor-pointer">
+    <template #element="{item}" class="">
       {{item.name}}
     </template>
   </Draggable>`,

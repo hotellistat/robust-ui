@@ -58,51 +58,32 @@ export default defineComponent({
 </script>
 
 <template>
-  <div
-    v-bind="$attrs"
+  <div v-bind="$attrs"
     class="group relative flex flex-col rounded-md border border-gray-200 bg-white dark:border-gray-700 dark:bg-gray-800"
-    :class="{ 'pl-1': stripe }"
-  >
-    <div
-      v-show="stripe"
-      class="absolute top-0 left-0 bottom-0 w-1"
-      :class="stripeClass"
-    ></div>
-    <div
-      v-if="title || $slots.title"
-      class="relative mb-3 flex justify-between px-4 pt-3 text-gray-700 dark:text-gray-400"
-    >
+    :class="{ 'pl-1': stripe }">
+    <div v-show="stripe" class="absolute top-0 left-0 bottom-0 w-1"
+      :class="stripeClass"></div>
+    <div v-if="title || $slots.title"
+      class="relative mb-3 flex justify-between px-4 pt-3 text-gray-700 dark:text-gray-400">
       <slot name="title" :title="title" v-if="$slots.title" />
       <template v-else>{{ title }}</template>
-      <button
-        v-if="$slots.options"
-        ref="contextButtonRef"
-        @click="open = !open"
-        class="ml-2 -mr-2 -mt-1 rounded-full border-none p-1 opacity-0 transition-all duration-150 hover:bg-gray-200 group-hover:opacity-100 dark:hover:bg-gray-800"
-      >
+      <button v-if="$slots.options" ref="contextButtonRef" @click="open = !open"
+        class="ml-2 -mr-2 -mt-1 rounded-full border-none p-1 opacity-0 transition-all duration-150 hover:bg-gray-200 group-hover:opacity-100 dark:hover:bg-gray-800 cursor-default">
         <PhDotsThreeVertical size="24" weight="bold" />
       </button>
     </div>
 
-    <section
-      v-if="$slots.default"
-      class="h-full w-full px-4 pb-3"
-      :class="{ 'pt-3': !(title || $slots.title) }"
-    >
+    <section v-if="$slots.default" class="h-full w-full px-4 pb-3"
+      :class="{ 'pt-3': !(title || $slots.title) }">
       <slot />
     </section>
 
     <slot name="raw" />
   </div>
-  <RobustPopper
-    ref="popperRef"
-    class="z-[100]"
-    :append-to="contextButtonRef"
-    v-model:open="open"
-    :options="{
+  <RobustPopper ref="popperRef" class="z-[100]" :append-to="contextButtonRef"
+    v-model:open="open" :options="{
       placement: 'bottom-end',
-    }"
-  >
+    }">
     <slot name="options" />
   </RobustPopper>
 </template>

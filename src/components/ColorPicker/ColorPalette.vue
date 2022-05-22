@@ -1,17 +1,10 @@
 <template>
   <div
-    class="grid grid-cols-3 place-items-center gap-x-3 gap-y-3 p-4 sm:grid-cols-6"
-  >
-    <div
-      v-for="(color, index) in colors"
-      :key="index"
-      class="flex cursor-pointer flex-col items-center gap-y-1"
-    >
-      <div
-        class="h-8 w-16 rounded-md"
-        :style="{ background: color }"
-        @click="selectedColor(color)"
-      ></div>
+    class="grid grid-cols-3 place-items-center gap-x-3 gap-y-3 p-4 sm:grid-cols-6">
+    <div v-for="(color, index) in colors" :key="index"
+      class="flex  flex-col items-center gap-y-1">
+      <div class="h-8 w-16 rounded-md" :style="{ background: color }"
+        @click="selectedColor(color)"></div>
       <div class="hidden sm:block">{{ color }}</div>
     </div>
   </div>
@@ -74,4 +67,5 @@ export default defineComponent({
 })
 </script>
 
-<style></style>
+<style>
+</style>

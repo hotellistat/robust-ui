@@ -1,27 +1,14 @@
 <template>
-  <div
-    ref="slider"
-    class="base-slider"
-    role="slider"
-    :aria-valuemax="moderatedMax()"
-    :aria-valuemin="moderatedMin()"
-    :aria-valuenow="localValue"
-    :class="classes"
-    :tabindex="disabled ? null : tabindex || '0'"
-    @blur="onBlur"
-    @focus="onFocus"
-    @keydown.down.prevent="decrementValue"
+  <div ref="slider" class="base-slider" role="slider"
+    :aria-valuemax="moderatedMax()" :aria-valuemin="moderatedMin()"
+    :aria-valuenow="localValue" :class="classes"
+    :tabindex="disabled ? null : tabindex || '0'" @blur="onBlur"
+    @focus="onFocus" @keydown.down.prevent="decrementValue"
     @keydown.left.prevent="decrementValue"
     @keydown.right.prevent="incrementValue"
-    @keydown.up.prevent="incrementValue"
-  >
-    <input
-      v-if="name"
-      class="base-slider__hidden-input"
-      type="hidden"
-      :name="name"
-      :value="value"
-    />
+    @keydown.up.prevent="incrementValue">
+    <input v-if="name" class="base-slider__hidden-input" type="hidden"
+      :name="name" :value="value" />
 
     <div v-if="hasIcon" class="base-slider__icon">
       <slot name="icon">
@@ -29,43 +16,26 @@
       </slot>
     </div>
 
-    <div
-      ref="track"
-      class="base-slider__track"
-      @mousedown="onDragStart"
-      @touchstart="onDragStart"
-    >
+    <div ref="track" class="base-slider__track" @mousedown="onDragStart"
+      @touchstart="onDragStart">
       <div class="base-slider__track-background bg-gray-300 dark:bg-gray-400">
         <div v-if="snapToSteps">
-          <span
-            v-for="(point, idx) in snapPoints"
-            :key="idx"
+          <span v-for="(point, idx) in snapPoints" :key="idx"
             class="base-slider__snap-point"
-            :style="{ left: 100 * relativeValue(point) + '%' }"
-          ></span>
+            :style="{ left: 100 * relativeValue(point) + '%' }"></span>
         </div>
       </div>
 
-      <div
-        class="base-slider__track-fill bg-primary-400"
-        :style="fillStyle"
-      ></div>
+      <div class="base-slider__track-fill bg-primary-400" :style="fillStyle">
+      </div>
 
-      <div
-        ref="thumb"
-        class="base-slider__thumb bg-primary-400"
-        :style="thumbStyle"
-      >
+      <div ref="thumb" class="base-slider__thumb bg-primary-400"
+        :style="thumbStyle">
         <div v-if="showMarker" class="base-slider__marker text-xs">
-          <svg
-            xmlns="http://www.w3.org/2000/svg"
-            viewBox="0 0 24 24"
-            width="36"
-            height="36"
-          >
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="36"
+            height="36">
             <path
-              d="M11 .5c-1.7.2-3.4.9-4.7 2-1.1.9-2 2-2.5 3.2-1.2 2.4-1.2 5.1-.1 7.7 1.1 2.6 2.8 5 5.3 7.5 1.2 1.2 2.8 2.7 3 2.7 0 0 .3-.2.6-.5 3.2-2.7 5.6-5.6 7.1-8.5.8-1.5 1.1-2.6 1.3-3.8.2-1.4 0-2.9-.5-4.3-1.2-3.2-4.1-5.4-7.5-5.8-.5-.2-1.5-.2-2-.2z"
-            />
+              d="M11 .5c-1.7.2-3.4.9-4.7 2-1.1.9-2 2-2.5 3.2-1.2 2.4-1.2 5.1-.1 7.7 1.1 2.6 2.8 5 5.3 7.5 1.2 1.2 2.8 2.7 3 2.7 0 0 .3-.2.6-.5 3.2-2.7 5.6-5.6 7.1-8.5.8-1.5 1.1-2.6 1.3-3.8.2-1.4 0-2.9-.5-4.3-1.2-3.2-4.1-5.4-7.5-5.8-.5-.2-1.5-.2-2-.2z" />
           </svg>
 
           <span class="base-slider__marker-text text-xs">{{ markerText }}</span>
@@ -418,58 +388,69 @@ export default defineComponent({
   display: flex;
   outline: none;
 }
-.base-slider:not(.is-disabled).is-active:not(.has-marker)
-  .base-slider__thumb::before,
-.base-slider:not(.is-disabled).is-dragging:not(.has-marker)
-  .base-slider__thumb::before {
+
+.base-slider:not(.is-disabled).is-active:not(.has-marker) .base-slider__thumb::before,
+.base-slider:not(.is-disabled).is-dragging:not(.has-marker) .base-slider__thumb::before {
   transform: scale(1);
 }
+
 .base-slider:not(.is-disabled).is-active .base-slider__marker,
 .base-slider:not(.is-disabled).is-dragging .base-slider__marker {
   opacity: 1;
   transform: scale(1) translateY(-26px);
 }
+
 .base-slider:not(.is-disabled).is-active .base-slider__marker-text,
 .base-slider:not(.is-disabled).is-dragging .base-slider__marker-text {
   color: white;
 }
+
 .base-slider:not(.is-disabled).is-active .base-slider__snap-point,
 .base-slider:not(.is-disabled).is-dragging .base-slider__snap-point {
   opacity: 1;
 }
+
 .base-slider:not(.is-disabled).is-active .base-slider__icon .ui-icon,
 .base-slider:not(.is-disabled).is-dragging .base-slider__icon .ui-icon {
   color: black;
 }
+
 .base-slider.is-disabled .base-slider__icon {
   opacity: 0.6;
 }
+
 .base-slider.is-disabled .base-slider__track {
   cursor: default;
 }
+
 .base-slider.is-disabled .base-slider__track-fill {
   background-color: transparent;
 }
+
 .base-slider.is-disabled .base-slider__thumb {
   background-color: #ddd;
   border: 2px solid white;
 }
+
 .base-slider__icon {
   margin-right: 16px;
 }
+
 .base-slider__icon .ui-icon {
   color: white;
   transition: color 0.2s ease;
 }
+
 .base-slider__track {
   align-items: center;
-  cursor: pointer;
+  cursor: default;
   display: flex;
   height: 18px;
   margin: 0 auto;
   position: relative;
   width: 100%;
 }
+
 .base-slider__track-background,
 .base-slider__track-fill {
   content: '';
@@ -479,9 +460,11 @@ export default defineComponent({
   position: absolute;
   top: 7px;
 }
+
 .base-slider__track-background {
   width: 100%;
 }
+
 .base-slider__snap-point {
   background-color: rgba(0, 0, 0, 0.75);
   height: 3px;
@@ -491,10 +474,12 @@ export default defineComponent({
   width: 2px;
   z-index: 1;
 }
+
 .base-slider__track-fill {
   transform-origin: left;
   width: 100%;
 }
+
 .base-slider__thumb {
   border-radius: 50%;
   cursor: inherit;
@@ -506,6 +491,7 @@ export default defineComponent({
   z-index: 1;
   margin-left: -14px / 2;
 }
+
 .base-slider__thumb::before {
   background-color: #93c5fd;
   opacity: 0.3;
@@ -521,6 +507,7 @@ export default defineComponent({
   transition: transform 0.2s ease;
   width: 36px;
 }
+
 .base-slider__marker {
   height: 24px;
   opacity: 0;
@@ -531,11 +518,13 @@ export default defineComponent({
   width: 24px;
   user-select: none;
 }
+
 .base-slider__marker svg {
   fill: #7f97ee;
   height: 24px;
   width: 24px;
 }
+
 .base-slider__marker-text {
   color: white;
   font-size: 13px;
@@ -547,6 +536,7 @@ export default defineComponent({
   transition: color 0.2s ease;
   width: 14px;
 }
+
 .base-slider--is-dragging {
   user-select: none;
 }

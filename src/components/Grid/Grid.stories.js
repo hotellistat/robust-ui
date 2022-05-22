@@ -27,8 +27,8 @@ let component = defineComponent({
   },
 })
 
-const DefaultTemplate = (args) => ({
-  template: '<Grid class="w-full" v-model:widgets="widgets" v-bind="args" />',
+const DefaultTemplate = (args, { events }) => ({
+  template: '<Grid class="w-full" v-model:widgets="widgets" v-bind="args" @="events"/>',
   components: { Grid },
   setup() {
     let widgets = ref([
@@ -67,6 +67,7 @@ const DefaultTemplate = (args) => ({
     return {
       args,
       widgets,
+      events
     }
   },
 })
