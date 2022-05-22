@@ -61,7 +61,7 @@ export default defineComponent({
   },
   setup(props, { emit }) {
     const { opened } = toRefs(props)
-    let scrollLocked = useScrollLock(document.body)
+    let scrollLocked
 
 
     const animationName = computed(() => {
@@ -130,6 +130,7 @@ export default defineComponent({
     }
 
     onMounted(() => {
+      scrollLocked = useScrollLock(document.body)
       stateChange(opened.value)
     })
 
