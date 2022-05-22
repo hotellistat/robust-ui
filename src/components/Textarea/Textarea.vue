@@ -82,7 +82,7 @@ export default defineComponent({
 <template>
   <RobustInputWrapper :fixed-height="false" :title="title" :hint="hint"
     :error="error" :class="$props.class"
-    :box-class="[condensed ? 'pt-1' : 'pt-2']" :readonly="readonly"
+    :box-class="condensed ? 'pt-1' : 'pt-2'" :readonly="readonly"
     :disabled="disabled" :condensed="condensed" v-slot="slotProps">
     <div v-if="$slots.prefix"
       class="flex h-full select-none items-center pr-2 text-gray-400"
