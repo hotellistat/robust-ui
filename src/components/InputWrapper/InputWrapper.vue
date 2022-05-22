@@ -4,7 +4,6 @@ import { computed, defineComponent, PropType, ref } from 'vue'
 let uid = 0
 export default defineComponent({
   name: 'RobustInputWrapper',
-
   inheritAttrs: false,
   props: {
     title: {
@@ -70,13 +69,10 @@ export default defineComponent({
 
 <template>
   <fieldset :class="[$props.class]">
-    <legend
-      v-if="title"
-      class="mb-1 block select-none text-sm font-medium text-gray-500 dark:text-gray-400"
-    >{{ title }}</legend>
-    <div
-      v-bind="listeners"
-      ref="wrapperRef"
+    <legend v-if="title"
+      class="mb-1 block select-none text-sm font-medium text-gray-500 dark:text-gray-400">
+      {{ title }}</legend>
+    <div v-bind="listeners" ref="wrapperRef"
       class="relative flex rounded-md border border-gray-200 bg-gray-50 dark:border-gray-600 dark:bg-gray-800"
       :class="[
         $props.boxClass,
@@ -86,19 +82,15 @@ export default defineComponent({
             !readonly,
         },
         disabled ? 'text-gray-500' : '',
-      ]"
-    >
+      ]">
       <slot :cuid="cuid" :wrapperRef="wrapperRef" />
     </div>
     <label v-if="hint !== undefined || error !== undefined" class="block pt-1">
-      <div
-        v-if="hint !== undefined"
-        class="select-none text-xs text-gray-400"
-      >{{ hint }}</div>
-      <div
-        v-if="error !== undefined"
-        class="select-none text-xs text-red-400 dark:text-red-400"
-      >{{ error }}</div>
+      <div v-if="hint !== undefined" class="select-none text-xs text-gray-400">
+        {{ hint }}</div>
+      <div v-if="error !== undefined"
+        class="select-none text-xs text-red-400 dark:text-red-400">{{ error }}
+      </div>
     </label>
   </fieldset>
 </template>

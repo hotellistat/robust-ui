@@ -1,8 +1,8 @@
 <script lang="ts">
-export default defineComponent({
+export default {
   name: 'RobustSelect',
   inheritAttrs: false
-})
+}
 </script>
 
 <script lang="ts" setup>
@@ -186,7 +186,7 @@ function resetFields() {
       </div>
       <div v-show="!open" :id="slotProps.cuid" ref="select"
         class="flex h-full w-full items-center bg-transparent text-current outline-none"
-        :class="[$slots.prefix || condensed ? 'pl-2' : 'pl-3']" v-bind="attrs">
+        :class="[$slots.prefix || condensed ? 'pl-2' : 'pl-3']" v-bind="$attrs">
         <div class="min-w-0 select-none truncate">{{ activeItem ?
             activeItem.title
             : 'Select'
