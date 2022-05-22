@@ -1,5 +1,4 @@
 import Select from './Select.vue'
-import SelectOption from './SelectOption.vue'
 import { ref } from 'vue'
 export default {
   title: 'Ui/Select',
@@ -74,43 +73,12 @@ ErrorHint.args = {
     'This is an input error. It tells the user, that there is something wrong with the current input state',
 }
 
+export const Inline = DefaultTemplate.bind()
 
-const OptionsTemplate = (args) => ({
-  template:
-    `<Select v-bind="args" v-model="value">
-      <SelectOption value="test" identifier="hello">Hello</SelectOption>
-    </Select>`,
-  components: { Select, SelectOption },
-  setup() {
-    let value = ref(undefined)
-
-    let options = ref([
-      {
-        title: 'Item 1',
-        value: true,
-      },
-      {
-        title: 'Item 2',
-        value: false,
-      },
-      {
-        title: 'Item 3',
-        value: 'test',
-      },
-      {
-        title: 'Hello',
-        value: 12,
-      },
-      {
-        title: 'Bye',
-        value: 0,
-      },
-    ])
-
-    return {
-      value,
-      options,
-      args,
-    }
-  },
-})
+Inline.args = {
+  title: 'Input title',
+  hint: 'This is an input hint. It is supposed to help the user understand the reason this input exists and what it does',
+  error:
+    'This is an input error. It tells the user, that there is something wrong with the current input state',
+  searchable: false
+}
