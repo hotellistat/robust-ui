@@ -240,7 +240,7 @@ function resetFields() {
     }" @closed="resetFields">
     <ul v-if="computedOptions.length > 0" class="max-h-72 overflow-auto">
       <li v-for="option in computedOptions" :key="option.value"
-        class="flex  items-center px-4 py-2 transition-colors duration-200 hover:bg-gray-100 dark:hover:bg-gray-700"
+        class="flex  items-center px-4 py-2 transition-colors duration-200 hover:bg-gray-100 dark:hover:bg-gray-700 cursor-default"
         @click="selectItem(option)">
         <span>{{ option.title }}</span>
         <PhCheck v-if="modelValue === option.value"
