@@ -1,8 +1,8 @@
 <script lang="ts">
-export default {
+export default defineComponent({
   name: 'RobustSelect',
   inheritAttrs: false
-}
+})
 </script>
 
 <script lang="ts" setup>
