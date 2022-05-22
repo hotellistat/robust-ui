@@ -22,9 +22,6 @@ import { Modifier } from '@popperjs/core'
 import { onClickOutside } from '@vueuse/core'
 import { PhCheck, PhCaretDown } from '@dnlsndr/vue-phosphor-icons'
 
-
-
-
 const props = defineProps({
   title: {
     type: String,
@@ -140,6 +137,7 @@ function selectItem(item) {
   })
   emit('update:modelValue', item.value)
   emit('change', item.value)
+  emit('blur')
 }
 
 function openDropdown() {
