@@ -1,25 +1,18 @@
 <template>
-  <div
-    ref="root"
+  <div ref="root"
     class="transition-color text-shade-20 relative flex select-none items-center bg-gray-200 duration-100 ease-in-out dark:bg-gray-700"
-    :class="[rounded ? 'rounded-full' : 'rounded-md']"
-  >
-    <div
-      ref="highlighter"
+    :class="[rounded ? 'rounded-full' : 'rounded-md']">
+    <div ref="highlighter"
       class="absolute top-0 bottom-0 z-0 bg-primary-500 transition-all duration-200 ease-in-out"
       :class="[rounded ? 'rounded-full' : 'rounded-md']"
-      :style="{ left: backgroundXOffset + 'px', width: backgroundWidth + 'px' }"
-    ></div>
+      :style="{ left: backgroundXOffset + 'px', width: backgroundWidth + 'px' }">
+    </div>
 
-    <button
-      v-for="tab in tabs"
-      :key="tab.value"
-      :ref="registerTab"
-      :data-value="tab.value"
-      @click="select($event, tab.value)"
+    <button v-for="tab in tabs" :key="tab.value" :ref="registerTab"
+      :data-value="tab.value" @click="select($event, tab.value)"
       class="whitespace-no-wrap z-10 flex-1 flex-shrink-0 flex-grow self-stretch whitespace-nowrap px-4 transition-colors duration-200"
-      :class="{ 'text-white': modelValue === tab.value }"
-    >{{ tab.title }}</button>
+      :class="{ 'text-white': modelValue === tab.value }">{{ tab.title
+      }}</button>
   </div>
 </template>
 

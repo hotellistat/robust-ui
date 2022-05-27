@@ -21,7 +21,7 @@ export default defineComponent({
 
   props: {
     appendTo: {
-      type: HTMLElement,
+      type: Object as PropType<HTMLElement>,
       required: true,
     },
     options: {
