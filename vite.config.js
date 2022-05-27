@@ -9,7 +9,6 @@ export default defineConfig({
     lib: {
       entry: resolve(__dirname, 'src/index.ts'),
       name: 'robust-ui',
-      formats: ['es', "umd", "cjs", "iife"]
     },
     rollupOptions: {
       // make sure to externalize deps that shouldn't be bundled
