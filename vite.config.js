@@ -6,11 +6,15 @@ import { resolve } from 'path'
 export default defineConfig({
   plugins: [vue()],
   build: {
+    ssr: true,
+    minify: false,
     lib: {
       entry: resolve(__dirname, 'src/index.ts'),
       name: 'robust-ui',
+      fileName: (format) => `robust-ui.${format}.js`
     },
     rollupOptions: {
+      input: ["src/index.ts"],
       // make sure to externalize deps that shouldn't be bundled
       // into your library
       external: [
@@ -25,8 +29,7 @@ export default defineConfig({
         "yup"
       ],
       output: {
-        // Provide global variables to use in the UMD build
-        // for externalized deps
+        entryFileNames: 'robust-ui.[format].js',
         globals: {
           vue: 'Vue',
         },
