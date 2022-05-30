@@ -1,6 +1,7 @@
 import vue from '@vitejs/plugin-vue'
 import { defineConfig } from 'vite'
 import { resolve } from 'path'
+import typescript from '@rollup/plugin-typescript';
 
 // https://vitejs.dev/config/
 export default defineConfig({
@@ -10,6 +11,7 @@ export default defineConfig({
       entry: resolve(__dirname, 'src/index.ts'),
       name: 'robust-ui',
     },
+    emptyOutDir: false,
     rollupOptions: {
       // make sure to externalize deps that shouldn't be bundled
       // into your library

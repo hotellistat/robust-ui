@@ -22,10 +22,11 @@
     }
   },
   "scripts": {
-    "dev": "start-storybook -p 6006",
+    "storybook": "start-storybook -p 6006",
     "build-storybook": "build-storybook",
     "deploy": "gh-pages -d storybook-static",
-    "build": "vite build && vue-tsc --emitDeclarationOnly ",
+    "build": "vue-tsc --emitDeclarationOnly && vite build",
+    "dev": "vue-tsc --emitDeclarationOnly && vite build --watch",
     "deploy-storybook": "storybook-to-ghpages",
     "analyze": "vite build --config analyze.config.js",
     "format": "prettier --write \"src/**/*.{vue,ts,js}\"",
@@ -36,6 +37,7 @@
     "@babel/core": "^7.18.0",
     "@dnlsndr/vue-phosphor-icons": "^1.15.1",
     "@mdx-js/preact": "^2.1.1",
+    "@rollup/plugin-typescript": "^8.3.2",
     "@storybook/addon-actions": "^6.5.3",
     "@storybook/addon-essentials": "^6.5.3",
     "@storybook/addon-links": "^6.5.3",

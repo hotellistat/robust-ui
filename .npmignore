@@ -1,0 +1,8 @@
+node_modules
+storybook-static
+src
+assets
+.vscode
+.storybook
+.github
+.devcontainer

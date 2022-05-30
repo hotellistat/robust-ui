@@ -1,6 +1,6 @@
 <template>
   <component :is="(tag as any)" :disabled="disabled"
-    class="flex items-center justify-center truncate font-medium ring-opacity-50 focus:ring cursor-default"
+    class="flex cursor-default items-center justify-center truncate font-medium ring-opacity-50 focus:ring"
     :class="[
       disabled
         ? 'bg-gray-200 text-gray-400 dark:bg-gray-700 dark:text-gray-400'
