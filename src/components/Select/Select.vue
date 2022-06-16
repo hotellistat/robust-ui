@@ -95,8 +95,8 @@ async function filterBySearchTerm(value) {
 }
 
 debouncedWatch(
-  search,
-  async (value) => {
+  [search, options],
+  async ([value, optValue]) => {
     await filterBySearchTerm(value)
   },
   { debounce: 150 }
