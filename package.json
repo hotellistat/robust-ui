@@ -9,7 +9,7 @@
   "files": [
     "dist"
   ],
-  "main": "dist/robust-ui.es.js",
+  "main": "dist/robust-ui.umd.js",
   "browser": "dist/robust-ui.es.js",
   "module": "dist/robust-ui.es.js",
   "unpkg": "dist/robust-ui.umd.js",
