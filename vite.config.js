@@ -1,7 +1,9 @@
 import vue from '@vitejs/plugin-vue'
 import { defineConfig } from 'vite'
 import { resolve } from 'path'
-import typescript from '@rollup/plugin-typescript';
+// visualizer({
+//   open: true
+// })
 
 // https://vitejs.dev/config/
 export default defineConfig({
@@ -11,7 +13,6 @@ export default defineConfig({
       entry: resolve(__dirname, 'src/index.ts'),
       name: 'robust-ui',
     },
-    emptyOutDir: false,
     rollupOptions: {
       // make sure to externalize deps that shouldn't be bundled
       // into your library
@@ -24,15 +25,19 @@ export default defineConfig({
         'vuex',
         'gridstack',
         "vee-validate",
-        "yup"
+        "yup",
+        '@dnlsndr/vue-phosphor-icons'
       ],
       output: {
-        // Provide global variables to use in the UMD build
-        // for externalized deps
         globals: {
           vue: 'Vue',
+          'date-fns': "dateFns",
+          '@popperjs/core': "popperJs",
+          gsap: "gsap",
+          gridstack: "gridStack",
+          '@dnlsndr/vue-phosphor-icons': "phosphor"
         },
-      },
+      }
     },
   },
 })

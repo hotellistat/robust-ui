@@ -25,7 +25,7 @@
     "storybook": "start-storybook -p 6006",
     "build-storybook": "build-storybook",
     "deploy": "gh-pages -d storybook-static",
-    "build": "vue-tsc --emitDeclarationOnly && vite build",
+    "build": "vite build && vue-tsc --emitDeclarationOnly ",
     "dev": "vue-tsc --emitDeclarationOnly && vite build --watch",
     "deploy-storybook": "storybook-to-ghpages",
     "analyze": "vite build --config analyze.config.js",
