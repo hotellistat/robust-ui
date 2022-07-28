@@ -1,5 +1,5 @@
 <template>
-  <div ref="slider" class="base-slider" role="slider"
+  <div ref="slider" class="base-slider relative" role="slider"
     :aria-valuemax="moderatedMax()" :aria-valuemin="moderatedMin()"
     :aria-valuenow="localValue" :class="classes"
     :tabindex="disabled ? null : tabindex || '0'" @blur="onBlur"
@@ -23,12 +23,31 @@
       <div class="base-slider__track-fill bg-primary-400" :style="fillStyle">
       </div>
 
-      <div ref="thumb" class="base-slider__thumb bg-primary-400"
-        :style="thumbStyle">
+      <div ref="firstThumb" class="base-slider__thumb bg-primary-400"
+        :style="firstThumbStyle">
         <div v-if="showMarker" class="base-slider__marker text-xs">
-          <span class="text-xs dark:text-gray-500 text-gray-400">{{ markerText }}</span>
+          <!-- <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="36" -->
+          <!--   height="36"> -->
+          <!--   <path -->
+          <!--     d="M11 .5c-1.7.2-3.4.9-4.7 2-1.1.9-2 2-2.5 3.2-1.2 2.4-1.2 5.1-.1 7.7 1.1 2.6 2.8 5 5.3 7.5 1.2 1.2 2.8 2.7 3 2.7 0 0 .3-.2.6-.5 3.2-2.7 5.6-5.6 7.1-8.5.8-1.5 1.1-2.6 1.3-3.8.2-1.4 0-2.9-.5-4.3-1.2-3.2-4.1-5.4-7.5-5.8-.5-.2-1.5-.2-2-.2z" /> -->
+          <!-- </svg> -->
+
+          <span class="text-xs dark:text-gray-500 text-gray-400">{{ markerText() }}</span>
         </div>
       </div>
+      <div ref="secondThumb" class="base-slider__thumb bg-primary-400"
+        :style="secondThumbStyle">
+        <div v-if="showMarker" class="base-slider__marker text-xs">
+          <!-- <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="36" -->
+          <!--   height="36"> -->
+          <!--   <path -->
+          <!--     d="M11 .5c-1.7.2-3.4.9-4.7 2-1.1.9-2 2-2.5 3.2-1.2 2.4-1.2 5.1-.1 7.7 1.1 2.6 2.8 5 5.3 7.5 1.2 1.2 2.8 2.7 3 2.7 0 0 .3-.2.6-.5 3.2-2.7 5.6-5.6 7.1-8.5.8-1.5 1.1-2.6 1.3-3.8.2-1.4 0-2.9-.5-4.3-1.2-3.2-4.1-5.4-7.5-5.8-.5-.2-1.5-.2-2-.2z" /> -->
+          <!-- </svg> -->
+
+          <span class="text-xs dark:text-gray-500 text-gray-400">{{ markerText(1) }}</span>
+        </div>
+      </div>
+
     </div>
   </div>
 </template>
@@ -39,8 +58,9 @@ import {
   defineComponent,
   onBeforeUnmount,
   onMounted,
+  PropType,
   ref,
-  watch,
+toRefs,
 } from 'vue'
 export default defineComponent({
   name: 'RobustSlider',
@@ -49,7 +69,7 @@ export default defineComponent({
     name: String,
     tabindex: [String, Number],
     modelValue: {
-      type: Number,
+      type: Array as PropType<number[]>,
       required: true,
     },
     value: {
@@ -82,57 +102,71 @@ export default defineComponent({
     },
   },
   setup(props, { emit }) {
-    const initialValue = ref(props.modelValue)
+    const { min, max, markerValue, disabled, showMarker, step, snapToSteps, modelValue } = toRefs(props)
+
+
+    const initialValue = ref(modelValue.value)
     const isActive = ref(false)
     const isDragging = ref(false)
-    const localValue = ref(props.modelValue)
+    const localValue = ref<number[]>(modelValue.value)
     const slider = ref()
     const track = ref()
-    const thumb = ref()
+    const firstThumb = ref()
+    const secondThumb = ref()
+    const handleIndex = ref(0)
+
+    if(Array.isArray(modelValue.value) && (modelValue.value.length > 2 || modelValue.value.length < 2)) {
+      throw Error('modelValue must be number or array of 2 numbers')
+    }
 
     const classes = computed(() => {
       return [
         { 'is-dragging': isDragging.value },
-        { 'is-disabled': props.disabled },
+        { 'is-disabled': disabled.value },
         { 'is-active': isActive.value },
-        { 'has-marker': props.showMarker },
+        { 'has-marker': showMarker.value },
       ]
     })
 
     const fillStyle = computed(() => {
-      return { transform: 'scaleX(' + relativeValue(localValue.value) + ')' }
+      const scaleX = relativeValue(localValue.value[1]) - relativeValue(localValue.value[0])
+      return { transform: 'scaleX(' + scaleX + ')', left: firstThumbStyle.value.left }
     })
 
-    const thumbStyle = computed(() => {
+    const firstThumbStyle = computed(() => {
       return {
-        left: relativeValue(localValue.value) * 100 + '%',
+        left: relativeValue(localValue.value[0]) * 100 + '%'
       }
     })
 
-    const markerText = computed(() => {
-      return props.markerValue === undefined
-        ? props.modelValue
-        : props.markerValue
+    const secondThumbStyle = computed(() => {
+      return {
+        left: relativeValue(localValue.value[1]) * 100 + '%'
+      }
     })
+
+    const markerText = (index = 0) => {
+      return markerValue.value ?? localValue.value[index]
+    }
 
     const snapPoints = computed(() => {
       const points = []
-      let point = props.step * Math.ceil(moderatedMin() / props.step)
+      let point = step.value * Math.ceil(moderatedMin() / step.value)
 
       while (point <= moderatedMax()) {
         points.push(point)
-        point += props.step
+        point += step.value
       }
 
       return points
     })
 
     const moderatedMin = () => {
-      return props.max > props.min ? props.min : 0
+      return max.value > min.value ? min.value : 0
     }
 
     const moderatedMax = () => {
-      return props.max > props.min ? props.max : 100
+      return max.value > min.value ? max.value : 100
     }
 
     const focus = () => {
@@ -140,7 +174,10 @@ export default defineComponent({
     }
 
     const reset = () => {
-      setValue(initialValue)
+      for(let i = 0; i < 2; i++){
+        handleIndex.value = i;
+        setValue(initialValue.value[i])
+      }
     }
 
     const onFocus = () => {
@@ -162,31 +199,34 @@ export default defineComponent({
     const setValueWithSnap = (value) => {
       value = moderateValue(value)
 
-      if (props.snapToSteps) {
+      if (snapToSteps.value) {
         value = getNearestSnapPoint(value)
       }
 
       setValue(value)
     }
 
-    const setValue = (value) => {
+    const setValue = (value: number) => {
       value = moderateValue(value)
 
-      if (value === localValue.value) {
+      if (value === localValue.value[handleIndex.value]) {
         return
       }
 
-      localValue.value = value
-      emit('update:modelValue', value)
-      emit('change', value)
+      if(handleIndex.value === 0 && value >= localValue.value[1]) value = localValue.value[1]
+      if(handleIndex.value === 1 && value <= localValue.value[0]) value = localValue.value[0]
+
+      localValue.value[handleIndex.value] = value
+      emit('update:modelValue', localValue.value)
+      emit('change', localValue.value)
     }
 
     const incrementValue = () => {
-      setValueWithSnap(localValue.value + props.step)
+      setValueWithSnap(localValue.value[handleIndex.value] + step.value)
     }
 
     const decrementValue = () => {
-      setValueWithSnap(localValue.value - props.step)
+      setValueWithSnap(localValue.value[handleIndex.value] - step.value)
     }
 
     const getTrackOffset = () => {
@@ -222,18 +262,24 @@ export default defineComponent({
     }
 
     const initializeDrag = () => {
-      const value = moderateValue(localValue.value ? localValue.value : 0)
-      setValue(value)
+      // const value = moderateValue(localValue.value ? localValue.value : 0)
+      // setValue(value)
+      reset()
     }
 
     const onDragStart = (e) => {
-      if (props.disabled) {
+      if (disabled.value) {
         return
       }
 
       if (!isActive.value) {
         onFocus()
       }
+
+      const value = getDragValue(e)
+      handleIndex.value = closestHandle(value);
+
+      console.log(handleIndex.value)
 
       isDragging.value = true
       dragUpdate(e)
@@ -248,13 +294,33 @@ export default defineComponent({
       dragUpdate(e)
     }
 
-    const dragUpdate = (e) => {
+    const closestHandle = (value: number) => {
+      let tempHandleIndex = 0;
+      if(localValue.value[0] === localValue.value[1]) {
+        let avg = localValue.value[0]
+        if(value > avg) return 1
+        return 0
+      }
+
+      const firstHandleDiff = Math.abs(localValue.value[0] - value);
+      const secondHandleDiff = Math.abs(localValue.value[1] - value);
+
+      if(secondHandleDiff < firstHandleDiff) tempHandleIndex = 1;
+      return tempHandleIndex;
+    }
+
+    const getDragValue = (e) => {
       const position = e.touches ? e.touches[0].pageX : e.pageX
       const trackLength = track.value.offsetWidth
       const relativeValue = (position - getTrackOffset()) / trackLength
       const value = moderateValue(
         moderatedMin() + relativeValue * (moderatedMax() - moderatedMin())
       )
+      return Math.round(value)
+    }
+
+    const dragUpdate = (e) => {
+      const value = getDragValue(e)
 
       if (isDragging.value) {
         setValue(Math.round(value))
@@ -265,8 +331,8 @@ export default defineComponent({
       if (isDragging.value) {
         isDragging.value = false
 
-        if (props.snapToSteps && props.modelValue % props.step !== 0) {
-          setValueWithSnap(props.modelValue)
+        if (snapToSteps.value && modelValue.value[handleIndex.value] % step.value !== 0) {
+          setValueWithSnap(modelValue.value[handleIndex.value])
         }
 
         document.removeEventListener('touchmove', onDragMove)
@@ -277,8 +343,8 @@ export default defineComponent({
     }
 
     const getNearestSnapPoint = (value) => {
-      const previousSnapPoint = Math.floor(value / props.step) * props.step
-      const nextSnapPoint = previousSnapPoint + props.step
+      const previousSnapPoint = Math.floor(value / step.value) * step.value
+      const nextSnapPoint = previousSnapPoint + step.value
       const midpoint = (previousSnapPoint + nextSnapPoint) / 2
 
       if (previousSnapPoint < moderatedMin()) {
@@ -306,13 +372,11 @@ export default defineComponent({
         return moderatedMax()
       }
 
+      //if(handleIndex.value === 0 && value >= localValue.value[1]) return localValue.value[1]
+      //if(handleIndex.value === 1 && value <= localValue.value[0]) return localValue.value[0]
+
       return value
     }
-
-    // debugging needs to be done
-    /*watch(props.value, () => {
-      setValue(props.modelValue);
-    });*/
 
     onMounted(() => {
       initializeSlider()
@@ -325,14 +389,16 @@ export default defineComponent({
     return {
       slider,
       track,
-      thumb,
+      firstThumb,
+      secondThumb,
+      firstThumbStyle,
+      secondThumbStyle,
       initialValue,
       isActive,
       isDragging,
       localValue,
       classes,
       fillStyle,
-      thumbStyle,
       markerText,
       snapPoints,
       moderatedMin,
@@ -376,10 +442,10 @@ export default defineComponent({
   transform: scale(1) translateY(-26px);
 }
 
-.base-slider:not(.is-disabled).is-active .base-slider__marker-text,
-.base-slider:not(.is-disabled).is-dragging .base-slider__marker-text {
-  color: white;
-}
+/* .base-slider:not(.is-disabled).is-active .base-slider__marker-text, */
+/* .base-slider:not(.is-disabled).is-dragging .base-slider__marker-text { */
+/*   color: white; */
+/* } */
 
 .base-slider:not(.is-disabled).is-active .base-slider__snap-point,
 .base-slider:not(.is-disabled).is-dragging .base-slider__snap-point {
