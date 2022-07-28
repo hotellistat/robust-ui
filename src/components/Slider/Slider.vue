@@ -189,18 +189,6 @@ export default defineComponent({
       setValueWithSnap(localValue.value - props.step)
     }
 
-    const getTrackOffset = () => {
-      let el = track.value
-      let offset = el.offsetLeft
-
-      while (el.offsetParent) {
-        el = el.offsetParent
-        offset += el.offsetLeft
-      }
-
-      return offset
-    }
-
     const getPointStyle = (point) => {
       return {
         left: point + '%',
@@ -249,9 +237,11 @@ export default defineComponent({
     }
 
     const dragUpdate = (e) => {
+      const sliderOffsetLeft = track.value!.getBoundingClientRect().left
       const position = e.touches ? e.touches[0].pageX : e.pageX
       const trackLength = track.value.offsetWidth
-      const relativeValue = (position - getTrackOffset()) / trackLength
+      const relativeValue = (position - sliderOffsetLeft) / trackLength
+        
       const value = moderateValue(
         moderatedMin() + relativeValue * (moderatedMax() - moderatedMin())
       )
@@ -346,7 +336,6 @@ export default defineComponent({
       setValue,
       incrementValue,
       decrementValue,
-      getTrackOffset,
       getPointStyle,
       initializeSlider,
       teardownSlider,
