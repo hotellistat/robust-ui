@@ -1,5 +1,5 @@
 import Slider from './Slider.vue'
-import { PhWarning } from '@dnlsndr/vue-phosphor-icons'
+import { ref } from 'vue'
 
 export default {
   title: 'Ui/Slider',
@@ -10,18 +10,18 @@ export default {
 }
 
 const DefaultTemplate = (args) => ({
-  template: `<Slider v-bind="args" class="w-64" />`,
+  template: `<Slider v-bind="args" v-model="value" class="w-64" />`,
   components: { Slider },
   setup() {
-    return { args }
+    const value = ref(500);
+    return { args, value }
   },
 })
 
 export const Default = DefaultTemplate.bind()
 
 Default.args = {
-  title: 'Input title',
-  description:
-    'This is an input hint. It is supposed to help the user understand the reason this input exists and what it does',
-  icon: PhWarning,
+  min: 0,
+  max: 5000,
+  step: 100
 }
