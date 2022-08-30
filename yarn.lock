@@ -10291,8 +10291,8 @@ vite-plugin-mdx@^3.5.6:
     unified "^9.2.1"
 
 vite@^2.9.7, vite@^2.9.9:
-  version "2.9.9"
-  resolved "https://registry.npmjs.org/vite/-/vite-2.9.9.tgz"
+  version "2.9.13"
+  resolved "https://registry.yarnpkg.com/vite/-/vite-2.9.13.tgz#859cb5d4c316c0d8c6ec9866045c0f7858ca6abc"
   dependencies:
     esbuild "^0.14.27"
     postcss "^8.4.13"
