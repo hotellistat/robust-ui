@@ -89,12 +89,15 @@ export default defineComponent({
       switch (props.size) {
         case "3xl": {
           classString += " max-w-7xl"
+          break;
         }
         case "2xl": {
           classString += " max-w-6xl"
+          break;
         }
         case "xl": {
           classString += " max-w-5xl"
+          break;
         }
         case "lg": {
           classString += " max-w-4xl"
