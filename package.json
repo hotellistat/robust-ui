@@ -10,14 +10,14 @@
     "dist"
   ],
   "main": "dist/robust-ui.umd.js",
-  "browser": "dist/robust-ui.es.js",
-  "module": "dist/robust-ui.es.js",
+  "browser": "dist/robust-ui.mjs",
+  "module": "dist/robust-ui.mjs",
   "unpkg": "dist/robust-ui.umd.js",
   "jsdelivr": "dist/robust-ui.umd.js",
   "types": "dist/index.d.ts",
   "exports": {
     ".": {
-      "import": "./dist/robust-ui.es.js",
+      "import": "./dist/robust-ui.mjs",
       "require": "./dist/robust-ui.umd.js"
     }
   },

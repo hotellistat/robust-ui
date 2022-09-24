@@ -1,7 +1,6 @@
 name: Publish to GitHub Pages
 on:
   push:
-    paths: ["stories/**", "src/**"]
 jobs:
   build-and-deploy:
     runs-on: ubuntu-latest
