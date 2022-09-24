@@ -6,7 +6,12 @@
     "outDir": "dist",
     "declaration": true,
     "allowJs": true,
-    "types": ["vite/client"]
+    "types": [
+      "vite/client",
+      "web-bluetooth"
+    ]
   },
-  "include": ["./src"]
+  "include": [
+    "./src",
+  ]
 }
