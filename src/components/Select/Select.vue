@@ -275,7 +275,7 @@ function deselectAll() {
         v-show="!open"
         :id="slotProps.cuid"
         ref="select"
-        class="flex h-full w-full items-center bg-transparent text-current outline-none"
+        class="flex h-full flex-1 flex-shrink min-w-0 items-center bg-transparent text-current outline-none"
         :class="[$slots.prefix || condensed ? 'pl-2' : 'pl-3']"
         v-bind="$attrs"
       >
@@ -288,7 +288,7 @@ function deselectAll() {
         ref="refSelectInput"
         v-model="search"
         size="1"
-        class="block h-full w-full bg-transparent text-current outline-none"
+        class="block h-full flex-1 flex-shrink min-w-0 bg-transparent text-current outline-none"
         :class="[$slots.prefix || condensed ? 'pl-2' : 'pl-3']"
       />
 
@@ -304,13 +304,22 @@ function deselectAll() {
         />
       </div>
     </RobustInputWrapper>
-    <div
+    <RobustInputWrapper
       v-else
-      class="max-w-52 relative flex h-10 min-w-20 rounded-md border border-gray-200 bg-gray-50 ring-primary-500 ring-opacity-30 focus-within:border-primary-500 focus-within:outline-none focus-within:ring dark:border-gray-700 dark:bg-gray-900 focus-within:dark:border-primary-500"
+      :title="title"
+      :hint="hint"
+      :error="error"
+      :class="$props.class"
+      class=""
+      :readonly="readonly"
+      :condensed="condensed"
       @click="openDropdown"
+      @focus="openDropdown"
+      @blur="closeDropdown"
+      v-slot="slotProps"
     >
       <div
-        class="flex h-full w-full items-center bg-transparent text-current outline-none"
+        class="flex h-full flex-1 flex-shrink min-w-0 items-center bg-transparent text-current outline-none"
         :class="[$slots.prefix || condensed ? 'pl-2' : 'pl-3']"
       >
         <div class="min-w-0 select-none truncate">
@@ -328,7 +337,7 @@ function deselectAll() {
           :class="{ 'rotate-180 transform': open }"
         />
       </div>
-    </div>
+    </RobustInputWrapper>
   </div>
   <RobustPopper
     v-if="anchorRef"
@@ -354,13 +363,13 @@ function deselectAll() {
       <li
         v-for="option in computedOptions"
         :key="option.value"
-        class="flex cursor-default items-center px-4 py-2 transition-colors duration-200 hover:bg-gray-100 dark:hover:bg-gray-700"
+        class="flex cursor-default items-center px-4 py-2 transition-colors duration-200 hover:bg-gray-100 dark:hover:bg-gray-700 gap-4"
         @click="selectItem(option)"
       >
         <span>{{ option.title }}</span>
         <PhCheck
           v-if="optionSelected(option)"
-          class="ml-auto text-gray-400"
+          class="flex-shrink-0 ml-auto text-gray-400"
           weight="bold"
           size="14"
         />
