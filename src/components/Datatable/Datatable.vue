@@ -1,9 +1,6 @@
 <template>
   <div class="flex flex-col gap-y-2 sm:gap-y-0">
-    <div
-      class="hidden gap-x-2 p-2 sm:grid"
-      :class="`grid-cols-[repeat(${options.columns.length},minmax(0,1fr))]`"
-    >
+    <div class="datatable-grid-columns hidden gap-x-2 p-2 sm:grid">
       <div
         class="flex-1"
         v-for="column in options.columns"
@@ -20,7 +17,7 @@
       <!-- set height to maxHeight -->
       <div
         class="p-2"
-        :class="`flex flex-col gap-x-2 sm:grid grid-cols-[repeat(${options.columns.length},minmax(0,1fr))]`"
+        :class="`datatable-grid-columns flex flex-col gap-x-2 sm:grid`"
       >
         <!-- Columns -->
         <div
@@ -83,3 +80,13 @@ onMounted(() => {
   getHeighestRow()
 })
 </script>
+
+<style>
+/* :class="`grid-cols-[repeat(${options.columns.length},minmax(0,1fr))]`" */
+.datatable-grid-columns {
+  grid-template-columns: repeat(
+    v-bind('options.columns.length'),
+    minmax(0, 1fr)
+  );
+}
+</style>
