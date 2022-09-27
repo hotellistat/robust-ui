@@ -1,14 +1,21 @@
 <template>
   <div class="py-4 flex flex-col text-center items-center">
     <div class="mb-4 text-gray-700 dark:text-gray-400">
-      <component v-if="!$slots.icon" :is="icon" size="40" />
-      <slot v-else name="icon" />
+      <component v-if="icon !== undefined" :is="icon" size="40" />
+      <slot name="icon" />
     </div>
-    <div class="text-xl text-gray-700 dark:text-gray-400 mb-2">{{ title }}</div>
+    <div class="text-xl text-gray-700 dark:text-gray-400 mb-2">
+        {{ title }}
+        <slot name='title'/>
+    </div>
     <div
       class="text-gray-400 dark:text-gray-500"
       :class="[$slots.default ? 'mb-4' : null]"
-    >{{ description }}</div>
+    >
+
+    {{ description }}
+    <slot name="description" />
+  </div>
     <div class="inline-block">
       <slot />
     </div>
@@ -30,6 +37,7 @@ export default defineComponent({
     },
     icon: {
       type: Object,
+      default: undefined
     },
   },
 })

@@ -14,7 +14,7 @@ export default {
 
 const DefaultTemplate = (args, { events }) => ({
   template:
-    '<Select v-bind="args" :options="options" v-model="value" @="events"/><br/>Value: {{value}}',
+    '<Select v-bind="args" :options="options" v-model="value" @="events" class="w-64 min-w-0"/><br/>Value: {{value}}',
   components: { Select },
   setup() {
     let value = ref(undefined)
@@ -29,7 +29,7 @@ const DefaultTemplate = (args, { events }) => ({
         value: false,
       },
       {
-        title: 'Item 3',
+        title: 'Item 3 very long title that might not fit into the select box',
         value: 'test',
       },
       {
