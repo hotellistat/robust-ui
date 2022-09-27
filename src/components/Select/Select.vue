@@ -351,7 +351,7 @@ function deselectAll() {
     }"
     @closed="resetFields"
   >
-    <div class="flex justify-end py-2 px-4">
+    <div v-if="Array.isArray(modelValue)" class="flex justify-end py-2 px-4">
       <div @click="controlAll" class="cursor-pointer font-light">
         <div v-if="Array.isArray(modelValue) && modelValue.length > 0">
           Clear all
