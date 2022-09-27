@@ -7,6 +7,8 @@ export const options = {
     {
       name: 'Review',
       key: 'review',
+      size: '2fr',
+      // class: 'w-1/4',
     },
     {
       name: 'Rating',

@@ -1,11 +1,7 @@
 <template>
   <div class="flex flex-col gap-y-2 sm:gap-y-0">
     <div class="datatable-grid-columns hidden gap-x-2 p-2 sm:grid">
-      <div
-        class="flex-1"
-        v-for="column in options.columns"
-        :class="column.class ?? ''"
-      >
+      <div v-for="column in options.columns" :class="column.class ?? ''">
         <div>{{ column.name }}</div>
       </div>
     </div>
@@ -35,6 +31,7 @@
 </template>
 
 <script setup lang="ts">
+import { computed } from '@vue/reactivity'
 import { onMounted, PropType, ref, toRefs } from 'vue'
 import Separator from '../Separator/Separator.vue'
 
@@ -42,6 +39,7 @@ type Column = {
   name: string
   key: string
   class?: string
+  size?: string
 }
 
 type DataTableOptions = {
@@ -68,6 +66,13 @@ const { options } = toRefs(props)
 const rows = ref()
 const maxHeight = ref(0)
 
+const sizes = computed(() => {
+  const colsSizeArray = options.value.columns.map((col) =>
+    col.size !== undefined ? `minmax(0, ${col.size})` : 'minmax(0, 1fr)'
+  )
+  return colsSizeArray.join(' ')
+})
+
 const getHeighestRow = () => {
   rows.value.forEach((el) => {
     const h = el.clientHeight
@@ -84,9 +89,6 @@ onMounted(() => {
 <style>
 /* :class="`grid-cols-[repeat(${options.columns.length},minmax(0,1fr))]`" */
 .datatable-grid-columns {
-  grid-template-columns: repeat(
-    v-bind('options.columns.length'),
-    minmax(0, 1fr)
-  );
+  grid-template-columns: v-bind('sizes');
 }
 </style>
