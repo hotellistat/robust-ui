@@ -1,32 +1,31 @@
 export const options = {
   columns: [
     {
-      name: 'hotel',
+      name: 'Hotel',
       key: 'hotel',
     },
     {
-      name: 'review',
+      name: 'Review',
       key: 'review',
-      class: 'flex-[2] truncate',
     },
     {
-      name: 'rating',
+      name: 'Rating',
       key: 'rating',
     },
     {
-      name: 'date',
+      name: 'Date',
       key: 'creation_time',
     },
     {
-      name: 'title',
+      name: 'Title',
       key: 'title',
     },
     {
-      name: 'reviewer',
+      name: 'Reviewer',
       key: 'reviewer_name',
     },
     {
-      name: 'extsys',
+      name: 'Extsys',
       key: 'extsys',
     },
   ],

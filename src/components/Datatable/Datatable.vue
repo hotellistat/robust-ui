@@ -1,6 +1,9 @@
 <template>
-  <div class="flex flex-col">
-    <div class="flex gap-x-2">
+  <div class="flex flex-col gap-y-2 sm:gap-y-0">
+    <div
+      class="hidden gap-x-2 p-2 sm:grid"
+      :class="`grid-cols-[repeat(${options.columns.length},minmax(0,1fr))]`"
+    >
       <div
         class="flex-1"
         v-for="column in options.columns"
@@ -9,14 +12,23 @@
         <div>{{ column.name }}</div>
       </div>
     </div>
-    <Separator />
-    <div v-for="entry in data">
-      <div class="flex gap-x-2">
+
+    <Separator class="hidden sm:block" />
+
+    <!-- Rows -->
+    <div v-for="entry in data" ref="rows">
+      <!-- set height to maxHeight -->
+      <div
+        class="p-2"
+        :class="`flex flex-col gap-x-2 sm:grid grid-cols-[repeat(${options.columns.length},minmax(0,1fr))]`"
+      >
+        <!-- Columns -->
         <div
-          class="flex-1"
+          class="grid grid-cols-2 sm:flex"
           v-for="column in options.columns"
           :class="column.class ?? ''"
         >
+          <div class="block sm:hidden">{{ column.name }}</div>
           <div>{{ entry[column.key] }}</div>
         </div>
       </div>
@@ -26,7 +38,7 @@
 </template>
 
 <script setup lang="ts">
-import { PropType, toRefs } from 'vue'
+import { onMounted, PropType, ref, toRefs } from 'vue'
 import Separator from '../Separator/Separator.vue'
 
 type Column = {
@@ -56,4 +68,18 @@ const props = defineProps({
 })
 
 const { options } = toRefs(props)
+const rows = ref()
+const maxHeight = ref(0)
+
+const getHeighestRow = () => {
+  rows.value.forEach((el) => {
+    const h = el.clientHeight
+    maxHeight.value = Math.max(h, maxHeight.value)
+  })
+  console.log(maxHeight.value)
+}
+
+onMounted(() => {
+  getHeighestRow()
+})
 </script>
