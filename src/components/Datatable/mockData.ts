@@ -1,34 +1,119 @@
+export const serverSideOptions = {
+  columns: [
+    {
+      name: 'Hotel',
+      key: 'hotel',
+      group_by: 'hotel',
+      // class: 'overflow-hidden',
+      // size: '2fr',
+    },
+    // {
+    //   name: 'Review',
+    //   key: 'review',
+    //   size: '2fr',
+    //   sort: (a: any, b: any, direction: string) => {
+    //     if (direction === 'asc') {
+    //       return a.length - b.length
+    //     } else {
+    //       return b.length - a.length
+    //     }
+    //   },
+    //   // class: 'w-1/4',
+    // },
+    {
+      name: 'Rating',
+      key: 'rating',
+      size: '4rem',
+      group_by: 'rating',
+    },
+    {
+      name: 'Recommendation',
+      key: 'recommendation',
+      size: '10rem',
+      group_by: 'recommendation',
+    },
+    {
+      name: 'Date',
+      key: 'creation_time',
+      size: '14rem',
+      group_by: 'date',
+      // size: '2fr',
+    },
+    {
+      name: 'Title',
+      key: 'title',
+      group_by: 'title',
+      // size: '2fr',
+    },
+    {
+      name: 'Reviewer',
+      key: 'reviewer_name',
+      size: '12rem',
+      group_by: 'reviewer',
+      // size: '2fr',
+    },
+    {
+      name: 'Extsys',
+      key: 'extsys',
+      size: '5rem',
+      group_by: 'extsys',
+    },
+  ],
+  serverSide: true,
+}
+
 export const options = {
   columns: [
     {
       name: 'Hotel',
       key: 'hotel',
+      // class: 'overflow-hidden',
+      // size: '2fr',
     },
-    {
-      name: 'Review',
-      key: 'review',
-      size: '2fr',
-      // class: 'w-1/4',
-    },
+    // {
+    //   name: 'Review',
+    //   key: 'review',
+    //   size: '2fr',
+    //   sort: (a: any, b: any, direction: string) => {
+    //     if (direction === 'asc') {
+    //       return a.length - b.length
+    //     } else {
+    //       return b.length - a.length
+    //     }
+    //   },
+    //   // class: 'w-1/4',
+    // },
     {
       name: 'Rating',
       key: 'rating',
+      size: '4rem',
+    },
+    {
+      name: 'Recommendation',
+      key: 'recommendation',
+      size: '10rem',
     },
     {
       name: 'Date',
       key: 'creation_time',
+      size: '14rem',
+      // size: '2fr',
     },
     {
       name: 'Title',
       key: 'title',
+      // size: '2fr',
     },
     {
       name: 'Reviewer',
       key: 'reviewer_name',
+      size: '12rem',
+      // size: '2fr',
     },
     {
       name: 'Extsys',
       key: 'extsys',
+      size: '5rem',
     },
   ],
 }
