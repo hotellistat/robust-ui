@@ -504,6 +504,9 @@ watch(selectedRows, () => {
   emit('update:selectedRows', selectedRows.value)
 })
 
+/*
+ Resets column sizes to px value.
+**/
 const resetSizes = () => {
   const tableEl = table.value
   const cols: HTMLElement[] = tableEl.querySelectorAll('.table-column')
@@ -513,6 +516,11 @@ const resetSizes = () => {
   emit('update:resize', sizesController.value)
 }
 
+/*
+  Creates resizable column by adding event listeners.
+  Calculates new size of column by calculating offset
+  of mouse x position before and after resize.
+**/
 const createResizableColumn = function (
   col: HTMLElement,
   resizer: HTMLElement,
@@ -523,13 +531,14 @@ const createResizableColumn = function (
   let x = 0
   let w = 0
 
+  // Storing width of coulmn and mouse X position
+  // for calculating offset between current and new X postion
   const mouseDownHandler = function (e: MouseEvent) {
     // Get the current mouse position
     x = e.clientX
 
     // Calculate the current width of column
     w = col.clientWidth
-    // w = parseInt(styles.width, 10)
 
     // Attach listeners for document's events
     document.addEventListener('mousemove', mouseMoveHandler)
@@ -542,8 +551,6 @@ const createResizableColumn = function (
     // Determine how far the mouse has been moved
     const dx = e.clientX - x
     const calculatedWidth = w + dx
-
-    // Update the width of column
 
     const currentCol = idx + 1
     const tableEl: HTMLElement = table.value
@@ -562,6 +569,8 @@ const createResizableColumn = function (
     // we set next column size to 1fr such that
     // it adapts to newly calculated width of previous column
     sizesController.value[currentCol + 1] = '1fr'
+
+    // Update the width of column
     sizesController.value[currentCol] = `${calculatedWidth}px`
   }
 
@@ -578,33 +587,20 @@ const createResizableColumn = function (
 
 const createResizableTable = () => {
   if (!options.value.resize) return
-  // Query the table
-  const tableEl = table.value
 
-  // Query all headers
+  const tableEl = table.value
   const cols: HTMLElement[] = tableEl.querySelectorAll('.table-column')
   const rowsWrapper = tableEl.querySelector('.rows-wrapper')
 
-  // Loop over them
   cols.forEach((col, idx) => {
-    // if (idx + 1 != sizesController.value.length - 1)
-    sizesController.value[idx + 1] = col.clientWidth + 'px'
-    // else sizesController.value[idx + 1] = '1fr'
-    console.log('sizesController.value', sizesController.value)
-    if (idx === cols.length - 1) return
-    // Create a resizer element
     const resizer = document.createElement('div')
     resizer.classList.add('resizer')
-
-    // Set the height
     resizer.style.height = `${rowsWrapper.clientHeight}px`
-
-    // Add a resizer element to the column
     col.appendChild(resizer)
-
-    // Will be implemented in the next section
     createResizableColumn(col, resizer, idx)
   })
+
+  resetSizes()
 }
 
 onMounted(() => {
