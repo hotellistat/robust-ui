@@ -1,4 +1,8 @@
 export const serverSideOptions = {
+  page: 1,
+  maxPage: 10,
+  rowsLimit: 10,
+  rowsLimitOptions: [5, 10, 15, 25, 50],
   columns: [
     {
       name: 'Hotel',
@@ -60,15 +64,21 @@ export const serverSideOptions = {
     },
   ],
   serverSide: true,
+  id: 'id',
 }
 
 export const options = {
+  id: 'id',
   columns: [
     {
       name: 'Hotel',
       key: 'hotel',
       // class: 'overflow-hidden',
-      // size: '2fr',
+      size: '2fr',
+    },
+    {
+      name: 'Rating',
+      key: 'rating',
     },
     // {
     //   name: 'Review',
@@ -84,36 +94,27 @@ export const options = {
     //   // class: 'w-1/4',
     // },
     {
-      name: 'Rating',
-      key: 'rating',
-      size: '4rem',
-    },
-    {
       name: 'Recommendation',
       key: 'recommendation',
-      size: '10rem',
     },
     {
       name: 'Date',
       key: 'creation_time',
-      size: '14rem',
-      // size: '2fr',
+      size: '2fr',
     },
     {
       name: 'Title',
       key: 'title',
-      // size: '2fr',
+      size: '2fr',
     },
     {
       name: 'Reviewer',
       key: 'reviewer_name',
-      size: '12rem',
-      // size: '2fr',
+      size: '2fr',
     },
     {
       name: 'Extsys',
       key: 'extsys',
-      size: '5rem',
     },
   ],
 }
