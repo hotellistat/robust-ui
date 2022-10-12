@@ -4,32 +4,39 @@
     class="block sm:hidden data-table-header border-bottom-2 flex items-center justify-center text-center whitespace-nowrap px-4 py-2 text-sm tracking-wider  bg-gray-200 dark:bg-gray-500">
   </div>
   Value</div>
-  <data-table-cell v-if="isGrouped" :key="-1" class="hidden sm:grid" />
+  <DataTableCell v-if="isGrouped" :key="-1" class="hidden sm:grid" />
 
-  <template v-for="column in columns.slice(isGrouped ? 1 : 0)"
+  <template
+v-for="column in columns.slice(isGrouped ? 1 : 0)"
     :key="column.key">
-    <slot :name="column.key" :row="record" :value="record[column.key]"
+    <slot
+:name="column.key" :row="record" :value="record[column.key]"
       :column="column.key">
-      <data-table-cell :type="column.type" :column="column.key"
-        :options="column.options" :is-inline-edit-mode="isInlineEditMode"
-        :class="column.fnClassRule ? column.fnClassRule(record[column.key], record) : null"
-        @click="$emit('click')" @change="changeHandler"
-        v-model="record[column.key]" />
+      <DataTableCell
+v-model="record[column.key]" :type="column.type"
+        :column="column.key" :options="column.options"
+        :is-inline-edit-mode="isInlineEditMode"
+        :class="column.fnClassRule ? column.fnClassRule(record[column.key], record) : null" @click="$emit('click')"
+        @change="changeHandler" />
     </slot>
   </template>
 
   <div v-if="hasActionColumn">
-    <div v-if="!isInlineEditMode"
+    <div
+v-if="!isInlineEditMode"
       class="flex items-center justify-center px-4 py-2 text-center whitespace-nowrap text-xs font-medium">
-      <component v-if="actionComponent" :is="actionComponent" :record="record"
+      <Component
+:is="actionComponent" v-if="actionComponent" :record="record"
         @reload="$emit('reload')" @action="(e) => $emit('action', e)" />
-      <Button v-else @click="$emit('edit')"
-        class="p-1.5 rounded bg-blue-500 text-gray-100">
-        <ph-pencil :size="15" />
+      <Button
+v-else class="p-1.5 rounded bg-blue-500 text-gray-100"
+        @click="$emit('edit')">
+        <PhPencil :size="15" />
       </Button>
     </div>
   </div>
 </template>
+
 <script lang="ts">
 import { toRefs, inject, defineComponent, PropType } from "vue";
 import DataTableCell from "./DataTableCell.vue";

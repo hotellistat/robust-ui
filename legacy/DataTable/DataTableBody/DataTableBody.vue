@@ -1,12 +1,11 @@
-
 <template>
   <div
-    class="data-table-body block sm:grid col-span-1"
+    class="data-table-body col-span-1 block sm:grid"
     :style="{ 'grid-template-columns': gridTemplateColumnsCss }"
   >
     <template v-if="config.groupBy">
       <template v-for="(group, groupKey) in bodyData" :key="groupKey">
-        <data-table-group-record
+        <DataTableGroupRecord
           :model-value="{ group: groupKey, count: group.children.length }"
           :columns="groupColumns"
           :total-count="columns.length"
@@ -16,108 +15,126 @@
         <template v-if="!(config.collapsed && config.collapsed[groupKey])">
           <Record
             v-for="(record, key) in bodyData[groupKey].children"
+            :key="record.id"
             v-model="bodyData[groupKey]['children'][key]"
             :columns="columns"
-            :key="record.id"
             is-grouped
           />
         </template>
       </template>
     </template>
-    <template v-else v-for="(record, key) in bodyData" :key="key">
+    <template v-for="(record, key) in bodyData" v-else :key="key">
       <Record
-        @edit="openRecordEditModal(key)"
-        @click="$emit('clickRecord', bodyData[key])"
         v-model="bodyData[key]"
         :columns="columns"
         :is-inline-edit-mode="isInlineEditMode"
         :action-component="actionComponent"
         :has-action-column="hasActionColumn"
+        @edit="openRecordEditModal(key)"
+        @click="$emit('clickRecord', bodyData[key])"
         @reload="$emit('reload')"
         @action="(e) => $emit('action', e)"
       >
-        <template v-for="(_, slot) in $slots" v-slot:[slot]="scope">
+        <template v-for="(_, slot) in $slots" #[slot]="scope">
           <slot :name="slot" v-bind="scope || {}" />
         </template>
       </Record>
     </template>
   </div>
 
-  <Modal name="update-field" ref="modalRef">
-    <div class="px-6 pt-8 pb-4 grid grid-cols-2">
+  <Modal ref="modalRef" name="update-field">
+    <div class="grid grid-cols-2 px-6 pt-8 pb-4">
       <div
         v-for="column in (columns as any)"
         :key="column.key"
-        class="flex items-center mx-2 my-4"
+        class="mx-2 my-4 flex items-center"
       >
-        <span class="flex items-center min-w-[5.6rem]">{{ column.title }}:</span>
+        <span class="flex min-w-[5.6rem] items-center"
+          >{{ column.title }}:</span
+        >
         <div class="flex w-full overflow-hidden">
           <slot name="leftIcon"></slot>
           <Input
             v-if="column.type === 'text' || column.type === 'number'"
-            :type="column.type"
-            class="bg-transparent truncate"
             v-model="selectedRecord[column.key]"
+            :type="column.type"
+            class="truncate bg-transparent"
           />
 
           <Checkbox
             v-if="column.type === 'checkbox'"
-            type="checkbox"
-            class="bg-transparent truncate"
             v-model="selectedRecord[column.key]"
+            type="checkbox"
+            class="truncate bg-transparent"
           />
 
           <DatePicker
             v-if="column.type === 'date'"
-            class="bg-transparent truncate"
-            :modelValue="new Date(selectedRecord[column.key])"
-            @update:modelValue="(v) => selectedRecord[column.key] = v"
+            class="truncate bg-transparent"
+            :model-value="new Date(selectedRecord[column.key])"
+            @update:modelValue="(v) => (selectedRecord[column.key] = v)"
           />
 
           <Select
             v-if="column.type === 'enum'"
-            class="bg-transparent truncate rounded"
-            :options="column.options"
             v-model="selectedRecord[column.key]"
+            class="truncate rounded bg-transparent"
+            :options="column.options"
           />
         </div>
       </div>
     </div>
-    <div class="p-4 pt-0 flex justify-end">
+    <div class="flex justify-end p-4 pt-0">
       <Button @click="updateSelectedRecord">Save</Button>
-      <Button
-        @click="modalRef.close"
-        class="ml-2 bg-gray-400 hover:bg-gray-500"
-      >Cancel</Button>
+      <Button class="ml-2 bg-gray-400 hover:bg-gray-500" @click="modalRef.close"
+        >Cancel</Button
+      >
     </div>
   </Modal>
 </template>
+
 <script lang="ts">
-import { toRefs, reactive, computed, ref, inject, defineComponent, Ref  } from "vue";
-import Record from "./DataTableRecord.vue";
-import DataTableGroupRecord from "./DataTableGroupRecord.vue";
-import { AddUpdatedRecordSymbol } from "../ProvideDataTableSettings";
-import DatePicker from '../../DatePicker/DatePicker.vue';
-import Modal from '../../Modal/Modal.vue';
-import Select from '../../Select/Select.vue';
-import Button from '../../Button/Button.vue';
-import Input from '../../Input/Input.vue';
-import Checkbox from '../../Checkbox/Checkbox.vue';
-export default defineComponent ({
-  components: { Record, DataTableGroupRecord, DatePicker, Modal, Select, Button, Input, Checkbox },
-  emits: ["update:modelData", "update:modelConfig", "toggleGroup", "clickRecord", "reload", "action"],
+import {
+  toRefs,
+  reactive,
+  computed,
+  ref,
+  inject,
+  defineComponent,
+  Ref,
+} from 'vue'
+import Record from './DataTableRecord.vue'
+import DataTableGroupRecord from './DataTableGroupRecord.vue'
+import { AddUpdatedRecordSymbol } from '../ProvideDataTableSettings'
+import DatePicker from '../../DatePicker/DatePicker.vue'
+import Modal from '../../Modal/Modal.vue'
+import Select from '../../Select/Select.vue'
+import Button from '../../Button/Button.vue'
+import Input from '../../Input/Input.vue'
+import Checkbox from '../../Checkbox/Checkbox.vue'
+export default defineComponent({
+  components: {
+    Record,
+    DataTableGroupRecord,
+    DatePicker,
+    Modal,
+    Select,
+    Button,
+    Input,
+    Checkbox,
+  },
   props: {
     columns: {
       type: Array,
-      default: () => []
+      default: () => [],
     },
     data: {
       type: Object,
-      default: () => ({})
+      default: () => ({}),
     },
     config: Object,
     isInlineEditMode: {
-      type: Boolean
+      type: Boolean,
     },
     hasActionColumn: {
       type: Boolean,
@@ -125,57 +142,65 @@ export default defineComponent ({
     },
     gridTemplateColumnsCss: String,
     actionComponent: {
-      type: Object
-    }
+      type: Object,
+    },
   },
+  emits: [
+    'update:modelData',
+    'update:modelConfig',
+    'toggleGroup',
+    'clickRecord',
+    'reload',
+    'action',
+  ],
   setup(props, { emit, slots }) {
-    const { data, columns, config, isInlineEditMode } = toRefs(props);
-    const modalRef = ref(null);
-    const selectedRecord = ref(null);
+    const { data, columns, config, isInlineEditMode } = toRefs(props)
+    const modalRef = ref(null)
+    const selectedRecord = ref(null)
 
-    const addUpdatedRecord: any = inject(AddUpdatedRecordSymbol);
+    const addUpdatedRecord: any = inject(AddUpdatedRecordSymbol)
     const bodyData: Ref<any> = computed({
       get() {
-        return data.value;
+        return data.value
       },
       set(value) {
-        emit("update:modelData", value);
-      }
-    });
+        emit('update:modelData', value)
+      },
+    })
 
     const groupColumns = config.value.groupBy
       ? computed(() => {
-        return [
-          columns.value.find(
-            (column: any) => column.key === config.value.groupBy
-          ),
-          {
-            title: "Count",
-            key: "count",
-            sortable: true,
-            editable: true,
-            hidden: false,
-            sortDirection: 0
-          }
-        ];
-      })
-      : "";
+          return [
+            columns.value.find(
+              (column: any) => column.key === config.value.groupBy
+            ),
+            {
+              title: 'Count',
+              key: 'count',
+              sortable: true,
+              editable: true,
+              hidden: false,
+              sortDirection: 0,
+            },
+          ]
+        })
+      : ''
 
     const toggleGroup = (groupKey) => {
-      emit("toggleGroup", groupKey);
-    };
+      emit('toggleGroup', groupKey)
+    }
 
     const openRecordEditModal = (index) => {
       if (!isInlineEditMode.value) {
-        selectedRecord.value = bodyData.value[index];
-        modalRef.value.open();
+        selectedRecord.value = bodyData.value[index]
+        modalRef.value.open()
       }
-    };
+    }
 
     const updateSelectedRecord = () => {
-      addUpdatedRecord(selectedRecord.value);
-      modalRef.value.close();
-    };
+      addUpdatedRecord(selectedRecord.value)
+      modalRef.value.close()
+    }
 
     return {
       $slots: slots,
@@ -187,11 +212,12 @@ export default defineComponent ({
       openRecordEditModal,
       selectedRecord,
       updateSelectedRecord,
-      ...reactive({ size: columns.value.length })
-    };
-  }
-});
+      ...reactive({ size: columns.value.length }),
+    }
+  },
+})
 </script>
+
 <style scoped>
 @media (min-width: 640px) {
   .data-table-body {

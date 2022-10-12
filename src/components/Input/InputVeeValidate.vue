@@ -1,8 +1,8 @@
 <template>
   <RobustInput
+    :id="name"
     :title="label"
     :name="name"
-    :id="name"
     :type="type"
     :model-value="inputValue"
     :placeholder="placeholder"
@@ -11,68 +11,50 @@
     @input="handleChange"
     @blur="handleBlur"
   >
-    <template v-for="(index, name) in $slots" v-slot:[name]>
+    <template v-for="(index, name) in $slots" #[name]>
       <slot :name="name"></slot>
     </template>
   </RobustInput>
 </template>
 
-<script lang="ts">
-import RobustInput from "./Input.vue"
-import { useField } from "vee-validate";
-import { defineComponent } from "vue";
+<script lang="ts" setup>
+import RobustInput from './Input.vue'
+import { useField } from 'vee-validate'
+import { placeholder } from '@babel/types'
 
-export default defineComponent({
-  isShim: true,
-  inheritAttrs: false,
-  name: "RobustInputVeeValidate",
-  components: {
-    RobustInput
+const props = defineProps({
+  type: {
+    type: String,
+    default: 'text',
   },
-  props: {
-    type: {
-      type: String,
-      default: "text",
-    },
-    value: {
-      type: String,
-      default: "",
-    },
-    name: {
-      type: String,
-      required: true,
-    },
-    label: {
-      type: String,
-      required: true,
-    },
-    successMessage: {
-      type: String,
-      default: "",
-    },
-    placeholder: {
-      type: String,
-      default: "",
-    },
+  value: {
+    type: String,
+    default: '',
   },
-  setup(props) {
-    const {
-      value: inputValue,
-      errorMessage,
-      handleBlur,
-      handleChange,
-      meta,
-    } = useField(props.name, undefined, {
-      initialValue: props.value,
-    });
+  name: {
+    type: String,
+    required: true,
+  },
+  label: {
+    type: String,
+    required: true,
+  },
+  successMessage: {
+    type: String,
+    default: '',
+  },
+  placeholder: {
+    type: String,
+    default: '',
+  },
+})
 
-    return {
-      handleChange,
-      handleBlur,
-      errorMessage,
-      inputValue,
-      meta,
-    };
-  }
+const {
+  value: inputValue,
+  errorMessage,
+  handleBlur,
+  handleChange,
+} = useField(props.name, undefined, {
+  initialValue: props.value,
 })
 </script>

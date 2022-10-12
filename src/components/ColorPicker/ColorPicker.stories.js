@@ -1,5 +1,4 @@
-import ColorPicker from './ColorPicker.vue'
-import { PhWarning } from '@dnlsndr/vue-phosphor-icons'
+import ColorPicker from './index.vue'
 
 export default {
   title: 'Ui/ColorPicker',

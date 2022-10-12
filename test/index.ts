@@ -1,10 +1,9 @@
-import "../src/styles/tailwind.css";
+import '../src/styles/tailwind.css'
 // import "../node_modules/@hotellistat/robust-ui/dist/style.css"
 
-import { computed, createApp, ref, watch } from "vue";
-import App from "./App.vue";
-import "global";
-
+import { createApp } from 'vue'
+import App from './App.vue'
+import 'global'
 
 import {
   Button,
@@ -27,33 +26,31 @@ import {
   Popper,
   WidgetWrapper,
   TabsSwitch,
-  Switch
-} from "../dist/robust-ui.es.js";
+  Switch,
+} from '../dist/robust-ui.es.js'
 
-const app = createApp(App);
+const app = createApp(App)
 
+app.component('HsButton', Button)
+app.component('HsContentPlaceholder', ContentPlaceholder)
+app.component('HsWidgetWrapper', WidgetWrapper)
+app.component('HsCalendar', Calendar)
+app.component('HsCheckbox', Checkbox)
+app.component('HsContentBox', ContentBox)
+app.component('HsDatePicker', DatePicker)
+app.component('HsDaterangePicker', DaterangePicker)
+app.component('HsInput', Input)
+app.component('HsModal', Modal)
+app.component('HsPopper', Popper)
+app.component('HsSelect', Select)
+app.component('HsSwitch', Switch)
+app.component('HsNotice', Notice)
+app.component('HsSeparator', Separator)
+app.component('HsTabs', Tabs)
+app.component('HsRadio', Radio)
+app.component('HsTextarea', Textarea)
+app.component('HsColorPicker', ColorPicker)
+app.component('HsImg', Img)
+app.component('HsTabsSwitch', TabsSwitch)
 
-app.component("hs-button", Button);
-app.component("hs-content-placeholder", ContentPlaceholder);
-app.component("hs-widget-wrapper", WidgetWrapper);
-app.component("hs-calendar", Calendar);
-app.component("hs-checkbox", Checkbox);
-app.component("hs-content-box", ContentBox);
-app.component("hs-date-picker", DatePicker);
-app.component("hs-daterange-picker", DaterangePicker);
-app.component("hs-input", Input);
-app.component("hs-modal", Modal);
-app.component("hs-popper", Popper);
-app.component("hs-select", Select);
-app.component("hs-switch", Switch);
-app.component("hs-notice", Notice);
-app.component("hs-separator", Separator);
-app.component("hs-tabs", Tabs);
-app.component("hs-radio", Radio);
-app.component("hs-textarea", Textarea);
-app.component("hs-color-picker", ColorPicker);
-app.component("hs-img", Img);
-app.component("hs-tabs-switch", TabsSwitch);
-
-
-app.mount("#app");
+app.mount('#app')

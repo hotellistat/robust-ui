@@ -1,91 +1,103 @@
 <template>
-  <div class="data-table-header-container grid sm:hidden col-span-1">
+  <div class="data-table-header-container col-span-1 grid sm:hidden">
     <template v-if="config.groupBy">
       <template v-for="(group, groupKey) in data" :key="groupKey">
         <div
-          class="data-table-header border-bottom-2 flex items-center justify-center px-4 py-3 text-sm tracking-wider bg-gray-700 border-b-2">
+          class="data-table-header border-bottom-2 flex items-center justify-center border-b-2 bg-gray-700 px-4 py-3 text-sm tracking-wider"
+        >
           <div class="mr-2 text-white">
-            <ph-plus v-if="config.collapsed && config.collapsed[groupKey]"
-              size="16px" />
-            <ph-minus v-else size="16px" />
+            <PhPlus
+              v-if="config.collapsed && config.collapsed[groupKey]"
+              size="16px"
+            />
+            <PhMinus v-else size="16px" />
           </div>
-          <span class="truncate w-full">
-            {{
-                `${config.groupBy.toUpperCase()}: ${groupKey}`
-            }}
+          <span class="w-full truncate">
+            {{ `${config.groupBy.toUpperCase()}: ${groupKey}` }}
           </span>
         </div>
         <template v-if="!(config.collapsed && config.collapsed[groupKey])">
           <template v-for="record in data[groupKey].children" :key="record.id">
             <div
-              class="data-table-header border-bottom-2 flex items-center justify-center px-4 py-2 text-sm tracking-wider bg-gray-500">
-              Key</div>
-            <table-header v-model="headersData" :hideFirst="true" />
+              class="data-table-header border-bottom-2 flex items-center justify-center bg-gray-500 px-4 py-2 text-sm tracking-wider"
+            >
+              Key
+            </div>
+            <TableHeader v-model="headersData" :hide-first="true" />
           </template>
         </template>
       </template>
     </template>
-    <div v-else v-for="record in data" :key="record.id">
+    <div v-for="record in data" v-else :key="record.id">
       <div
-        class="data-table-header border-bottom-2 flex items-center justify-center px-4 py-2 text-sm tracking-wider bg-gray-500">
-        Key</div>
-      <table-header v-model="headersData"
-        :isInlineEditMode="isInlineEditMode" />
+        class="data-table-header border-bottom-2 flex items-center justify-center bg-gray-500 px-4 py-2 text-sm tracking-wider"
+      >
+        Key
+      </div>
+      <TableHeader
+        v-model="headersData"
+        :is-inline-edit-mode="isInlineEditMode"
+      />
     </div>
   </div>
   <div
-    class="data-table-header-container hidden sm:grid col-span-1 grid-cols-1 bg-gray-500"
-    :style="{ 'grid-template-columns': gridTemplateColumnsCss }">
-    <table-header v-model="headersData" :isInlineEditMode="isInlineEditMode" />
+    class="data-table-header-container col-span-1 hidden grid-cols-1 bg-gray-500 sm:grid"
+    :style="{ 'grid-template-columns': gridTemplateColumnsCss }"
+  >
+    <TableHeader
+      v-model="headersData"
+      :is-inline-edit-mode="isInlineEditMode"
+    />
   </div>
 </template>
-<script>
-import { computed, toRefs, reactive } from "vue";
-import TableHeader from "../DataTableHeader/DataTableHeader.vue";
-import { PhPlus, PhMinus } from '@dnlsndr/vue-phosphor-icons'
 
+<script>
+import { computed, toRefs, reactive } from 'vue'
+import TableHeader from '../DataTableHeader/DataTableHeader.vue'
+import { PhPlus, PhMinus } from '@dnlsndr/vue-phosphor-icons'
 
 export default {
   components: { TableHeader, PhPlus, PhMinus },
-  emits: ["update:modelValue"],
   props: {
     modelValue: {
       type: Object,
-      default: () => ({})
+      default: () => ({}),
     },
     data: {
       type: Object,
-      default: () => ({})
+      default: () => ({}),
     },
     config: Object,
     gridTemplateColumnsCss: String,
     isInlineEditMode: {
       type: Boolean,
-      default: true
+      default: true,
     },
     hasActionColumn: {
       type: Boolean,
-      default: false
-    }
+      default: false,
+    },
   },
+  emits: ['update:modelValue'],
   setup(props, { emit }) {
-    const { modelValue, config } = toRefs(props);
+    const { modelValue, config } = toRefs(props)
 
     const headersData = computed({
       get() {
-        return modelValue.value;
+        return modelValue.value
       },
       set(value) {
-        emit("update:modelValue", value);
-      }
-    });
+        emit('update:modelValue', value)
+      },
+    })
     return {
       headersData,
-      ...reactive({ size: Object.keys(headersData.value).length })
-    };
-  }
-};
+      ...reactive({ size: Object.keys(headersData.value).length }),
+    }
+  },
+}
 </script>
+
 <style scoped>
 @media (min-width: 640px) {
   .data-table-header-container {

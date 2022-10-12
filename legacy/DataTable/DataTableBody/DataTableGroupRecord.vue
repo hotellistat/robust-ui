@@ -1,59 +1,72 @@
 <template>
-  <data-table-cell key="role" :model-value="record['group']"
-    class="bg-gray-700 py-3 hidden sm:grid  border-b-2" @click="toggleGroup">
-    <template v-slot:leftIcon>
-      <ph-plus v-if="collapsed" size="16px" class="mr-2 text-white" />
-      <ph-minus v-else size="16px" class="mr-2 text-white" />
+  <DataTableCell
+    key="role"
+    :model-value="record['group']"
+    class="hidden border-b-2 bg-gray-700 py-3 sm:grid"
+    @click="toggleGroup"
+  >
+    <template #leftIcon>
+      <PhPlus v-if="collapsed" size="16px" class="mr-2 text-white" />
+      <PhMinus v-else size="16px" class="mr-2 text-white" />
     </template>
-  </data-table-cell>
-  <data-table-cell key="count" :model-value="`Count: ${record.count}`"
-    class="bg-gray-700 py-3  border-b-2" @click="toggleGroup" />
-  <data-table-cell v-for="key in Array(totalCount - 2).keys()"
-    :key="`empty-${key}`" model-value=" "
-    class="bg-gray-700 hidden sm:grid  border-b-2" @click="toggleGroup" />
+  </DataTableCell>
+  <DataTableCell
+    key="count"
+    :model-value="`Count: ${record.count}`"
+    class="border-b-2 bg-gray-700 py-3"
+    @click="toggleGroup"
+  />
+  <DataTableCell
+    v-for="key in Array(totalCount - 2).keys()"
+    :key="`empty-${key}`"
+    model-value=" "
+    class="hidden border-b-2 bg-gray-700 sm:grid"
+    @click="toggleGroup"
+  />
 </template>
+
 <script>
-import { computed, toRefs } from "vue";
-import DataTableCell from "./DataTableCell.vue";
-import { PhPlus, PhMinus } from '@dnlsndr/vue-phosphor-icons';
+import { computed, toRefs } from 'vue'
+import DataTableCell from './DataTableCell.vue'
+import { PhPlus, PhMinus } from '@dnlsndr/vue-phosphor-icons'
 
 export default {
   components: { DataTableCell, PhPlus, PhMinus },
   props: {
     modelValue: {
       type: Object,
-      default: () => ({})
+      default: () => ({}),
     },
     columns: {
       type: Array,
-      default: () => []
+      default: () => [],
     },
     totalCount: {
       type: Number,
-      default: 2
+      default: 2,
     },
     collapsed: {
       type: Boolean,
-      default: false
-    }
+      default: false,
+    },
   },
-  emits: ["update:modelValue", "toggle"],
+  emits: ['update:modelValue', 'toggle'],
   setup(props, { emit }) {
-    const { modelValue } = toRefs(props);
+    const { modelValue } = toRefs(props)
 
     const record = computed({
       get: () => modelValue.value,
-      set: (value) => emit("update:modelValue", value)
-    });
+      set: (value) => emit('update:modelValue', value),
+    })
 
     const toggleGroup = () => {
-      emit("toggle", record.value.group);
-    };
+      emit('toggle', record.value.group)
+    }
 
     return {
       record,
-      toggleGroup
-    };
-  }
-};
+      toggleGroup,
+    }
+  },
+}
 </script>

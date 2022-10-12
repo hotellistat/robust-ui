@@ -1,3 +1,3 @@
-import DataTableSettings from "./DataTableSettings.vue";
+import DataTableSettings from './DataTableSettings.vue'
 
-export default DataTableSettings;
+export default DataTableSettings

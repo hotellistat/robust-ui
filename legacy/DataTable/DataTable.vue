@@ -1,25 +1,24 @@
-
 <template>
   <div>
-    <div class="flex flex-wrap mb-1.5 items-center justify-between">
+    <div class="mb-1.5 flex flex-wrap items-center justify-between">
       <div
         v-if="isTurnOnInlineMode && isShowInlineTab"
-        class="flex items-start mr-4 my-2"
+        class="my-2 mr-4 flex items-start"
       >
         <label class="mr-1 whitespace-nowrap">Inline edit:</label>
-        <base-tab-switch
+        <BaseTabSwitch
           v-model="isInlineEditMode"
           :tabs="isInlineEditModeTabs"
         />
       </div>
 
-      <data-search-box
-        class="mr-2"
+      <DataSearchBox
         v-if="!tableConfig.hideSearch || tableConfig.hideSearch === false"
+        class="mr-2"
         @search-submit="(val) => $emit('search-submit', val)"
       />
       <div class="flex justify-end">
-        <data-table-settings
+        <DataTableSettings
           :columns="allColumns"
           :config="tableConfig"
           :active-column="filteredColumns"
@@ -29,9 +28,9 @@
     </div>
     <div
       :key="columnData.length"
-      class="grid sm:block grid-cols-2 border border-gray-700"
+      class="grid grid-cols-2 border border-gray-700 sm:block"
     >
-      <table-header
+      <TableHeader
         v-model="columnData"
         :data="bodyData"
         :config="tableConfig"
@@ -39,31 +38,31 @@
         :is-inline-edit-mode="isInlineEditMode === 'true'"
         :has-action-column="hasActionColumn"
       />
-      <table-body
-        :columns="columnData"
-        :is-inline-edit-mode="isInlineEditMode === 'true'"
+      <TableBody
         v-model:data="bodyData"
         v-model:config="tableConfig"
-        @toggleGroup="toggleGroup"
-        @clickRecord="recordClickHandler"
+        :columns="columnData"
+        :is-inline-edit-mode="isInlineEditMode === 'true'"
         :grid-template-columns-css="gridTemplateColumnsCss"
         :action-component="actionComponent"
         :has-action-column="hasActionColumn"
+        @toggleGroup="toggleGroup"
+        @clickRecord="recordClickHandler"
         @reload="$emit('reload')"
         @action="(e) => $emit('action', e)"
       >
-        <template v-for="(_, slot) in $slots" v-slot:[slot]="scope">
+        <template v-for="(_, slot) in $slots" #[slot]="scope">
           <slot :name="slot" v-bind="scope || {}" />
         </template>
-      </table-body>
+      </TableBody>
     </div>
-    <table-footer
+    <TableFooter
       :config="tableConfig"
       @patch-records="(records) => $emit('patch-records', records)"
     />
     <div v-if="isLoading" class="loading min-h-[400px]">
       <div
-        class="relative w-full h-full flex items-center justify-center text-white"
+        class="relative flex h-full w-full items-center justify-center text-white"
       >
         <Spinner :size="100" />
       </div>
@@ -72,14 +71,23 @@
 </template>
 
 <script lang="ts">
-import { ref, toRefs, computed, inject, watch, onMounted, defineComponent, Ref } from "vue";
-import TableHeader from "./DataTableHeader/DataTableHeaderContainer.vue";
-import TableFooter from "./DataTableFooter";
-import TableBody from "./DataTableBody/DataTableBody.vue";
-import DataTableSettings from "./DataTableSettings";
-import DataSearchBox from "./DataSearchBox/DataSearchBox.vue";
-import { useTableGroup } from "./composables";
-import { StateSymbol, UpdateSymbol } from "./ProvideDataTableSettings";
+import {
+  ref,
+  toRefs,
+  computed,
+  inject,
+  watch,
+  onMounted,
+  defineComponent,
+  Ref,
+} from 'vue'
+import TableHeader from './DataTableHeader/DataTableHeaderContainer.vue'
+import TableFooter from './DataTableFooter'
+import TableBody from './DataTableBody/DataTableBody.vue'
+import DataTableSettings from './DataTableSettings'
+import DataSearchBox from './DataSearchBox/DataSearchBox.vue'
+import { useTableGroup } from './composables'
+import { StateSymbol, UpdateSymbol } from './ProvideDataTableSettings'
 import Spinner from '../Spinner/Spinner.vue'
 
 export default defineComponent({
@@ -89,72 +97,54 @@ export default defineComponent({
     TableHeader,
     TableFooter,
     TableBody,
-    Spinner
-  },
-  emits: ["patch-records", "page", "search", "record-click", "search-submit", "action", "reload"],
-  data() {
-    return {
-      isInlineEditModeTabs: [
-        { title: "Enable", value: "true" },
-        { title: "Disable", value: "false" }
-      ],
-      fieldTypes: [
-        {
-          title: "Text",
-          value: "text"
-        },
-        {
-          title: "Number",
-          value: "number"
-        },
-        {
-          title: "Enum",
-          value: "enum"
-        },
-        {
-          title: "Date",
-          value: "date"
-        }
-      ]
-    };
+    Spinner,
   },
   props: {
     columns: {
       type: Array,
-      default: () => []
+      default: () => [],
     },
     modelValue: {
       type: Object,
-      default: () => ({})
+      default: () => ({}),
     },
     config: {
       type: Object,
-      default: () => ({})
+      default: () => ({}),
     },
     totalCount: {
       type: Number,
-      default: 0
+      default: 0,
     },
     isTurnOnInlineMode: {
       type: Boolean,
-      default: false
+      default: false,
     },
     isShowInlineTab: {
       type: Boolean,
-      default: false
+      default: false,
     },
     actionComponent: {
-      type: Object
+      type: Object,
     },
     isLoading: {
       type: Boolean,
-      default: false
+      default: false,
     },
     hasActionColumn: {
       type: Boolean,
-      default: false
-    }
+      default: false,
+    },
   },
+  emits: [
+    'patch-records',
+    'page',
+    'search',
+    'record-click',
+    'search-submit',
+    'action',
+    'reload',
+  ],
   setup(props, { emit, slots }) {
     const {
       columns,
@@ -163,68 +153,70 @@ export default defineComponent({
       totalCount,
       isTurnOnInlineMode,
       hasActionColumn,
-    } = toRefs(props);
-    const updateSettings: any = inject(UpdateSymbol);
-    const { pageSize, page, keyword } = inject(StateSymbol);
-    const isInlineEditMode = ref("true");
+    } = toRefs(props)
+    const updateSettings: any = inject(UpdateSymbol)
+    const { pageSize, page, keyword } = inject(StateSymbol)
+    const isInlineEditMode = ref('true')
     if (!isTurnOnInlineMode.value) {
-      isInlineEditMode.value = "false";
+      isInlineEditMode.value = 'false'
     }
-    let defaultPageSize = pageSize.value;
+    let defaultPageSize = pageSize.value
 
-    const allColumns: Ref<any> = ref(columns.value);
+    const allColumns: Ref<any> = ref(columns.value)
     const filteredColumns = ref(
       allColumns.value.filter((column) => !column.hidden)
-    );
+    )
 
     const getGridTemplateColumnsCss = () => {
-      let result = "";
-      let totalWidth = 0;
+      let result = ''
+      let totalWidth = 0
       for (const column of filteredColumns.value) {
-        totalWidth += column.width;
+        totalWidth += column.width
       }
 
       const actionsColumnWidth =
-        (isInlineEditMode.value === "false") && filteredColumns.value.length && hasActionColumn.value
+        isInlineEditMode.value === 'false' &&
+        filteredColumns.value.length &&
+        hasActionColumn.value
           ? 100 / filteredColumns.value.length
-          : 0;
+          : 0
       for (const column of filteredColumns.value) {
         result +=
-          (column.width * (100 - actionsColumnWidth)) / totalWidth + "% ";
+          (column.width * (100 - actionsColumnWidth)) / totalWidth + '% '
       }
       if (actionsColumnWidth !== 0) {
-        result += actionsColumnWidth + "%";
+        result += actionsColumnWidth + '%'
       }
-      return result;
-    };
+      return result
+    }
 
-    const gridTemplateColumnsCss = ref(getGridTemplateColumnsCss());
+    const gridTemplateColumnsCss = ref(getGridTemplateColumnsCss())
 
-    const updateTotalCount = (value) => updateSettings("totalCount", value);
+    const updateTotalCount = (value) => updateSettings('totalCount', value)
 
-    watch(totalCount, () => updateTotalCount(totalCount.value));
+    watch(totalCount, () => updateTotalCount(totalCount.value))
     onMounted(() => {
       updateTotalCount(totalCount.value)
     })
 
     watch([pageSize, page], () => {
-      let offset = pageSize.value * (page.value - 1);
-      const limit = pageSize.value;
+      let offset = pageSize.value * (page.value - 1)
+      const limit = pageSize.value
 
       // if the offset changed and the page is not page 1
       if (defaultPageSize !== pageSize.value && page.value !== 1) {
-        offset = 0;
-        updateSettings("page", 1);
+        offset = 0
+        updateSettings('page', 1)
       } else {
-        defaultPageSize = pageSize.value;
+        defaultPageSize = pageSize.value
       }
 
-      emit("page", { offset, limit });
-    });
+      emit('page', { offset, limit })
+    })
 
     watch(keyword, (newValue) => {
-      emit("search", newValue);
-    });
+      emit('search', newValue)
+    })
 
     // const { sortedData } = useTableSort(data, filteredColumns);
     // console.log("sortedData:", sortedData.value, filteredColumns.value);
@@ -232,55 +224,55 @@ export default defineComponent({
       modelValue,
       filteredColumns,
       ref(config.value.groupBy)
-    );
+    )
 
-    const refConfig = ref(config.value);
+    const refConfig = ref(config.value)
 
     const toggleGroup = (groupKey) => {
       if (refConfig.value.collapsed === undefined) {
         refConfig.value = {
           ...refConfig.value,
-          collapsed: { [groupKey]: true }
-        };
+          collapsed: { [groupKey]: true },
+        }
       } else if (refConfig.value.collapsed[groupKey] === undefined) {
         refConfig.value.collapsed = {
           ...refConfig.value.collapsed,
-          [groupKey]: true
-        };
+          [groupKey]: true,
+        }
       } else {
         refConfig.value.collapsed = {
           ...refConfig.value.collapsed,
-          [groupKey]: !refConfig.value.collapsed[groupKey]
-        };
+          [groupKey]: !refConfig.value.collapsed[groupKey],
+        }
       }
-    };
+    }
 
     const tableConfig: Ref<any> = computed(() => {
       return {
         ...refConfig.value,
-        size: columnData.value.length
-      };
-    });
+        size: columnData.value.length,
+      }
+    })
 
     const toggleColumn = (key) => {
       allColumns.value = allColumns.value.map((column: any) => {
-        if (column.key === key) column.hidden = !column.hidden;
-        return column;
-      });
+        if (column.key === key) column.hidden = !column.hidden
+        return column
+      })
       filteredColumns.value = allColumns.value.filter(
         (column) => !column.hidden
-      );
-    };
+      )
+    }
 
     watch([filteredColumns, isInlineEditMode], () => {
-      gridTemplateColumnsCss.value = getGridTemplateColumnsCss();
-    });
+      gridTemplateColumnsCss.value = getGridTemplateColumnsCss()
+    })
 
     const recordClickHandler = (record) => {
-      if (isInlineEditMode.value === "false") {
-        emit("record-click", record);
+      if (isInlineEditMode.value === 'false') {
+        emit('record-click', record)
       }
-    };
+    }
 
     return {
       $slots: slots,
@@ -294,10 +286,36 @@ export default defineComponent({
       isInlineEditMode,
       isTurnOnInlineMode,
       gridTemplateColumnsCss,
-      recordClickHandler
-    };
-  }
-});
+      recordClickHandler,
+    }
+  },
+  data() {
+    return {
+      isInlineEditModeTabs: [
+        { title: 'Enable', value: 'true' },
+        { title: 'Disable', value: 'false' },
+      ],
+      fieldTypes: [
+        {
+          title: 'Text',
+          value: 'text',
+        },
+        {
+          title: 'Number',
+          value: 'number',
+        },
+        {
+          title: 'Enum',
+          value: 'enum',
+        },
+        {
+          title: 'Date',
+          value: 'date',
+        },
+      ],
+    }
+  },
+})
 </script>
 
 <style scoped>

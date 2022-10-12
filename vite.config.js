@@ -8,6 +8,7 @@ export default defineConfig({
     lib: {
       entry: resolve(__dirname, 'src/index.ts'),
       name: 'robust-ui',
+      formats: ['es'],
     },
     rollupOptions: {
       // make sure to externalize deps that shouldn't be bundled
@@ -15,25 +16,11 @@ export default defineConfig({
       external: [
         'vue',
         'date-fns',
-        'gsap',
         '@popperjs/core',
-        'vue-router',
-        'vuex',
-        'gridstack',
-        "vee-validate",
-        "yup",
-        '@dnlsndr/vue-phosphor-icons'
+        'vee-validate',
+        'gsap',
+        '@dnlsndr/vue-phosphor-icons',
       ],
-      output: {
-        globals: {
-          vue: 'Vue',
-          'date-fns': "dateFns",
-          '@popperjs/core': "popperJs",
-          gsap: "gsap",
-          gridstack: "gridStack",
-          '@dnlsndr/vue-phosphor-icons': "phosphor"
-        },
-      }
     },
   },
 })

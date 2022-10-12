@@ -95,14 +95,14 @@ export default [
   {
     title: 'last_week',
     preset: () => {
-      let startDay = startOfWeek(subDays(new Date(), 7))
+      const startDay = startOfWeek(subDays(new Date(), 7))
       return [startDay, endOfWeek(new Date(startDay))]
     },
   },
   {
     title: 'last_month',
     preset: () => {
-      let startDay = startOfMonth(subDays(startOfMonth(new Date()), 1))
+      const startDay = startOfMonth(subDays(startOfMonth(new Date()), 1))
       return [startDay, endOfMonth(startDay)]
     },
   },

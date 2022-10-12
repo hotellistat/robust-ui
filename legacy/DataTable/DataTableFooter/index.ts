@@ -1,3 +1,3 @@
-import DataTableFooter from "./DataTableFooter.vue";
+import DataTableFooter from './DataTableFooter.vue'
 
-export default DataTableFooter;
+export default DataTableFooter

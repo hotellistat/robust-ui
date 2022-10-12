@@ -1,9 +1,7 @@
 <template>
-  <provide-data-table-settings>
-    <data-table
+  <ProvideDataTableSettings>
+    <DataTable
       v-bind="$props"
-      @page="page"
-      @search="search"
       v-model="bodyData"
       class="relative"
       :total-count="totalCount"
@@ -11,77 +9,90 @@
       :has-action-column="hasActionColumn"
       :is-turn-on-inline-mode="isTurnOnInlineMode"
       :is-show-inline-tab="isShowInlineTab"
-      @patch-records="records => $emit('patch-records', records)"
-      @record-click="record => $emit('record-click', record)"
+      @page="page"
+      @search="search"
+      @patch-records="(records) => $emit('patch-records', records)"
+      @record-click="(record) => $emit('record-click', record)"
       @reload="$emit('reload')"
       @action="(e) => $emit('action', e)"
       @search-submit="(val) => $emit('search-submit', val)"
     >
-      <template v-for="(_, slot) in $slots" v-slot:[slot]="scope">
+      <template v-for="(_, slot) in $slots" #[slot]="scope">
         <slot :name="slot" v-bind="scope || {}" />
       </template>
-    </data-table>
-  </provide-data-table-settings>
+    </DataTable>
+  </ProvideDataTableSettings>
 </template>
 
 <script lang="ts">
-import { toRefs, computed, defineComponent, PropType  } from "vue";
-import ProvideDataTableSettings from "./ProvideDataTableSettings";
-import DataTable from "./DataTable.vue";
+import { toRefs, computed, defineComponent, PropType } from 'vue'
+import ProvideDataTableSettings from './ProvideDataTableSettings'
+import DataTable from './DataTable.vue'
 
-export default defineComponent ({
+export default defineComponent({
   components: { ProvideDataTableSettings, DataTable },
-  emits: ["page", "update:modelValue", "patch-records", "record-click", "search-submit", "reload", "search", "action"],
   props: {
     columns: {
       type: Array as PropType<any[]>,
-      default: () => []
+      default: () => [],
     },
     config: {
       type: Object,
-      default: () => ({})
+      default: () => ({}),
     },
     totalCount: {
       type: Number,
-      default: 0
+      default: 0,
     },
     modelValue: {
       type: Object,
-      default: () => ({})
+      default: () => ({}),
     },
     isTurnOnInlineMode: {
       type: Boolean,
-      default: false
+      default: false,
     },
     isShowInlineTab: {
       type: Boolean,
-      default: false
+      default: false,
     },
     actionComponent: {
-      type: Object
+      type: Object,
     },
     isLoading: {
       type: Boolean,
-      default: false
+      default: false,
     },
     hasActionColumn: {
       type: Boolean,
-      default: false
-    }
+      default: false,
+    },
   },
+  emits: [
+    'page',
+    'update:modelValue',
+    'patch-records',
+    'record-click',
+    'search-submit',
+    'reload',
+    'search',
+    'action',
+  ],
   setup(props, { emit, slots }) {
-    const { modelValue } = toRefs(props);
-    const slotNames = computed(() => (props.columns as any).value.map(e => e.key))
+    const { modelValue } = toRefs(props)
+    const slotNames = computed(() =>
+      (props.columns as any).value.map((e) => e.key)
+    )
     const bodyData = computed({
       get() {
-        return modelValue.value;
+        return modelValue.value
       },
       set(value) {
-        emit("update:modelValue", value);
-      }
-    });
-    const page = (data) => emit("page", data);
-    const search = (keyword) => emit("search", keyword);
+        emit('update:modelValue', value)
+      },
+    })
+    const page = (data) => emit('page', data)
+    const search = (keyword) => emit('search', keyword)
 
     return {
       page,
@@ -89,8 +100,8 @@ export default defineComponent ({
       bodyData,
       slotNames,
       $slots: slots,
-      $props: props as any
-    };
-  }
-});
+      $props: props as any,
+    }
+  },
+})
 </script>

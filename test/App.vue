@@ -1,6 +1,6 @@
 <template>
   <div>
     asdf
-    <hs-input />
+    <HsInput />
   </div>
 </template>
