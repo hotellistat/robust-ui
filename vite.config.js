@@ -25,6 +25,7 @@ export default defineConfig(async (config) => ({
         '@popperjs/core',
         'vee-validate',
         'gsap',
+        'fuse.js',
         '@dnlsndr/vue-phosphor-icons',
       ],
     },
