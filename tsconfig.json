@@ -12,6 +12,11 @@
     ]
   },
   "include": [
-    "./src",
+    "src/**/*",
+  ],
+  "exclude": [
+    "src/**/*.stories.js",
+    "src/**/*.stories.ts",
+    "src/styles.ts"
   ]
 }
