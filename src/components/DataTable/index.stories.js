@@ -1,5 +1,5 @@
 import { ref } from 'vue'
-import DataTable from './DataTable.vue'
+import DataTable from './index.vue'
 
 import { data, options, serverSideOptions } from './__test__/mockData.ts'
 
