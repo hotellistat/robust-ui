@@ -5,7 +5,18 @@ on:
       - main
   workflow_dispatch:
 jobs:
+  lint:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+      - name: Install modules
+        run: yarn
+      - name: Run ESLint
+        run: yarn run lint
+
   build-container:
+    needs:
+      - lint
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2

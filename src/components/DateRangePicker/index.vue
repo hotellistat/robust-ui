@@ -96,18 +96,18 @@ const displayCompare = ref()
 const storeHistory = ref(true)
 const popperRef = ref()
 
-const pickedCompare = computed(() => {
-  return compareDates.value.length > 1
-})
+// const pickedCompare = computed(() => {
+//   return compareDates.value.length > 1
+// })
 
-const formatDate = (date: Date, time?: boolean) => {
-  if (!time) return format(date, 'dd.MM.yyyy')
-  return format(date, 'dd.MM.yyyy HH:mm:ss')
-}
+// const formatDate = (date: Date, time?: boolean) => {
+//   if (!time) return format(date, 'dd.MM.yyyy')
+//   return format(date, 'dd.MM.yyyy HH:mm:ss')
+// }
 
-const dateHistory = computed(() => {
-  return props.dateHistory || []
-})
+// const dateHistory = computed(() => {
+//   return props.dateHistory || []
+// })
 
 const tmpDateRange = ref<[Date, Date]>()
 
@@ -184,13 +184,13 @@ onClickOutside(popperRef, (event) => {
   }
 })
 
-const updatePerspective = (val: Date) => {
-  emit('update:perspectiveDate', val)
-}
+// const updatePerspective = (val: Date) => {
+//   emit('update:perspectiveDate', val)
+// }
 
-const updateComparePerspective = (val: Date) => {
-  emit('update:comparePerspectiveDate', val)
-}
+// const updateComparePerspective = (val: Date) => {
+//   emit('update:comparePerspectiveDate', val)
+// }
 
 const handleClick = () => {
   tmpDateRange.value = dateRange.value
@@ -219,6 +219,10 @@ watch(perspectiveOf, (val) => {
 
 watch(comparePerspectiveOf, (val) => {
   emit('update:comparePerspectiveDate', val)
+})
+
+defineExpose({
+  goBack,
 })
 </script>
 
