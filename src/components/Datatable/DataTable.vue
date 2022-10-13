@@ -111,7 +111,7 @@
 
 <script setup lang="ts">
 import { computed } from '@vue/reactivity'
-import { onMounted, PropType, ref, toRefs, watch } from 'vue'
+import { onMounted, onUnmounted, PropType, ref, toRefs, watch } from 'vue'
 import Separator from '../Separator/Separator.vue'
 import {
   PhCaretUp,
@@ -585,6 +585,18 @@ const createResizableColumn = function (
   resizer.addEventListener('mousedown', mouseDownHandler)
 }
 
+const resizeLine = () => {
+  if (!options.value.resize) return
+  const tableEl = table.value
+  const cols: HTMLElement[] = tableEl.querySelectorAll('.table-column')
+  const rowsWrapper = tableEl.querySelector('.rows-wrapper')
+
+  cols.forEach((col) => {
+    const resizer = col.querySelector<HTMLDivElement>('.resizer')
+    if (resizer) resizer.style.height = `${rowsWrapper.clientHeight}px`
+  })
+}
+
 const createResizableTable = () => {
   if (!options.value.resize) return
 
@@ -603,8 +615,16 @@ const createResizableTable = () => {
   resetSizes()
 }
 
+let resizeObserver: ResizeObserver
+
 onMounted(() => {
   createResizableTable()
+  resizeObserver = new ResizeObserver(() => resizeLine())
+  resizeObserver.observe(table.value)
+})
+
+onUnmounted(() => {
+  resizeObserver.disconnect()
 })
 </script>
 
