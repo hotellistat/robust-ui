@@ -25,7 +25,7 @@
     "build": "vite build && vue-tsc --emitDeclarationOnly ",
     "dev": "vue-tsc --emitDeclarationOnly && vite build --watch",
     "deploy-storybook": "storybook-to-ghpages",
-    "analyze": "vite build --config analyze.config.js",
+    "analyze": "vite build -m analyze",
     "format": "prettier --write \"src/**/*.{vue,ts,js}\"",
     "lint": "eslint --ext .ts,vue --ignore-path .gitignore . --fix",
     "tailwind-config-viewer": "tailwind-config-viewer -o"
@@ -58,7 +58,7 @@
     "eslint-plugin-unused-imports": "^2.0.0",
     "eslint-plugin-vue": "^9.6.0",
     "gh-pages": "^4.0.0",
-    "postcss": "^8.4.17",
+    "postcss": "^8.4.18",
     "postcss-import": "^15.0.0",
     "prettier": "^2.7.1",
     "prettier-plugin-tailwindcss": "^0.1.13",
@@ -68,11 +68,11 @@
     "storybook-tailwind-dark-mode": "^1.0.15",
     "tailwind-config-viewer": "^1.7.2",
     "typescript": "^4.8.4",
-    "vite": "^3.1.7",
+    "vite": "^3.1.8",
     "vitepress": "^0.22.4",
     "vue-eslint-parser": "^9.1.0",
     "vue-loader": "^17.0.0",
-    "vue-tsc": "^1.0.5"
+    "vue-tsc": "^1.0.7"
   },
   "dependencies": {
     "@dnlsndr/vue-phosphor-icons": "^1.17.0",
