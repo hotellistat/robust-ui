@@ -15,6 +15,7 @@
         <Checkbox v-model="checkAllModel" />
         <div
           v-for="column in options.columns"
+          :key="column.key"
           class="relative table-column"
           :class="column.class ?? ''"
         >
@@ -49,8 +50,9 @@
       >
         <!-- Rows -->
         <div
-          class="flex flex-col justify-between"
           v-for="(entry, idx) in sortedData"
+          :key="idx"
+          class="flex flex-col justify-between"
         >
           <div
             class="datatable-grid-columns flex flex-col gap-y-2 gap-x-2 p-4 sm:grid sm:items-center"
@@ -58,8 +60,9 @@
             <!-- Columns -->
             <Checkbox v-model="selectedRows" :value="entry[options.id]" />
             <div
-              class="grid grid-cols-2 sm:flex"
               v-for="column in options.columns"
+              :key="column.key"
+              class="grid grid-cols-2 sm:flex"
               :class="column.class ?? ''"
             >
               <!-- Column name on mobile device -->
@@ -100,9 +103,9 @@
       <div class="flex items-center gap-x-2">
         <div>Rows per page:</div>
         <Select
-          @change="rowsLimitChange"
           v-model="rowsLimit"
           :options="rowsLimitOptions"
+          @change="rowsLimitChange"
         />
       </div>
     </div>
@@ -110,9 +113,9 @@
 </template>
 
 <script setup lang="ts">
-import { computed } from '@vue/reactivity'
+import { computed } from 'vue'
 import { onMounted, onUnmounted, PropType, ref, toRefs, watch } from 'vue'
-import Separator from '../Separator/Separator.vue'
+import Separator from '../Separator/index.vue'
 import {
   PhCaretUp,
   PhCaretDown,
@@ -121,28 +124,26 @@ import {
   PhCaretRight,
   PhCaretDoubleRight,
 } from '@dnlsndr/vue-phosphor-icons'
-import Select from '../Select/Select.vue'
-import Checkbox from '../Checkbox/Checkbox.vue'
-import Input from '../Input/Input.vue'
+import Select from '../Select/index.vue'
+import Checkbox from '../Checkbox/index.vue'
+import Input from '../Input/index.vue'
 import Fuse from 'fuse.js'
 import { debouncedWatch } from '@vueuse/shared'
 
-type Column = {
-  name: string
+export type Direction = 0 | -1 | 1
+
+export interface Column {
   key: string
+  name: string
   class?: string
   size?: string
-  sort?: (a: any, b: any, direction: 'asc' | 'desc') => number
+  direction?: Direction
+  sort?: (
+    a: number | string | boolean,
+    b: number | string | boolean,
+    direction: 'asc' | 'desc'
+  ) => number
 }
-
-type Sort = {
-  key: string
-  name: string
-  direction: Direction
-  sort?: (a: any, b: any, direction: 'asc' | 'desc') => number
-}
-
-type Direction = 0 | -1 | 1
 
 type DataTableOptions = {
   columns: Column[]
@@ -170,7 +171,7 @@ const defaultOptions: Partial<DataTableOptions> = {
 
 const props = defineProps({
   data: {
-    type: Array as PropType<any[]>,
+    type: Array as PropType<Record<string, unknown>[]>,
     required: true,
   },
   options: {
@@ -242,7 +243,7 @@ const rowsLimit = computed({
 })
 
 const rowsLimitOptionsInit = () => {
-  let optionsArray =
+  const optionsArray =
     options.value.rowsLimitOptions ?? defaultOptions.rowsLimitOptions
   return optionsArray.map((o) => ({
     value: o,
@@ -252,7 +253,7 @@ const rowsLimitOptionsInit = () => {
 const rowsLimitOptions = ref(rowsLimitOptionsInit())
 
 const sortedData = computed(() => {
-  if (loading.value) return Array(rowsLimit.value).fill({} as any)
+  if (loading.value) return Array(rowsLimit.value).fill({})
   if (options.value.serverSide) return data.value
   const sorted = sortData()
   gotoPage(page.value)
@@ -297,7 +298,7 @@ const page = computed({
 })
 
 const initSorting = () => {
-  const sortArray: Sort[] = []
+  const sortArray: Column[] = []
   for (const column of options.value.columns) {
     sortArray.push({
       ...column,
@@ -310,7 +311,7 @@ const initSorting = () => {
 // Used for storing column order direction
 // key: Column.key
 // value: Sort
-const sorting = ref<Sort[]>(initSorting())
+const sorting = ref<Column[]>(initSorting())
 
 const initSizes = () => {
   const colsSizeArray = options.value.columns.map((col) => col.size)
@@ -352,7 +353,11 @@ const sortData = () => {
 
       if (sort.direction === -1) {
         if (sort.sort) {
-          const rSort = sort.sort(a[sortKey], b[sortKey], 'desc')
+          const rSort = sort.sort(
+            (a as any)[sortKey],
+            (b as any)[sortKey],
+            'desc'
+          )
           if (rSort) return rSort
         } else {
           if (a[sortKey] > b[sortKey]) return -1
@@ -360,7 +365,11 @@ const sortData = () => {
         }
       } else if (sort.direction === 1) {
         if (sort.sort) {
-          const rSort = sort.sort(a[sortKey], b[sortKey], 'asc')
+          const rSort = sort.sort(
+            (a as any)[sortKey],
+            (b as any)[sortKey],
+            'asc'
+          )
           if (rSort) return rSort
         } else {
           if (a[sortKey] > b[sortKey]) return 1
@@ -372,7 +381,7 @@ const sortData = () => {
   return sorted
 }
 
-const sortOnShiftClick = (cSort: Sort) => {
+const sortOnShiftClick = (cSort: Column) => {
   const index = sorting.value.findIndex((s) => s.key === cSort.key)
   const tempSortObj = sorting.value[index]
 
@@ -412,7 +421,7 @@ const sortOnShiftClick = (cSort: Sort) => {
   emit('update:sort', directions)
 }
 
-const sortOnSimpleClick = (cSort: Sort) => {
+const sortOnSimpleClick = (cSort: Column) => {
   const index = sorting.value.findIndex((s) => s.key === cSort.key)
   const tempSortObj = sorting.value[index]
 
@@ -449,13 +458,13 @@ const sortOnSimpleClick = (cSort: Sort) => {
   emit('update:sort', directions)
 }
 
-const sortColumn = (cSort: Sort, event: MouseEvent) => {
+const sortColumn = (cSort: Column, event: MouseEvent) => {
   if (loading.value) return
   if (event.shiftKey) return sortOnShiftClick(cSort)
   return sortOnSimpleClick(cSort)
 }
 
-const getDirection = (column: Sort) => {
+const getDirection = (column: Column) => {
   const dir = sorting.value.find((s) => s.key === column.key)
   return dir.direction
 }

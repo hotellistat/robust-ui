@@ -1,7 +1,7 @@
 import { ref } from 'vue'
 import DataTable from './DataTable.vue'
 
-import { data, options, serverSideOptions } from './mockData.ts'
+import { data, options, serverSideOptions } from './__test__/mockData.ts'
 
 export default {
   title: 'Ui/DataTable',
@@ -26,7 +26,7 @@ const LoadingTemplate = (args) => ({
   components: { DataTable },
   template: `
   <div class="w-screen">
-  <DataTable v-bind="args" :loading="loading" class="w-full h-full"> 
+  <DataTable v-bind="args" :loading="loading" class="w-full h-full">
   </DataTable>
   </div>
   `,
