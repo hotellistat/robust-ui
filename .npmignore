@@ -1,8 +1,9 @@
-node_modules
-storybook-static
-src
-assets
+# Folders
 .vscode
 .storybook
 .github
 .devcontainer
+node_modules
+storybook-static
+assets
+test

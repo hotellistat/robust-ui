@@ -5,7 +5,18 @@ on:
       - main
   workflow_dispatch:
 jobs:
+  lint:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+      - name: Install modules
+        run: yarn
+      - name: Run ESLint
+        run: yarn run lint
+
   build-container:
+    needs:
+      - lint
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
@@ -23,7 +34,6 @@ jobs:
             ${{ runner.os }}-
       - uses: actions/setup-node@v2
         with:
-          node-version: "16.x"
           registry-url: "https://registry.npmjs.org"
       - name: "Automated Version Bump"
         uses: "phips28/gh-action-bump-version@master"

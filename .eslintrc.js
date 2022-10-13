@@ -31,6 +31,12 @@ module.exports = {
     'vue/prefer-separate-static-class': ['error'],
     'vue/prefer-true-attribute-shorthand': ['warn'],
     'vue/v-on-function-call': ['error'],
+    'vue/multi-word-component-names': [
+      'error',
+      {
+        ignores: ['index'],
+      },
+    ],
     'vue/no-undef-components': [
       'error',
       {
@@ -65,4 +71,4 @@ module.exports = {
       },
     ],
   },
-};
+}
