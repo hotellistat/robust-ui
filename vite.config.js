@@ -3,8 +3,6 @@ import { defineConfig } from 'vite'
 import { resolve } from 'path'
 import visualizer from 'rollup-plugin-visualizer'
 
-console.log(process.env)
-
 export default defineConfig(async (config) => ({
   plugins: [
     vue(),
