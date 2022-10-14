@@ -1,0 +1,2 @@
+import{_ as t}from"./index.8a4166f9.js";import"./iframe.d0acd4d4.js";const s={title:"Ui/Notice",component:t,argTypes:{title:{control:{type:"text",default:"Title"}}}},o=e=>({template:'<Notice v-bind="args" >This is a notice</Notice>',components:{Notice:t},setup(){return{args:e}}}),a=o.bind(),c=["Default"];export{a as Default,c as __namedExportsOrder,s as default};
+//# sourceMappingURL=index.stories.dedeb527.js.map

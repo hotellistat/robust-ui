@@ -1,0 +1,2 @@
+import{_ as e}from"./index.76434e24.js";import{y as a}from"./iframe.d0acd4d4.js";const i={title:"Ui/Slider",component:e,argTypes:{title:{control:{type:"text",default:"Title"}}}},o=t=>({template:'<Slider v-bind="args" v-model="value" class="w-64" />',components:{Slider:e},setup(){const s=a(500);return{args:t,value:s}}}),r=o.bind();r.args={min:0,max:5e3,step:100};const m=["Default"];export{r as Default,m as __namedExportsOrder,i as default};
+//# sourceMappingURL=index.stories.426e88fb.js.map
