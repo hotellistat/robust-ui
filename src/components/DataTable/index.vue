@@ -20,24 +20,22 @@
           :class="column.class ?? ''"
         >
           <div
-            class="flex cursor-pointer gap-x-1"
+            class="flex cursor-pointer items-center gap-x-2"
             @click="sortColumn(column, $event)"
           >
-            <div class="overflow-hidden truncate break-words">
+            <div class="mr-auto overflow-hidden truncate break-words">
               {{ column.name }}
             </div>
-            <div class="flex flex-col">
-              <PhCaretUp
-                :class="getDirection(column) === 1 ? 'visible' : 'invisible'"
-                weight="bold"
-                :size="12"
-              />
-              <PhCaretDown
-                :class="getDirection(column) === -1 ? 'visible' : 'invisible'"
-                weight="bold"
-                :size="12"
-              />
-            </div>
+            <PhSortAscending
+              v-show="getDirection(column) === 1"
+              class="text-gray-500"
+              :size="20"
+            />
+            <PhSortDescending
+              v-show="getDirection(column) === -1"
+              class="text-gray-500"
+              :size="20"
+            />
           </div>
         </div>
       </div>
@@ -117,8 +115,8 @@ import { computed } from 'vue'
 import { onMounted, onUnmounted, PropType, ref, toRefs, watch } from 'vue'
 import Separator from '../Separator/index.vue'
 import {
-  PhCaretUp,
-  PhCaretDown,
+  PhSortDescending,
+  PhSortAscending,
   PhCaretLeft,
   PhCaretDoubleLeft,
   PhCaretRight,
