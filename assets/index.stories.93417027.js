@@ -1,0 +1,2 @@
+import{y as p}from"./iframe.4adac04e.js";import{P as e}from"./index.8352703a.js";const l={title:"Ui/Popper",component:e,argTypes:{title:{control:{type:"text"}},description:{control:{type:"text"}}}},r=t=>({template:'<Popper v-bind="args" v-model="value">ldsajfk</Popper>',components:{Popper:e},setup(){const o=p(!1);return{args:t,value:o}}}),s=r.bind({});s.args={title:"Popper title",description:"Popper description text to be placed here"};const i=["Default"];export{s as Default,i as __namedExportsOrder,l as default};
+//# sourceMappingURL=index.stories.93417027.js.map

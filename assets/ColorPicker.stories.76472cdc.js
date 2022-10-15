@@ -1,2 +1,0 @@
-import{_ as t}from"./index.5a3b0dea.js";import"./iframe.d0acd4d4.js";const i={title:"Ui/ColorPicker",component:t,argTypes:{title:{control:{type:"text",default:"Title"}}}},o=e=>({template:'<ColorPicker v-bind="args" />',components:{ColorPicker:t},setup(){return{args:e}}}),n=o.bind(),s=["Default"];export{n as Default,s as __namedExportsOrder,i as default};
-//# sourceMappingURL=ColorPicker.stories.76472cdc.js.map
