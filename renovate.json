@@ -1,7 +1,12 @@
 {
+  "timezone": "Europe/Berlin",
   "extends": [
     "config:base",
     "group:allNonMajor"
+  ],
+  "schedule": [
+    "after 10pm every weekday",
+    "before 5am every weekday"
   ],
   "commitBody": "[skip ci]",
   "automerge": true
