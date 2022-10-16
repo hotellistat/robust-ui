@@ -9,5 +9,13 @@
     "before 5am every weekday"
   ],
   "commitBody": "[skip ci]",
-  "automerge": true
+  "automerge": true,
+  "packageRules": [
+    {
+      "description": "All Github maintained actions",
+      "groupName": "Github maintained actions",
+      "groupSlug": "github-actions",
+      "matchManagers": ["github-actions"]
+    }
+  ]
 }
