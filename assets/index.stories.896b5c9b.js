@@ -1,2 +1,0 @@
-import{_ as e}from"./index.83889144.js";import"./iframe.d0acd4d4.js";const n={title:"Ui/LinearProgress",component:e,argTypes:{progress:{control:{type:"number"}}}},t=r=>({template:'<LinearProgress v-bind="args" />',components:{LinearProgress:e},setup(){return{args:r}}}),a=t.bind(),i=["Default"];export{a as Default,i as __namedExportsOrder,n as default};
-//# sourceMappingURL=index.stories.896b5c9b.js.map
