@@ -136,6 +136,7 @@ export interface Column {
   class?: string
   size?: string
   direction?: Direction
+  sortable?: boolean
   sort?: (
     a: number | string | boolean,
     b: number | string | boolean,
@@ -458,6 +459,11 @@ const sortOnSimpleClick = (cSort: Column) => {
 
 const sortColumn = (cSort: Column, event: MouseEvent) => {
   if (loading.value) return
+  // if sortable is explicitly false -> not sorting
+  // since it's sortable by default
+  if (cSort.sortable === false) {
+    return
+  }
   if (event.shiftKey) return sortOnShiftClick(cSort)
   return sortOnSimpleClick(cSort)
 }

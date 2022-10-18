@@ -8,6 +8,7 @@ export const serverSideOptions = {
       name: 'Hotel',
       key: 'hotel',
       group_by: 'hotel',
+      sortable: false,
       // class: 'overflow-hidden',
       // size: '2fr',
     },
