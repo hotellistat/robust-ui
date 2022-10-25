@@ -2,6 +2,7 @@
 
 html {
   font-family: 'Inter', sans-serif;
+  line-height: normal;
 }
 @supports (font-variation-settings: normal) {
   html {

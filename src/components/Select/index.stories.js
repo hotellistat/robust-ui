@@ -82,3 +82,52 @@ Inline.args = {
     'This is an input error. It tells the user, that there is something wrong with the current input state',
   searchable: false,
 }
+
+const MultiselectTemplate = (args, { events }) => ({
+  template:
+    '<Select v-bind="args" :options="options" v-model="value" @="events" class="w-64 min-w-0"/><br/>Value: {{value}}',
+  components: { Select },
+  setup() {
+    const value = ref([])
+
+    const options = ref([
+      {
+        title: 'Item 1',
+        value: true,
+      },
+      {
+        title: 'Item 2',
+        value: false,
+      },
+      {
+        title: 'Item 3 very long title that might not fit into the select box',
+        value: 'test',
+      },
+      {
+        title: 'Hello',
+        value: 12,
+      },
+      {
+        title: 'Bye',
+        value: 0,
+      },
+    ])
+
+    return {
+      value,
+      options,
+      args,
+      events,
+    }
+  },
+})
+
+export const Multiselect = MultiselectTemplate.bind()
+
+Multiselect.args = {
+  title: 'Input title',
+  hint: 'This is an input hint. It is supposed to help the user understand the reason this input exists and what it does',
+  error:
+    'This is an input error. It tells the user, that there is something wrong with the current input state',
+  searchable: false,
+}

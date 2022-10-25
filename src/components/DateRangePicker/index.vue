@@ -230,6 +230,7 @@ defineExpose({
   <RobustInputWrapper
     ref="inputWrapperRef"
     v-slot="slotProps"
+    box-class="items-center"
     :title="title"
     :hint="hint"
     :error="error"
@@ -239,7 +240,7 @@ defineExpose({
     @click.stop="handleClick"
   >
     <div
-      class="flex h-full items-center pr-2 text-gray-400"
+      class="items-center text-gray-400"
       :class="[condensed ? 'pl-2' : 'pl-3']"
     >
       <PhCalendar size="20" />
@@ -247,7 +248,8 @@ defineExpose({
     <div
       :id="slotProps.cuid"
       ref="select"
-      class="flex h-full w-full cursor-default items-center bg-transparent pl-2 text-current outline-none"
+      class="w-full cursor-default items-center bg-transparent text-current outline-none"
+      :class="[condensed ? 'pl-2' : 'pl-3']"
       v-bind="$attrs"
     >
       <div class="min-w-0 truncate text-sm tabular-nums sm:text-base">
@@ -256,7 +258,7 @@ defineExpose({
     </div>
 
     <div
-      class="flex h-full flex-shrink-0 items-center pr-3 text-gray-400 dark:text-gray-500"
+      class="flex-shrink-0 items-center pr-3 text-gray-400 dark:text-gray-500"
       :class="[condensed ? 'pl-2' : 'pl-3']"
     >
       <PhCaretDown

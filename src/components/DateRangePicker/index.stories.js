@@ -15,8 +15,7 @@ export default {
 }
 
 const Template = (args) => ({
-  template:
-    '<DaterangePicker class="p-2 col-span-2 sm:col-span-1" v-bind="args"></DaterangePicker>',
+  template: '<DaterangePicker v-bind="args"></DaterangePicker>',
   components: { DaterangePicker },
   setup() {
     return { args }
