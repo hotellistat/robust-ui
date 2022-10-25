@@ -1,5 +1,11 @@
 import { FC } from 'react';
 
+declare global {
+	interface SymbolConstructor {
+		readonly observable: symbol;
+	}
+}
+
 declare enum types {
     TAB = "tab",
     PANEL = "panel",
