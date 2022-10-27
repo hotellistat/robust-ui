@@ -1,5 +1,5 @@
 <script lang="ts" setup>
-import { computed, readonly, ref } from 'vue'
+import { computed, ref } from 'vue'
 import RobustInputWrapper from '../InputWrapper/index.vue'
 import { PhWarningCircle } from '@dnlsndr/vue-phosphor-icons'
 
@@ -89,7 +89,6 @@ defineExpose({
     >
       <slot tag="div" name="prefix" />
     </div>
-
     <textarea
       :id="slotProps.cuid"
       ref="inputRef"
