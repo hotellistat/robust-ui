@@ -18,9 +18,9 @@
       <div v-if="$slots.prefix" class="mr-2">
         <slot tag="div" name="prefix" />
       </div>
-      <div class="whitespace-no-wrap truncate">
+      <span class="whitespace-no-wrap inline-block truncate align-top">
         <slot />
-      </div>
+      </span>
       <div v-if="$slots.suffix" class="ml-2">
         <slot tag="div" name="suffix" />
       </div>

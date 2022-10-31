@@ -3,7 +3,7 @@ let uid = 0
 </script>
 
 <script lang="ts" setup>
-import { computed, PropType, readonly, ref, useAttrs } from 'vue'
+import { computed, PropType, ref, useAttrs } from 'vue'
 
 defineProps({
   title: {
@@ -61,30 +61,26 @@ defineExpose({
 </script>
 
 <template>
-  <fieldset :class="[$props.class]">
-    <legend
+  <label :for="cuid" :class="[$props.class]">
+    <div
       v-if="title"
       class="mb-1 block select-none text-sm font-medium text-gray-500 dark:text-gray-400"
     >
       {{ title }}
-    </legend>
+    </div>
     <div
       v-bind="listeners"
       ref="wrapperRef"
-      class="relative flex rounded-md border border-gray-200 bg-gray-50 dark:border-gray-600 dark:bg-gray-800"
+      class="relative flex rounded-md border border-gray-200 bg-gray-50 ring-primary-500 ring-opacity-30 focus-within:border-primary-500 focus-within:outline-none focus-within:ring dark:border-gray-600 dark:bg-gray-800 focus-within:dark:border-primary-500"
       :class="[
         $props.boxClass,
-        fixedHeight ? (condensed ? 'h-9' : 'h-10') : undefined,
-        {
-          'ring-primary-500 ring-opacity-30 focus-within:border-primary-500 focus-within:outline-none focus-within:ring focus-within:dark:border-primary-500':
-            !readonly,
-        },
+        fixedHeight ? (condensed ? 'h-8' : 'h-10') : undefined,
         disabled ? 'text-gray-500' : '',
       ]"
     >
       <slot :cuid="cuid" :wrapper-ref="wrapperRef" />
     </div>
-    <label v-if="hint !== undefined || error !== undefined" class="block pt-1">
+    <div v-if="hint !== undefined || error !== undefined" class="mt-2">
       <div v-if="hint !== undefined" class="select-none text-xs text-gray-400">
         {{ hint }}
       </div>
@@ -94,6 +90,6 @@ defineExpose({
       >
         {{ error }}
       </div>
-    </label>
-  </fieldset>
+    </div>
+  </label>
 </template>

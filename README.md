@@ -23,7 +23,7 @@ When you are starting a new prototype you want to be able to develop features fa
 First install the library using your prefered package manager
 
 ```bash
-yarn add @hotellistat/robust-ui
+npm run add @hotellistat/robust-ui
 ```
 
 then you can import the available components like so
@@ -54,41 +54,41 @@ Here is a list of all available npm commands.
 We use Vue Press to hold our component documentation and examples
 
 ```bash
-yarn dev
+npm run dev
 ```
 
 **Building the documentation**
 
 ```bash
-yarn build
+npm run build
 ```
 
 **Serving the documentation**
 
 ```bash
-yarn serve
+npm run serve
 ```
 
 **Building the library bundles**
 
 ```bash
-yarn build:library
+npm run build:library
 ```
 
 **Analyzing bundle sizes with [rollup-plugin-visualizer](https://github.com/btd/rollup-plugin-visualizer)**
 
 ```bash
-yarn analyze
+npm run analyze
 ```
 
 **Lint all files**
 
 ```bash
-yarn lint
+npm run lint
 ```
 
 **Format all files**
 
 ```bash
-yarn format
+npm run format
 ```

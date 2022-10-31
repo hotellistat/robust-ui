@@ -1,6 +1,6 @@
 <template>
   <div
-    class="wrapper relative min-w-16 rounded-full bg-gray-200"
+    class="wrapper relative min-w-16 rounded-full bg-gray-200 dark:bg-gray-600"
     :style="[heightComputed]"
   >
     <div
