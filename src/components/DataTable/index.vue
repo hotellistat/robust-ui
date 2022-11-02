@@ -69,7 +69,7 @@
               </div>
 
               <!-- Column content -->
-              <div v-if="!loading" class="overflow-hidden break-words">
+              <div v-if="!loading" class="w-full overflow-hidden break-words">
                 <div v-if="!$slots[column.key]">
                   {{
                     entry[column.key] === undefined
