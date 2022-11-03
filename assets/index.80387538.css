@@ -1,0 +1,1 @@
+circle[data-v-28bc0434]{animation:grow-28bc0434 2s linear infinite,spin-28bc0434 2s linear infinite}@keyframes grow-28bc0434{0%{stroke-dashoffset:var(--18bf3f15)}50%{stroke-dashoffset:var(--a7bde0b2)}to{stroke-dashoffset:var(--18bf3f15)}}@keyframes spin-28bc0434{0%{transform:rotate(0)}50%{transform:rotate(2turn)}to{transform:rotate(3turn)}}
