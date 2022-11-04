@@ -1,7 +1,7 @@
 <template>
   <div
     ref="root"
-    class="transition-color text-shade-20 relative flex select-none gap-1 bg-gray-200 p-1 duration-100 ease-in-out dark:bg-gray-700"
+    class="transition-color text-shade-20 relative flex select-none gap-1 bg-gray-100 p-1 duration-100 ease-in-out dark:bg-gray-700"
     :class="[rounded ? 'rounded-full' : 'rounded-lg']"
   >
     <button

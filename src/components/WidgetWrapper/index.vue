@@ -56,7 +56,7 @@ const closeDropdown = () => {
       <button
         v-if="$slots.options"
         ref="contextButtonRef"
-        class="ml-2 -mr-2 -mt-1 cursor-default rounded-full border-none p-1 opacity-0 transition-all duration-150 hover:bg-gray-200 group-hover:opacity-100 dark:hover:bg-gray-800"
+        class="ml-2 -mr-2 -mt-1 cursor-default rounded-full border-none p-1 opacity-0 transition-all duration-150 hover:bg-gray-100 group-hover:opacity-100 dark:hover:bg-gray-800"
         @click="open = !open"
       >
         <PhDotsThreeVertical size="24" weight="bold" />
