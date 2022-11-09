@@ -49,7 +49,7 @@ const closeDropdown = () => {
   >
     <div
       v-if="title || $slots.title"
-      class="relative mb-3 flex justify-between px-4 pt-3 text-gray-700 dark:text-gray-400"
+      class="relative mb-3 flex min-w-0 justify-between truncate px-4 pt-3 text-gray-700 dark:text-gray-400"
     >
       <slot v-if="$slots.title" name="title" :title="title" />
       <template v-else>{{ title }}</template>
