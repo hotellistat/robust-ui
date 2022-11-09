@@ -19,7 +19,7 @@
       <template v-for="(value, index) in listPages" :key="index">
         <span
           class="paginate-btn relative inline-flex w-12 items-center justify-center border-gray-200 bg-gray-50 py-2 text-sm font-medium text-gray-700 hover:bg-gray-300 dark:border-gray-600 dark:bg-gray-800"
-          :class="value === page ? 'active bg-gray-200 dark:text-gray-900' : ''"
+          :class="value === page ? 'active bg-gray-100 dark:text-gray-900' : ''"
           @click="() => setPage(value)"
           >{{ value }}</span
         >

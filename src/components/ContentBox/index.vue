@@ -1,7 +1,5 @@
 <template>
-  <section
-    class="relative rounded-lg border border-gray-200 bg-white dark:border-gray-700 dark:bg-gray-800"
-  >
+  <section class="relative rounded-lg bg-white dark:bg-gray-800">
     <header
       v-if="description !== undefined || title !== undefined"
       class="relative overflow-hidden rounded-md p-4 sm:p-6"
@@ -28,7 +26,12 @@
         }}</slot>
       </p>
     </header>
-    <RobustSeparator />
+    <div
+      v-if="description !== undefined || title !== undefined"
+      class="px-4 sm:px-6"
+    >
+      <RobustSeparator />
+    </div>
     <div class="p-4 sm:p-6">
       <slot />
     </div>

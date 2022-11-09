@@ -465,14 +465,14 @@ defineExpose({
           </div>
         </div>
         <div
-          class="flex h-8 w-8 items-center justify-center rounded-lg text-gray-800 hover:bg-gray-100 hover:text-gray-800 active:bg-gray-200 dark:text-gray-400 dark:hover:bg-gray-800 dark:hover:text-gray-100"
+          class="flex h-8 w-8 items-center justify-center rounded-lg text-gray-800 hover:bg-gray-100 hover:text-gray-800 active:bg-gray-100 dark:text-gray-400 dark:hover:bg-gray-800 dark:hover:text-gray-100"
           @click="subMonth"
         >
           <PhCaretLeft type="chevron-left" size="14" weight="bold" />
         </div>
 
         <div
-          class="flex h-8 w-8 items-center justify-center rounded-lg text-gray-800 hover:bg-gray-100 hover:text-gray-800 active:bg-gray-200 dark:text-gray-400 dark:hover:bg-gray-800 dark:hover:text-gray-100"
+          class="flex h-8 w-8 items-center justify-center rounded-lg text-gray-800 hover:bg-gray-100 hover:text-gray-800 active:bg-gray-100 dark:text-gray-400 dark:hover:bg-gray-800 dark:hover:text-gray-100"
           @click="addMonth"
         >
           <PhCaretRight type="chevron-right" size="14" weight="bold" />
@@ -603,7 +603,7 @@ defineExpose({
                 isFirst(day) ||
                 isSelectedDay(day)
                   ? `rounded-0 ${variantStyling.background}`
-                  : 'hover:bg-gray-200 dark:hover:bg-gray-800',
+                  : 'hover:bg-gray-100 dark:hover:bg-gray-800',
               ]"
             >
               {{ day }}

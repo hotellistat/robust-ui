@@ -6,11 +6,12 @@ export default {
   component: TabsSwitch,
   argTypes: {
     rounded: { control: { type: 'boolean' } },
+    condensed: { control: { type: 'boolean' } },
   },
 }
 
 const DefaultTemplate = (args) => ({
-  template: '<TabsSwitch v-bind="args" v-model="value"></TabsSwitch>',
+  template: '<TabsSwitch  v-bind="args" v-model="value"></TabsSwitch>',
   components: { TabsSwitch },
   setup() {
     const value = ref('item_1')
@@ -39,8 +40,8 @@ Default.args = {
 
 const SlotTemplate = (args) => ({
   template: `<TabsSwitch v-bind="args" v-model="value">
-  <template v-slot:tab="data">
-  <div @click="data.select" class="px-4 py-3 flex items-center">
+  <template v-slot="data">
+  <div @click="data.select" class="flex items-center">
   <div class="w-2 h-2 rounded-full bg-green-500 mr-3"></div>
   <div>
   {{data.tab.title}}

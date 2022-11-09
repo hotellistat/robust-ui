@@ -61,7 +61,7 @@ defineExpose({
 </script>
 
 <template>
-  <label :for="cuid" :class="[$props.class]">
+  <label :for="cuid" class="inline-block" :class="[$props.class]">
     <div
       v-if="title"
       class="mb-1 block select-none text-sm font-medium text-gray-500 dark:text-gray-400"
