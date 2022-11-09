@@ -10,13 +10,6 @@ import RobustPopper from '../Popper'
 import { PhDotsThreeVertical } from '@dnlsndr/vue-phosphor-icons'
 import { onClickOutside } from '@vueuse/core'
 
-defineProps({
-  title: {
-    type: String,
-    default: undefined,
-  },
-})
-
 const emit = defineEmits(['blur'])
 
 const open = ref(false)
@@ -48,11 +41,10 @@ const closeDropdown = () => {
     class="group relative flex flex-col rounded-md bg-white dark:bg-gray-800"
   >
     <div
-      v-if="title || $slots.title"
+      v-if="$slots.title"
       class="relative mb-3 flex min-w-0 justify-between truncate px-4 pt-3 text-gray-700 dark:text-gray-400"
     >
-      <slot v-if="$slots.title" name="title" :title="title" />
-      <template v-else>{{ title }}</template>
+      <slot v-if="$slots.title" name="title" />
       <button
         v-if="$slots.options"
         ref="contextButtonRef"
@@ -65,7 +57,7 @@ const closeDropdown = () => {
     <section
       v-if="$slots.default"
       class="h-full w-full px-4 pb-3"
-      :class="{ 'pt-3': !(title || $slots.title) }"
+      :class="{ 'pt-3': !$slots.title }"
     >
       <slot />
     </section>
