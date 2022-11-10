@@ -42,36 +42,36 @@ const closeDropdown = () => {
   >
     <div
       v-if="$slots.title"
-      class="relative mb-3 flex min-w-0 justify-between truncate px-4 pt-3 text-gray-700 dark:text-gray-400"
+      class="relative flex min-w-0 items-center justify-between gap-4 truncate p-4 text-sm font-medium text-gray-500 dark:text-gray-400"
     >
       <slot v-if="$slots.title" name="title" />
-      <button
+      <div
         v-if="$slots.options"
         ref="contextButtonRef"
-        class="ml-2 -mr-2 -mt-1 cursor-default rounded-full border-none p-1 opacity-0 transition-all duration-150 hover:bg-gray-100 group-hover:opacity-100 dark:hover:bg-gray-800"
+        class="-m-1 cursor-default rounded-full border-none p-1 opacity-0 transition-all duration-150 hover:bg-gray-100 group-hover:opacity-100 dark:hover:bg-gray-700"
         @click="open = !open"
       >
-        <PhDotsThreeVertical size="24" weight="bold" />
-      </button>
+        <PhDotsThreeVertical size="20" weight="bold" />
+      </div>
     </div>
+    <RobustPopper
+      ref="popperRef"
+      v-model:open="open"
+      class="z-[100]"
+      :append-to="contextButtonRef"
+      :options="{
+        placement: 'bottom-end',
+      }"
+    >
+      <slot name="options" />
+    </RobustPopper>
     <section
       v-if="$slots.default"
-      class="h-full w-full px-4 pb-3"
-      :class="{ 'pt-3': !$slots.title }"
+      class="h-full w-full px-4 pb-4"
+      :class="{ 'pt-4': !$slots.title }"
     >
       <slot />
     </section>
     <slot name="raw" />
   </div>
-  <RobustPopper
-    ref="popperRef"
-    v-model:open="open"
-    class="z-[100]"
-    :append-to="contextButtonRef"
-    :options="{
-      placement: 'bottom-end',
-    }"
-  >
-    <slot name="options" />
-  </RobustPopper>
 </template>

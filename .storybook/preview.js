@@ -25,7 +25,7 @@ export const parameters = {
       {
         name: 'Dark',
         class: ['dark', 'dark-mode'],
-        color: '#111827',
+        color: '#0f141a',
       },
     ],
   },

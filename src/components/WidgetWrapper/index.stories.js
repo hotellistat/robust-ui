@@ -11,7 +11,8 @@ export default {
 }
 
 const DefaultTemplate = (args) => ({
-  template: `<WidgetWrapper title="Widtet wrapper">
+  template: `<WidgetWrapper>
+    <template #title>Widget wrapper</template>
     Test content
     <template #options>
     <div style="padding: 16px">
