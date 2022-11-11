@@ -1,0 +1,1 @@
+.robust-ui-spinner{animation:grow 2s linear infinite,spin 2s linear infinite}@keyframes grow{0%{stroke-dashoffset:var(--3d42b6a8)}50%{stroke-dashoffset:var(--5eb6f18c)}to{stroke-dashoffset:var(--3d42b6a8)}}@keyframes spin{0%{transform:rotate(0)}50%{transform:rotate(2turn)}to{transform:rotate(3turn)}}
