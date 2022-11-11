@@ -7,6 +7,7 @@
     :viewBox="`0 0 ${size} ${size}`"
   >
     <circle
+      class="robust-ui-spinner"
       fill="transparent"
       stroke="currentColor"
       :stroke-width="stroke"
@@ -47,8 +48,8 @@ const maxDashOffset = computed(() => {
 })
 </script>
 
-<style scoped>
-circle {
+<style>
+.robust-ui-spinner {
   animation: grow 2s linear infinite, spin 2s linear infinite;
 }
 

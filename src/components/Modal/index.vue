@@ -8,11 +8,15 @@
         role="dialog"
       >
         <div
-          class="modal-backdrop absolute top-0 left-0 right-0 bottom-0 bg-gray-900 bg-opacity-50"
+          class="robust-ui-modal__backdrop absolute top-0 left-0 right-0 bottom-0 bg-gray-900 bg-opacity-50"
           @click.self="close"
         ></div>
 
-        <div class="modal-box" :class="[modalBoxClass]" @keydown.esc="close">
+        <div
+          class="robust-ui-modal__box"
+          :class="[modalBoxClass]"
+          @keydown.esc="close"
+        >
           <div
             class="relative flex max-h-full min-h-0 w-full flex-col bg-white shadow-xl dark:bg-gray-800"
             :class="[modalClass, !isSlideOut ? 'rounded-md' : 'h-full']"
@@ -71,13 +75,13 @@ let scrollLocked
 
 const animationName = computed(() => {
   if (props.slideOutLeft) {
-    return 'slide-left'
+    return 'robust-ui-modal__slide-left'
   }
   if (props.slideOutRight) {
-    return 'slide-right'
+    return 'robust-ui-modal__slide-right'
   }
 
-  return 'fade'
+  return 'robust-ui-modal__fade'
 })
 
 const modalBoxClass = computed(() => {
@@ -168,120 +172,120 @@ defineExpose({
 })
 </script>
 
-<style lang="postcss" scoped>
-.modal-backdrop {
+<style lang="postcss">
+.robust-ui-modal__backdrop {
   backdrop-filter: blur(2px);
 }
 
-.fade-enter-active {
+.robust-ui-modal__fade-enter-active {
   transition: all 200ms ease-in-out;
 
-  .modal-backdrop {
+  .robust-ui-modal__backdrop {
     transition: all 100ms ease-in-out;
   }
 
-  .modal-box {
+  .robust-ui-modal__box {
     transition: all 200ms ease-in-out;
   }
 }
 
-.fade-leave-active {
+.robust-ui-modal__fade-leave-active {
   transition: all 50ms ease-in-out;
 
-  .modal-backdrop {
+  .robust-ui-modal__backdrop {
     transition: all 50ms ease-in-out;
   }
 
-  .modal-box {
+  .robust-ui-modal__box {
     transition: all 50ms ease-in-out;
   }
 }
 
-.fade-enter-from {
-  .modal-backdrop {
+.robust-ui-modal__fade-enter-from {
+  .robust-ui-modal__backdrop {
     opacity: 0;
   }
 
-  .modal-box {
-    opacity: 0;
-  }
-}
-
-.fade-leave-to {
-  .modal-backdrop {
-    opacity: 0;
-  }
-
-  .modal-box {
+  .robust-ui-modal__box {
     opacity: 0;
   }
 }
 
-.slide-right-enter-active,
-.slide-left-enter-active {
+.robust-ui-modal__fade-leave-to {
+  .robust-ui-modal__backdrop {
+    opacity: 0;
+  }
+
+  .robust-ui-modal__box {
+    opacity: 0;
+  }
+}
+
+.robust-ui-modal__slide-right-enter-active,
+.robust-ui-modal__slide-left-enter-active {
   transition: all 150ms ease-in-out;
 
-  .modal-backdrop {
+  .robust-ui-modal__backdrop {
     transition: all 150ms ease-in-out;
   }
 
-  .modal-box {
+  .robust-ui-modal__box {
     transition: all 150ms ease-in-out;
   }
 }
 
-.slide-right-leave-active,
-.slide-left-leave-active {
+.robust-ui-modal__slide-right-leave-active,
+.robust-ui-modal__slide-left-leave-active {
   transition: all 150ms ease-in-out;
 
-  .modal-backdrop {
+  .robust-ui-modal__backdrop {
     transition: all 150ms ease-in-out;
   }
 
-  .modal-box {
+  .robust-ui-modal__box {
     transition: all 150ms ease-in-out;
   }
 }
 
-.slide-right-enter-from {
-  .modal-backdrop {
+.robust-ui-modal__slide-right-enter-from {
+  .robust-ui-modal__backdrop {
     opacity: 0;
   }
 
-  .modal-box {
+  .robust-ui-modal__box {
     transform: translateX(100%);
     opacity: 0;
   }
 }
 
-.slide-right-leave-to {
-  .modal-backdrop {
+.robust-ui-modal__slide-right-leave-from {
+  .robust-ui-modal__backdrop {
     opacity: 0;
   }
 
-  .modal-box {
+  .robust-ui-modal__box {
     transform: translateX(100%);
     opacity: 0;
   }
 }
 
-.slide-left-enter-from {
-  .modal-backdrop {
+.robust-ui-modal__slide-left-enter-from {
+  .robust-ui-modal__backdrop {
     opacity: 0;
   }
 
-  .modal-box {
+  .robust-ui-modal__box {
     transform: translateX(-100%);
     opacity: 0;
   }
 }
 
-.slide-left-leave-to {
-  .modal-backdrop {
+.robust-ui-modal__slide-left-leave-to {
+  .robust-ui-modal__backdrop {
     opacity: 0;
   }
 
-  .modal-box {
+  .robust-ui-modal__box {
     transform: translateX(-100%);
     opacity: 0;
   }
