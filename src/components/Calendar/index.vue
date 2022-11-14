@@ -27,7 +27,7 @@ import {
   watch,
 } from 'vue'
 import { PhCaretLeft, PhCaretRight } from '@dnlsndr/vue-phosphor-icons'
-import QuickActionPresets from './quickActionPresets'
+import defaultPresets, { Preset } from './presets'
 import variants from './variants'
 
 const props = defineProps({
@@ -51,6 +51,10 @@ const props = defineProps({
     type: Object as PropType<[Date, Date] | Date>,
     default: () => new Date(),
   },
+  presets: {
+    type: Array as PropType<Array<Preset>>,
+    default: () => defaultPresets,
+  },
 })
 const emit = defineEmits(['update:modelValue', 'click:relativeDate'])
 
@@ -68,8 +72,6 @@ const cursor = Array.isArray(modelValue.value)
 
 const selectedDate = ref()
 const refYearEntry = ref({})
-
-const quickActions = QuickActionPresets
 
 const variantStyling = computed(() => {
   return variants[props.variant]
@@ -424,16 +426,16 @@ defineExpose({
   <div class="relative flex w-max select-none">
     <div
       v-if="Array.isArray(modelValue)"
-      class="relative w-48 border-r border-gray-200 dark:border-gray-700"
+      class="relative min-h-0 w-48 border-r border-gray-200 dark:border-gray-700"
     >
       <div class="absolute inset-0 overflow-auto py-2">
         <div
-          v-for="action in quickActions"
-          :key="action.title"
+          v-for="(preset, index) in presets"
+          :key="index"
           class="py-2 px-4 hover:bg-gray-50 dark:hover:bg-gray-800"
-          @click="setQuickAction(action.preset())"
+          @click="setQuickAction(preset.preset())"
         >
-          {{ action.title }}
+          {{ preset.title }}
         </div>
       </div>
     </div>
