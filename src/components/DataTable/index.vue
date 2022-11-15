@@ -88,7 +88,7 @@
       </div>
     </div>
     <div class="flex items-center justify-between py-2">
-      <div class="flex gap-x-2">
+      <div class="flex items-center gap-x-2">
         <div class="flex gap-x-2">
           <PhCaretDoubleLeft :size="24" @click="firstPage" />
           <PhCaretLeft :size="24" @click="prevPage" />
@@ -324,19 +324,8 @@ const initSizes = () => {
 const sizesController = ref(initSizes())
 
 const sizes = computed(() => {
-  // const colsSizeArray = options.value.columns.map((col) =>
-  //   col.size !== undefined ? `minmax(0, ${col.size})` : 'minmax(0, 1fr)'
-  // )
-  // colsSizeArray.unshift('minmax(0, 2rem)')
-  const colsSizeArray = sizesController.value.map((size, idx) => {
-    // if (idx === 0) {
-    //   return size !== undefined ? `minmax(0, ${size})` : `minmax(0, 1fr)`
-    // }
-    return size !== undefined ? `minmax(0, ${size})` : `minmax(0, 1fr)`
-
-    // return size !== undefined
-    //   ? `minmax(${minColSize.value}px, ${size})`
-    //   : `minmax(${minColSize.value}px, 1fr)`
+  const colsSizeArray = sizesController.value.map((size) => {
+    return size !== undefined ? `${size}` : `minmax(0, 1fr)`
   })
   return colsSizeArray.join(' ')
 })
@@ -534,9 +523,9 @@ const resetSizes = () => {
   const cols: HTMLElement[] = tableEl.querySelectorAll('.table-column')
   cols.forEach((col, idx) => {
     sizesController.value[idx + 1] = col.clientWidth + 'px'
-    // (col.clientWidth < minColSize.value ? minColSize : col.clientWidth) + 'px'
   })
   emit('update:resize', sizesController.value)
+  console.log('sizesController.value', sizesController.value)
 }
 
 /*
@@ -583,35 +572,17 @@ const createResizableColumn = function (
     const calculatedWidth = w + dx
 
     const currentCol = idx + 1
-    // const tableEl: HTMLElement = table.value
-    // const columns = tableEl.querySelectorAll('.table-column')
-
-    // width of current Element
-    // const currWidth = columns[currentCol - 1].clientWidth
-    // next column width because columns don't count checkbox
-    // const width = columns[currentCol].clientWidth
-
-    // if new calculatedWidth for coulmn is less than min Column height
-    // prevent column from resizing
-    // if (currWidth <= minColSize.value && dx < 0) return
-    // if (width <= minColSize.value && dx > 0) return
-
-    // if (columns[currentCol]) {
-    //   console.log(dx)
-    //   const value = Math.max(columns[currentCol].clientWidth, minColSize.value)
-    //   if (value === minColSize.value) return
-    // }
 
     // we set next column size to 1fr such that
     // it adapts to newly calculated width of previous column
-    sizesController.value[currentCol + 1] = `1fr`
+    sizesController.value[currentCol + 1] = `minmax(${minColSize.value}px, 1fr)`
 
     const size = Math.max(calculatedWidth, minColSize.value)
 
     // Update the width of column
-    sizesController.value[currentCol] = size + 'px'
-
-    // resetSizes()
+    sizesController.value[
+      currentCol
+    ] = `minmax(${minColSize.value}px, ${size}px)`
   }
 
   // When user releases the mouse, remove the existing event listeners
