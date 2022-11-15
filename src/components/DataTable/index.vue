@@ -525,7 +525,6 @@ const resetSizes = () => {
     sizesController.value[idx + 1] = col.clientWidth + 'px'
   })
   emit('update:resize', sizesController.value)
-  console.log('sizesController.value', sizesController.value)
 }
 
 /*
