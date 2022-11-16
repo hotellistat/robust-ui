@@ -302,8 +302,8 @@ const initSorting = () => {
   const sortArray: Column[] = []
   for (const column of options.value.columns) {
     sortArray.push({
-      ...column,
       direction: 0,
+      ...column,
     })
   }
   return sortArray
