@@ -163,10 +163,6 @@ export default defineComponent({
         'div',
         {
           ref: 'root',
-          onClick: (event: MouseEvent) => {
-            event.preventDefault()
-            event.stopPropagation()
-          },
           class:
             'absolute bg-white border border-gray-200 dark:border-gray-700 dark:bg-gray-800 rounded-md shadow-2xl',
         },

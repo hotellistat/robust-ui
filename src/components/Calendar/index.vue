@@ -426,7 +426,7 @@ defineExpose({
   <div class="relative flex w-max select-none">
     <div
       v-if="Array.isArray(modelValue)"
-      class="relative min-h-0 w-48 border-r border-gray-200 dark:border-gray-700"
+      class="relative hidden min-h-0 w-48 border-r border-gray-200 dark:border-gray-700 lg:block"
     >
       <div class="absolute inset-0 overflow-auto py-2">
         <div

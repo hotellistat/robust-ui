@@ -134,12 +134,7 @@ const computedCompare = computed<[Date, Date] | undefined>({
   },
 })
 
-const compareWith = computed({
-  get: () => computedCompare.value.length > 1,
-  set: (value) => {
-    showCompare(value)
-  },
-})
+const showComparisonPicker = ref(false)
 
 const displayDate = computed(() => {
   if (!dateRange.value) {
@@ -164,14 +159,14 @@ function closeDropdown() {
   }
 }
 
-const showCompare = (val: boolean) => {
-  if (val) {
-    displayCompare.value = val
-  } else {
-    emit('update:compareDate', undefined)
-    computedCompare.value = undefined
-  }
-}
+// const showCompare = (val: boolean) => {
+//   if (val) {
+//     displayCompare.value = val
+//   } else {
+//     emit('update:compareDate', undefined)
+//     computedCompare.value = undefined
+//   }
+// }
 
 onClickOutside(popperRef, (event) => {
   if (open.value) {
@@ -279,17 +274,13 @@ defineExpose({
       placement: 'bottom-start',
     }"
   >
-    <h3
-      class="font-lg border-b border-gray-200 p-4 font-medium dark:border-gray-700"
-    >
-      Date range
-    </h3>
-    <div>
-      <RobustCalendar
-        ref="mainCalendar"
-        v-model="tmpDateRange"
-        @click:relativeDate="enableStoringHistory(false)"
+    <section>
+      <h3
+        class="font-lg border-b border-gray-200 p-4 font-medium dark:border-gray-700"
       >
+        Date range
+      </h3>
+      <RobustCalendar ref="mainCalendar" v-model="tmpDateRange">
         <div v-if="enablePerspective" class="flex flex-col items-start gap-y-3">
           <div>
             <label
@@ -298,21 +289,19 @@ defineExpose({
             >
             <RobustDatePicker v-model="perspectiveOf" placeholder="Date" />
           </div>
-          <RobustCheckbox
-            v-if="enableComparison"
-            v-model="compareWith"
-            title="Compare with"
-          />
+          <RobustCheckbox v-model="showComparisonPicker">
+            <template #title>Compare</template>
+          </RobustCheckbox>
         </div>
       </RobustCalendar>
-    </div>
-    <h3
-      v-if="enableComparison"
-      class="font-lg border-b border-t border-gray-200 p-4 font-medium"
-    >
-      Comparison date range
-    </h3>
-    <div v-if="enableComparison">
+    </section>
+
+    <section v-if="enableComparison && showComparisonPicker">
+      <h3
+        class="font-lg border-b border-t border-gray-200 p-4 font-medium dark:border-gray-700"
+      >
+        Comparison date range
+      </h3>
       <RobustCalendar
         v-model="computedCompare"
         variant="secondary"
@@ -326,7 +315,7 @@ defineExpose({
           <RobustDatePicker v-model="comparePerspectiveOf" placeholder="Date" />
         </div>
       </RobustCalendar>
-    </div>
+    </section>
     <div
       class="flex items-start justify-between border-t border-gray-200 p-4 dark:border-gray-700"
     >
