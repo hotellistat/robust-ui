@@ -9,6 +9,7 @@
     </div>
     <div class="rows-wrapper">
       <div
+        ref="header"
         class="datatable-grid-columns hidden select-none items-center gap-x-2 p-4 sm:grid"
         :class="headerClass"
       >
@@ -16,11 +17,11 @@
         <div
           v-for="column in options.columns"
           :key="column.key"
-          class="relative table-column"
+          class="relative table-column cursor-pointer"
           :class="column.class ?? ''"
         >
           <div
-            class="flex cursor-pointer items-center gap-x-2"
+            class="flex items-center gap-x-2"
             @click="sortColumn(column, $event)"
           >
             <div class="mr-auto overflow-hidden truncate break-words">
@@ -87,7 +88,7 @@
       </div>
     </div>
     <div class="flex items-center justify-between py-2">
-      <div class="flex gap-x-2">
+      <div class="flex items-center gap-x-2">
         <div class="flex gap-x-2">
           <PhCaretDoubleLeft :size="24" @click="firstPage" />
           <PhCaretLeft :size="24" @click="prevPage" />
@@ -199,6 +200,7 @@ const emit = defineEmits([
 const { data, options, loading, headerClass } = toRefs(props)
 
 const table = ref()
+const header = ref()
 
 const minColSize = computed(() => {
   return options.value.minColSize ?? defaultOptions.minColSize
@@ -300,8 +302,8 @@ const initSorting = () => {
   const sortArray: Column[] = []
   for (const column of options.value.columns) {
     sortArray.push({
-      ...column,
       direction: 0,
+      ...column,
     })
   }
   return sortArray
@@ -322,13 +324,9 @@ const initSizes = () => {
 const sizesController = ref(initSizes())
 
 const sizes = computed(() => {
-  // const colsSizeArray = options.value.columns.map((col) =>
-  //   col.size !== undefined ? `minmax(0, ${col.size})` : 'minmax(0, 1fr)'
-  // )
-  // colsSizeArray.unshift('minmax(0, 2rem)')
-  const colsSizeArray = sizesController.value.map((size) =>
-    size !== undefined ? `minmax(0, ${size})` : 'minmax(0, 1fr)'
-  )
+  const colsSizeArray = sizesController.value.map((size) => {
+    return size !== undefined ? `${size}` : `minmax(0, 1fr)`
+  })
   return colsSizeArray.join(' ')
 })
 
@@ -537,6 +535,7 @@ const resetSizes = () => {
 const createResizableColumn = function (
   col: HTMLElement,
   resizer: HTMLElement,
+  resizerHandle: HTMLElement,
   idx: number
 ) {
   if (!options.value.resize) return
@@ -556,7 +555,13 @@ const createResizableColumn = function (
     // Attach listeners for document's events
     document.addEventListener('mousemove', mouseMoveHandler)
     document.addEventListener('mouseup', mouseUpHandler)
+    const body = document.querySelector('body')
+    body.classList.add('resizer-cursor')
 
+    const resizers = document.querySelectorAll('.resizer')
+    resizers.forEach((r) => r.classList.add('resizer-not-active'))
+
+    resizer.classList.remove('resizer-not-active')
     resizer.classList.add('resizing')
   }
 
@@ -566,25 +571,17 @@ const createResizableColumn = function (
     const calculatedWidth = w + dx
 
     const currentCol = idx + 1
-    const tableEl: HTMLElement = table.value
-    const columns = tableEl.querySelectorAll('.table-column')
-
-    // width of current Element
-    const currWidth = columns[currentCol - 1].clientWidth
-    // next column width because columns don't count checkbox
-    const width = columns[currentCol].clientWidth
-
-    // if new calculatedWidth for coulmn is less than min Column height
-    // prevent column from resizing
-    if (currWidth <= minColSize.value && dx < 0) return
-    if (width <= minColSize.value && dx > 0) return
 
     // we set next column size to 1fr such that
     // it adapts to newly calculated width of previous column
-    sizesController.value[currentCol + 1] = '1fr'
+    sizesController.value[currentCol + 1] = `minmax(${minColSize.value}px, 1fr)`
+
+    const size = Math.max(calculatedWidth, minColSize.value)
 
     // Update the width of column
-    sizesController.value[currentCol] = `${calculatedWidth}px`
+    sizesController.value[
+      currentCol
+    ] = `minmax(${minColSize.value}px, ${size}px)`
   }
 
   // When user releases the mouse, remove the existing event listeners
@@ -592,21 +589,34 @@ const createResizableColumn = function (
     resetSizes()
     document.removeEventListener('mousemove', mouseMoveHandler)
     document.removeEventListener('mouseup', mouseUpHandler)
+    const body = document.querySelector('body')
+    body.classList.remove('resizer-cursor')
+
+    const resizers = document.querySelectorAll('.resizer')
+    resizers.forEach((r) => r.classList.remove('resizer-not-active'))
     resizer.classList.remove('resizing')
   }
 
-  resizer.addEventListener('mousedown', mouseDownHandler)
+  resizerHandle.addEventListener('mousedown', mouseDownHandler)
 }
 
+// resetting resize Line
 const resizeLine = () => {
   if (!options.value.resize) return
   const tableEl = table.value
   const cols: HTMLElement[] = tableEl.querySelectorAll('.table-column')
   const rowsWrapper = tableEl.querySelector('.rows-wrapper')
 
-  cols.forEach((col) => {
-    const resizer = col.querySelector<HTMLDivElement>('.resizer')
-    if (resizer) resizer.style.height = `${rowsWrapper.clientHeight}px`
+  cols.forEach((col, i) => {
+    if (i < cols.length - 1) {
+      const resizer = col.querySelector<HTMLDivElement>('.resizer')
+      const resizerHandle = col.querySelector<HTMLDivElement>('.resizer-handle')
+
+      if (resizer) resizer.style.height = `${rowsWrapper.clientHeight}px`
+
+      if (resizerHandle)
+        resizerHandle.style.height = `${header.value.clientHeight}px`
+    }
   })
 }
 
@@ -618,11 +628,20 @@ const createResizableTable = () => {
   const rowsWrapper = tableEl.querySelector('.rows-wrapper')
 
   cols.forEach((col, idx) => {
-    const resizer = document.createElement('div')
-    resizer.classList.add('resizer')
-    resizer.style.height = `${rowsWrapper.clientHeight}px`
-    col.appendChild(resizer)
-    createResizableColumn(col, resizer, idx)
+    if (idx < cols.length - 1) {
+      const resizer = document.createElement('div')
+      const resizerHandle = document.createElement('div')
+
+      resizer.classList.add('resizer')
+      resizerHandle.classList.add('resizer-handle')
+
+      resizerHandle.style.height = `${header.value.clientHeight}px`
+      resizerHandle.style.zIndex = '2'
+      resizer.style.height = `${rowsWrapper.clientHeight}px`
+      col.appendChild(resizerHandle)
+      col.appendChild(resizer)
+      createResizableColumn(col, resizer, resizerHandle, idx)
+    }
   })
 
   resetSizes()
@@ -685,17 +704,34 @@ onUnmounted(() => {
 }
 
 .resizer {
-  /* Displayed at the right side of column */
+  position: absolute;
+  top: -15px;
+  right: 0;
+  width: 1px;
+  user-select: none;
+}
+
+.resizer-handle {
   position: absolute;
   top: -15px;
   right: 0;
   width: 5px;
   cursor: col-resize;
-  user-select: none;
 }
 
-.resizer:hover,
+.resizer-handle:hover + .resizer:not(.resizer-not-active) {
+  @apply visible flex bg-gray-400;
+}
+
 .resizing {
-  @apply border-r-2 border-r-gray-400;
+  @apply visible flex bg-gray-400;
+}
+
+.table-column.table-column-not-active {
+  cursor: col-resize;
+}
+
+.resizer-cursor * {
+  cursor: col-resize;
 }
 </style>
