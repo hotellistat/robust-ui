@@ -1,0 +1,2 @@
+import{_ as e}from"./index.ddc113ea.js";import{l as a}from"./vue.esm-bundler.32ce71b1.js";const i={title:"Ui/Slider",component:e,argTypes:{title:{control:{type:"text",default:"Title"}}}},l=t=>({template:'<Slider v-bind="args" v-model="value" class="w-64" />',components:{Slider:e},setup(){const s=a(500);return{args:t,value:s}}}),o=l.bind();o.args={min:0,max:5e3,step:100};const m=["Default"];export{o as Default,m as __namedExportsOrder,i as default};
+//# sourceMappingURL=index.stories.da26bdbc.js.map

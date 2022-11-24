@@ -1,0 +1,2 @@
+import{_ as t}from"./index.be28e408.js";import"./vue.esm-bundler.32ce71b1.js";const i={title:"Ui/ColorPicker",component:t,argTypes:{title:{control:{type:"text",default:"Title"}}}},o=e=>({template:'<ColorPicker v-bind="args" />',components:{ColorPicker:t},setup(){return{args:e}}}),n=o.bind(),s=["Default"];export{n as Default,s as __namedExportsOrder,i as default};
+//# sourceMappingURL=ColorPicker.stories.e5c915da.js.map
