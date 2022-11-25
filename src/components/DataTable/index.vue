@@ -20,7 +20,7 @@
     <div class="rows-wrapper">
       <div
         ref="header"
-        class="datatable-grid-columns hidden select-none items-center gap-x-2 p-4 sm:grid"
+        class="datatable-grid-columns hidden select-none items-center gap-x-2 sm:grid"
         :class="headerClass"
       >
         <Checkbox v-model="checkAllModel" />
@@ -28,7 +28,7 @@
         <div
           v-for="column in options.columns"
           :key="column.key"
-          class="relative table-column cursor-pointer"
+          class="relative table-column cursor-pointer py-4"
           :class="column.class ?? ''"
         >
           <div
@@ -65,14 +65,14 @@
           class="flex flex-col justify-between"
         >
           <div
-            class="datatable-grid-columns flex flex-col gap-y-2 gap-x-2 p-4 sm:grid sm:items-center"
+            class="datatable-grid-columns flex flex-col gap-y-2 gap-x-2 sm:grid sm:items-center"
           >
             <!-- Columns -->
             <Checkbox v-model="checkboxSelected" :value="entry[options.id]" />
             <div
               v-for="column in options.columns"
               :key="column.key"
-              class="grid grid-cols-2 sm:flex"
+              class="grid grid-cols-2 py-4 sm:flex"
               :class="column.class ?? ''"
             >
               <!-- Column name on mobile device -->
@@ -593,10 +593,13 @@ watch(data, () => {
 const resetSizes = (resizable = false) => {
   const tableEl = table.value
   const cols: HTMLElement[] = tableEl.querySelectorAll('.table-column')
+  const rowsWrapper = tableEl.querySelector('.rows-wrapper')
   const sizes: string[] = []
   cols.forEach((col, idx) => {
     if (resizable) {
-      sizesController.value[idx + 1] = `minmax(0,${col.clientWidth}px)`
+      sizesController.value[idx + 1] = `minmax(0, ${
+        (col.clientWidth / rowsWrapper.clientWidth) * 100
+      }%)`
     } else {
       sizesController.value[idx + 1] = `${col.clientWidth}px`
     }
@@ -807,15 +810,16 @@ onUnmounted(() => {
 
 .resizer {
   position: absolute;
-  top: -15px;
+  top: 0px;
   right: 0;
   width: 1px;
   user-select: none;
+  height: 1000px;
 }
 
 .resizer-handle {
   position: absolute;
-  top: -15px;
+  top: 15px;
   right: 0;
   width: 5px;
   cursor: col-resize;
