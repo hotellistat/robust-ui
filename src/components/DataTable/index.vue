@@ -7,17 +7,28 @@
         <slot name="filter" />
       </div>
     </div>
+    <RobustNotice v-if="displayInfo" variant="info" class="mb-0">
+      <span class="text-primary-900 dark:text-primary-600">
+        You've selected {{ selectedRows.length }} entries.
+      </span>
+      <span
+        class="cursor-pointer font-semibold text-primary-400"
+        @click="selectAll(true)"
+        >Select all.</span
+      >
+    </RobustNotice>
     <div class="rows-wrapper">
       <div
         ref="header"
-        class="datatable-grid-columns hidden select-none items-center gap-x-2 p-4 sm:grid"
+        class="datatable-grid-columns hidden select-none items-center gap-x-2 sm:grid"
         :class="headerClass"
       >
         <Checkbox v-model="checkAllModel" />
+
         <div
           v-for="column in options.columns"
           :key="column.key"
-          class="relative table-column cursor-pointer"
+          class="relative table-column cursor-pointer py-4"
           :class="column.class ?? ''"
         >
           <div
@@ -54,14 +65,14 @@
           class="flex flex-col justify-between"
         >
           <div
-            class="datatable-grid-columns flex flex-col gap-y-2 gap-x-2 p-4 sm:grid sm:items-center"
+            class="datatable-grid-columns flex flex-col gap-y-2 gap-x-2 sm:grid sm:items-center"
           >
             <!-- Columns -->
-            <Checkbox v-model="selectedRows" :value="entry[options.id]" />
+            <Checkbox v-model="checkboxSelected" :value="entry[options.id]" />
             <div
               v-for="column in options.columns"
               :key="column.key"
-              class="grid grid-cols-2 sm:flex"
+              class="grid grid-cols-2 py-4 sm:flex"
               :class="column.class ?? ''"
             >
               <!-- Column name on mobile device -->
@@ -69,16 +80,21 @@
                 {{ column.name }}
               </div>
 
+              <slot
+                v-if="$slots[column.key] && !loading"
+                :name="`${column.key}`"
+                :data="entry"
+              />
               <!-- Column content -->
-              <div v-if="!loading" class="w-full overflow-hidden break-words">
-                <div v-if="!$slots[column.key]">
-                  {{
-                    entry[column.key] === undefined
-                      ? 'No data'
-                      : entry[column.key]
-                  }}
-                </div>
-                <slot :name="`${column.key}`" :data="entry" />
+              <div
+                v-else-if="!$slots[column.key] && !loading"
+                class="w-full overflow-hidden break-words"
+              >
+                {{
+                  entry[column.key] === undefined
+                    ? 'No data'
+                    : entry[column.key]
+                }}
               </div>
               <div v-else class="loading dark:loading-dark h-6 w-full"></div>
             </div>
@@ -112,7 +128,7 @@
 </template>
 
 <script setup lang="ts">
-import { computed } from 'vue'
+import { computed, reactive } from 'vue'
 import { onMounted, onUnmounted, PropType, ref, toRefs, watch } from 'vue'
 import Separator from '../Separator/index.vue'
 import {
@@ -128,6 +144,7 @@ import Checkbox from '../Checkbox/index.vue'
 import Input from '../Input/index.vue'
 import Fuse from 'fuse.js'
 import { debouncedWatch } from '@vueuse/shared'
+import { RobustNotice } from '..'
 
 export type Direction = 0 | -1 | 1
 
@@ -202,6 +219,12 @@ const { data, options, loading, headerClass } = toRefs(props)
 const table = ref()
 const header = ref()
 
+const dimensions = reactive({
+  width: 0,
+  height: 0,
+  offset: 0,
+})
+
 const minColSize = computed(() => {
   return options.value.minColSize ?? defaultOptions.minColSize
 })
@@ -214,13 +237,23 @@ const fuseOptions = computed(() => ({
 
 const checkAllModel = computed({
   get() {
-    return selectedRows.value.length > 0
+    return selectedRows.value.length > 0 || selectedAll.value
   },
   set(value) {
     if (!value) {
       selectedRows.value = []
+      emit('update:selectedRows', {
+        type: 'include',
+        data: selectedRows.value,
+      })
+      selectAll(false)
     } else {
       selectedRows.value = sortedData.value.map((d) => d[options.value.id])
+      emit('update:selectedRows', {
+        type: 'include',
+        data: selectedRows.value,
+      })
+      displayInfo.value = true
     }
   },
 })
@@ -228,7 +261,31 @@ const checkAllModel = computed({
 // const checkAllModel = computed(() => selectedRows.value.length > 0)
 
 const selectedRows = ref([])
+const excludedRows = ref([])
 const searchModel = ref('')
+const displayInfo = ref(false)
+const selectedAll = ref(false)
+
+const checkboxSelected = computed({
+  get() {
+    return selectedRows.value
+  },
+  set(value) {
+    if (options.value.serverSide && selectedAll.value) {
+      const excluded = []
+      for (const row of data.value) {
+        if (!value.includes(row[options.value.id]))
+          excluded.push(row[options.value.id])
+      }
+      excludedRows.value = excluded
+    } else {
+      emit('update:selectedRows', {
+        type: 'include',
+        data: selectedRows.value,
+      })
+    }
+  },
+})
 
 const rowsLimitController = ref(
   options.value.rowsLimit ?? defaultOptions.rowsLimit
@@ -325,7 +382,7 @@ const sizesController = ref(initSizes())
 
 const sizes = computed(() => {
   const colsSizeArray = sizesController.value.map((size) => {
-    return size !== undefined ? `${size}` : `minmax(0, 1fr)`
+    return size !== undefined ? `${size}` : `minmax(0,1fr)`
   })
   return colsSizeArray.join(' ')
 })
@@ -511,20 +568,44 @@ watch(maxPage, () => {
   gotoPage(page.value)
 })
 
-watch(selectedRows, () => {
-  emit('update:selectedRows', selectedRows.value)
+watch(excludedRows, () => {
+  if (options.value.serverSide && selectedAll.value)
+    emit('update:selectedRows', {
+      type: 'exclude',
+      data: excludedRows.value,
+    })
+})
+
+watch(data, () => {
+  if (options.value.serverSide && selectedAll.value) {
+    const newSelectedRows = []
+    for (const row of data.value) {
+      if (!excludedRows.value.includes(row[options.value.id]))
+        newSelectedRows.push(row[options.value.id])
+    }
+    selectedRows.value = newSelectedRows
+  }
 })
 
 /*
  Resets column sizes to px value.
 **/
-const resetSizes = () => {
+const resetSizes = (resizable = false) => {
   const tableEl = table.value
   const cols: HTMLElement[] = tableEl.querySelectorAll('.table-column')
+  const rowsWrapper = tableEl.querySelector('.rows-wrapper')
+  const sizes: string[] = []
   cols.forEach((col, idx) => {
-    sizesController.value[idx + 1] = col.clientWidth + 'px'
+    if (resizable) {
+      sizesController.value[idx + 1] = `minmax(0, ${
+        (col.clientWidth / rowsWrapper.clientWidth) * 100
+      }%)`
+    } else {
+      sizesController.value[idx + 1] = `${col.clientWidth}px`
+    }
+    sizes.push(`${col.clientWidth}px`)
   })
-  emit('update:resize', sizesController.value)
+  emit('update:resize', sizes)
 }
 
 /*
@@ -546,6 +627,7 @@ const createResizableColumn = function (
   // Storing width of coulmn and mouse X position
   // for calculating offset between current and new X postion
   const mouseDownHandler = function (e: MouseEvent) {
+    resetSizes()
     // Get the current mouse position
     x = e.clientX
 
@@ -574,21 +656,22 @@ const createResizableColumn = function (
 
     // we set next column size to 1fr such that
     // it adapts to newly calculated width of previous column
-    sizesController.value[currentCol + 1] = `minmax(${minColSize.value}px, 1fr)`
+    sizesController.value[currentCol + 1] = `minmax(${minColSize.value}px,1fr)`
 
     const size = Math.max(calculatedWidth, minColSize.value)
 
     // Update the width of column
     sizesController.value[
       currentCol
-    ] = `minmax(${minColSize.value}px, ${size}px)`
+    ] = `minmax(${minColSize.value}px,${size}px)`
   }
 
   // When user releases the mouse, remove the existing event listeners
   const mouseUpHandler = function () {
-    resetSizes()
     document.removeEventListener('mousemove', mouseMoveHandler)
     document.removeEventListener('mouseup', mouseUpHandler)
+    resetSizes(true)
+
     const body = document.querySelector('body')
     body.classList.remove('resizer-cursor')
 
@@ -644,14 +727,36 @@ const createResizableTable = () => {
     }
   })
 
-  resetSizes()
+  // resetSizes()
+}
+
+const selectAll = (value: boolean) => {
+  selectedAll.value = value
+
+  if (selectedAll.value) {
+    selectedRows.value = data.value.map((d) => d[options.value.id])
+    emit('update:selectedRows', {
+      type: 'exclude',
+      data: [],
+    })
+    displayInfo.value = false
+  } else {
+    if (options.value.serverSide) excludedRows.value = []
+    selectedRows.value = []
+    displayInfo.value = false
+  }
 }
 
 let resizeObserver: ResizeObserver
 
+const onResize = () => {
+  resizeLine()
+}
+
 onMounted(() => {
   createResizableTable()
-  resizeObserver = new ResizeObserver(() => resizeLine())
+  resetSizes(true)
+  resizeObserver = new ResizeObserver(onResize)
   resizeObserver.observe(table.value)
 })
 
@@ -705,15 +810,16 @@ onUnmounted(() => {
 
 .resizer {
   position: absolute;
-  top: -15px;
+  top: 0px;
   right: 0;
   width: 1px;
   user-select: none;
+  height: 1000px;
 }
 
 .resizer-handle {
   position: absolute;
-  top: -15px;
+  top: 15px;
   right: 0;
   width: 5px;
   cursor: col-resize;
