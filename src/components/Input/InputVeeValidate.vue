@@ -20,7 +20,6 @@
 <script lang="ts" setup>
 import RobustInput from './Input.vue'
 import { useField } from 'vee-validate'
-import { placeholder } from '@babel/types'
 
 const props = defineProps({
   type: {

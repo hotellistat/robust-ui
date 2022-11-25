@@ -12,7 +12,7 @@
     </div>
     <div
       class="text-gray-400 dark:text-gray-500"
-      :class="[$slots.default ? 'mb-4' : null]"
+      :class="[$slots.default ? 'mb-8' : null]"
     >
       <slot name="description">
         {{ description }}
