@@ -258,7 +258,7 @@ defineExpose({
   }
 }
 
-.robust-ui-modal__slide-right-leave-from {
+.robust-ui-modal__slide-right-leave-to {
   .robust-ui-modal__backdrop {
     opacity: 0;
   }
