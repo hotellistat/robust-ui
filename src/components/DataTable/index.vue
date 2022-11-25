@@ -128,7 +128,7 @@
 </template>
 
 <script setup lang="ts">
-import { computed, reactive } from 'vue'
+import { computed } from 'vue'
 import { onMounted, onUnmounted, PropType, ref, toRefs, watch } from 'vue'
 import Separator from '../Separator/index.vue'
 import {
@@ -218,12 +218,6 @@ const { data, options, loading, headerClass } = toRefs(props)
 
 const table = ref()
 const header = ref()
-
-const dimensions = reactive({
-  width: 0,
-  height: 0,
-  offset: 0,
-})
 
 const minColSize = computed(() => {
   return options.value.minColSize ?? defaultOptions.minColSize
