@@ -23,10 +23,8 @@
         class="datatable-grid-columns hidden select-none items-center gap-x-2 sm:grid"
         :class="headerClass"
       >
-        <Checkbox v-model="checkAllModel" />
-
         <div
-          v-for="column in options.columns"
+          v-for="(column, idx) in options.columns"
           :key="column.key"
           class="relative table-column cursor-pointer py-4"
           :class="column.class ?? ''"
@@ -35,6 +33,7 @@
             class="flex items-center gap-x-2"
             @click="sortColumn(column, $event)"
           >
+            <Checkbox v-if="!idx" v-model="checkAllModel" />
             <div class="mr-auto overflow-hidden truncate break-words">
               {{ column.name }}
             </div>
@@ -68,18 +67,24 @@
             class="datatable-grid-columns flex flex-col gap-y-2 gap-x-2 sm:grid sm:items-center"
           >
             <!-- Columns -->
-            <Checkbox v-model="checkboxSelected" :value="entry[options.id]" />
             <div
-              v-for="column in options.columns"
+              v-for="(column, cIdx) in options.columns"
               :key="column.key"
               class="grid grid-cols-2 py-4 sm:flex"
               :class="column.class ?? ''"
             >
-              <!-- Column name on mobile device -->
-              <div class="block sm:hidden" :class="column.class ?? ''">
-                {{ column.name }}
+              <div>
+                <div class="justify-cetner flex items-center">
+                  <Checkbox
+                    v-if="!cIdx"
+                    v-model="checkboxSelected"
+                    :value="entry[options.id]"
+                  />
+                </div>
+                <div class="block sm:hidden" :class="column.class ?? ''">
+                  {{ column.name }}
+                </div>
               </div>
-
               <slot
                 v-if="$slots[column.key] && !loading"
                 :name="`${column.key}`"
@@ -368,7 +373,6 @@ const sorting = ref<Column[]>(initSorting())
 const initSizes = () => {
   const colsSizeArray = options.value.columns.map((col) => col.size)
   // checkbox
-  colsSizeArray.unshift('2rem')
   return colsSizeArray
 }
 
@@ -591,13 +595,13 @@ const resetSizes = (resizable = false) => {
   const sizes: string[] = []
   cols.forEach((col, idx) => {
     if (resizable) {
-      sizesController.value[idx + 1] = `minmax(0, ${
+      sizesController.value[idx] = `minmax(0, ${
         (col.clientWidth / rowsWrapper.clientWidth) * 100
       }%)`
     } else {
-      sizesController.value[idx + 1] = `${col.clientWidth}px`
+      sizesController.value[idx] = `${col.clientWidth}px`
     }
-    sizes.push(`${col.clientWidth}px`)
+    sizes.push(`${(col.clientWidth / rowsWrapper.clientWidth) * 100}%`)
   })
   emit('update:resize', sizes)
 }
@@ -646,7 +650,7 @@ const createResizableColumn = function (
     const dx = e.clientX - x
     const calculatedWidth = w + dx
 
-    const currentCol = idx + 1
+    const currentCol = idx
 
     // we set next column size to 1fr such that
     // it adapts to newly calculated width of previous column
