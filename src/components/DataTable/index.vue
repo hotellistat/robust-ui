@@ -598,12 +598,12 @@ const resetSizes = (resizable = false) => {
       sizesController.value[idx] = `minmax(0, ${
         (col.clientWidth / rowsWrapper.clientWidth) * 100
       }%)`
+      sizes.push(`${(col.clientWidth / rowsWrapper.clientWidth) * 100}%`)
     } else {
       sizesController.value[idx] = `${col.clientWidth}px`
     }
-    sizes.push(`${(col.clientWidth / rowsWrapper.clientWidth) * 100}%`)
   })
-  emit('update:resize', sizes)
+  if (resizable) emit('update:resize', sizes)
 }
 
 /*
