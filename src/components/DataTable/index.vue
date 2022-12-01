@@ -592,18 +592,16 @@ const resetSizes = (resizable = false) => {
   const tableEl = table.value
   const cols: HTMLElement[] = tableEl.querySelectorAll('.table-column')
   const rowsWrapper = tableEl.querySelector('.rows-wrapper')
-  const sizes: string[] = []
   cols.forEach((col, idx) => {
     if (resizable) {
       sizesController.value[idx] = `minmax(0, ${
         (col.clientWidth / rowsWrapper.clientWidth) * 100
       }%)`
+      emit('update:resize', sizesController.value)
     } else {
       sizesController.value[idx] = `${col.clientWidth}px`
     }
-    sizes.push(`${(col.clientWidth / rowsWrapper.clientWidth) * 100}%`)
   })
-  emit('update:resize', sizes)
 }
 
 /*
