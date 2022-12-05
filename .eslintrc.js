@@ -7,12 +7,25 @@ module.exports = {
     defineEmits: 'readonly',
     withDefaults: 'readonly',
   },
-  plugins: ['prettier', 'unused-imports'],
+  plugins: ['@typescript-eslint', 'prettier', 'unused-imports'],
   extends: [
     '@vue/typescript/recommended',
     'eslint:recommended',
     'plugin:vue/vue3-recommended',
     'prettier',
+  ],
+
+  overrides: [
+    {
+      files: ['*.ts'],
+      parser: '@typescript-eslint/parser',
+      plugins: ['@typescript-eslint'],
+      extends: [
+        'eslint:recommended',
+        'plugin:@typescript-eslint/recommended',
+        'plugin:prettier/recommended',
+      ],
+    },
   ],
 
   rules: {
