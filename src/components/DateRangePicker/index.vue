@@ -121,14 +121,11 @@ const tmpDateRange = ref<[Date, Date]>()
 //   },
 // })
 
-const compareDates = ref<[Date, Date] | undefined>(compareDateRange.value)
-
 const computedCompare = computed<[Date, Date] | undefined>({
   get() {
-    return compareDates.value
+    return compareDateRange.value
   },
   set(value) {
-    compareDates.value = value
     emit('update:compareDateRange', value)
     emit('blur')
   },
