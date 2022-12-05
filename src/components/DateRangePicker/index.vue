@@ -74,7 +74,7 @@ const props = defineProps({
 const emit = defineEmits([
   'blur',
   'focus',
-  'update:compareDate',
+  'update:compareDateRange',
   'update:perspectiveDate',
   'update:comparePerspectiveDate',
   'update:dateRange',
@@ -129,7 +129,7 @@ const computedCompare = computed<[Date, Date] | undefined>({
   },
   set(value) {
     compareDates.value = value
-    emit('update:compareDate', value)
+    emit('update:compareDateRange', value)
     emit('blur')
   },
 })
