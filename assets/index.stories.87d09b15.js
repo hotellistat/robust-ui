@@ -1,0 +1,2 @@
+import{_ as e}from"./index.27b402e6.js";import"./vue.esm-bundler.ed6ce848.js";const n={title:"Ui/LinearProgress",component:e,argTypes:{progress:{control:{type:"number"}}}},t=r=>({template:'<LinearProgress v-bind="args" />',components:{LinearProgress:e},setup(){return{args:r}}}),a=t.bind(),i=["Default"];export{a as Default,i as __namedExportsOrder,n as default};
+//# sourceMappingURL=index.stories.87d09b15.js.map

@@ -1,0 +1,2 @@
+import{l as i}from"./vue.esm-bundler.ed6ce848.js";import{_ as t}from"./index.bd8e2340.js";const a={title:"Ui/Switch",component:t,argTypes:{title:{control:{type:"text"}},description:{control:{type:"text"}}}},r=e=>({template:'<Switch v-bind="args" v-model="value"></Switch>',components:{Switch:t},setup(){const o=i(!1);return{args:e,value:o}}}),s=r.bind({});s.args={title:"Switch title",description:"Switch description text to be placed here"};const l=["Default"];export{s as Default,l as __namedExportsOrder,a as default};
+//# sourceMappingURL=index.stories.94ff6476.js.map

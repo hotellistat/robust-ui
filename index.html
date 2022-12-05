@@ -8,6 +8,8 @@
     <link rel="shortcut icon" href="./favicon.ico" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
 
+    <link href="./sb-preview/runtime.mjs" rel="preload" as="script">
+
       
 
     <style>
@@ -16,6 +18,8 @@
       }
     </style>
 
+    
+    <link href="./sb-addons/node_modules/%40storybook/addon-interactions/dist/manager.css" rel="stylesheet" />
     
   </head>
   <body>
@@ -26,7 +30,6 @@
       
         
           window['FEATURES'] = {
-  "postcss": true,
   "warnOnLegacyHierarchySeparator": true,
   "buildStoriesJson": false,
   "storyStoreV7": true,
@@ -54,6 +57,10 @@
         
       
         
+          window['CONFIG_TYPE'] = "PRODUCTION";
+        
+      
+        
       
         
       
@@ -64,28 +71,32 @@
     </script>
     
 
-    <script src="./sb-manager/runtime.mjs" type="module"></script>
+    <script type="module">
+      import './sb-manager/runtime.mjs';
 
-    
-    <script src="./sb-addons/node_modules/storybook-addon-themes/register.mjs" type="module"></script>
-    
-    <script src="./sb-addons/node_modules/%40storybook/addon-links/manager.mjs" type="module"></script>
-    
-    <script src="./sb-addons/node_modules/%40storybook/addon-controls/manager.mjs" type="module"></script>
-    
-    <script src="./sb-addons/node_modules/%40storybook/addon-actions/manager.mjs" type="module"></script>
-    
-    <script src="./sb-addons/node_modules/%40storybook/addon-backgrounds/manager.mjs" type="module"></script>
-    
-    <script src="./sb-addons/node_modules/%40storybook/addon-viewport/manager.mjs" type="module"></script>
-    
-    <script src="./sb-addons/node_modules/%40storybook/addon-toolbars/manager.mjs" type="module"></script>
-    
-    <script src="./sb-addons/node_modules/%40storybook/addon-measure/manager.mjs" type="module"></script>
-    
-    <script src="./sb-addons/node_modules/%40storybook/addon-outline/manager.mjs" type="module"></script>
-    
-    <script src="./sb-addons/.storybook/manager.mjs" type="module"></script>
-    
+      
+      import '././sb-addons/node_modules/storybook-addon-themes/register.mjs';
+      
+      import '././sb-addons/node_modules/%40storybook/addon-links/dist/manager.mjs';
+      
+      import '././sb-addons/node_modules/%40storybook/addon-essentials/dist/controls/manager.mjs';
+      
+      import '././sb-addons/node_modules/%40storybook/addon-essentials/dist/actions/manager.mjs';
+      
+      import '././sb-addons/node_modules/%40storybook/addon-essentials/dist/backgrounds/manager.mjs';
+      
+      import '././sb-addons/node_modules/%40storybook/addon-essentials/dist/viewport/manager.mjs';
+      
+      import '././sb-addons/node_modules/%40storybook/addon-essentials/dist/toolbars/manager.mjs';
+      
+      import '././sb-addons/node_modules/%40storybook/addon-essentials/dist/measure/manager.mjs';
+      
+      import '././sb-addons/node_modules/%40storybook/addon-essentials/dist/outline/manager.mjs';
+      
+      import '././sb-addons/node_modules/%40storybook/addon-interactions/dist/manager.mjs';
+      
+      import '././sb-addons/.storybook/manager.mjs';
+      
+    </script>    
   </body>
 </html>
