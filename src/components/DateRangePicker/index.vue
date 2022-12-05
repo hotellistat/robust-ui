@@ -110,6 +110,7 @@ const popperRef = ref()
 // })
 
 const tmpDateRange = ref<[Date, Date]>()
+const tmpCompareDateRange = ref<[Date, Date]>()
 
 // const computedDateRange = computed<[Date, Date]>({
 //   get() {
@@ -120,16 +121,6 @@ const tmpDateRange = ref<[Date, Date]>()
 //     tmpDateRange.value = value
 //   },
 // })
-
-const computedCompare = computed<[Date, Date] | undefined>({
-  get() {
-    return compareDateRange.value
-  },
-  set(value) {
-    emit('update:compareDateRange', value)
-    emit('blur')
-  },
-})
 
 const showComparisonPicker = ref(false)
 
@@ -186,6 +177,7 @@ onClickOutside(popperRef, (event) => {
 
 const handleClick = () => {
   tmpDateRange.value = dateRange.value
+  tmpCompareDateRange.value = compareDateRange.value
   open.value = !open.value
 }
 
@@ -196,6 +188,7 @@ const goBack = () => {
 
 const saveTime = async () => {
   emit('update:dateRange', tmpDateRange.value)
+  emit('update:compareDateRange', tmpCompareDateRange.value)
   emit('change', tmpDateRange.value)
   emit('blur')
   open.value = false
@@ -300,7 +293,7 @@ defineExpose({
         Comparison date range
       </h3>
       <RobustCalendar
-        v-model="computedCompare"
+        v-model="tmpCompareDateRange"
         variant="secondary"
         @click:relativeDate="enableStoringHistory(false)"
       >
