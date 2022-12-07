@@ -17,6 +17,7 @@
         >Select all.</span
       >
     </RobustNotice>
+    <slot name="header" />
     <div class="rows-wrapper">
       <div
         ref="header"
