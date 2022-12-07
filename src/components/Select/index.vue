@@ -141,7 +141,7 @@ function selectItem(item) {
     if (modelValue.value.includes(item.value)) {
       updatedValue = modelValue.value.filter((v) => v !== item.value)
     } else {
-      updatedValue.push(item.value)
+      updatedValue = [...updatedValue, item.value]
     }
     emit('input', updatedValue)
     emit('change', updatedValue)
