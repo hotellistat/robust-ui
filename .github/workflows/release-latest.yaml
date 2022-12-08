@@ -51,12 +51,18 @@ jobs:
           VERSION=${{ github.event.release.tag_name }}
           echo "VERSION=${VERSION:1}" >> $GITHUB_ENV
 
+      - name:  'Automated Version Bump'
+        uses:  'phips28/gh-action-bump-version@master'
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          tag-prefix:  'v'
+
       - uses: actions/setup-node@v3
         with:
           registry-url: "https://registry.npmjs.org"
 
       - run: |
-          npm version ${{ env.VERSION }}
           npm ci --force
           npm run build
           npm publish --access public
