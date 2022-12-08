@@ -47,14 +47,16 @@ jobs:
             ${{ runner.os }}-
 
       - name: Set env
-        run: echo VERSION=${{ github.event.release.tag_name }}
+        run: |
+          VERSION=${{ github.event.release.tag_name }}
+          echo "VERSION=${VERSION:1}" >> $GITHUB_ENV
 
       - uses: actions/setup-node@v3
         with:
           registry-url: "https://registry.npmjs.org"
 
       - run: |
-          npm version ${{ env.VERSION:1 }}
+          npm version ${{ env.VERSION }}
           npm ci --force
           npm run build
           npm publish --access public
