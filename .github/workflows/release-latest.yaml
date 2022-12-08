@@ -2,7 +2,7 @@ name: Publish Package npm
 on:
   push:
     tags:
-      - "v[0-9]+.[0-9]+.[0-9]+"
+      - "[0-9]+.[0-9]+.[0-9]+"
   workflow_dispatch:
 jobs:
   lint:
@@ -32,6 +32,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v3
+
       - name: Cache node modules
         uses: actions/cache@v3
         env:
@@ -44,16 +45,16 @@ jobs:
             ${{ runner.os }}-build-${{ env.cache-name }}-
             ${{ runner.os }}-build-
             ${{ runner.os }}-
+
+      - name: Set env
+        run: echo "RELEASE_VERSION=${GITHUB_REF#refs/*/}" >> $GITHUB_ENV
+
       - uses: actions/setup-node@v3
         with:
           registry-url: "https://registry.npmjs.org"
-      - name: "Automated Version Bump"
-        uses: "phips28/gh-action-bump-version@master"
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        with:
-          tag-prefix: "v"
+
       - run: |
+          npm version ${{ env.RELEASE_VERSION }}
           npm ci --force
           npm run build
           npm publish --access public
