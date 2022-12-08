@@ -20,12 +20,10 @@ export const parameters = {
       {
         name: 'Light',
         class: ['light-mode'],
-        color: '#f3f4f6',
       },
       {
         name: 'Dark',
         class: ['dark', 'dark-mode'],
-        color: '#0f141a',
       },
     ],
   },

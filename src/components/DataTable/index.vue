@@ -8,11 +8,9 @@
       </div>
     </div>
     <RobustNotice v-if="displayInfo" variant="info" class="mb-0">
-      <span class="text-primary-900 dark:text-primary-600">
-        You've selected {{ selectedRows.length }} entries.
-      </span>
+      You've selected {{ selectedRows.length }} entries.
       <span
-        class="cursor-pointer font-semibold text-primary-400"
+        class="dark:text-primay-300 cursor-pointer font-semibold text-primary-400"
         @click="selectAll(true)"
         >Select all.</span
       >
@@ -27,28 +25,24 @@
         <div
           v-for="(column, idx) in options.columns"
           :key="column.key"
-          class="relative table-column cursor-pointer py-4"
+          class="robust-table-column relative flex h-12 cursor-pointer items-center"
           :class="column.class ?? ''"
+          @click="sortColumn(column, $event)"
         >
-          <div
-            class="flex items-center gap-x-2"
-            @click="sortColumn(column, $event)"
-          >
-            <Checkbox v-if="!idx" v-model="checkAllModel" />
-            <div class="mr-auto overflow-hidden truncate break-words">
-              {{ column.name }}
-            </div>
-            <PhSortAscending
-              v-show="getDirection(column) === 1"
-              class="text-gray-500"
-              :size="20"
-            />
-            <PhSortDescending
-              v-show="getDirection(column) === -1"
-              class="text-gray-500"
-              :size="20"
-            />
+          <Checkbox v-if="!idx" v-model="checkAllModel" />
+          <div class="mr-auto overflow-hidden truncate break-words">
+            {{ column.name }}
           </div>
+          <PhSortAscending
+            v-show="getDirection(column) === 1"
+            class="text-gray-500"
+            :size="20"
+          />
+          <PhSortDescending
+            v-show="getDirection(column) === -1"
+            class="text-gray-500"
+            :size="20"
+          />
         </div>
       </div>
 
@@ -71,7 +65,7 @@
             <div
               v-for="(column, cIdx) in options.columns"
               :key="column.key"
-              class="grid grid-cols-2 py-4 sm:flex"
+              class="grid min-h-[48px] grid-cols-2 items-center sm:flex"
               :class="column.class ?? ''"
             >
               <div>
@@ -591,7 +585,7 @@ watch(data, () => {
 **/
 const resetSizes = (resizable = false) => {
   const tableEl = table.value
-  const cols: HTMLElement[] = tableEl.querySelectorAll('.table-column')
+  const cols: HTMLElement[] = tableEl.querySelectorAll('.robust-table-column')
   const rowsWrapper = tableEl.querySelector('.rows-wrapper')
   const sizes: string[] = []
   cols.forEach((col, idx) => {
@@ -686,7 +680,7 @@ const createResizableColumn = function (
 const resizeLine = () => {
   if (!options.value.resize) return
   const tableEl = table.value
-  const cols: HTMLElement[] = tableEl.querySelectorAll('.table-column')
+  const cols: HTMLElement[] = tableEl.querySelectorAll('.robust-table-column')
   const rowsWrapper = tableEl.querySelector('.rows-wrapper')
 
   cols.forEach((col, i) => {
@@ -706,13 +700,15 @@ const createResizableTable = () => {
   if (!options.value.resize) return
 
   const tableEl = table.value
-  const cols: HTMLElement[] = tableEl.querySelectorAll('.table-column')
+  const cols: HTMLElement[] = tableEl.querySelectorAll('.robust-table-column')
   const rowsWrapper = tableEl.querySelector('.rows-wrapper')
 
   cols.forEach((col, idx) => {
     if (idx < cols.length - 1) {
       const resizer = document.createElement('div')
       const resizerHandle = document.createElement('div')
+
+      resizerHandle.addEventListener('click', (e) => e.stopPropagation())
 
       resizer.classList.add('resizer')
       resizerHandle.classList.add('resizer-handle')
@@ -809,18 +805,19 @@ onUnmounted(() => {
 
 .resizer {
   position: absolute;
-  top: 0px;
-  right: 0;
+  top: 0;
+  right: -4px;
   width: 1px;
   user-select: none;
-  height: 1000px;
+  height: 999999px;
 }
 
 .resizer-handle {
   position: absolute;
-  top: 15px;
-  right: 0;
-  width: 5px;
+  top: 0;
+  bottom: 0;
+  right: -8px;
+  width: 8px;
   cursor: col-resize;
 }
 
@@ -832,7 +829,7 @@ onUnmounted(() => {
   @apply visible flex bg-gray-400;
 }
 
-.table-column.table-column-not-active {
+.robust-table-column.robust-table-column-not-active {
   cursor: col-resize;
 }
 
