@@ -103,8 +103,11 @@
         </div>
       </div>
     </div>
-    <div class="flex items-center justify-between py-2">
-      <div class="flex items-center gap-x-2">
+    <div
+      v-if="page !== undefined || rowsLimitOptions !== undefined"
+      class="flex items-center justify-between py-2"
+    >
+      <div v-if="page !== undefined" class="flex items-center gap-x-2">
         <div class="flex gap-x-2">
           <PhCaretDoubleLeft :size="24" @click="firstPage" />
           <PhCaretLeft :size="24" @click="prevPage" />
@@ -115,7 +118,10 @@
           <PhCaretDoubleRight :size="24" @click="lastPage" />
         </div>
       </div>
-      <div class="flex items-center gap-x-2">
+      <div
+        v-if="rowsLimitOptions !== undefined"
+        class="flex items-center gap-x-2"
+      >
         <div>Rows per page:</div>
         <Select
           v-model="rowsLimit"
