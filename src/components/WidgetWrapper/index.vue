@@ -10,7 +10,7 @@ import RobustPopper from '../Popper'
 import { PhDotsThreeVertical } from '@dnlsndr/vue-phosphor-icons'
 import { onClickOutside } from '@vueuse/core'
 
-const props = defineProps({
+defineProps({
   draggable: {
     type: Boolean,
     default: false,
