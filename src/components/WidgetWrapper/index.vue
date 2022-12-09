@@ -42,7 +42,7 @@ const closeDropdown = () => {
   >
     <div
       v-if="$slots.title"
-      class="relative flex min-w-0 flex-shrink-0 items-center justify-between gap-4 truncate p-4 font-medium text-gray-500 dark:text-gray-400"
+      class="widget-header relative flex min-w-0 flex-shrink-0 items-center justify-between gap-4 truncate p-4 font-medium text-gray-500 dark:text-gray-400"
     >
       <slot v-if="$slots.title" name="title" />
       <div
