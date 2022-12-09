@@ -10,6 +10,13 @@ import RobustPopper from '../Popper'
 import { PhDotsThreeVertical } from '@dnlsndr/vue-phosphor-icons'
 import { onClickOutside } from '@vueuse/core'
 
+const props = defineProps({
+  draggable: {
+    type: Boolean,
+    default: false,
+  },
+})
+
 const emit = defineEmits(['blur'])
 
 const open = ref(false)
@@ -42,7 +49,10 @@ const closeDropdown = () => {
   >
     <div
       v-if="$slots.title"
-      class="widget-header relative flex min-w-0 flex-shrink-0 items-center justify-between gap-4 truncate p-4 font-medium text-gray-500 dark:text-gray-400"
+      class="widget-header relative flex min-w-0 flex-shrink-0 select-none items-center justify-between gap-4 truncate rounded-md p-4 font-medium text-gray-500 dark:text-gray-400"
+      :class="{
+        'hover:bg-gray-200 dark:hover:bg-gray-700': draggable,
+      }"
     >
       <slot v-if="$slots.title" name="title" />
       <div
@@ -67,7 +77,7 @@ const closeDropdown = () => {
     </RobustPopper>
     <section
       v-if="$slots.default"
-      class="h-full w-full px-4 pb-4"
+      class="h-full w-full px-4 pb-4 pt-2"
       :class="{ 'pt-4': !$slots.title }"
     >
       <slot />
