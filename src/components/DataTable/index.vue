@@ -1,5 +1,5 @@
 <template>
-  <div ref="table" class="flex flex-col gap-y-2 sm:gap-y-2">
+  <div ref="table" class="flex w-full flex-col gap-y-2 sm:gap-y-2">
     <div class="search-wrapper">
       <Input v-model="searchModel" placeholder="Search" />
       <!-- Display filters -->
@@ -7,7 +7,11 @@
         <slot name="filter" />
       </div>
     </div>
-    <RobustNotice v-if="displayInfo" variant="info" class="mb-0">
+    <RobustNotice
+      v-if="displayInfo && isSelectedAll()"
+      variant="info"
+      class="mb-0"
+    >
       You've selected {{ selectedRows.length }} entries.
       <span
         class="dark:text-primay-300 cursor-pointer font-semibold text-primary-400"
@@ -22,14 +26,14 @@
         class="datatable-grid-columns hidden select-none items-center gap-x-2 sm:grid"
         :class="headerClass"
       >
+        <Checkbox v-model="checkAllModel" class="checkbox" />
         <div
-          v-for="(column, idx) in options.columns"
+          v-for="column in options.columns"
           :key="column.key"
           class="robust-table-column relative flex h-12 cursor-pointer items-center"
           :class="column.class ?? ''"
           @click="sortColumn(column, $event)"
         >
-          <Checkbox v-if="!idx" v-model="checkAllModel" />
           <div class="mr-auto overflow-hidden truncate break-words">
             {{ column.name }}
           </div>
@@ -61,24 +65,16 @@
           <div
             class="datatable-grid-columns flex flex-col gap-y-2 gap-x-2 sm:grid sm:items-center"
           >
+            <Checkbox v-model="checkboxSelected" :value="entry[options.id]" />
             <!-- Columns -->
             <div
-              v-for="(column, cIdx) in options.columns"
+              v-for="column in options.columns"
               :key="column.key"
               class="grid min-h-[48px] grid-cols-2 items-center sm:flex"
               :class="column.class ?? ''"
             >
-              <div>
-                <div class="justify-cetner flex items-center">
-                  <Checkbox
-                    v-if="!cIdx"
-                    v-model="checkboxSelected"
-                    :value="entry[options.id]"
-                  />
-                </div>
-                <div class="block sm:hidden" :class="column.class ?? ''">
-                  {{ column.name }}
-                </div>
+              <div class="block sm:hidden" :class="column.class ?? ''">
+                {{ column.name }}
               </div>
               <slot
                 v-if="$slots[column.key] && !loading"
@@ -103,10 +99,7 @@
         </div>
       </div>
     </div>
-    <div
-      v-if="page !== undefined || rowsLimitOptions !== undefined"
-      class="flex items-center justify-between py-2"
-    >
+    <div v-if="isFooterVisible" class="flex items-center justify-between py-2">
       <div v-if="page !== undefined" class="flex items-center gap-x-2">
         <div class="flex gap-x-2">
           <PhCaretDoubleLeft :size="24" @click="firstPage" />
@@ -180,6 +173,7 @@ type DataTableOptions = {
   searchKeys?: string[]
   resize: boolean
   minColSize: number
+  ghostColumns?: boolean
 }
 
 const defaultOptions: Partial<DataTableOptions> = {
@@ -190,6 +184,7 @@ const defaultOptions: Partial<DataTableOptions> = {
   rowsLimitOptions: [10, 25, 50],
   resize: true,
   minColSize: 100,
+  ghostColumns: true,
 }
 
 const props = defineProps({
@@ -287,9 +282,7 @@ const checkboxSelected = computed({
   },
 })
 
-const rowsLimitController = ref(
-  options.value.rowsLimit ?? defaultOptions.rowsLimit
-)
+const rowsLimitController = ref(options.value.rowsLimit ?? data.value.length)
 const rowsLimit = computed({
   get() {
     if (options.value.serverSide) return options.value.rowsLimit
@@ -301,14 +294,24 @@ const rowsLimit = computed({
 })
 
 const rowsLimitOptionsInit = () => {
-  const optionsArray =
-    options.value.rowsLimitOptions ?? defaultOptions.rowsLimitOptions
+  const optionsArray = options.value.rowsLimitOptions
+  if (!optionsArray) return optionsArray
   return optionsArray.map((o) => ({
     value: o,
     title: `${o}`,
   }))
 }
 const rowsLimitOptions = ref(rowsLimitOptionsInit())
+
+const ghostColumns = computed(() => {
+  if (
+    options.value.ghostColumns === undefined ||
+    options.value.ghostColumns === true
+  ) {
+    return rowsLimit.value
+  }
+  return sortedData.value.length
+})
 
 const sortedData = computed(() => {
   if (loading.value) return Array(rowsLimit.value).fill({})
@@ -371,9 +374,45 @@ const initSorting = () => {
 // value: Sort
 const sorting = ref<Column[]>(initSorting())
 
+const isPercentage = (str: string) => {
+  if (str) return str[str.length - 1] === '%'
+  return false
+}
+
+const parsePercentage = (str: string) => {
+  return Number(str.slice(0, str.length - 1))
+}
+
 const initSizes = () => {
   const colsSizeArray = options.value.columns.map((col) => col.size)
+  const percentages = colsSizeArray
+    .filter((d) => {
+      return d !== undefined && isPercentage(d)
+    })
+    .map((d) => parsePercentage(d))
+  // if all size values are percentage
+  // make sure that we always use 100% of width
+  if (percentages.length === colsSizeArray.length) {
+    const sum = percentages.reduce((acc, curr) => {
+      return acc + curr
+    })
+
+    // 96.45% is available width without checkbox
+    // checkbox has fixed with of 2 rem
+    // TODO: find better solution, temp fix
+    const calc = 96.45 / sum
+
+    const w = table.value?.width
+    console.log(w)
+
+    percentages.forEach((p, i) => {
+      colsSizeArray[i] = p * calc + '%'
+      console.log(colsSizeArray)
+    })
+  }
+
   // checkbox
+  colsSizeArray.unshift('2rem')
   return colsSizeArray
 }
 
@@ -596,12 +635,11 @@ const resetSizes = (resizable = false) => {
   const sizes: string[] = []
   cols.forEach((col, idx) => {
     if (resizable) {
-      sizesController.value[idx] = `minmax(0, ${
-        (col.clientWidth / rowsWrapper.clientWidth) * 100
-      }%)`
-      sizes.push(`${(col.clientWidth / rowsWrapper.clientWidth) * 100}%`)
+      const perc = (col.clientWidth / rowsWrapper.clientWidth) * 100
+      sizesController.value[idx + 1] = `minmax(0, ${perc}%)`
+      sizes.push(`${perc}%`)
     } else {
-      sizesController.value[idx] = `${col.clientWidth}px`
+      sizesController.value[idx + 1] = `${col.clientWidth}px`
     }
   })
   if (resizable) emit('update:resize', sizes)
@@ -651,11 +689,11 @@ const createResizableColumn = function (
     const dx = e.clientX - x
     const calculatedWidth = w + dx
 
-    const currentCol = idx
+    const currentCol = idx + 1
 
     // we set next column size to 1fr such that
     // it adapts to newly calculated width of previous column
-    sizesController.value[currentCol + 1] = `minmax(${minColSize.value}px,1fr)`
+    sizesController.value[currentCol + 1] = `minmax(${minColSize.value}px, 1fr)`
 
     const size = Math.max(calculatedWidth, minColSize.value)
 
@@ -748,6 +786,18 @@ const selectAll = (value: boolean) => {
   }
 }
 
+const isFooterVisible = computed(() => {
+  return maxPage.value !== 1 || rowsLimitOptions.value !== undefined
+})
+
+const isSelectedAll = () => {
+  return (
+    (!options.value.serverSide &&
+      selectedRows.value.length !== data.value.length) ||
+    options.value.serverSide
+  )
+}
+
 let resizeObserver: ResizeObserver
 
 const onResize = () => {
@@ -774,12 +824,12 @@ onUnmounted(() => {
 /* use v-bind for (max rows per page) */
 .datatable-grid-rows {
   display: grid;
-  grid-template-rows: repeat(v-bind(rowsLimit), minmax(0, 1fr));
+  grid-template-rows: repeat(v-bind(ghostColumns), minmax(0, 1fr));
 }
 
 .datatable-grid-rows-empty {
   display: grid;
-  grid-template-rows: repeat(v-bind(rowsLimit), minmax(0, 3.57rem));
+  grid-template-rows: repeat(v-bind(ghostColumns), minmax(0, 3.57rem));
 }
 
 @keyframes shine {
