@@ -1,2 +1,4 @@
-var a=__STORYBOOKADDONS__,{addons:o,types:s,mockChannel:_}=__STORYBOOKADDONS__;var O=__STORYBOOKTHEMING__,{CacheProvider:c,ClassNames:d,Global:m,ThemeProvider:h,background:l,color:i,convert:p,create:T,createCache:S,createGlobal:f,createReset:g,css:k,darken:u,ensure:x,ignoreSsrWarning:y,isPropValid:C,jsx:N,keyframes:R,lighten:B,styled:D,themes:t,typography:G,useTheme:K,withTheme:Y}=__STORYBOOKTHEMING__;o.setConfig({theme:t.dark});
+try{
+var a=__STORYBOOKADDONS__,{addons:o,types:s,mockChannel:_}=__STORYBOOKADDONS__;var d=__STORYBOOKTHEMING__,{CacheProvider:m,ClassNames:h,Global:l,ThemeProvider:i,background:p,color:T,convert:S,create:f,createCache:g,createGlobal:k,createReset:u,css:x,darken:y,ensure:C,ignoreSsrWarning:N,isPropValid:R,jsx:B,keyframes:D,lighten:G,styled:K,themes:t,typography:Y,useTheme:b,withTheme:v}=__STORYBOOKTHEMING__;o.setConfig({theme:t.dark});
+}catch(e){ console.error("[Storybook] One of your manager-entries failed: " + import.meta.url, e); }
 //# sourceMappingURL=manager.mjs.map

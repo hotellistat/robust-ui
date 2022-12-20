@@ -1,2 +1,0 @@
-import{_ as t}from"./index.5f810b23.js";import"./vue.esm-bundler.ed6ce848.js";const s={title:"Ui/Notice",component:t,argTypes:{title:{control:{type:"text",default:"Title"}}}},o=e=>({template:'<Notice v-bind="args" >This is a notice</Notice>',components:{Notice:t},setup(){return{args:e}}}),a=o.bind(),c=["Default"];export{a as Default,c as __namedExportsOrder,s as default};
-//# sourceMappingURL=index.stories.16ef851e.js.map

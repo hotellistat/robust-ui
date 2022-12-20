@@ -1,2 +1,0 @@
-import{l as p}from"./vue.esm-bundler.ed6ce848.js";import{P as e}from"./index.187d1ec2.js";const a={title:"Ui/Popper",component:e,argTypes:{title:{control:{type:"text"}},description:{control:{type:"text"}}}},r=t=>({template:'<Popper v-bind="args" v-model="value">ldsajfk</Popper>',components:{Popper:e},setup(){const o=p(!1);return{args:t,value:o}}}),s=r.bind({});s.args={title:"Popper title",description:"Popper description text to be placed here"};const i=["Default"];export{s as Default,i as __namedExportsOrder,a as default};
-//# sourceMappingURL=index.stories.bb625fbc.js.map
