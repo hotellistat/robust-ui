@@ -295,7 +295,8 @@ const rowsLimit = computed({
 
 const rowsLimitOptionsInit = () => {
   const optionsArray = options.value.rowsLimitOptions
-  if (!optionsArray) return optionsArray
+  if (!optionsArray)
+    return optionsArray.map((d) => ({ value: d, title: `${d}` }))
   return optionsArray.map((o) => ({
     value: o,
     title: `${o}`,
