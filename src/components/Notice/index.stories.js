@@ -1,4 +1,4 @@
-import Notice from './index.vue'
+import Notice from './index.vue';
 
 export default {
   title: 'Ui/Notice',
@@ -6,14 +6,14 @@ export default {
   argTypes: {
     title: { control: { type: 'text', default: 'Title' } },
   },
-}
+};
 
 const DefaultTemplate = (args) => ({
   template: `<Notice v-bind="args" >This is a notice</Notice>`,
   components: { Notice },
   setup() {
-    return { args }
+    return { args };
   },
-})
+});
 
-export const Default = DefaultTemplate.bind()
+export const Default = DefaultTemplate.bind();

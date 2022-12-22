@@ -35,9 +35,9 @@
 </template>
 
 <script lang="ts" setup>
-import { computed, toRefs } from 'vue'
-import RobustSpinner from '../Spinner/index.vue'
-import variants from './variants'
+import { computed, toRefs } from 'vue';
+import RobustSpinner from '../Spinner/index.vue';
+import variants from './variants';
 
 const props = defineProps({
   tag: {
@@ -64,11 +64,11 @@ const props = defineProps({
     type: Boolean,
     default: false,
   },
-})
+});
 
-const { loading, variant } = toRefs(props)
+const { loading, variant } = toRefs(props);
 
 const variantStyles = computed<string>(() => {
-  return variants[variant.value]
-})
+  return variants[variant.value];
+});
 </script>

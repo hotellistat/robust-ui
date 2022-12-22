@@ -1,4 +1,4 @@
-import WidgetWrapper from './index.vue'
+import WidgetWrapper from './index.vue';
 
 export default {
   title: 'Ui/WidgetWrapper',
@@ -8,7 +8,7 @@ export default {
     description: { control: { type: 'text' } },
     draggable: { control: { type: 'boolean' } },
   },
-}
+};
 
 const DefaultTemplate = (args) => ({
   template: `<WidgetWrapper v-bind="args">
@@ -22,12 +22,12 @@ const DefaultTemplate = (args) => ({
   </WidgetWrapper>`,
   components: { WidgetWrapper },
   setup() {
-    return { args }
+    return { args };
   },
-})
+});
 
-export const Default = DefaultTemplate.bind({})
+export const Default = DefaultTemplate.bind({});
 Default.args = {
   title: 'WidgetWrapper title',
   description: 'WidgetWrapper description text to be placed here',
-}
+};

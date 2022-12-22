@@ -1,5 +1,5 @@
-import { ref } from 'vue'
-import TabsSwitch from './index.vue'
+import { ref } from 'vue';
+import TabsSwitch from './index.vue';
 
 export default {
   title: 'Ui/TabsSwitch',
@@ -8,18 +8,18 @@ export default {
     rounded: { control: { type: 'boolean' } },
     condensed: { control: { type: 'boolean' } },
   },
-}
+};
 
 const DefaultTemplate = (args) => ({
   template: '<TabsSwitch  v-bind="args" v-model="value"></TabsSwitch>',
   components: { TabsSwitch },
   setup() {
-    const value = ref('item_1')
-    return { args, value }
+    const value = ref('item_1');
+    return { args, value };
   },
-})
+});
 
-export const Default = DefaultTemplate.bind()
+export const Default = DefaultTemplate.bind();
 
 Default.args = {
   tabs: [
@@ -36,7 +36,7 @@ Default.args = {
       value: 'item_3',
     },
   ],
-}
+};
 
 const SlotTemplate = (args) => ({
   template: `<TabsSwitch v-bind="args" v-model="value">
@@ -52,12 +52,12 @@ const SlotTemplate = (args) => ({
   </TabsSwitch>`,
   components: { TabsSwitch },
   setup() {
-    const value = ref('item_1')
-    return { args, value }
+    const value = ref('item_1');
+    return { args, value };
   },
-})
+});
 
-export const Slotted = SlotTemplate.bind()
+export const Slotted = SlotTemplate.bind();
 
 Slotted.args = {
   tabs: [
@@ -74,4 +74,4 @@ Slotted.args = {
       value: 'item_3',
     },
   ],
-}
+};

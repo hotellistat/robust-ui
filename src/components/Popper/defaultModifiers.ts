@@ -1,4 +1,4 @@
-import { Modifier } from '@popperjs/core'
+import { Modifier } from '@popperjs/core';
 
 export default [
   {
@@ -24,4 +24,4 @@ export default [
       padding: 8,
     },
   },
-] as Array<Partial<Modifier<any, any>>>
+] as Array<Partial<Modifier<any, any>>>;

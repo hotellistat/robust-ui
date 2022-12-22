@@ -1,7 +1,7 @@
 <script lang="ts" setup>
-import { computed, ref } from 'vue'
-import RobustInputWrapper from '../InputWrapper/index.vue'
-import { PhWarningCircle } from '@dnlsndr/vue-phosphor-icons'
+import { computed, ref } from 'vue';
+import RobustInputWrapper from '../InputWrapper/index.vue';
+import { PhWarningCircle } from '@dnlsndr/vue-phosphor-icons';
 
 const props = defineProps({
   title: {
@@ -40,33 +40,33 @@ const props = defineProps({
     type: Boolean,
     default: false,
   },
-})
-const emit = defineEmits(['update:modelValue', 'input', 'change'])
+});
+const emit = defineEmits(['update:modelValue', 'input', 'change']);
 
-const inputRef = ref()
+const inputRef = ref();
 
 const inputFieldValue = computed<string | number | string[]>({
   get() {
-    return props.modelValue
+    return props.modelValue;
   },
   set(value) {
-    emit('input', value)
-    emit('change', value)
-    emit('update:modelValue', value)
+    emit('input', value);
+    emit('change', value);
+    emit('update:modelValue', value);
   },
-})
+});
 function focus() {
-  inputRef.value?.focus()
+  inputRef.value?.focus();
 }
 
 function clear() {
-  emit('update:modelValue', '')
+  emit('update:modelValue', '');
 }
 
 defineExpose({
   focus,
   clear,
-})
+});
 </script>
 
 <template>

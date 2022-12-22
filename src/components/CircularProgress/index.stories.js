@@ -1,4 +1,4 @@
-import CircularProgress from './index.vue'
+import CircularProgress from './index.vue';
 
 export default {
   title: 'Ui/CircularProgress',
@@ -6,7 +6,7 @@ export default {
   argTypes: {
     progress: { control: { type: 'number' } },
   },
-}
+};
 
 const DefaultTemplate = (args) => ({
   template: `<CircularProgress v-bind="args" />
@@ -24,8 +24,8 @@ const DefaultTemplate = (args) => ({
   `,
   components: { CircularProgress },
   setup() {
-    return { args }
+    return { args };
   },
-})
+});
 
-export const Default = DefaultTemplate.bind()
+export const Default = DefaultTemplate.bind();

@@ -22,7 +22,7 @@
 </template>
 
 <script lang="ts" setup>
-import { computed, toRefs } from 'vue'
+import { computed, toRefs } from 'vue';
 
 const props = defineProps({
   title: {
@@ -37,17 +37,17 @@ const props = defineProps({
     type: [Boolean, Number, String, Object],
     required: true,
   },
-})
+});
 
-const emit = defineEmits(['update:modelValue', 'change', 'input'])
+const emit = defineEmits(['update:modelValue', 'change', 'input']);
 
-const { modelValue } = toRefs(props)
+const { modelValue } = toRefs(props);
 const isChecked: any = computed({
   get: () => modelValue.value,
   set: (value) => {
-    emit('input', value)
-    emit('change', value)
-    emit('update:modelValue', value)
+    emit('input', value);
+    emit('change', value);
+    emit('update:modelValue', value);
   },
-})
+});
 </script>

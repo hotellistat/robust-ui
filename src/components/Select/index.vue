@@ -2,17 +2,17 @@
 export default {
   name: 'RobustSelect',
   inheritAttrs: false,
-}
+};
 </script>
 
 <script lang="ts" setup>
-import RobustInputWrapper from '../InputWrapper/index.vue'
-import RobustPopper from '../Popper'
-import { ref, computed, nextTick, toRefs, onMounted, PropType } from 'vue'
-import { debouncedWatch } from '@vueuse/core'
-import { Modifier } from '@popperjs/core'
-import { onClickOutside } from '@vueuse/core'
-import { PhCheck, PhCaretDown } from '@dnlsndr/vue-phosphor-icons'
+import RobustInputWrapper from '../InputWrapper/index.vue';
+import RobustPopper from '../Popper';
+import { ref, computed, nextTick, toRefs, onMounted, PropType } from 'vue';
+import { debouncedWatch } from '@vueuse/core';
+import { Modifier } from '@popperjs/core';
+import { onClickOutside } from '@vueuse/core';
+import { PhCheck, PhCaretDown } from '@dnlsndr/vue-phosphor-icons';
 
 const props = defineProps({
   title: {
@@ -58,7 +58,7 @@ const props = defineProps({
   searchFunction: {
     type: Function,
   },
-})
+});
 
 const emit = defineEmits([
   'update:modelValue',
@@ -66,48 +66,48 @@ const emit = defineEmits([
   'change',
   'focus',
   'blur',
-])
+]);
 // const refSelectContainer = ref()
-const refSelectInput = ref()
+const refSelectInput = ref();
 
-const refSelectWrapper = ref()
-const { options, modelValue } = toRefs(props)
+const refSelectWrapper = ref();
+const { options, modelValue } = toRefs(props);
 
-const anchorRef = ref()
+const anchorRef = ref();
 
-const open = ref(false)
-const popperRef = ref()
+const open = ref(false);
+const popperRef = ref();
 // const inputWrapper = ref()
 
-const search = ref('')
+const search = ref('');
 
-const computedOptions = ref([])
+const computedOptions = ref([]);
 
 async function filterBySearchTerm(value) {
   if (props.searchFunction !== undefined) {
-    computedOptions.value = await props.searchFunction(value)
+    computedOptions.value = await props.searchFunction(value);
   }
 
   if (value === '') {
-    computedOptions.value = options.value
+    computedOptions.value = options.value;
   } else {
     computedOptions.value = options.value.filter((option) =>
       option.title.toLowerCase().includes(value.toLowerCase())
-    )
+    );
   }
 }
 
 debouncedWatch(
   [search, options],
   async ([value, optValue]) => {
-    await filterBySearchTerm(value)
+    await filterBySearchTerm(value);
   },
   { debounce: 150 }
-)
+);
 
 onMounted(async () => {
-  await filterBySearchTerm('')
-})
+  await filterBySearchTerm('');
+});
 
 const popperModifiers: Array<
   Partial<Modifier<string, Record<string, unknown>>>
@@ -121,129 +121,129 @@ const popperModifiers: Array<
       args.state.styles.popper.width = `${Math.max(
         args.state.rects.reference.width,
         200
-      )}px`
+      )}px`;
     },
     effect: (args) => {
       args.state.elements.popper.style.width = `${
         args.state.elements.reference.getBoundingClientRect().width
-      }px`
+      }px`;
     },
   },
-]
+];
 
 const activeItem = computed(() => {
-  return props.options.find((item) => item.value === props.modelValue)
-})
+  return props.options.find((item) => item.value === props.modelValue);
+});
 
 function selectItem(item) {
   if (Array.isArray(modelValue.value)) {
-    let updatedValue = modelValue.value
+    let updatedValue = modelValue.value;
     if (modelValue.value.includes(item.value)) {
-      updatedValue = modelValue.value.filter((v) => v !== item.value)
+      updatedValue = modelValue.value.filter((v) => v !== item.value);
     } else {
-      updatedValue = [...updatedValue, item.value]
+      updatedValue = [...updatedValue, item.value];
     }
-    emit('input', updatedValue)
-    emit('change', updatedValue)
-    emit('update:modelValue', updatedValue)
+    emit('input', updatedValue);
+    emit('change', updatedValue);
+    emit('update:modelValue', updatedValue);
   } else {
-    emit('input', item.value)
+    emit('input', item.value);
     if (item.value !== props.modelValue) {
-      emit('change', item.value)
-      emit('update:modelValue', item.value)
+      emit('change', item.value);
+      emit('update:modelValue', item.value);
     }
     nextTick(() => {
-      closeDropdown()
-      emit('blur')
-    })
+      closeDropdown();
+      emit('blur');
+    });
   }
 }
 
 function openDropdown() {
-  open.value = true
-  sortOptionsBySelected()
+  open.value = true;
+  sortOptionsBySelected();
   nextTick(() => {
-    refSelectInput.value.focus()
-  })
-  emit('focus')
+    refSelectInput.value.focus();
+  });
+  emit('focus');
 }
 
 onClickOutside(popperRef, (event) => {
   if (open.value) {
     if (anchorRef.value.contains(event.target)) {
-      event.stopPropagation()
-      event.preventDefault()
+      event.stopPropagation();
+      event.preventDefault();
     }
-    resetFields()
-    closeDropdown()
-    emit('blur')
+    resetFields();
+    closeDropdown();
+    emit('blur');
   }
-})
+});
 
 function closeDropdown() {
-  open.value = false
+  open.value = false;
 }
 
 function resetFields() {
-  search.value = ''
+  search.value = '';
 }
 
 // returns if options is selected
 // in form of boolean
 function optionSelected(option: any) {
   if (Array.isArray(modelValue.value)) {
-    return modelValue.value.includes(option.value)
+    return modelValue.value.includes(option.value);
   }
-  return modelValue.value === option.value
+  return modelValue.value === option.value;
 }
 
 function getInputTitle() {
   if (Array.isArray(modelValue.value)) {
-    if (modelValue.value.length < 1) return 'Select'
-    const titles = []
+    if (modelValue.value.length < 1) return 'Select';
+    const titles = [];
     for (const value of modelValue.value) {
-      const found = options.value.find((o) => o.value === value)
-      titles.push(found.title)
+      const found = options.value.find((o) => o.value === value);
+      titles.push(found.title);
     }
-    return titles.join(', ')
+    return titles.join(', ');
   } else {
-    return activeItem.value ? activeItem.value.title : 'Select'
+    return activeItem.value ? activeItem.value.title : 'Select';
   }
 }
 
 function sortOptionsBySelected() {
   if (Array.isArray(modelValue.value)) {
-    const selectedOptions = []
-    const notSelectedOptions = []
+    const selectedOptions = [];
+    const notSelectedOptions = [];
 
     for (const option of computedOptions.value) {
-      if (modelValue.value.includes(option.value)) selectedOptions.push(option)
-      else notSelectedOptions.push(option)
+      if (modelValue.value.includes(option.value)) selectedOptions.push(option);
+      else notSelectedOptions.push(option);
     }
 
-    computedOptions.value = [...selectedOptions, ...notSelectedOptions]
-    console.log(computedOptions.value)
+    computedOptions.value = [...selectedOptions, ...notSelectedOptions];
+    console.log(computedOptions.value);
   }
 }
 
 function controlAll() {
-  if (!Array.isArray(modelValue.value)) return
-  if (modelValue.value.length < 1) selectAll()
-  else deselectAll()
+  if (!Array.isArray(modelValue.value)) return;
+  if (modelValue.value.length < 1) selectAll();
+  else deselectAll();
 }
 
 function selectAll() {
-  const newValue = computedOptions.value.map((option) => option.value)
-  emit('input', newValue)
-  emit('change', newValue)
-  emit('update:modelValue', newValue)
+  const newValue = computedOptions.value.map((option) => option.value);
+  emit('input', newValue);
+  emit('change', newValue);
+  emit('update:modelValue', newValue);
 }
 
 function deselectAll() {
-  const newValue = []
-  emit('input', newValue)
-  emit('change', newValue)
-  emit('update:modelValue', newValue)
+  const newValue = [];
+  emit('input', newValue);
+  emit('change', newValue);
+  emit('update:modelValue', newValue);
 }
 </script>
 

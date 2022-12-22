@@ -1,45 +1,45 @@
 <script lang="ts">
 export default {
   name: 'RobustWidgetWrapper',
-}
+};
 </script>
 
 <script lang="ts" setup>
-import { ref } from 'vue'
-import RobustPopper from '../Popper'
-import { PhDotsThreeVertical } from '@dnlsndr/vue-phosphor-icons'
-import { onClickOutside } from '@vueuse/core'
+import { ref } from 'vue';
+import RobustPopper from '../Popper';
+import { PhDotsThreeVertical } from '@dnlsndr/vue-phosphor-icons';
+import { onClickOutside } from '@vueuse/core';
 
 defineProps({
   draggable: {
     type: Boolean,
     default: false,
   },
-})
+});
 
-const emit = defineEmits(['blur'])
+const emit = defineEmits(['blur']);
 
-const open = ref(false)
-const contextButtonRef = ref()
-const popperRef = ref()
+const open = ref(false);
+const contextButtonRef = ref();
+const popperRef = ref();
 
 onClickOutside(popperRef, (event) => {
   if (open.value) {
     if (contextButtonRef.value.contains(event.target)) {
-      event.stopPropagation()
-      event.preventDefault()
+      event.stopPropagation();
+      event.preventDefault();
     }
-    closeDropdown()
-    emit('blur')
+    closeDropdown();
+    emit('blur');
   }
-})
+});
 
 const closeDropdown = () => {
   if (open.value === true) {
-    open.value = false
-    emit('blur')
+    open.value = false;
+    emit('blur');
   }
-}
+};
 </script>
 
 <template>

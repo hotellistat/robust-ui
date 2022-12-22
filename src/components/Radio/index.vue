@@ -36,11 +36,11 @@
 </template>
 
 <script lang="ts">
-let uid = 0
+let uid = 0;
 </script>
 
 <script lang="ts" setup>
-import { computed } from 'vue'
+import { computed } from 'vue';
 
 const props = defineProps({
   modelValue: {
@@ -55,20 +55,20 @@ const props = defineProps({
     type: String,
     default: '',
   },
-})
+});
 
-const emit = defineEmits(['update:modelValue', 'change'])
-const cuid = (++uid).toString()
+const emit = defineEmits(['update:modelValue', 'change']);
+const cuid = (++uid).toString();
 
 const isChecked = computed({
   get() {
-    return props.modelValue === props.value
+    return props.modelValue === props.value;
   },
   set() {
-    let newModelValue = props.modelValue
-    newModelValue = props.value
-    emit('update:modelValue', newModelValue)
-    emit('change', newModelValue)
+    let newModelValue = props.modelValue;
+    newModelValue = props.value;
+    emit('update:modelValue', newModelValue);
+    emit('change', newModelValue);
   },
-})
+});
 </script>

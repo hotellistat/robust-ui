@@ -91,7 +91,7 @@ import {
   PropType,
   ref,
   toRefs,
-} from 'vue'
+} from 'vue';
 
 const props = defineProps({
   name: {
@@ -138,7 +138,7 @@ const props = defineProps({
     type: Boolean,
     default: false,
   },
-})
+});
 
 const emit = defineEmits([
   'focus',
@@ -147,7 +147,7 @@ const emit = defineEmits([
   'change',
   'dragstart',
   'dragend',
-])
+]);
 
 const {
   min,
@@ -158,23 +158,23 @@ const {
   step,
   snapToSteps,
   modelValue,
-} = toRefs(props)
+} = toRefs(props);
 
-const initialValue = ref(modelValue.value)
-const isActive = ref(false)
-const isDragging = ref(false)
-const localValue = ref<number[]>(modelValue.value)
-const slider = ref()
-const track = ref()
-const firstThumb = ref()
-const secondThumb = ref()
-const handleIndex = ref(0)
+const initialValue = ref(modelValue.value);
+const isActive = ref(false);
+const isDragging = ref(false);
+const localValue = ref<number[]>(modelValue.value);
+const slider = ref();
+const track = ref();
+const firstThumb = ref();
+const secondThumb = ref();
+const handleIndex = ref(0);
 
 if (
   Array.isArray(modelValue.value) &&
   (modelValue.value.length > 2 || modelValue.value.length < 2)
 ) {
-  throw Error('modelValue must be number or array of 2 numbers')
+  throw Error('modelValue must be number or array of 2 numbers');
 }
 
 const classes = computed(() => {
@@ -183,270 +183,270 @@ const classes = computed(() => {
     { 'is-disabled': disabled.value },
     { 'is-active': isActive.value },
     { 'has-marker': showMarker.value },
-  ]
-})
+  ];
+});
 
 const fillStyle = computed(() => {
   const scaleX =
-    relativeValue(localValue.value[1]) - relativeValue(localValue.value[0])
+    relativeValue(localValue.value[1]) - relativeValue(localValue.value[0]);
   return {
     transform: 'scaleX(' + scaleX + ')',
     left: firstThumbStyle.value.left,
-  }
-})
+  };
+});
 
 const firstThumbStyle = computed(() => {
   return {
     left: relativeValue(localValue.value[0]) * 100 + '%',
-  }
-})
+  };
+});
 
 const secondThumbStyle = computed(() => {
   return {
     left: relativeValue(localValue.value[1]) * 100 + '%',
-  }
-})
+  };
+});
 
 const markerText = (index = 0) => {
-  return markerValue.value ?? localValue.value[index]
-}
+  return markerValue.value ?? localValue.value[index];
+};
 
 const snapPoints = computed(() => {
-  const points = []
-  let point = step.value * Math.ceil(moderatedMin() / step.value)
+  const points = [];
+  let point = step.value * Math.ceil(moderatedMin() / step.value);
 
   while (point <= moderatedMax()) {
-    points.push(point)
-    point += step.value
+    points.push(point);
+    point += step.value;
   }
 
-  return points
-})
+  return points;
+});
 
 const moderatedMin = () => {
-  return max.value > min.value ? min.value : 0
-}
+  return max.value > min.value ? min.value : 0;
+};
 
 const moderatedMax = () => {
-  return max.value > min.value ? max.value : 100
-}
+  return max.value > min.value ? max.value : 100;
+};
 
 const focus = () => {
-  slider.value.focus()
-}
+  slider.value.focus();
+};
 
 const reset = () => {
   for (let i = 0; i < 2; i++) {
-    handleIndex.value = i
-    setValue(initialValue.value[i])
+    handleIndex.value = i;
+    setValue(initialValue.value[i]);
   }
-}
+};
 
 const onFocus = () => {
-  isActive.value = true
-  emit('focus')
-}
+  isActive.value = true;
+  emit('focus');
+};
 
 const onBlur = () => {
-  isActive.value = false
-  emit('blur')
-}
+  isActive.value = false;
+  emit('blur');
+};
 
 const onExternalClick = (e) => {
   if (!slider.value.contains(e.target)) {
-    onBlur()
+    onBlur();
   }
-}
+};
 
 const setValueWithSnap = (value) => {
-  value = moderateValue(value)
+  value = moderateValue(value);
 
   if (snapToSteps.value) {
-    value = getNearestSnapPoint(value)
+    value = getNearestSnapPoint(value);
   }
 
-  setValue(value)
-}
+  setValue(value);
+};
 
 const setValue = (value: number) => {
-  value = moderateValue(value)
+  value = moderateValue(value);
 
   if (value === localValue.value[handleIndex.value]) {
-    return
+    return;
   }
 
   if (handleIndex.value === 0 && value >= localValue.value[1])
-    value = localValue.value[1]
+    value = localValue.value[1];
   if (handleIndex.value === 1 && value <= localValue.value[0])
-    value = localValue.value[0]
+    value = localValue.value[0];
 
-  localValue.value[handleIndex.value] = value
-  emit('update:modelValue', localValue.value)
-  emit('change', localValue.value)
-}
+  localValue.value[handleIndex.value] = value;
+  emit('update:modelValue', localValue.value);
+  emit('change', localValue.value);
+};
 
 const incrementValue = () => {
-  setValueWithSnap(localValue.value[handleIndex.value] + step.value)
-}
+  setValueWithSnap(localValue.value[handleIndex.value] + step.value);
+};
 
 const decrementValue = () => {
-  setValueWithSnap(localValue.value[handleIndex.value] - step.value)
-}
+  setValueWithSnap(localValue.value[handleIndex.value] - step.value);
+};
 
 const getPointStyle = (point) => {
   return {
     left: point + '%',
-  }
-}
+  };
+};
 
 const initializeSlider = () => {
-  document.addEventListener('touchend', onDragStop)
-  document.addEventListener('mouseup', onDragStop)
-  document.addEventListener('click', onExternalClick)
-  document.addEventListener('touchstart', onExternalClick)
-  initializeDrag()
-}
+  document.addEventListener('touchend', onDragStop);
+  document.addEventListener('mouseup', onDragStop);
+  document.addEventListener('click', onExternalClick);
+  document.addEventListener('touchstart', onExternalClick);
+  initializeDrag();
+};
 
 const teardownSlider = () => {
-  document.removeEventListener('touchend', onDragStop)
-  document.removeEventListener('mouseup', onDragStop)
-  document.removeEventListener('click', onExternalClick)
-}
+  document.removeEventListener('touchend', onDragStop);
+  document.removeEventListener('mouseup', onDragStop);
+  document.removeEventListener('click', onExternalClick);
+};
 
 const initializeDrag = () => {
   // const value = moderateValue(localValue.value ? localValue.value : 0)
   // setValue(value)
-  reset()
-}
+  reset();
+};
 
 const onDragStart = (e) => {
   if (disabled.value) {
-    return
+    return;
   }
 
   if (!isActive.value) {
-    onFocus()
+    onFocus();
   }
 
-  const value = getDragValue(e)
-  handleIndex.value = closestHandle(value)
+  const value = getDragValue(e);
+  handleIndex.value = closestHandle(value);
 
-  console.log(handleIndex.value)
+  console.log(handleIndex.value);
 
-  isDragging.value = true
-  dragUpdate(e)
+  isDragging.value = true;
+  dragUpdate(e);
 
-  document.addEventListener('touchmove', onDragMove)
-  document.addEventListener('mousemove', onDragMove)
+  document.addEventListener('touchmove', onDragMove);
+  document.addEventListener('mousemove', onDragMove);
 
-  emit('dragstart', localValue.value, e)
-}
+  emit('dragstart', localValue.value, e);
+};
 
 const onDragMove = (e) => {
-  dragUpdate(e)
-}
+  dragUpdate(e);
+};
 
 const closestHandle = (value: number) => {
-  let tempHandleIndex = 0
+  let tempHandleIndex = 0;
   if (localValue.value[0] === localValue.value[1]) {
-    const avg = localValue.value[0]
-    if (value > avg) return 1
-    return 0
+    const avg = localValue.value[0];
+    if (value > avg) return 1;
+    return 0;
   }
 
-  const firstHandleDiff = Math.abs(localValue.value[0] - value)
-  const secondHandleDiff = Math.abs(localValue.value[1] - value)
+  const firstHandleDiff = Math.abs(localValue.value[0] - value);
+  const secondHandleDiff = Math.abs(localValue.value[1] - value);
 
-  if (secondHandleDiff < firstHandleDiff) tempHandleIndex = 1
-  return tempHandleIndex
-}
+  if (secondHandleDiff < firstHandleDiff) tempHandleIndex = 1;
+  return tempHandleIndex;
+};
 
 const getDragValue = (e) => {
-  const sliderOffsetLeft = track.value!.getBoundingClientRect().left
-  const position = e.touches ? e.touches[0].pageX : e.pageX
-  const trackLength = track.value.offsetWidth
-  const relativeValue = (position - sliderOffsetLeft) / trackLength
+  const sliderOffsetLeft = track.value!.getBoundingClientRect().left;
+  const position = e.touches ? e.touches[0].pageX : e.pageX;
+  const trackLength = track.value.offsetWidth;
+  const relativeValue = (position - sliderOffsetLeft) / trackLength;
 
   const value = moderateValue(
     moderatedMin() + relativeValue * (moderatedMax() - moderatedMin())
-  )
-  return Math.round(value)
-}
+  );
+  return Math.round(value);
+};
 
 const dragUpdate = (e) => {
-  const value = getDragValue(e)
+  const value = getDragValue(e);
 
   if (isDragging.value) {
-    setValue(Math.round(value))
+    setValue(Math.round(value));
   }
-}
+};
 
 const onDragStop = (e) => {
   if (isDragging.value) {
-    isDragging.value = false
+    isDragging.value = false;
 
     if (
       snapToSteps.value &&
       modelValue.value[handleIndex.value] % step.value !== 0
     ) {
-      setValueWithSnap(modelValue.value[handleIndex.value])
+      setValueWithSnap(modelValue.value[handleIndex.value]);
     }
 
-    document.removeEventListener('touchmove', onDragMove)
-    document.removeEventListener('mousemove', onDragMove)
+    document.removeEventListener('touchmove', onDragMove);
+    document.removeEventListener('mousemove', onDragMove);
 
-    emit('dragend', localValue.value, e)
+    emit('dragend', localValue.value, e);
   }
-}
+};
 
 const getNearestSnapPoint = (value) => {
-  const previousSnapPoint = Math.floor(value / step.value) * step.value
-  const nextSnapPoint = previousSnapPoint + step.value
-  const midpoint = (previousSnapPoint + nextSnapPoint) / 2
+  const previousSnapPoint = Math.floor(value / step.value) * step.value;
+  const nextSnapPoint = previousSnapPoint + step.value;
+  const midpoint = (previousSnapPoint + nextSnapPoint) / 2;
 
   if (previousSnapPoint < moderatedMin()) {
     if (nextSnapPoint > moderatedMax()) {
-      return value
+      return value;
     }
-    return nextSnapPoint
+    return nextSnapPoint;
   }
   if (value >= midpoint && nextSnapPoint <= moderatedMax()) {
-    return nextSnapPoint
+    return nextSnapPoint;
   }
-  return previousSnapPoint
-}
+  return previousSnapPoint;
+};
 
 const relativeValue = (value) => {
-  return (value - moderatedMin()) / (moderatedMax() - moderatedMin())
-}
+  return (value - moderatedMin()) / (moderatedMax() - moderatedMin());
+};
 
 const moderateValue = (value) => {
   if (value < moderatedMin()) {
-    return moderatedMin()
+    return moderatedMin();
   }
 
   if (value > moderatedMax()) {
-    return moderatedMax()
+    return moderatedMax();
   }
 
   //if(handleIndex.value === 0 && value >= localValue.value[1]) return localValue.value[1]
   //if(handleIndex.value === 1 && value <= localValue.value[0]) return localValue.value[0]
 
-  return value
-}
+  return value;
+};
 
 onMounted(() => {
-  initializeSlider()
-})
+  initializeSlider();
+});
 
 onBeforeUnmount(() => {
-  teardownSlider()
-})
+  teardownSlider();
+});
 
 defineExpose({
   getPointStyle,
   focus,
-})
+});
 </script>
 
 <style>

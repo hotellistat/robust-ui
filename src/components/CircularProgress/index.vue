@@ -40,5 +40,5 @@ defineProps({
     type: Number,
     default: 25,
   },
-})
+});
 </script>

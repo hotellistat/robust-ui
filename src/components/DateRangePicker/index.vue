@@ -1,5 +1,5 @@
 <script lang="ts" setup>
-import { onClickOutside } from '@vueuse/core'
+import { onClickOutside } from '@vueuse/core';
 import {
   RobustPopper,
   RobustCalendar,
@@ -7,10 +7,10 @@ import {
   RobustButton,
   RobustCheckbox,
   RobustDatePicker,
-} from '..'
-import { PhCaretDown, PhCalendar } from '@dnlsndr/vue-phosphor-icons'
-import { format } from 'date-fns'
-import { computed, PropType, readonly, ref, toRefs, watch } from 'vue'
+} from '..';
+import { PhCaretDown, PhCalendar } from '@dnlsndr/vue-phosphor-icons';
+import { format } from 'date-fns';
+import { computed, PropType, readonly, ref, toRefs, watch } from 'vue';
 
 const props = defineProps({
   title: {
@@ -69,7 +69,7 @@ const props = defineProps({
     type: Array,
     default: () => [],
   },
-})
+});
 
 const emit = defineEmits([
   'blur',
@@ -79,22 +79,24 @@ const emit = defineEmits([
   'update:comparePerspectiveDate',
   'update:dateRange',
   'change',
-])
+]);
 
 const { dateRange, compareDateRange, perspectiveDate, comparePerspectiveDate } =
-  toRefs(props)
+  toRefs(props);
 
-const open = ref(false)
-const inputWrapperRef = ref()
+const open = ref(false);
+const inputWrapperRef = ref();
 
-const mainCalendar = ref()
-const perspectiveOf = ref<Date | undefined>(perspectiveDate.value)
-const comparePerspectiveOf = ref<Date | undefined>(comparePerspectiveDate.value)
+const mainCalendar = ref();
+const perspectiveOf = ref<Date | undefined>(perspectiveDate.value);
+const comparePerspectiveOf = ref<Date | undefined>(
+  comparePerspectiveDate.value
+);
 
-const enabledHistory = ref(false)
-const displayCompare = ref()
-const storeHistory = ref(true)
-const popperRef = ref()
+const enabledHistory = ref(false);
+const displayCompare = ref();
+const storeHistory = ref(true);
+const popperRef = ref();
 
 // const pickedCompare = computed(() => {
 //   return compareDates.value.length > 1
@@ -109,8 +111,8 @@ const popperRef = ref()
 //   return props.dateHistory || []
 // })
 
-const tmpDateRange = ref<[Date, Date]>()
-const tmpCompareDateRange = ref<[Date, Date]>()
+const tmpDateRange = ref<[Date, Date]>();
+const tmpCompareDateRange = ref<[Date, Date]>();
 
 // const computedDateRange = computed<[Date, Date]>({
 //   get() {
@@ -122,28 +124,28 @@ const tmpCompareDateRange = ref<[Date, Date]>()
 //   },
 // })
 
-const showComparisonPicker = ref(false)
+const showComparisonPicker = ref(false);
 
 const displayDate = computed(() => {
   if (!dateRange.value) {
-    return 'Select date'
+    return 'Select date';
   }
 
-  const realDate = dateRange.value
+  const realDate = dateRange.value;
   try {
     return realDate.length > 1
       ? format(realDate[0], 'P') + ' - ' + format(realDate[1], 'P')
-      : format(realDate[0], 'P') + ' - ' + format(realDate[0], 'P')
+      : format(realDate[0], 'P') + ' - ' + format(realDate[0], 'P');
   } catch (e) {
-    return undefined
+    return undefined;
   }
-})
+});
 
 function closeDropdown() {
   if (open.value === true) {
-    open.value = false
-    enabledHistory.value = false
-    emit('blur')
+    open.value = false;
+    enabledHistory.value = false;
+    emit('blur');
   }
 }
 
@@ -159,13 +161,13 @@ function closeDropdown() {
 onClickOutside(popperRef, (event) => {
   if (open.value) {
     if (inputWrapperRef.value.wrapperRef.contains(event.target)) {
-      event.stopPropagation()
-      event.preventDefault()
+      event.stopPropagation();
+      event.preventDefault();
     }
-    closeDropdown()
-    emit('blur')
+    closeDropdown();
+    emit('blur');
   }
-})
+});
 
 // const updatePerspective = (val: Date) => {
 //   emit('update:perspectiveDate', val)
@@ -176,39 +178,39 @@ onClickOutside(popperRef, (event) => {
 // }
 
 const handleClick = () => {
-  tmpDateRange.value = dateRange.value
-  tmpCompareDateRange.value = compareDateRange.value
-  open.value = !open.value
-}
+  tmpDateRange.value = dateRange.value;
+  tmpCompareDateRange.value = compareDateRange.value;
+  open.value = !open.value;
+};
 
 const goBack = () => {
-  displayCompare.value = false
+  displayCompare.value = false;
   // mainCalendar.value.toggleCompare(false)
-}
+};
 
 const saveTime = async () => {
-  emit('update:dateRange', tmpDateRange.value)
-  emit('update:compareDateRange', tmpCompareDateRange.value)
-  emit('change', tmpDateRange.value)
-  emit('blur')
-  open.value = false
-}
+  emit('update:dateRange', tmpDateRange.value);
+  emit('update:compareDateRange', tmpCompareDateRange.value);
+  emit('change', tmpDateRange.value);
+  emit('blur');
+  open.value = false;
+};
 
 const enableStoringHistory = (enable: boolean) => {
-  storeHistory.value = enable
-}
+  storeHistory.value = enable;
+};
 
 watch(perspectiveOf, (val) => {
-  emit('update:perspectiveDate', val)
-})
+  emit('update:perspectiveDate', val);
+});
 
 watch(comparePerspectiveOf, (val) => {
-  emit('update:comparePerspectiveDate', val)
-})
+  emit('update:comparePerspectiveDate', val);
+});
 
 defineExpose({
   goBack,
-})
+});
 </script>
 
 <template>

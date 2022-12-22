@@ -1,6 +1,6 @@
-import { defineComponent, h, onMounted, ref } from 'vue'
-import RobustSpinner from '../Spinner/index.vue'
-import { PhWarning } from '@dnlsndr/vue-phosphor-icons'
+import { defineComponent, h, onMounted, ref } from 'vue';
+import RobustSpinner from '../Spinner/index.vue';
+import { PhWarning } from '@dnlsndr/vue-phosphor-icons';
 export default defineComponent({
   name: 'RobustImg',
 
@@ -18,30 +18,30 @@ export default defineComponent({
   emits: ['loaded', 'error'],
 
   setup(props, { emit }) {
-    const loading = ref(true)
-    const error = ref(false)
+    const loading = ref(true);
+    const error = ref(false);
 
-    const image = new Image()
+    const image = new Image();
 
     image.onload = () => {
-      emit('loaded', true)
-      loading.value = false
-    }
+      emit('loaded', true);
+      loading.value = false;
+    };
 
     image.onerror = (e) => {
-      emit('error', e)
-      error.value = true
-      loading.value = false
-    }
+      emit('error', e);
+      error.value = true;
+      loading.value = false;
+    };
 
     onMounted(() => {
-      image.src = props.src
-    })
+      image.src = props.src;
+    });
 
     return {
       error,
       loading,
-    }
+    };
   },
 
   render() {
@@ -55,21 +55,21 @@ export default defineComponent({
           size: 24,
           stroke: 2,
         })
-      )
+      );
     } else if (this.error) {
       if (this.fallbackSrc) {
         return h('img', {
           src: this.fallbackSrc,
-        })
+        });
       } else {
         return h(PhWarning, {
           size: 20,
-        })
+        });
       }
     } else {
       return h('img', {
         src: this.src,
-      })
+      });
     }
   },
-})
+});

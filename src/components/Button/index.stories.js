@@ -1,5 +1,5 @@
-import Button from './index.vue'
-import { PhSmiley, PhPaperPlaneTilt } from '@dnlsndr/vue-phosphor-icons'
+import Button from './index.vue';
+import { PhSmiley, PhPaperPlaneTilt } from '@dnlsndr/vue-phosphor-icons';
 export default {
   title: 'Ui/Button',
   component: Button,
@@ -24,17 +24,17 @@ export default {
     condensed: { control: { type: 'boolean' } },
     rounded: { control: { type: 'boolean' } },
   },
-}
+};
 
 const DefaultTemplate = (args) => ({
   components: { Button },
   template: '<Button v-bind="args" >Click here</Button>',
   setup() {
-    return { args }
+    return { args };
   },
-})
+});
 
-export const Default = DefaultTemplate.bind({})
+export const Default = DefaultTemplate.bind({});
 
 const PrefixTemplate = (args) => ({
   template: `<Button v-bind="args">
@@ -45,11 +45,11 @@ const PrefixTemplate = (args) => ({
   </Button>`,
   components: { Button, PhSmiley },
   setup() {
-    return { args }
+    return { args };
   },
-})
+});
 
-export const Prefix = PrefixTemplate.bind()
+export const Prefix = PrefixTemplate.bind();
 
 const SuffixTemplate = (args) => ({
   template: `<Button v-bind="args">
@@ -60,18 +60,18 @@ const SuffixTemplate = (args) => ({
   </Button>`,
   components: { Button, PhPaperPlaneTilt },
   setup() {
-    return { args }
+    return { args };
   },
-})
+});
 
-export const Suffix = SuffixTemplate.bind()
+export const Suffix = SuffixTemplate.bind();
 
 const LoadingTemplate = (args) => ({
   template: `<Button loading v-bind="args">Click here</Button>`,
   components: { Button },
   setup() {
-    return { args }
+    return { args };
   },
-})
+});
 
-export const Loading = LoadingTemplate.bind()
+export const Loading = LoadingTemplate.bind();

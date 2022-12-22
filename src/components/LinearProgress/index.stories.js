@@ -1,4 +1,4 @@
-import LinearProgress from './index.vue'
+import LinearProgress from './index.vue';
 
 export default {
   title: 'Ui/LinearProgress',
@@ -6,14 +6,14 @@ export default {
   argTypes: {
     progress: { control: { type: 'number' } },
   },
-}
+};
 
 const DefaultTemplate = (args) => ({
   template: `<LinearProgress v-bind="args" />`,
   components: { LinearProgress },
   setup() {
-    return { args }
+    return { args };
   },
-})
+});
 
-export const Default = DefaultTemplate.bind()
+export const Default = DefaultTemplate.bind();

@@ -1,6 +1,6 @@
 export interface Preset {
-  title: string
-  preset: () => [Date, Date]
+  title: string;
+  preset: () => [Date, Date];
 }
 
 import {
@@ -12,7 +12,7 @@ import {
   startOfWeek,
   startOfYear,
   subDays,
-} from 'date-fns'
+} from 'date-fns';
 
 export default [
   {
@@ -23,7 +23,7 @@ export default [
         minutes: 0,
         seconds: 0,
         milliseconds: 0,
-      })
+      });
       return [
         today,
         set(new Date(today), {
@@ -31,7 +31,7 @@ export default [
           minutes: 59,
           seconds: 59,
         }),
-      ]
+      ];
     },
   },
   {
@@ -42,7 +42,7 @@ export default [
         minutes: 0,
         seconds: 0,
         milliseconds: 0,
-      })
+      });
       return [
         yesterday,
         set(new Date(yesterday), {
@@ -50,20 +50,20 @@ export default [
           minutes: 59,
           seconds: 59,
         }),
-      ]
+      ];
     },
   },
   {
     title: 'Last week',
     preset: () => {
-      const startDay = startOfWeek(subDays(new Date(), 7))
-      return [startDay, endOfWeek(new Date(startDay))]
+      const startDay = startOfWeek(subDays(new Date(), 7));
+      return [startDay, endOfWeek(new Date(startDay))];
     },
   },
   {
     title: 'This month so far',
     preset: () => {
-      const monthStart = startOfMonth(new Date())
+      const monthStart = startOfMonth(new Date());
       return [
         monthStart,
         set(new Date(), {
@@ -71,20 +71,20 @@ export default [
           minutes: 59,
           seconds: 59,
         }),
-      ]
+      ];
     },
   },
   {
     title: 'This month',
     preset: () => {
-      return [startOfMonth(new Date()), endOfMonth(new Date())]
+      return [startOfMonth(new Date()), endOfMonth(new Date())];
     },
   },
   {
     title: 'Last month',
     preset: () => {
-      const startDay = startOfMonth(subDays(startOfMonth(new Date()), 1))
-      return [startDay, endOfMonth(startDay)]
+      const startDay = startOfMonth(subDays(startOfMonth(new Date()), 1));
+      return [startDay, endOfMonth(startDay)];
     },
   },
   {
@@ -97,20 +97,20 @@ export default [
           minutes: 59,
           seconds: 59,
         }),
-      ]
+      ];
     },
   },
   {
     title: 'This year',
     preset: () => {
-      return [startOfYear(new Date()), endOfYear(new Date())]
+      return [startOfYear(new Date()), endOfYear(new Date())];
     },
   },
   {
     title: 'Last year',
     preset: () => {
-      const startDay = startOfYear(subDays(startOfYear(new Date()), 1))
-      return [startDay, endOfYear(new Date(startDay))]
+      const startDay = startOfYear(subDays(startOfYear(new Date()), 1));
+      return [startDay, endOfYear(new Date(startDay))];
     },
   },
-] as Array<Preset>
+] as Array<Preset>;

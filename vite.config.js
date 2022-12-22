@@ -1,7 +1,7 @@
-import vue from '@vitejs/plugin-vue'
-import { defineConfig } from 'vite'
-import { resolve } from 'path'
-import visualizer from 'rollup-plugin-visualizer'
+import vue from '@vitejs/plugin-vue';
+import { defineConfig } from 'vite';
+import { resolve } from 'path';
+import visualizer from 'rollup-plugin-visualizer';
 
 export default defineConfig(async (config) => ({
   base: '/robust-ui/',
@@ -31,4 +31,4 @@ export default defineConfig(async (config) => ({
       ],
     },
   },
-}))
+}));

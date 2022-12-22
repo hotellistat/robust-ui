@@ -26,11 +26,11 @@
 </template>
 
 <script lang="ts" setup>
-import { PropType, ref } from 'vue'
+import { PropType, ref } from 'vue';
 
 export interface Tab {
-  title: string
-  value: string
+  title: string;
+  value: string;
 }
 
 defineProps({
@@ -50,20 +50,20 @@ defineProps({
     type: Boolean,
     default: false,
   },
-})
+});
 
-const emit = defineEmits(['update:modelValue'])
+const emit = defineEmits(['update:modelValue']);
 
-const registeredTabs = ref<HTMLElement[]>([])
+const registeredTabs = ref<HTMLElement[]>([]);
 
 const registerTab = (el: HTMLElement) => {
-  registeredTabs.value?.push(el)
-}
+  registeredTabs.value?.push(el);
+};
 
-const root = ref<HTMLElement>()
+const root = ref<HTMLElement>();
 
 const select = (event: MouseEvent, value: string) => {
   // emit a value update event and change the background size and position to the newly selected tab
-  emit('update:modelValue', value)
-}
+  emit('update:modelValue', value);
+};
 </script>

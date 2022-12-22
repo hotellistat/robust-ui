@@ -19,4 +19,4 @@ export default {
 
   transparent:
     'hover:bg-gray-100 dark:hover:bg-gray-700 text-gray-900 dark:text-white',
-} as Record<string, string>
+} as Record<string, string>;

@@ -1,5 +1,5 @@
-import { ref } from 'vue'
-import Radio from './index.vue'
+import { ref } from 'vue';
+import Radio from './index.vue';
 
 export default {
   title: 'Ui/Radio',
@@ -7,7 +7,7 @@ export default {
   argTypes: {
     title: { control: { type: 'text' } },
   },
-}
+};
 
 const DefaultTemplate = (args) => ({
   template: `
@@ -17,12 +17,12 @@ const DefaultTemplate = (args) => ({
     `,
   components: { Radio },
   setup() {
-    const value = ref('test')
-    return { args, value }
+    const value = ref('test');
+    return { args, value };
   },
-})
+});
 
-export const Default = DefaultTemplate.bind({})
+export const Default = DefaultTemplate.bind({});
 Default.args = {
   title: 'Radio title',
-}
+};
