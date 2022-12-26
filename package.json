@@ -1,7 +1,7 @@
 {
   "name": "@hotellistat/robust-ui",
   "homepage": "https://hotellistat.github.io/robust-ui",
-  "version": "1.21.0",
+  "version": "1.21.1",
   "description": "A lightweight Vue 3 component library",
   "repository": "hotellistat/robust-ui",
   "author": "Daniel Schneider <daniel.schneider@hotellistat.de>",
