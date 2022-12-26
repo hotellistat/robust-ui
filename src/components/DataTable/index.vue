@@ -295,8 +295,7 @@ const rowsLimit = computed({
 
 const rowsLimitOptionsInit = () => {
   const optionsArray = options.value.rowsLimitOptions;
-  if (!optionsArray)
-    return optionsArray.map((d) => ({ value: d, title: `${d}` }));
+  if (!optionsArray) return undefined;
   return optionsArray.map((o) => ({
     value: o,
     title: `${o}`,
@@ -791,7 +790,7 @@ const selectAll = (value: boolean) => {
 };
 
 const isFooterVisible = computed(() => {
-  return maxPage.value !== 1 || rowsLimitOptions.value !== undefined;
+  return maxPage.value > 1 || rowsLimitOptions.value !== undefined;
 });
 
 const isSelectedAll = () => {
