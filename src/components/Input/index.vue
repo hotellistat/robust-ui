@@ -29,7 +29,7 @@ const props = defineProps({
     default: undefined,
   },
   modelValue: {
-    type: String,
+    type: null,
     default: undefined,
   },
   condensed: {

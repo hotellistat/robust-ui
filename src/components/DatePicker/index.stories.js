@@ -13,7 +13,7 @@ export default {
 
 const Template = (args) => ({
   template:
-    '<DatePicker class="p-2 col-span-2 sm:col-span-1" v-bind="args"></DatePicker>',
+    '<DatePicker class="p-2 col-span-2 sm:col-span-1" v-bind="args" title="Date picker"></DatePicker>',
   components: { DatePicker },
   setup() {
     return { args };

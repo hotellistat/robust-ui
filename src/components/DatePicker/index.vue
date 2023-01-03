@@ -26,7 +26,7 @@ const props = defineProps({
   },
   class: {
     type: String,
-    default: 'bg-gray-100 dark:bg-gray-700',
+    default: undefined,
   },
   condensed: {
     type: Boolean,
