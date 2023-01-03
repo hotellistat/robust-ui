@@ -60,7 +60,8 @@
         <div
           v-for="(entry, idx) in sortedData"
           :key="idx"
-          class="flex flex-col justify-between"
+          class="flex flex-col justify-between hover:bg-gray-100 hover:dark:bg-gray-800"
+          @click="onClickRow(entry)"
         >
           <div
             class="datatable-grid-columns flex flex-col gap-x-2 gap-y-2 sm:grid sm:items-center"
@@ -215,6 +216,7 @@ const emit = defineEmits([
   'update:search',
   'update:selectedRows',
   'update:resize',
+  'click:rowEntry',
 ]);
 
 const { data, options, loading, headerClass } = toRefs(props);
@@ -794,6 +796,10 @@ const isSelectedAll = () => {
   );
 };
 
+const onClickRow = (data: any) => {
+  emit('click:rowEntry', data);
+};
+
 let resizeObserver: ResizeObserver;
 
 const onResize = () => {
@@ -832,10 +838,6 @@ const getSpace = () => {
     const t2 = (t / availableSpace) * 100;
     return t2;
   };
-  const perc2 = (c: any) => {
-    const t = ((c.value * percentageScale) / 100) * responsiveSpace;
-    return t;
-  };
   if (fixedSpace > availableSpace) {
     sizes = sizes.map((c) => ({
       ...c,
@@ -845,7 +847,6 @@ const getSpace = () => {
   sizes = sizes.map((c) => ({
     ...c,
     value: c.type === '%' ? perc(c) : c.value,
-    inPx: c.type === '%' ? perc2(c) : c.value,
   }));
   return {
     sizes,
