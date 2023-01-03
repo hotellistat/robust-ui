@@ -177,6 +177,7 @@ type DataTableOptions = {
   resize: boolean;
   minColSize: number;
   ghostColumns?: boolean;
+  defaultColSize?: string;
 };
 
 const defaultOptions: Partial<DataTableOptions> = {
@@ -188,6 +189,7 @@ const defaultOptions: Partial<DataTableOptions> = {
   resize: true,
   minColSize: 100,
   ghostColumns: true,
+  defaultColSize: '150px',
 };
 
 const props = defineProps({
@@ -387,7 +389,10 @@ const isPx = (str: string) => {
 };
 
 const initSizes = () => {
-  const colsSizeArray = options.value.columns.map((col) => '1fr');
+  const colsSizeArray = options.value.columns.map(
+    (c) =>
+      c.size ?? options.value.defaultColSize ?? defaultOptions.defaultColSize
+  );
 
   // checkbox
   colsSizeArray.unshift('24px');
@@ -810,14 +815,15 @@ const getSpace = () => {
   // gap between columns 8px
   const padding = 8;
   let sizes = options.value.columns.map((c) => {
-    if (!isPercentage(c.size) && !isPx(c.size)) {
+    if (c.size && !isPercentage(c.size) && !isPx(c.size)) {
       throw Error('Only "px" and "%" units are allowed for column size!');
     }
-    const type = isPercentage(c.size) ? '%' : 'px';
+    const size =
+      c.size ?? options.value.defaultColSize ?? defaultOptions.defaultColSize;
+    const type = isPercentage(size) ? '%' : 'px';
     return {
       type,
-      value: parseInt(c.size),
-      inPx: 0,
+      value: parseInt(size),
     };
   });
   const headerWidth = header.value.clientWidth;
@@ -859,9 +865,7 @@ onMounted(() => {
   createResizableTable();
   const space = getSpace();
   const newSizeValues = space.sizes.map((s) => s.value + s.type);
-  setTimeout(() => {
-    initColSize(newSizeValues);
-  }, 10);
+  initColSize(newSizeValues);
   resizeObserver = new ResizeObserver(onResize);
   resizeObserver.observe(table.value);
 });
