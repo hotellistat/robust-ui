@@ -12,7 +12,7 @@
       window.CHANNEL_OPTIONS = {};
       window.FEATURES = {"warnOnLegacyHierarchySeparator":true,"buildStoriesJson":false,"storyStoreV7":true,"breakingChangesV7":true,"interactionsDebugger":false,"argTypeTargetsV7":true};
       window.STORIES = [{"titlePrefix":"","directory":"./src","files":"**/*.mdx","importPathMatcher":"^\\.[\\\\/](?:src(?:\\/(?!\\.)(?:(?:(?!(?:^|\\/)\\.).)*?)\\/|\\/|$)(?!\\.)(?=.)[^/]*?\\.mdx)$"},{"titlePrefix":"","directory":"./src","files":"**/*.stories.@(js|jsx|ts|tsx)","importPathMatcher":"^\\.[\\\\/](?:src(?:\\/(?!\\.)(?:(?:(?!(?:^|\\/)\\.).)*?)\\/|\\/|$)(?!\\.)(?=.)[^/]*?\\.stories\\.(js|jsx|ts|tsx))$"}];
-      window.DOCS_OPTIONS = {"enabled":true,"defaultName":"Docs","docsPage":false};
+      window.DOCS_OPTIONS = {"disable":false,"defaultName":"Docs","autodocs":"tag","docsPage":false};
       window.SERVER_CHANNEL_URL = undefined;
       
       // We do this so that "module && module.hot" etc. in Storybook source code
@@ -347,26 +347,6 @@
     // eslint-disable-next-line no-console
     console.warn('unable to connect to top frame for connecting dev tools');
   }
-
-  window.onerror = function onerror(message, source, line, column, err) {
-    if (window.CONFIG_TYPE !== 'DEVELOPMENT') return;
-    // eslint-disable-next-line no-var, vars-on-top
-    var xhr = new window.XMLHttpRequest();
-    xhr.open('POST', '/runtime-error');
-    xhr.setRequestHeader('Content-Type', 'application/json;charset=UTF-8');
-    xhr.send(
-      JSON.stringify({
-        /* eslint-disable object-shorthand */
-        message: message,
-        source: source,
-        line: line,
-        column: column,
-        error: err && { message: err.message, name: err.name, stack: err.stack },
-        origin: 'preview',
-        /* eslint-enable object-shorthand */
-      })
-    );
-  };
 </script>
 <link
   rel="stylesheet"
@@ -375,7 +355,7 @@
 <script>
   window.global = window;
 </script>
-    <script type="module" crossorigin src="./assets/iframe-0a8e36e9.js"></script>
+    <script type="module" crossorigin src="./assets/iframe-3e73ffe7.js"></script>
   </head>
   <body>
     <div class="sb-preparing-story sb-wrapper">
