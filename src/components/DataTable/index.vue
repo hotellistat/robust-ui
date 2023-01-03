@@ -218,7 +218,7 @@ const emit = defineEmits([
   'update:search',
   'update:selectedRows',
   'update:resize',
-  'click:rowEntry',
+  'clickRow',
 ]);
 
 const { data, options, loading, headerClass } = toRefs(props);
@@ -802,7 +802,7 @@ const isSelectedAll = () => {
 };
 
 const onClickRow = (data: any) => {
-  emit('click:rowEntry', data);
+  emit('clickRow', data);
 };
 
 let resizeObserver: ResizeObserver;
