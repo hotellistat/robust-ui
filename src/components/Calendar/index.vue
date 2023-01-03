@@ -1,5 +1,5 @@
 <script lang="ts" setup>
-import RobustInput from '../Input/index.vue'
+import RobustInput from '../Input/index.vue';
 import {
   subMonths,
   addMonths,
@@ -16,7 +16,7 @@ import {
   isValid,
   addYears,
   subYears,
-} from 'date-fns'
+} from 'date-fns';
 import {
   computed,
   nextTick,
@@ -25,10 +25,10 @@ import {
   ref,
   toRefs,
   watch,
-} from 'vue'
-import { PhCaretLeft, PhCaretRight } from '@dnlsndr/vue-phosphor-icons'
-import defaultPresets, { Preset } from './presets'
-import variants from './variants'
+} from 'vue';
+import { PhCaretLeft, PhCaretRight } from '@dnlsndr/vue-phosphor-icons';
+import defaultPresets, { Preset } from './presets';
+import variants from './variants';
 
 const props = defineProps({
   future: {
@@ -55,241 +55,241 @@ const props = defineProps({
     type: Array as PropType<Array<Preset>>,
     default: () => defaultPresets,
   },
-})
-const emit = defineEmits(['update:modelValue', 'click:relativeDate'])
+});
+const emit = defineEmits(['update:modelValue', 'click:relativeDate']);
 
-const { future, past, today, modelValue } = toRefs(props)
+const { future, past, today, modelValue } = toRefs(props);
 
-const from = ref()
-const to = ref()
-const errorFrom = ref()
-const errorTo = ref()
-const now = ref()
+const from = ref();
+const to = ref();
+const errorFrom = ref();
+const errorTo = ref();
+const now = ref();
 // const cursor = ref<Date>()
 const cursor = Array.isArray(modelValue.value)
   ? ref<Date>(new Date())
-  : ref<Date>(new Date(modelValue.value))
+  : ref<Date>(new Date(modelValue.value));
 
-const selectedDate = ref()
-const refYearEntry = ref({})
+const selectedDate = ref();
+const refYearEntry = ref({});
 
 const variantStyling = computed(() => {
-  return variants[props.variant]
-})
+  return variants[props.variant];
+});
 
 const daysInMonth = computed(() => {
-  const date = new Date(cursor.value)
-  return getDaysInMonth(date)
-})
+  const date = new Date(cursor.value);
+  return getDaysInMonth(date);
+});
 
 const monthHeading = computed(() => {
   try {
-    return format(cursor.value, 'MMM')
+    return format(cursor.value, 'MMM');
   } catch (e) {
-    return undefined
+    return undefined;
   }
-})
+});
 const yearHeading = computed(() => {
   try {
-    return format(cursor.value, 'yyyy')
+    return format(cursor.value, 'yyyy');
   } catch (e) {
-    return undefined
+    return undefined;
   }
-})
+});
 
 const firstWeekday = computed(() => {
-  const date = new Date(cursor.value)
-  date.setDate(1)
-  const day = date.getDay()
-  return (day === 0 ? 7 : day) - 1
-})
+  const date = new Date(cursor.value);
+  date.setDate(1);
+  const day = date.getDay();
+  return (day === 0 ? 7 : day) - 1;
+});
 
 const activeMonth = computed(() => {
-  const date = new Date(cursor.value)
-  return date.getMonth()
-})
+  const date = new Date(cursor.value);
+  return date.getMonth();
+});
 
 const activeYear = computed(() => {
-  const date = new Date(cursor.value)
-  return date.getFullYear()
-})
+  const date = new Date(cursor.value);
+  return date.getFullYear();
+});
 
 const applyTime = () => {
-  console.log('applying time')
+  console.log('applying time');
 
   if (from.value != '' && !isValid(new Date(from.value))) {
-    errorFrom.value = 'Please enter a valid date.'
+    errorFrom.value = 'Please enter a valid date.';
   }
   if (to.value != '' && !isValid(new Date(to.value))) {
-    errorTo.value = 'Please enter a valid date.'
+    errorTo.value = 'Please enter a valid date.';
   }
   if (isValid(new Date(from.value)) && isValid(new Date(to.value))) {
-    errorFrom.value = ''
-    errorTo.value = ''
-    const newModelValue = [new Date(from.value), new Date(to.value)]
-    emit('update:modelValue', newModelValue)
+    errorFrom.value = '';
+    errorTo.value = '';
+    const newModelValue = [new Date(from.value), new Date(to.value)];
+    emit('update:modelValue', newModelValue);
   }
-}
+};
 
 const compareDates = (dateOne, dateTwo) => {
-  const diff = dayDiff(dateOne, dateTwo)
+  const diff = dayDiff(dateOne, dateTwo);
 
-  if (diff < 0) return 1
-  else if (diff > 0) return -1
-  return 0
-}
+  if (diff < 0) return 1;
+  else if (diff > 0) return -1;
+  return 0;
+};
 
 const dayDiff = (d1, d2) => {
-  const endDate = Date.UTC(d2.getFullYear(), d2.getMonth(), d2.getDate())
-  const startDate = Date.UTC(d1.getFullYear(), d1.getMonth(), d1.getDate())
-  return (endDate - startDate) / 86400000
-}
+  const endDate = Date.UTC(d2.getFullYear(), d2.getMonth(), d2.getDate());
+  const startDate = Date.UTC(d1.getFullYear(), d1.getMonth(), d1.getDate());
+  return (endDate - startDate) / 86400000;
+};
 
 const isFirst = (day) => {
   // checking if it is daterange or only datepicker
-  if (!Array.isArray(modelValue.value)) return false
+  if (!Array.isArray(modelValue.value)) return false;
 
   // doesn't do any actions if you've choosen only one date
-  if (modelValue.value.length < 2) return false
+  if (modelValue.value.length < 2) return false;
 
-  if (!compareDates(...modelValue.value)) return false
+  if (!compareDates(...modelValue.value)) return false;
 
-  const tmpDate = new Date()
-  tmpDate.setDate(day)
-  tmpDate.setMonth(cursor.value.getMonth())
-  tmpDate.setFullYear(cursor.value.getFullYear())
+  const tmpDate = new Date();
+  tmpDate.setDate(day);
+  tmpDate.setMonth(cursor.value.getMonth());
+  tmpDate.setFullYear(cursor.value.getFullYear());
 
-  const minDate = min(modelValue.value)
+  const minDate = min(modelValue.value);
 
   // minimal value
-  if (!compareDates(tmpDate, minDate)) return true
-  return false
-}
+  if (!compareDates(tmpDate, minDate)) return true;
+  return false;
+};
 
 const isLast = (day) => {
   // checking if it is daterange or only datepicker
-  if (!Array.isArray(modelValue.value)) return false
+  if (!Array.isArray(modelValue.value)) return false;
 
   // doesn't do any actions if you've choosen only one date
-  if (modelValue.value.length < 2) return false
+  if (modelValue.value.length < 2) return false;
 
-  if (!compareDates(...modelValue.value)) return false
+  if (!compareDates(...modelValue.value)) return false;
 
-  const tmpDate = new Date()
-  tmpDate.setDate(day)
-  tmpDate.setMonth(cursor.value.getMonth())
-  tmpDate.setFullYear(cursor.value.getFullYear())
+  const tmpDate = new Date();
+  tmpDate.setDate(day);
+  tmpDate.setMonth(cursor.value.getMonth());
+  tmpDate.setFullYear(cursor.value.getFullYear());
 
-  const maxDate = max(modelValue.value)
+  const maxDate = max(modelValue.value);
 
   // max value
-  if (!compareDates(tmpDate, maxDate)) return true
-  return false
-}
+  if (!compareDates(tmpDate, maxDate)) return true;
+  return false;
+};
 
 const isBetweenRange = (day) => {
-  if (!Array.isArray(modelValue.value)) return false
-  if (modelValue.value.length < 2) return false
+  if (!Array.isArray(modelValue.value)) return false;
+  if (modelValue.value.length < 2) return false;
 
-  const tmpDate = new Date()
-  tmpDate.setDate(day)
-  tmpDate.setMonth(cursor.value.getMonth())
-  tmpDate.setFullYear(cursor.value.getFullYear())
-  const minDate = min(modelValue.value)
-  const maxDate = max(modelValue.value)
+  const tmpDate = new Date();
+  tmpDate.setDate(day);
+  tmpDate.setMonth(cursor.value.getMonth());
+  tmpDate.setFullYear(cursor.value.getFullYear());
+  const minDate = min(modelValue.value);
+  const maxDate = max(modelValue.value);
 
   if (
     compareDates(tmpDate, maxDate) === -1 &&
     compareDates(tmpDate, minDate) === 1
   ) {
-    return true
+    return true;
   }
-  return false
-}
+  return false;
+};
 
 const isSelectedDay = (day) => {
-  const tmpDate = new Date()
-  tmpDate.setDate(day)
-  tmpDate.setMonth(cursor.value.getMonth())
-  tmpDate.setFullYear(cursor.value.getFullYear())
+  const tmpDate = new Date();
+  tmpDate.setDate(day);
+  tmpDate.setMonth(cursor.value.getMonth());
+  tmpDate.setFullYear(cursor.value.getFullYear());
 
   if (Array.isArray(modelValue.value)) {
-    const selectedDates = modelValue.value.map((date) => new Date(date))
+    const selectedDates = modelValue.value.map((date) => new Date(date));
     for (let i = 0; i < selectedDates.length; i++) {
       if (!compareDates(selectedDates[i], tmpDate)) {
-        return true
+        return true;
       }
     }
   } else {
     if (!compareDates(new Date(selectedDate.value), tmpDate)) {
-      return true
+      return true;
     }
   }
-}
+};
 
 function setQuickAction(dateRange: [Date, Date]) {
-  emit('update:modelValue', dateRange)
-  cursor.value = dateRange[1]
+  emit('update:modelValue', dateRange);
+  cursor.value = dateRange[1];
 }
 function addYear() {
-  cursor.value = addYears(cursor.value, 1)
+  cursor.value = addYears(cursor.value, 1);
 }
 
 function subYear() {
-  cursor.value = subYears(cursor.value, 1)
+  cursor.value = subYears(cursor.value, 1);
 }
 
 function setYear(year) {
-  cursor.value = setFnsYear(cursor.value, year)
+  cursor.value = setFnsYear(cursor.value, year);
 }
 
 function addMonth() {
-  cursor.value = addMonths(cursor.value, 1)
+  cursor.value = addMonths(cursor.value, 1);
 }
 
 function subMonth() {
-  cursor.value = subMonths(cursor.value, 1)
+  cursor.value = subMonths(cursor.value, 1);
 }
 
 function setMonth(month) {
-  cursor.value = setFnsMonth(cursor.value, month)
+  cursor.value = setFnsMonth(cursor.value, month);
 }
 
 const dayAllowed = (day) => {
-  const date = new Date(cursor.value).setDate(day)
+  const date = new Date(cursor.value).setDate(day);
   if (!today.value && isSameDay(now.value, date)) {
-    return false
+    return false;
   }
   if (!past.value && differenceInDays(now.value, date) > 0) {
-    return false
+    return false;
   }
   if (!future.value && isFuture(date)) {
-    return false
+    return false;
   }
-  return true
-}
+  return true;
+};
 
 const daySelect = (day) => {
   if (!dayAllowed(day)) {
-    return
+    return;
   }
 
-  const tmpDate = new Date()
-  tmpDate.setDate(day)
-  tmpDate.setMonth(cursor.value.getMonth())
-  tmpDate.setFullYear(cursor.value.getFullYear())
-  cursor.value = tmpDate
+  const tmpDate = new Date();
+  tmpDate.setDate(day);
+  tmpDate.setMonth(cursor.value.getMonth());
+  tmpDate.setFullYear(cursor.value.getFullYear());
+  cursor.value = tmpDate;
 
   if (Array.isArray(modelValue.value)) {
-    errorFrom.value = ''
-    errorTo.value = ''
-    let newModelValue = []
+    errorFrom.value = '';
+    errorTo.value = '';
+    let newModelValue = [];
     if (modelValue.value.length >= 2) {
-      newModelValue.push(new Date(cursor.value))
-      to.value = ''
+      newModelValue.push(new Date(cursor.value));
+      to.value = '';
     } else {
-      newModelValue = modelValue.value
-      newModelValue.push(new Date(cursor.value))
+      newModelValue = modelValue.value;
+      newModelValue.push(new Date(cursor.value));
       if (newModelValue.length > 1) {
         newModelValue = [
           set(min(newModelValue), {
@@ -302,73 +302,74 @@ const daySelect = (day) => {
             minutes: 59,
             seconds: 59,
           }),
-        ]
-        to.value = newModelValue[1].toLocaleDateString()
+        ];
+        to.value = newModelValue[1].toLocaleDateString();
       }
     }
-    from.value = newModelValue[0].toLocaleDateString()
-    emit('update:modelValue', newModelValue)
+    from.value = newModelValue[0].toLocaleDateString();
+    emit('update:modelValue', newModelValue);
   } else {
-    selectedDate.value = new Date(cursor.value)
-    emit('update:modelValue', cursor.value)
+    selectedDate.value = new Date(cursor.value);
+    emit('update:modelValue', cursor.value);
   }
-}
+};
 
 const reset = () => {
-  cursor.value = new Date(new Date().setHours(12))
-}
+  cursor.value = new Date(new Date().setHours(12));
+};
 
 watch(modelValue, (val) => {
-  const f = val[0] || undefined
-  const t = val[1] || undefined
-  if (f) from.value = f.toLocaleDateString()
-  else from.value = ''
-  if (t) to.value = t.toLocaleDateString()
-  else to.value = ''
-})
+  const f = val[0] || undefined;
+  const t = val[1] || undefined;
+  if (f) from.value = f.toLocaleDateString();
+  else from.value = '';
+  if (t) to.value = t.toLocaleDateString();
+  else to.value = '';
+});
 
 onMounted(() => {
   if (Array.isArray(modelValue.value)) {
-    cursor.value = new Date(modelValue.value[1] || new Date())
-    selectedDate.value = cursor.value
-    const f = modelValue.value[0] || undefined
-    const t = modelValue.value[1] || undefined
-    if (f) from.value = f.toLocaleDateString()
-    else from.value = ''
-    if (t) to.value = t.toLocaleDateString()
-    else to.value = ''
+    cursor.value = new Date(modelValue.value[1] || new Date());
+    selectedDate.value = cursor.value;
+    const f = modelValue.value[0] || undefined;
+    const t = modelValue.value[1] || undefined;
+    if (f) from.value = f.toLocaleDateString();
+    else from.value = '';
+    if (t) to.value = t.toLocaleDateString();
+    else to.value = '';
   } else {
-    cursor.value = new Date(modelValue.value || new Date())
-    selectedDate.value = cursor.value
+    cursor.value = new Date(modelValue.value || new Date());
+    selectedDate.value = cursor.value;
   }
-})
+});
 
 const yearSelectionYears = computed(() => {
-  const years = []
+  const years = [];
   for (let year = 1900; year <= 2100; year++) {
-    years.push(year)
+    years.push(year);
   }
-  return years
-})
+  return years;
+});
 
-const showMonthSelectionActive = ref(false)
+const showMonthSelectionActive = ref(false);
+
 function showMonthSelection() {
-  showMonthSelectionActive.value = true
+  showMonthSelectionActive.value = true;
 }
 function hideMonthSelection() {
-  showMonthSelectionActive.value = false
+  showMonthSelectionActive.value = false;
 }
 
-const showYearSelectionActive = ref(false)
+const showYearSelectionActive = ref(false);
 function showYearSelection() {
-  showYearSelectionActive.value = true
+  showYearSelectionActive.value = true;
   nextTick(() => {
-    const yearEntry = refYearEntry.value[activeYear.value]
-    yearEntry.scrollIntoView({ block: 'start', behavior: 'auto' })
-  })
+    const yearEntry = refYearEntry.value[activeYear.value];
+    yearEntry.scrollIntoView({ block: 'start', behavior: 'auto' });
+  });
 }
 function hideYearSelection() {
-  showYearSelectionActive.value = false
+  showYearSelectionActive.value = false;
 }
 
 const months = computed(() => {
@@ -409,8 +410,8 @@ const months = computed(() => {
     {
       title: 'Dec',
     },
-  ]
-})
+  ];
+});
 
 defineExpose({
   applyTime,
@@ -419,7 +420,7 @@ defineExpose({
   addMonth,
   subMonth,
   reset,
-})
+});
 </script>
 
 <template>
@@ -447,8 +448,8 @@ defineExpose({
             class="flex h-8 items-center rounded-lg px-2 tabular-nums hover:bg-gray-100 dark:hover:bg-gray-800"
             @click="
               () => {
-                showMonthSelection()
-                hideYearSelection()
+                showMonthSelection();
+                hideYearSelection();
               }
             "
           >
@@ -458,8 +459,8 @@ defineExpose({
             class="flex h-8 items-center rounded-lg px-2 tabular-nums hover:bg-gray-100 dark:hover:bg-gray-800"
             @click="
               () => {
-                showYearSelection()
-                hideMonthSelection()
+                showYearSelection();
+                hideMonthSelection();
               }
             "
           >
@@ -497,8 +498,8 @@ defineExpose({
             ]"
             @click="
               () => {
-                setMonth(index)
-                hideMonthSelection()
+                setMonth(index);
+                hideMonthSelection();
               }
             "
           >
@@ -523,8 +524,8 @@ defineExpose({
             :data-year="year"
             @click="
               () => {
-                setYear(year)
-                hideYearSelection()
+                setYear(year);
+                hideYearSelection();
               }
             "
           >

@@ -27,10 +27,10 @@
 </template>
 
 <script lang="ts" setup>
-import { onMounted, PropType, ref } from 'vue'
+import { onMounted, PropType, ref } from 'vue';
 export interface Tab {
-  title: string
-  value: string
+  title: string;
+  value: string;
 }
 
 const props = defineProps({
@@ -42,34 +42,34 @@ const props = defineProps({
     type: String,
     required: true,
   },
-})
+});
 
-const emit = defineEmits(['update:modelValue'])
+const emit = defineEmits(['update:modelValue']);
 
-const root = ref<HTMLElement>()
+const root = ref<HTMLElement>();
 
-const tabsRefs = ref<HTMLElement[]>([])
+const tabsRefs = ref<HTMLElement[]>([]);
 
 const registerTab = (el: HTMLElement) => {
-  tabsRefs.value?.push(el)
-}
+  tabsRefs.value?.push(el);
+};
 
 onMounted(() => {
   const activeTab = tabsRefs.value.find(
     (item) => item.dataset.value === props.modelValue
-  )
+  );
   // console.log(activeTab);
   if (activeTab) {
-    console.log(activeTab)
+    console.log(activeTab);
 
     activeTab.scrollIntoView({
       behavior: 'smooth',
       block: 'end',
-    })
+    });
   }
-})
+});
 
 const select = (value: string) => {
-  emit('update:modelValue', value)
-}
+  emit('update:modelValue', value);
+};
 </script>

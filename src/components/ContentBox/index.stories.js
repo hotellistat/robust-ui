@@ -1,4 +1,4 @@
-import ContentBox from './index.vue'
+import ContentBox from './index.vue';
 
 export default {
   title: 'Ui/ContentBox',
@@ -6,7 +6,7 @@ export default {
   argTypes: {
     title: { control: { type: 'text' } },
   },
-}
+};
 
 const DefaultTemplate = (args) => ({
   template: `<ContentBox v-bind="args" >
@@ -14,11 +14,11 @@ const DefaultTemplate = (args) => ({
   </ContentBox>`,
   components: { ContentBox },
   setup() {
-    return { args }
+    return { args };
   },
-})
+});
 
-export const Default = DefaultTemplate.bind()
+export const Default = DefaultTemplate.bind();
 
 const TitleTemplate = (args) => ({
   template: `<ContentBox v-bind="args" >
@@ -29,15 +29,15 @@ const TitleTemplate = (args) => ({
   </ContentBox>`,
   components: { ContentBox },
   setup() {
-    return { args }
+    return { args };
   },
-})
+});
 
-export const Title = TitleTemplate.bind()
+export const Title = TitleTemplate.bind();
 
 Title.args = {
   title: 'Input title',
-}
+};
 
 const TitlePropTemplate = (args) => ({
   template: `<ContentBox v-bind="args" >
@@ -45,15 +45,15 @@ const TitlePropTemplate = (args) => ({
   </ContentBox>`,
   components: { ContentBox },
   setup() {
-    return { args }
+    return { args };
   },
-})
+});
 
-export const TitleProp = TitlePropTemplate.bind()
+export const TitleProp = TitlePropTemplate.bind();
 
 TitleProp.args = {
   title: 'Input title',
-}
+};
 
 const StripeTemplate = (args) => ({
   template: `<ContentBox v-bind="args" stripe stripe-class="bg-primary-500">
@@ -61,12 +61,12 @@ const StripeTemplate = (args) => ({
   </ContentBox>`,
   components: { ContentBox },
   setup() {
-    return { args }
+    return { args };
   },
-})
+});
 
-export const Stripe = StripeTemplate.bind()
+export const Stripe = StripeTemplate.bind();
 
 Stripe.args = {
   title: 'Input title',
-}
+};

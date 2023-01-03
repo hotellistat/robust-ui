@@ -66,7 +66,7 @@ export const serverSideOptions = {
   ],
   serverSide: true,
   id: 'id',
-}
+};
 
 export const options = {
   id: 'id',
@@ -118,7 +118,7 @@ export const options = {
       key: 'extsys',
     },
   ],
-}
+};
 
 export const data = [
   {
@@ -2634,4 +2634,4 @@ export const data = [
     creation_time: '2022-09-15T11:09:46.327',
     update_time: '2022-09-15T11:09:46.327',
   },
-]
+];

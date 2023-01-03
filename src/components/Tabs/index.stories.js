@@ -1,5 +1,5 @@
-import { ref } from 'vue'
-import Tabs from './index.vue'
+import { ref } from 'vue';
+import Tabs from './index.vue';
 
 export default {
   title: 'Ui/Tabs',
@@ -7,18 +7,18 @@ export default {
   argTypes: {
     rounded: { control: { type: 'boolean' } },
   },
-}
+};
 
 const DefaultTemplate = (args) => ({
   template: '<Tabs v-bind="args" v-model="value"></Tabs>',
   components: { Tabs },
   setup() {
-    const value = ref('item_1')
-    return { args, value }
+    const value = ref('item_1');
+    return { args, value };
   },
-})
+});
 
-export const Default = DefaultTemplate.bind()
+export const Default = DefaultTemplate.bind();
 
 Default.args = {
   tabs: [
@@ -35,7 +35,7 @@ Default.args = {
       value: 'item_3',
     },
   ],
-}
+};
 
 const SlotTemplate = (args) => ({
   template: `<Tabs v-bind="args" v-model="value">
@@ -51,12 +51,12 @@ const SlotTemplate = (args) => ({
   </Tabs>`,
   components: { Tabs },
   setup() {
-    const value = ref('item_1')
-    return { args, value }
+    const value = ref('item_1');
+    return { args, value };
   },
-})
+});
 
-export const Slotted = SlotTemplate.bind()
+export const Slotted = SlotTemplate.bind();
 
 Slotted.args = {
   tabs: [
@@ -73,4 +73,4 @@ Slotted.args = {
       value: 'item_3',
     },
   ],
-}
+};

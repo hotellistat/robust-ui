@@ -1,5 +1,5 @@
-import DaterangePicker from './index.vue'
-import { ref } from 'vue'
+import DaterangePicker from './index.vue';
+import { ref } from 'vue';
 
 export default {
   title: 'Ui/DaterangePicker',
@@ -12,28 +12,28 @@ export default {
     comparePerspectiveDate: { control: { type: 'date' } },
     outline: { control: { type: 'boolean' } },
   },
-}
+};
 
 const Template = (args) => ({
   template: '<DaterangePicker v-bind="args"></DaterangePicker>',
   components: { DaterangePicker },
   setup() {
-    return { args }
+    return { args };
   },
-})
+});
 
-const date = [new Date(), new Date()]
-const dateRange = ref(date)
-const compareDateRange = ref(date)
+const date = [new Date(), new Date()];
+const dateRange = ref(date);
+const compareDateRange = ref(date);
 
-export const Default = Template.bind({})
+export const Default = Template.bind({});
 Default.args = {
   dateRange: dateRange,
   'onUpdate:dateRange': (val) => {
-    dateRange.value = val
+    dateRange.value = val;
   },
   compareDateRange: compareDateRange,
   'onUpdate:compareDateRange': (val) => {
-    compareDateRange.value = val
+    compareDateRange.value = val;
   },
-}
+};

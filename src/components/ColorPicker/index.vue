@@ -47,13 +47,13 @@ import {
   watchEffect,
   nextTick,
   PropType,
-} from 'vue'
-import { setColorValue, rgb2hex } from './composable'
-import ColorPickerSaturation from './CoorPickerSaturation.vue'
-import ColorPickerHue from './ColorPickerHue.vue'
-import ColorPickerPreview from './ColorPickerPreview.vue'
-import ColorPickerBox from './ColorPickerBox.vue'
-import ColorPickerColors from './ColorPickerColors.vue'
+} from 'vue';
+import { setColorValue, rgb2hex } from './composable';
+import ColorPickerSaturation from './CoorPickerSaturation.vue';
+import ColorPickerHue from './ColorPickerHue.vue';
+import ColorPickerPreview from './ColorPickerPreview.vue';
+import ColorPickerBox from './ColorPickerBox.vue';
+import ColorPickerColors from './ColorPickerColors.vue';
 
 const props = defineProps({
   color: {
@@ -88,37 +88,37 @@ const props = defineProps({
     type: String,
     default: 'vue-colorpicker-history',
   },
-})
-const emit = defineEmits(['changeColor'])
+});
+const emit = defineEmits(['changeColor']);
 
-const hueWidth = ref(15)
-const hueHeight = ref(152)
-const previewHeight = ref(20)
-const modelRgba = ref('')
-const modelHex = ref('')
-const r = ref(0)
-const g = ref(0)
-const b = ref(0)
-const a = ref(1)
-const h = ref(0)
-const s = ref(0)
-const v = ref(0)
-const hue = ref()
-const saturation = ref()
+const hueWidth = ref(15);
+const hueHeight = ref(152);
+const previewHeight = ref(20);
+const modelRgba = ref('');
+const modelHex = ref('');
+const r = ref(0);
+const g = ref(0);
+const b = ref(0);
+const a = ref(1);
+const h = ref(0);
+const s = ref(0);
+const v = ref(0);
+const hue = ref();
+const saturation = ref();
 
-const { theme, color } = toRefs(props)
+const { theme, color } = toRefs(props);
 
 const isLightTheme = computed((): boolean => {
-  return theme.value === 'light'
-})
+  return theme.value === 'light';
+});
 
 const totalWidth = computed((): number => {
-  return hueHeight.value + (hueWidth.value + 8) * 2
-})
+  return hueHeight.value + (hueWidth.value + 8) * 2;
+});
 
 const previewWidth = computed((): number => {
-  return totalWidth.value - previewHeight.value
-})
+  return totalWidth.value - previewHeight.value;
+});
 
 const rgba = computed((): Record<string, unknown> => {
   return {
@@ -126,139 +126,139 @@ const rgba = computed((): Record<string, unknown> => {
     g: g.value,
     b: b.value,
     a: a.value,
-  }
-})
+  };
+});
 
 const hsv = computed((): Record<string, unknown> => {
   return {
     h: h.value,
     s: s.value,
     v: v.value,
-  }
-})
+  };
+});
 
 const rgbString = computed((): string => {
-  return `rgb(${r.value}, ${g.value}, ${b.value})`
-})
+  return `rgb(${r.value}, ${g.value}, ${b.value})`;
+});
 
 const rgbStringShort = computed((): string => {
-  return `${r.value}, ${g.value}, ${b.value}`
-})
+  return `${r.value}, ${g.value}, ${b.value}`;
+});
 
 const rgbaString = computed((): string => {
-  return `rgb(${rgbStringShort.value})`
-})
+  return `rgb(${rgbStringShort.value})`;
+});
 
 const hexString = computed((): string => {
-  return rgb2hex(rgba.value, true)
-})
+  return rgb2hex(rgba.value, true);
+});
 
 const setText = () => {
-  modelHex.value = hexString.value
-  modelRgba.value = rgbStringShort.value
-}
+  modelHex.value = hexString.value;
+  modelRgba.value = rgbStringShort.value;
+};
 
 onMounted(() => {
-  const rgbaValues = setColorValue(color.value)
-  r.value = rgbaValues.r
-  g.value = rgbaValues.g
-  b.value = rgbaValues.b
-  a.value = rgbaValues.a
-  h.value = rgbaValues.h
-  s.value = rgbaValues.s
-  v.value = rgbaValues.v
-  setText()
-})
+  const rgbaValues = setColorValue(color.value);
+  r.value = rgbaValues.r;
+  g.value = rgbaValues.g;
+  b.value = rgbaValues.b;
+  a.value = rgbaValues.a;
+  h.value = rgbaValues.h;
+  s.value = rgbaValues.s;
+  v.value = rgbaValues.v;
+  setText();
+});
 
 watchEffect(() => {
   emit('changeColor', {
     rgba: rgba.value,
     hsv: hsv.value,
     hex: modelHex.value,
-  })
-})
+  });
+});
 
 const selectSaturation = (color: any) => {
-  const rgbaValues = setColorValue(color)
-  r.value = rgbaValues.r
-  g.value = rgbaValues.g
-  b.value = rgbaValues.b
-  a.value = rgbaValues.a
-  h.value = rgbaValues.h
-  s.value = rgbaValues.s
-  v.value = rgbaValues.v
-  setText()
-}
+  const rgbaValues = setColorValue(color);
+  r.value = rgbaValues.r;
+  g.value = rgbaValues.g;
+  b.value = rgbaValues.b;
+  a.value = rgbaValues.a;
+  h.value = rgbaValues.h;
+  s.value = rgbaValues.s;
+  v.value = rgbaValues.v;
+  setText();
+};
 
 const selectHue = (color: any) => {
-  const rgbaValues = setColorValue(color)
-  r.value = rgbaValues.r
-  g.value = rgbaValues.g
-  b.value = rgbaValues.b
-  a.value = rgbaValues.a
-  h.value = rgbaValues.h
-  s.value = rgbaValues.s
-  v.value = rgbaValues.v
-  setText()
+  const rgbaValues = setColorValue(color);
+  r.value = rgbaValues.r;
+  g.value = rgbaValues.g;
+  b.value = rgbaValues.b;
+  a.value = rgbaValues.a;
+  h.value = rgbaValues.h;
+  s.value = rgbaValues.s;
+  v.value = rgbaValues.v;
+  setText();
   nextTick(() => {
-    saturation.value.renderColor(saturation.value.canvasSaturation)
+    saturation.value.renderColor(saturation.value.canvasSaturation);
 
-    saturation.value.renderSlide()
-  })
-}
+    saturation.value.renderSlide();
+  });
+};
 
 const inputHex = (color: string) => {
-  const rgbaValues = setColorValue(color)
-  r.value = rgbaValues.r
-  g.value = rgbaValues.g
-  b.value = rgbaValues.b
-  a.value = rgbaValues.a
-  h.value = rgbaValues.h
-  s.value = rgbaValues.s
-  v.value = rgbaValues.v
-  modelHex.value = color
-  modelRgba.value = rgbStringShort.value
+  const rgbaValues = setColorValue(color);
+  r.value = rgbaValues.r;
+  g.value = rgbaValues.g;
+  b.value = rgbaValues.b;
+  a.value = rgbaValues.a;
+  h.value = rgbaValues.h;
+  s.value = rgbaValues.s;
+  v.value = rgbaValues.v;
+  modelHex.value = color;
+  modelRgba.value = rgbStringShort.value;
   nextTick(() => {
-    saturation.value.renderColor(saturation.value.canvasSaturation)
-    saturation.value.renderSlide()
-    hue.value.renderSlide()
-  })
-}
+    saturation.value.renderColor(saturation.value.canvasSaturation);
+    saturation.value.renderSlide();
+    hue.value.renderSlide();
+  });
+};
 
 const inputRgba = (color: string) => {
-  const rgbaValues = setColorValue(color)
-  r.value = rgbaValues.r
-  g.value = rgbaValues.g
-  b.value = rgbaValues.b
-  a.value = rgbaValues.a
-  h.value = rgbaValues.h
-  s.value = rgbaValues.s
-  v.value = rgbaValues.v
-  modelHex.value = hexString.value
-  modelRgba.value = `${r.value}, ${g.value}, ${b.value}`
+  const rgbaValues = setColorValue(color);
+  r.value = rgbaValues.r;
+  g.value = rgbaValues.g;
+  b.value = rgbaValues.b;
+  a.value = rgbaValues.a;
+  h.value = rgbaValues.h;
+  s.value = rgbaValues.s;
+  v.value = rgbaValues.v;
+  modelHex.value = hexString.value;
+  modelRgba.value = `${r.value}, ${g.value}, ${b.value}`;
   nextTick(() => {
-    saturation.value.renderColor(saturation.value.canvasSaturation)
-    saturation.value.renderSlide()
-    hue.value.renderSlide()
-  })
-}
+    saturation.value.renderColor(saturation.value.canvasSaturation);
+    saturation.value.renderSlide();
+    hue.value.renderSlide();
+  });
+};
 
 const selectColor = (color: string) => {
-  const rgbaValues = setColorValue(color)
-  r.value = rgbaValues.r
-  g.value = rgbaValues.g
-  b.value = rgbaValues.b
-  a.value = rgbaValues.a
-  h.value = rgbaValues.h
-  s.value = rgbaValues.s
-  v.value = rgbaValues.v
-  setText()
+  const rgbaValues = setColorValue(color);
+  r.value = rgbaValues.r;
+  g.value = rgbaValues.g;
+  b.value = rgbaValues.b;
+  a.value = rgbaValues.a;
+  h.value = rgbaValues.h;
+  s.value = rgbaValues.s;
+  v.value = rgbaValues.v;
+  setText();
   nextTick(() => {
-    saturation.value.renderColor(saturation.value.canvasSaturation)
-    saturation.value.renderSlide()
-    hue.value.renderSlide()
-  })
-}
+    saturation.value.renderColor(saturation.value.canvasSaturation);
+    saturation.value.renderSlide();
+    hue.value.renderSlide();
+  });
+};
 </script>
 
 <style>

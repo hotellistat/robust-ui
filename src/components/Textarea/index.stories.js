@@ -1,4 +1,4 @@
-import Textarea from './index.vue'
+import Textarea from './index.vue';
 
 export default {
   title: 'Ui/Textarea',
@@ -12,35 +12,35 @@ export default {
     hint: { control: { type: 'text' } },
     error: { control: { type: 'text' } },
   },
-}
+};
 
 const DefaultTemplate = (args) => ({
   template: '<Textarea v-bind="args" class="mb-5"/>',
   components: { Textarea },
   setup() {
-    return { args }
+    return { args };
   },
-})
+});
 
-export const Default = DefaultTemplate.bind()
+export const Default = DefaultTemplate.bind();
 
 Default.args = {
   modelValue: 'Textarea text',
   title: 'Textarea title',
-}
+};
 
-export const Hint = DefaultTemplate.bind()
+export const Hint = DefaultTemplate.bind();
 
 Hint.args = {
   title: 'Textarea title',
   hint: 'This is an textarea hint. It is supposed to help the user understand the reason this textarea exists and what it does',
-}
+};
 
-export const ErrorHint = DefaultTemplate.bind()
+export const ErrorHint = DefaultTemplate.bind();
 
 ErrorHint.args = {
   title: 'Textarea title',
   hint: 'This is an textarea hint. It is supposed to help the user understand the reason this textarea exists and what it does',
   error:
     'This is an textarea error. It tells the user, that there is something wrong with the current textarea state',
-}
+};

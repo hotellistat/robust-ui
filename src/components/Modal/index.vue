@@ -41,9 +41,9 @@
 </template>
 
 <script lang="ts" setup>
-import { computed, onMounted, toRefs, watch } from 'vue'
-import { PhX } from '@dnlsndr/vue-phosphor-icons'
-import { useScrollLock } from '@vueuse/core'
+import { computed, onMounted, toRefs, watch } from 'vue';
+import { PhX } from '@dnlsndr/vue-phosphor-icons';
+import { useScrollLock } from '@vueuse/core';
 
 const props = defineProps({
   modalClass: {
@@ -66,110 +66,110 @@ const props = defineProps({
     type: Boolean,
     default: false,
   },
-})
+});
 
-const emit = defineEmits(['open', 'close', 'update:opened'])
+const emit = defineEmits(['open', 'close', 'update:opened']);
 
-const { opened } = toRefs(props)
-let scrollLocked
+const { opened } = toRefs(props);
+let scrollLocked;
 
 const animationName = computed(() => {
   if (props.slideOutLeft) {
-    return 'robust-ui-modal__slide-left'
+    return 'robust-ui-modal__slide-left';
   }
   if (props.slideOutRight) {
-    return 'robust-ui-modal__slide-right'
+    return 'robust-ui-modal__slide-right';
   }
 
-  return 'robust-ui-modal__fade'
-})
+  return 'robust-ui-modal__fade';
+});
 
 const modalBoxClass = computed(() => {
-  let classString = ''
+  let classString = '';
 
   if (props.slideOutLeft) {
-    classString += 'absolute left-0 top-0 bottom-0 h-full min-h-0 w-full'
+    classString += 'absolute left-0 top-0 bottom-0 h-full min-h-0 w-full';
   } else if (props.slideOutRight) {
-    classString += 'absolute right-0 top-0 bottom-0 h-full min-h-0 w-full'
+    classString += 'absolute right-0 top-0 bottom-0 h-full min-h-0 w-full';
   } else {
-    classString += 'mx-auto h-full min-h-0'
+    classString += 'mx-auto h-full min-h-0';
   }
 
   switch (props.size) {
     case '3xl': {
-      classString += ' max-w-7xl'
-      break
+      classString += ' max-w-7xl';
+      break;
     }
     case '2xl': {
-      classString += ' max-w-6xl'
-      break
+      classString += ' max-w-6xl';
+      break;
     }
     case 'xl': {
-      classString += ' max-w-5xl'
-      break
+      classString += ' max-w-5xl';
+      break;
     }
     case 'lg': {
-      classString += ' max-w-4xl'
-      break
+      classString += ' max-w-4xl';
+      break;
     }
     case 'sm': {
-      classString += ' max-w-md'
-      break
+      classString += ' max-w-md';
+      break;
     }
     default: {
-      classString += ' max-w-lg'
-      break
+      classString += ' max-w-lg';
+      break;
     }
   }
 
-  return classString
-})
+  return classString;
+});
 
 const isSlideOut = computed(() => {
-  return props.slideOutLeft || props.slideOutRight
-})
+  return props.slideOutLeft || props.slideOutRight;
+});
 
-watch(opened, stateChange)
+watch(opened, stateChange);
 
 function stateChange(value) {
   if (value) {
-    window.addEventListener('keydown', keyPress)
-    scrollLocked.value = true
+    window.addEventListener('keydown', keyPress);
+    scrollLocked.value = true;
   } else {
-    window.removeEventListener('keydown', keyPress)
-    scrollLocked.value = false
+    window.removeEventListener('keydown', keyPress);
+    scrollLocked.value = false;
   }
 }
 
 function keyPress(e: KeyboardEvent) {
   if (e.key === 'Escape' && opened.value === true) {
-    e.stopPropagation()
-    e.preventDefault()
-    close()
+    e.stopPropagation();
+    e.preventDefault();
+    close();
   }
 }
 
 onMounted(() => {
-  scrollLocked = useScrollLock(document.body)
-  stateChange(opened.value)
-})
+  scrollLocked = useScrollLock(document.body);
+  stateChange(opened.value);
+});
 
 async function open() {
-  opened.value = true
-  emit('update:opened', true)
-  emit('open')
+  opened.value = true;
+  emit('update:opened', true);
+  emit('open');
 }
 
 async function close() {
-  opened.value = false
-  emit('update:opened', false)
-  emit('close')
+  opened.value = false;
+  emit('update:opened', false);
+  emit('close');
 }
 
 defineExpose({
   open,
   close,
-})
+});
 </script>
 
 <style lang="postcss">

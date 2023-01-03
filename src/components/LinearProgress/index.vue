@@ -13,11 +13,11 @@
 <script lang="ts">
 export default {
   name: 'RobustLinearProgress',
-}
+};
 </script>
 
 <script lang="ts" setup>
-import { computed, toRefs } from 'vue'
+import { computed, toRefs } from 'vue';
 
 const props = defineProps({
   height: {
@@ -28,15 +28,15 @@ const props = defineProps({
     type: Number,
     default: 50,
   },
-})
+});
 
-const { height, progress } = toRefs(props)
+const { height, progress } = toRefs(props);
 
 const heightComputed = computed(() => {
-  return `height:${height.value}px`
-})
+  return `height:${height.value}px`;
+});
 
 const widthComputed = computed(() => {
-  return `width:clamp(${height.value}px, ${progress.value}%, 100%);`
-})
+  return `width:clamp(${height.value}px, ${progress.value}%, 100%);`;
+});
 </script>

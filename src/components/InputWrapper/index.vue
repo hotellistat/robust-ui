@@ -1,9 +1,9 @@
 <script lang="ts">
-let uid = 0
+let uid = 0;
 </script>
 
 <script lang="ts" setup>
-import { computed, PropType, ref, useAttrs } from 'vue'
+import { computed, PropType, ref, useAttrs } from 'vue';
 
 defineProps({
   title: {
@@ -42,22 +42,22 @@ defineProps({
     type: Boolean,
     default: false,
   },
-})
-const attrs = useAttrs()
+});
+const attrs = useAttrs();
 
-const cuid = (++uid).toString()
+const cuid = (++uid).toString();
 
 const listeners = computed(() => {
   return Object.fromEntries(
     Object.entries(attrs).filter((entry) => /^on[^a-z]/.test(entry[0]))
-  )
-})
+  );
+});
 
-const wrapperRef = ref()
+const wrapperRef = ref();
 
 defineExpose({
   wrapperRef,
-})
+});
 </script>
 
 <template>

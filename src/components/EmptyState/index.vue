@@ -38,5 +38,5 @@ defineProps({
     type: Object,
     default: undefined,
   },
-})
+});
 </script>

@@ -8,7 +8,7 @@
 </template>
 
 <script lang="ts" setup>
-import { computed } from 'vue'
+import { computed } from 'vue';
 
 const props = defineProps({
   name: {
@@ -19,18 +19,18 @@ const props = defineProps({
     type: String,
     default: '',
   },
-})
+});
 
-const emit = defineEmits(['inputColor'])
+const emit = defineEmits(['inputColor']);
 
 const modelColor = computed({
   get() {
-    return props.color || ''
+    return props.color || '';
   },
   set(val) {
-    emit('inputColor', val)
+    emit('inputColor', val);
   },
-})
+});
 </script>
 
 <style>

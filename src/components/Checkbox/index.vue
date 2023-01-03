@@ -34,8 +34,8 @@
 </template>
 
 <script lang="ts" setup>
-import { computed } from 'vue'
-import { PhCheck } from '@dnlsndr/vue-phosphor-icons'
+import { computed } from 'vue';
+import { PhCheck } from '@dnlsndr/vue-phosphor-icons';
 
 const props = defineProps({
   modelValue: {
@@ -58,36 +58,36 @@ const props = defineProps({
     type: Boolean,
     default: false,
   },
-})
-const emit = defineEmits(['update:modelValue', 'change'])
+});
+const emit = defineEmits(['update:modelValue', 'change']);
 
-const cuid = '_' + Math.random().toString(36).substr(2, 9)
+const cuid = '_' + Math.random().toString(36).substr(2, 9);
 
 const isChecked = computed<boolean>({
   get(): boolean {
     if (Array.isArray(props.modelValue)) {
-      return props.modelValue.includes(props.value)
+      return props.modelValue.includes(props.value);
     } else {
-      return props.modelValue === props.value
+      return props.modelValue === props.value;
     }
   },
   set(value) {
-    let newModelValue = props.modelValue
+    let newModelValue = props.modelValue;
     if (Array.isArray(newModelValue)) {
       if (value) {
-        newModelValue.push(props.value)
+        newModelValue.push(props.value);
       } else {
-        newModelValue.splice(newModelValue.indexOf(props.value), 1)
+        newModelValue.splice(newModelValue.indexOf(props.value), 1);
       }
     } else {
       if (value) {
-        newModelValue = props.value
+        newModelValue = props.value;
       } else {
-        newModelValue = props.disabledValue
+        newModelValue = props.disabledValue;
       }
     }
-    emit('update:modelValue', newModelValue)
-    emit('change', newModelValue)
+    emit('update:modelValue', newModelValue);
+    emit('change', newModelValue);
   },
-})
+});
 </script>

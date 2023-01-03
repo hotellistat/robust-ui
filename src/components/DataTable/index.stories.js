@@ -1,7 +1,7 @@
-import { ref } from 'vue'
-import DataTable from './index.vue'
+import { ref } from 'vue';
+import DataTable from './index.vue';
 
-import { data, options, serverSideOptions } from './__test__/mockData.ts'
+import { data, options, serverSideOptions } from './__test__/mockData.ts';
 
 export default {
   title: 'Ui/DataTable',
@@ -10,7 +10,7 @@ export default {
     options: { control: { type: 'array' } },
     data: { control: { type: 'object' } },
   },
-}
+};
 
 const DefaultTemplate = (args) => ({
   components: { DataTable },
@@ -18,9 +18,9 @@ const DefaultTemplate = (args) => ({
   <DataTable v-bind="args" header-class="bg-slate-200 dark:bg-slate-800/25 rounded-t-xl shadow-sm">
   </DataTable>`,
   setup() {
-    return { args }
+    return { args };
   },
-})
+});
 
 const LoadingTemplate = (args) => ({
   components: { DataTable },
@@ -31,11 +31,11 @@ const LoadingTemplate = (args) => ({
   </div>
   `,
   setup() {
-    const loading = ref(false)
+    const loading = ref(false);
     // setInterval(() => (loading.value = !loading.value), 2000)
-    return { args, loading }
+    return { args, loading };
   },
-})
+});
 
 const ServerSideTemplate = (args) => ({
   components: { DataTable },
@@ -55,46 +55,46 @@ const ServerSideTemplate = (args) => ({
   </DataTable>
   </div>`,
   setup() {
-    const ssData = ref([])
-    const options = ref(serverSideOptions)
-    options.value.resize = true
+    const ssData = ref([]);
+    const options = ref(serverSideOptions);
+    options.value.resize = true;
 
-    const loading = ref(true)
+    const loading = ref(true);
     setTimeout(() => {
-      ssData.value = data.slice(0, options.value.rowsLimit)
+      ssData.value = data.slice(0, options.value.rowsLimit);
       // ssData.value = data
-      loading.value = false
-    }, 500)
+      loading.value = false;
+    }, 500);
 
     const pageUpdated = (p) => {
-      console.log('page updated', p)
-      if (!p || p > options.value.maxPage) return
-      options.value.page = p
-      const pageOffset = p - 1
-      const currPage = pageOffset * options.value.rowsLimit
-      ssData.value = data.slice(currPage, currPage + options.value.rowsLimit)
-      console.log('page is updated', p)
-    }
+      console.log('page updated', p);
+      if (!p || p > options.value.maxPage) return;
+      options.value.page = p;
+      const pageOffset = p - 1;
+      const currPage = pageOffset * options.value.rowsLimit;
+      ssData.value = data.slice(currPage, currPage + options.value.rowsLimit);
+      console.log('page is updated', p);
+    };
     const rowsLimitUpdated = (r) => {
-      console.log('rows limit is updated: ', r)
-      options.value.maxPage = Math.ceil(data.length / r)
-      console.log('maxPage', options.value.maxPage)
+      console.log('rows limit is updated: ', r);
+      options.value.maxPage = Math.ceil(data.length / r);
+      console.log('maxPage', options.value.maxPage);
       if (options.value.maxPage < options.value.page)
-        options.value.page = options.value.maxPage
-      options.value.rowsLimit = r
-    }
+        options.value.page = options.value.maxPage;
+      options.value.rowsLimit = r;
+    };
     const sortUpdated = (s) => {
-      console.log('sort is updated', s)
-    }
+      console.log('sort is updated', s);
+    };
     const searchUpdated = (s) => {
-      console.log('search is updated', s)
-    }
+      console.log('search is updated', s);
+    };
     const selectedRowsUpdated = (sr) => {
-      console.log('selected rows are updated: ', sr)
-    }
+      console.log('selected rows are updated: ', sr);
+    };
     const resizeUpdated = (sizes) => {
-      console.log(sizes)
-    }
+      console.log(sizes);
+    };
 
     return {
       args,
@@ -107,26 +107,26 @@ const ServerSideTemplate = (args) => ({
       resizeUpdated,
       loading,
       selectedRowsUpdated,
-    }
+    };
   },
-})
+});
 
-export const Default = DefaultTemplate.bind({})
+export const Default = DefaultTemplate.bind({});
 Default.args = {
   data,
   options,
-}
+};
 
-export const Loading = LoadingTemplate.bind({})
+export const Loading = LoadingTemplate.bind({});
 Loading.args = {
   data,
   options: {
     ...options,
     resize: true,
   },
-}
+};
 
-export const ServerSide = ServerSideTemplate.bind({})
+export const ServerSide = ServerSideTemplate.bind({});
 ServerSide.args = {
   data,
-}
+};

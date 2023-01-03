@@ -20,7 +20,7 @@
 </template>
 
 <script lang="ts">
-import { defineComponent } from 'vue'
+import { defineComponent } from 'vue';
 
 export default defineComponent({
   name: 'RobustSeparator',
@@ -35,5 +35,5 @@ export default defineComponent({
       default: 'bg-gray-100 dark:bg-gray-700 ',
     },
   },
-})
+});
 </script>

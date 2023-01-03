@@ -87,13 +87,13 @@
 </template>
 
 <script lang="ts" setup>
-import { ref, watch, toRefs, onMounted } from 'vue'
+import { ref, watch, toRefs, onMounted } from 'vue';
 import {
   PhCaretLeft,
   PhCaretRight,
   PhCaretDown,
-} from '@dnlsndr/vue-phosphor-icons'
-import { onClickOutside } from '@vueuse/core'
+} from '@dnlsndr/vue-phosphor-icons';
+import { onClickOutside } from '@vueuse/core';
 
 const props = defineProps({
   pageSize: {
@@ -112,81 +112,81 @@ const props = defineProps({
     type: Boolean,
     default: true,
   },
-})
-const emit = defineEmits(['update:page', 'update:pageSize'])
+});
+const emit = defineEmits(['update:page', 'update:pageSize']);
 
-const { pageSize, totalCount, page } = toRefs(props)
-const pageCount = ref(0)
-const containerRef = ref(null)
-const isOpen = ref(false)
-const listPages = ref([])
+const { pageSize, totalCount, page } = toRefs(props);
+const pageCount = ref(0);
+const containerRef = ref(null);
+const isOpen = ref(false);
+const listPages = ref([]);
 
 const setPage = (value) => {
-  emit('update:page', value)
-}
+  emit('update:page', value);
+};
 
-watch([totalCount, pageSize, page], () => listPageShow())
+watch([totalCount, pageSize, page], () => listPageShow());
 const toggleDropdown = () => {
-  isOpen.value = !isOpen.value
-}
+  isOpen.value = !isOpen.value;
+};
 
 const selectItem = (value) => {
   if (value !== pageSize.value) {
-    isOpen.value = false
-    emit('update:pageSize', value)
+    isOpen.value = false;
+    emit('update:pageSize', value);
   }
-}
+};
 
 onClickOutside(containerRef, (e) => {
   if (isOpen.value && !containerRef.value.contains(e.target)) {
-    isOpen.value = false
+    isOpen.value = false;
   }
-})
+});
 
 const listPageShow = () => {
-  pageCount.value = Math.ceil(totalCount.value / pageSize.value)
-  const pages = []
+  pageCount.value = Math.ceil(totalCount.value / pageSize.value);
+  const pages = [];
   if (pageCount.value < 10) {
     for (let i = 1; i <= pageCount.value; i++) {
-      pages.push(i)
+      pages.push(i);
     }
-    listPages.value = pages
-    return listPages.value
+    listPages.value = pages;
+    return listPages.value;
   }
   // try to keep 3 more pages each side of current page
-  let start = page.value - 3 < 1 ? 1 : page.value - 3
-  let end = page.value + 3 > pageCount.value ? pageCount.value : page.value + 3
+  let start = page.value - 3 < 1 ? 1 : page.value - 3;
+  let end = page.value + 3 > pageCount.value ? pageCount.value : page.value + 3;
 
   // if start or end is not next to two side, remove a page
   // because this case we will have 2 ... each side
-  if (start === 1) end = 7 + start
-  if (end === pageCount.value) start = end - 7
+  if (start === 1) end = 7 + start;
+  if (end === pageCount.value) start = end - 7;
 
   if (end < pageCount.value - 1 && start > 2 && end - start === 6) {
-    end -= 1
+    end -= 1;
   }
   for (let i = start; i <= end; i++) {
     if (i > 0 && i < pageCount.value) {
-      pages.push(i)
+      pages.push(i);
     }
   }
   if (pages[0] !== 1) {
-    pages.unshift(1)
+    pages.unshift(1);
   }
   if (pages[pages.length - 1] !== pageCount.value) {
-    pages.push(pageCount.value)
+    pages.push(pageCount.value);
   }
-  listPages.value = pages
-  return listPages.value
-}
+  listPages.value = pages;
+  return listPages.value;
+};
 const showDot = (index: number) => {
-  if (listPages.value[index + 1] - listPages.value[index] > 1) return true
-  return false
-}
+  if (listPages.value[index + 1] - listPages.value[index] > 1) return true;
+  return false;
+};
 
 onMounted(() => {
-  listPageShow()
-})
+  listPageShow();
+});
 </script>
 
 <style lang="postcss" scoped>

@@ -18,7 +18,7 @@
 </template>
 
 <script lang="ts" setup>
-import { PropType } from 'vue'
+import { PropType } from 'vue';
 
 defineProps({
   colors: {
@@ -60,11 +60,11 @@ defineProps({
       '#F43F5E',
     ],
   },
-})
+});
 
-const emit = defineEmits(['change'])
+const emit = defineEmits(['change']);
 
 const selectedColor = (color: string) => {
-  emit('change', color)
-}
+  emit('change', color);
+};
 </script>

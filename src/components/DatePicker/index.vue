@@ -1,11 +1,11 @@
 <script lang="ts" setup>
-import RobustPopper from '../Popper'
-import RobustCalendar from '../Calendar/index.vue'
-import RobustInputWrapper from '../InputWrapper/index.vue'
-import { format } from 'date-fns'
-import { PhCaretDown, PhCalendar } from '@dnlsndr/vue-phosphor-icons'
-import { computed, ref, toRefs, PropType, readonly } from 'vue'
-import { onClickOutside } from '@vueuse/core'
+import RobustPopper from '../Popper';
+import RobustCalendar from '../Calendar/index.vue';
+import RobustInputWrapper from '../InputWrapper/index.vue';
+import { format } from 'date-fns';
+import { PhCaretDown, PhCalendar } from '@dnlsndr/vue-phosphor-icons';
+import { computed, ref, toRefs, PropType, readonly } from 'vue';
+import { onClickOutside } from '@vueuse/core';
 
 const props = defineProps({
   title: {
@@ -40,55 +40,55 @@ const props = defineProps({
     type: Boolean,
     default: false,
   },
-})
+});
 
-const emit = defineEmits(['blur', 'update:modelValue', 'change', 'blur'])
+const emit = defineEmits(['blur', 'update:modelValue', 'change', 'blur']);
 
-const { modelValue } = toRefs(props)
-const open = ref(false)
-const popperRef = ref()
-const inputWrapperRef = ref()
+const { modelValue } = toRefs(props);
+const open = ref(false);
+const popperRef = ref();
+const inputWrapperRef = ref();
 
 onClickOutside(popperRef, (event) => {
   if (open.value) {
     if (inputWrapperRef.value.wrapperRef.contains(event.target)) {
-      event.stopPropagation()
-      event.preventDefault()
+      event.stopPropagation();
+      event.preventDefault();
     }
-    closeDropdown()
-    emit('blur')
+    closeDropdown();
+    emit('blur');
   }
-})
+});
 
 const computedValue = computed<Date>({
   get() {
-    return modelValue?.value ? modelValue.value : new Date()
+    return modelValue?.value ? modelValue.value : new Date();
   },
   set(value) {
-    open.value = false
-    emit('update:modelValue', value)
-    emit('change', value)
-    emit('blur')
+    open.value = false;
+    emit('update:modelValue', value);
+    emit('change', value);
+    emit('blur');
   },
-})
+});
 
 const displayDate = computed(() => {
   if (!computedValue.value) {
-    return 'Select date'
+    return 'Select date';
   }
 
-  const realDate = computedValue.value
+  const realDate = computedValue.value;
   try {
-    return realDate ? format(realDate, 'P') : 'Unknown'
+    return realDate ? format(realDate, 'P') : 'Unknown';
   } catch (e) {
-    return undefined
+    return undefined;
   }
-})
+});
 
 function closeDropdown() {
   if (open.value === true) {
-    open.value = false
-    emit('blur')
+    open.value = false;
+    emit('blur');
   }
 }
 </script>

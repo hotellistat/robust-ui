@@ -1,4 +1,4 @@
-import ColorPicker from './index.vue'
+import ColorPicker from './index.vue';
 
 export default {
   title: 'Ui/ColorPicker',
@@ -6,14 +6,14 @@ export default {
   argTypes: {
     title: { control: { type: 'text', default: 'Title' } },
   },
-}
+};
 
 const DefaultTemplate = (args) => ({
   template: `<ColorPicker v-bind="args" />`,
   components: { ColorPicker },
   setup() {
-    return { args }
+    return { args };
   },
-})
+});
 
-export const Default = DefaultTemplate.bind()
+export const Default = DefaultTemplate.bind();

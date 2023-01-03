@@ -1,6 +1,6 @@
-import { createPopper, OptionsGeneric } from '@popperjs/core'
-import type { Instance, Options, Modifier } from '@popperjs/core'
-import gsap from 'gsap'
+import { createPopper, OptionsGeneric } from '@popperjs/core';
+import type { Instance, Options, Modifier } from '@popperjs/core';
+import gsap from 'gsap';
 
 import {
   defineComponent,
@@ -12,9 +12,9 @@ import {
   ref,
   toRefs,
   watch,
-} from 'vue'
+} from 'vue';
 
-import defaultModifiers from './defaultModifiers'
+import defaultModifiers from './defaultModifiers';
 
 export default defineComponent({
   name: 'RobustPopper',
@@ -51,50 +51,50 @@ export default defineComponent({
   emits: ['opened'],
 
   setup(props, { emit, slots }) {
-    const { open, appendTo } = toRefs(props)
-    const root = ref<HTMLElement>()
-    let popper: Instance | undefined
-    const render = ref(false)
+    const { open, appendTo } = toRefs(props);
+    const root = ref<HTMLElement>();
+    let popper: Instance | undefined;
+    const render = ref(false);
 
     const defaultPopperOptions: Options = {
       strategy: 'absolute',
       placement: 'bottom-start',
       modifiers: [...defaultModifiers, ...props.modifiers],
-    }
+    };
 
     function destroy() {
-      popper?.destroy()
-      render.value = false
+      popper?.destroy();
+      render.value = false;
     }
 
     async function init(appendElement: HTMLElement) {
       if (!appendElement) {
-        return
+        return;
       }
 
       const mergedOptions = Object.assign(
         {},
         defaultPopperOptions,
         props.options
-      )
+      );
 
       if (!root.value) {
-        return
+        return;
       }
 
-      popper = createPopper(appendElement, root.value, mergedOptions)
+      popper = createPopper(appendElement, root.value, mergedOptions);
 
-      await popper.update()
+      await popper.update();
     }
 
     onUnmounted(() => {
-      destroy()
-    })
+      destroy();
+    });
 
     async function mountPopper() {
-      await init(appendTo.value)
+      await init(appendTo.value);
       if (root.value) {
-        popper?.update()
+        popper?.update();
         gsap
           .fromTo(
             root.value,
@@ -108,8 +108,8 @@ export default defineComponent({
             }
           )
           .then(() => {
-            emit('opened')
-          })
+            emit('opened');
+          });
       }
     }
 
@@ -128,34 +128,34 @@ export default defineComponent({
             }
           )
           .then(() => {
-            destroy()
-          })
+            destroy();
+          });
       }
     }
 
     onMounted(() => {
       if (!slots.default) {
-        throw new Error('Popper does not have a child slot')
+        throw new Error('Popper does not have a child slot');
       }
       watch(open, (value) => {
-        render.value = true
+        render.value = true;
         // Only mount popper in the next dom update cycle after
         // popper content could be drawn, such that it can fetch the correct
         // partent dimenstions etc.
         nextTick(async () => {
           if (value) {
-            mountPopper()
+            mountPopper();
           } else {
-            destroyPopper()
+            destroyPopper();
           }
-        })
-      })
-    })
+        });
+      });
+    });
 
     return {
       root,
       render,
-    }
+    };
   },
   render() {
     if (this.render) {
@@ -167,9 +167,9 @@ export default defineComponent({
             'absolute bg-white border border-gray-200 dark:border-gray-700 dark:bg-gray-800 rounded-md shadow-2xl',
         },
         this.$slots.default ? this.$slots.default() : undefined
-      )
+      );
     } else {
-      return undefined
+      return undefined;
     }
   },
-})
+});

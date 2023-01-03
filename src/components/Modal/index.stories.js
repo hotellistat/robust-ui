@@ -1,6 +1,6 @@
-import { ref } from 'vue'
-import Modal from './index.vue'
-import { RobustButton } from '..'
+import { ref } from 'vue';
+import Modal from './index.vue';
+import { RobustButton } from '..';
 
 export default {
   title: 'Ui/Modal',
@@ -14,89 +14,89 @@ export default {
     hint: { control: { type: 'text' } },
     error: { control: { type: 'text' } },
   },
-}
+};
 
 const DefaultTemplate = (args) => ({
   template:
     ' <RobustButton @click="args.opened.value = true">modal open {{args.opened}}</RobustButton><Modal v-bind="args">test</Modal>',
   components: { Modal, RobustButton },
   setup() {
-    return { args }
+    return { args };
   },
-})
+});
 
-export const Default = DefaultTemplate.bind()
+export const Default = DefaultTemplate.bind();
 
-const opened = ref(true)
+const opened = ref(true);
 
 Default.args = {
   title: 'Modal title',
   opened: opened,
   'onUpdate:opened': (value) => {
-    console.log('opeone')
-    opened.value = value
+    console.log('opeone');
+    opened.value = value;
   },
-}
+};
 
 const SlideRightTemplate = (args) => ({
   template:
     ' <RobustButton @click="args.opened.value = true">modal open {{args.opened}}</RobustButton><Modal slide-out-right v-bind="args">test</Modal>',
   components: { Modal, RobustButton },
   setup() {
-    return { args }
+    return { args };
   },
-})
+});
 
-export const SlideRight = SlideRightTemplate.bind()
+export const SlideRight = SlideRightTemplate.bind();
 
 SlideRight.args = {
   title: 'Modal title',
   opened: opened,
   'onUpdate:opened': (value) => {
-    console.log('opeone')
-    opened.value = value
+    console.log('opeone');
+    opened.value = value;
   },
-}
+};
 
 const SlideLeftTemplate = (args) => ({
   template:
     ' <RobustButton @click="args.opened.value = true">modal open {{args.opened}}</RobustButton><Modal slide-out-left v-bind="args">test</Modal>',
   components: { Modal, RobustButton },
   setup() {
-    return { args }
+    return { args };
   },
-})
+});
 
-export const SlideLeft = SlideLeftTemplate.bind()
+export const SlideLeft = SlideLeftTemplate.bind();
 
 SlideLeft.args = {
   title: 'Modal title',
   opened: opened,
   'onUpdate:opened': (value) => {
-    console.log('opeone')
-    opened.value = value
+    console.log('opeone');
+    opened.value = value;
   },
-}
+};
 
 const LargeTemplate = (args) => ({
   template:
     ' <RobustButton @click="args.opened.value = true">modal open {{args.opened}}</RobustButton><Modal size="lg" v-bind="args">test</Modal>',
   components: { Modal, RobustButton },
   setup() {
-    return { args }
+    return { args };
   },
-})
+});
 
-export const Large = LargeTemplate.bind()
+export const Large = LargeTemplate.bind();
 
 Large.args = {
   title: 'Modal title',
   opened: opened,
   'onUpdate:opened': (value) => {
-    console.log('opeone')
-    opened.value = value
+    console.log('opeone');
+    opened.value = value;
   },
-}
+};
 
 const OverlayTemplate = (args) => ({
   template: `<RobustButton @click="args.opened.value = true">modal open {{args.opened}}</RobustButton>
@@ -108,20 +108,20 @@ const OverlayTemplate = (args) => ({
   </Modal>`,
   components: { Modal, RobustButton },
   setup() {
-    return { args }
+    return { args };
   },
-})
+});
 
-export const Overlay = OverlayTemplate.bind()
+export const Overlay = OverlayTemplate.bind();
 
-const overlayOpened = ref(false)
+const overlayOpened = ref(false);
 
 Overlay.args = {
   title: 'Modal title',
   opened: opened,
   overlayOpened,
   'onUpdate:opened': (value) => {
-    console.log('opeone')
-    opened.value = value
+    console.log('opeone');
+    opened.value = value;
   },
-}
+};

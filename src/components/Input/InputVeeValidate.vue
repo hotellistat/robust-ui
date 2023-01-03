@@ -18,8 +18,8 @@
 </template>
 
 <script lang="ts" setup>
-import RobustInput from './Input.vue'
-import { useField } from 'vee-validate'
+import RobustInput from './Input.vue';
+import { useField } from 'vee-validate';
 
 const props = defineProps({
   type: {
@@ -46,7 +46,7 @@ const props = defineProps({
     type: String,
     default: '',
   },
-})
+});
 
 const {
   value: inputValue,
@@ -55,5 +55,5 @@ const {
   handleChange,
 } = useField(props.name, undefined, {
   initialValue: props.value,
-})
+});
 </script>

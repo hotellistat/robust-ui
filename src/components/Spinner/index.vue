@@ -22,7 +22,7 @@
 </template>
 
 <script lang="ts" setup>
-import { computed } from 'vue'
+import { computed } from 'vue';
 
 const props = defineProps({
   size: {
@@ -37,15 +37,15 @@ const props = defineProps({
     type: Number,
     default: 1,
   },
-})
+});
 
 const minDashOffset = computed(() => {
-  return 0.666 * (props.size - 2 * props.safeMargin)
-})
+  return 0.666 * (props.size - 2 * props.safeMargin);
+});
 
 const maxDashOffset = computed(() => {
-  return 3.1415 * (props.size - 2 * props.safeMargin)
-})
+  return 3.1415 * (props.size - 2 * props.safeMargin);
+});
 </script>
 
 <style>

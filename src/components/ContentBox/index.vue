@@ -41,11 +41,11 @@
 <script lang="ts">
 export default {
   name: 'RobustContentBox',
-}
+};
 </script>
 
 <script lang="ts" setup>
-import RobustSeparator from '../Separator/index.vue'
+import RobustSeparator from '../Separator/index.vue';
 
 defineProps({
   title: {
@@ -64,5 +64,5 @@ defineProps({
     type: String,
     default: 'bg-primary-500',
   },
-})
+});
 </script>

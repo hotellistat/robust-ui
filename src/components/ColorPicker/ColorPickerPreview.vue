@@ -3,8 +3,8 @@
 </template>
 
 <script lang="ts" setup>
-import { onMounted, ref, toRefs, watchEffect } from 'vue'
-import { createAlphaSquare } from './composable'
+import { onMounted, ref, toRefs, watchEffect } from 'vue';
+import { createAlphaSquare } from './composable';
 
 const props = defineProps({
   color: {
@@ -19,34 +19,34 @@ const props = defineProps({
     type: Number,
     default: 30,
   },
-})
+});
 
-const alphaSize = ref(5)
-const { color, width, height } = toRefs(props)
-const canvas = ref()
+const alphaSize = ref(5);
+const { color, width, height } = toRefs(props);
+const canvas = ref();
 
 const renderColor = (canvasElement: any) => {
-  const canvasRender = canvasElement
-  const widthRender = width.value
-  const heightRender = height.value
-  const size = alphaSize.value
-  const canvasSquare = createAlphaSquare(size)
+  const canvasRender = canvasElement;
+  const widthRender = width.value;
+  const heightRender = height.value;
+  const size = alphaSize.value;
+  const canvasSquare = createAlphaSquare(size);
 
-  const ctx = canvasRender.getContext('2d')
-  canvasRender.width = widthRender
-  canvasRender.height = heightRender
+  const ctx = canvasRender.getContext('2d');
+  canvasRender.width = widthRender;
+  canvasRender.height = heightRender;
 
-  ctx.fillStyle = ctx.createPattern(canvasSquare, 'repeat')
-  ctx.fillRect(0, 0, widthRender, heightRender)
+  ctx.fillStyle = ctx.createPattern(canvasSquare, 'repeat');
+  ctx.fillRect(0, 0, widthRender, heightRender);
 
-  ctx.fillStyle = color.value
-  ctx.fillRect(0, 0, widthRender, heightRender)
-}
+  ctx.fillStyle = color.value;
+  ctx.fillRect(0, 0, widthRender, heightRender);
+};
 
 onMounted(() => {
   watchEffect(() => {
-    renderColor(canvas.value)
-  })
-  renderColor(canvas.value)
-})
+    renderColor(canvas.value);
+  });
+  renderColor(canvas.value);
+});
 </script>

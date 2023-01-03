@@ -26,8 +26,8 @@
 </template>
 
 <script lang="ts" setup>
-import { onUnmounted, PropType, ref } from 'vue'
-import { createAlphaSquare } from './composable'
+import { onUnmounted, PropType, ref } from 'vue';
+import { createAlphaSquare } from './composable';
 
 const props = defineProps({
   color: {
@@ -42,45 +42,45 @@ const props = defineProps({
     type: String,
     default: '',
   },
-})
+});
 
-const emit = defineEmits(['selectColor'])
+const emit = defineEmits(['selectColor']);
 
-const color = ref()
-const colorsHistory = ref<string[]>([])
-const imgAlphaBase64 = ref()
+const color = ref();
+const colorsHistory = ref<string[]>([]);
+const imgAlphaBase64 = ref();
 if (props.colorsHistoryKey && localStorage) {
   colorsHistory.value =
-    JSON.parse(localStorage.getItem(props.colorsHistoryKey)) || []
+    JSON.parse(localStorage.getItem(props.colorsHistoryKey)) || [];
 }
 
-imgAlphaBase64.value = createAlphaSquare(4).toDataURL()
+imgAlphaBase64.value = createAlphaSquare(4).toDataURL();
 
 onUnmounted(() => {
-  setColorsHistory(color.value)
-})
+  setColorsHistory(color.value);
+});
 
 const setColorsHistory = (color) => {
   if (!color) {
-    return
+    return;
   }
-  const colors = colorsHistory.value || []
-  const index = colors.indexOf(color)
+  const colors = colorsHistory.value || [];
+  const index = colors.indexOf(color);
   if (index >= 0) {
-    colors.splice(index, 1)
+    colors.splice(index, 1);
   }
   if (colors.length >= 8) {
-    colors.length = 7
+    colors.length = 7;
   }
-  colors.unshift(color)
-  colorsHistory.value = colors || []
+  colors.unshift(color);
+  colorsHistory.value = colors || [];
   if (localStorage && props.colorsHistoryKey) {
-    localStorage.setItem(props.colorsHistoryKey, JSON.stringify(colors))
+    localStorage.setItem(props.colorsHistoryKey, JSON.stringify(colors));
   }
-}
+};
 const selectColor = (color) => {
-  emit('selectColor', color)
-}
+  emit('selectColor', color);
+};
 </script>
 
 <style>
