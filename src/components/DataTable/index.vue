@@ -23,7 +23,7 @@
     <div class="rows-wrapper">
       <div
         ref="header"
-        class="datatable-grid-columns hidden select-none items-center gap-x-2 sm:grid"
+        class="datatable-grid-columns robust-datatable-header hidden select-none items-center gap-x-2 sm:grid"
         :class="headerClass"
       >
         <Checkbox v-model="checkAllModel" class="checkbox" />
@@ -60,10 +60,11 @@
         <div
           v-for="(entry, idx) in sortedData"
           :key="idx"
-          class="flex flex-col justify-between"
+          class="flex flex-col justify-between hover:bg-gray-100 hover:dark:bg-gray-800"
+          @click="onClickRow(entry)"
         >
           <div
-            class="datatable-grid-columns flex flex-col gap-y-2 gap-x-2 sm:grid sm:items-center"
+            class="datatable-grid-columns flex flex-col gap-x-2 gap-y-2 sm:grid sm:items-center"
           >
             <Checkbox v-model="checkboxSelected" :value="entry[options.id]" />
             <!-- Columns -->
@@ -154,6 +155,8 @@ export interface Column {
   size?: string;
   direction?: Direction;
   sortable?: boolean;
+  resizable?: boolean;
+  fixed?: boolean;
   sort?: (
     a: number | string | boolean,
     b: number | string | boolean,
@@ -174,6 +177,7 @@ type DataTableOptions = {
   resize: boolean;
   minColSize: number;
   ghostColumns?: boolean;
+  defaultColSize?: string;
 };
 
 const defaultOptions: Partial<DataTableOptions> = {
@@ -185,6 +189,7 @@ const defaultOptions: Partial<DataTableOptions> = {
   resize: true,
   minColSize: 100,
   ghostColumns: true,
+  defaultColSize: '150px',
 };
 
 const props = defineProps({
@@ -213,6 +218,7 @@ const emit = defineEmits([
   'update:search',
   'update:selectedRows',
   'update:resize',
+  'clickRow',
 ]);
 
 const { data, options, loading, headerClass } = toRefs(props);
@@ -375,44 +381,21 @@ const initSorting = () => {
 const sorting = ref<Column[]>(initSorting());
 
 const isPercentage = (str: string) => {
-  if (str) return str[str.length - 1] === '%';
-  return false;
+  if (str) return str.includes('%');
 };
 
-const parsePercentage = (str: string) => {
-  return Number(str.slice(0, str.length - 1));
+const isPx = (str: string) => {
+  if (str) return str.includes('px');
 };
 
 const initSizes = () => {
-  const colsSizeArray = options.value.columns.map((col) => col.size);
-  const percentages = colsSizeArray
-    .filter((d) => {
-      return d !== undefined && isPercentage(d);
-    })
-    .map((d) => parsePercentage(d));
-  // if all size values are percentage
-  // make sure that we always use 100% of width
-  if (percentages.length === colsSizeArray.length) {
-    const sum = percentages.reduce((acc, curr) => {
-      return acc + curr;
-    });
-
-    // 96.45% is available width without checkbox
-    // checkbox has fixed with of 2 rem
-    // TODO: find better solution, temp fix
-    const calc = 96.45 / sum;
-
-    const w = table.value?.width;
-    console.log(w);
-
-    percentages.forEach((p, i) => {
-      colsSizeArray[i] = p * calc + '%';
-      console.log(colsSizeArray);
-    });
-  }
+  const colsSizeArray = options.value.columns.map(
+    (c) =>
+      c.size ?? options.value.defaultColSize ?? defaultOptions.defaultColSize
+  );
 
   // checkbox
-  colsSizeArray.unshift('2rem');
+  colsSizeArray.unshift('24px');
   return colsSizeArray;
 };
 
@@ -628,21 +611,29 @@ watch(data, () => {
 /*
  Resets column sizes to px value.
 **/
+// TODO: Bring back gap-x-2 between columns
 const resetSizes = (resizable = false) => {
   const tableEl = table.value;
   const cols: HTMLElement[] = tableEl.querySelectorAll('.robust-table-column');
   const rowsWrapper = tableEl.querySelector('.rows-wrapper');
   const sizes: string[] = [];
   cols.forEach((col, idx) => {
-    if (resizable) {
+    if (resizable && options.value.columns[idx].fixed !== true) {
       const perc = (col.clientWidth / rowsWrapper.clientWidth) * 100;
       sizesController.value[idx + 1] = `minmax(0, ${perc}%)`;
       sizes.push(`${perc}%`);
     } else {
       sizesController.value[idx + 1] = `${col.clientWidth}px`;
+      sizes.push(`${col.clientWidth}px`);
     }
   });
   if (resizable) emit('update:resize', sizes);
+};
+
+const initColSize = (sizes: string[]) => {
+  sizes.forEach((sz, idx) => {
+    sizesController.value[idx + 1] = `minmax(0, ${sz})`;
+  });
 };
 
 /*
@@ -665,6 +656,10 @@ const createResizableColumn = function (
   // for calculating offset between current and new X postion
   const mouseDownHandler = function (e: MouseEvent) {
     resetSizes();
+    const currentCol = idx + 1;
+    sizesController.value[
+      currentCol + 1
+    ] = `minmax(${minColSize.value}px, 1fr)`;
     // Get the current mouse position
     x = e.clientX;
 
@@ -690,19 +685,23 @@ const createResizableColumn = function (
     const calculatedWidth = w + dx;
 
     const currentCol = idx + 1;
-
-    // we set next column size to 1fr such that
-    // it adapts to newly calculated width of previous column
-    sizesController.value[
-      currentCol + 1
-    ] = `minmax(${minColSize.value}px, 1fr)`;
-
     const size = Math.max(calculatedWidth, minColSize.value);
 
     // Update the width of column
     sizesController.value[
       currentCol
     ] = `minmax(${minColSize.value}px,${size}px)`;
+
+    // we set next column size to 1fr such that
+    // it adapts to newly calculated width of previous column
+    // const nextColWidth = Math.max(
+    //   parseInt(sizesController.value[currentCol + 1]) - dx,
+    //   minColSize.value
+    // );
+    // const normalized = isNaN(nextColWidth) ? minColSize.value : nextColWidth;
+    // sizesController.value[
+    //   currentCol + 1
+    // ] = `minmax(${minColSize.value}px, 1fr)`;
   };
 
   // When user releases the mouse, remove the existing event listeners
@@ -752,6 +751,7 @@ const createResizableTable = () => {
 
   cols.forEach((col, idx) => {
     if (idx < cols.length - 1) {
+      if (options.value.columns[idx].resizable === false) return;
       const resizer = document.createElement('div');
       const resizerHandle = document.createElement('div');
 
@@ -801,15 +801,71 @@ const isSelectedAll = () => {
   );
 };
 
+const onClickRow = (data: any) => {
+  emit('clickRow', data);
+};
+
 let resizeObserver: ResizeObserver;
 
 const onResize = () => {
   resizeLine();
 };
 
+const getSpace = () => {
+  // gap between columns 8px
+  const padding = 8;
+  let sizes = options.value.columns.map((c) => {
+    if (c.size && !isPercentage(c.size) && !isPx(c.size)) {
+      throw Error('Only "px" and "%" units are allowed for column size!');
+    }
+    const size =
+      c.size ?? options.value.defaultColSize ?? defaultOptions.defaultColSize;
+    const type = isPercentage(size) ? '%' : 'px';
+    return {
+      type,
+      value: parseInt(size),
+    };
+  });
+  const headerWidth = header.value.clientWidth;
+  const checkboxWidth =
+    header.value.querySelector('.checkbox').clientWidth + padding;
+  const availableSpace = headerWidth - checkboxWidth;
+  const fixedSpace = sizes
+    .filter((c) => c.type === 'px')
+    .reduce((acc, curr) => acc + curr.value, 0);
+  const percentages = sizes
+    .filter((c) => c.type === '%')
+    .reduce((acc, curr) => acc + curr.value, 0);
+  const scale = availableSpace / fixedSpace;
+  const percentageScale = 100 / percentages;
+  const responsiveSpace = Math.max(availableSpace - fixedSpace, 0);
+  const perc = (c: any) => {
+    const t = ((c.value * percentageScale) / 100) * responsiveSpace;
+    const t2 = (t / availableSpace) * 100;
+    return t2;
+  };
+  if (fixedSpace > availableSpace) {
+    sizes = sizes.map((c) => ({
+      ...c,
+      value: c.type === 'px' ? c.value * scale : c.value,
+    }));
+  }
+  sizes = sizes.map((c) => ({
+    ...c,
+    value: c.type === '%' ? perc(c) : c.value,
+  }));
+  return {
+    sizes,
+    available: availableSpace,
+    responsive_space: responsiveSpace,
+  };
+};
+
 onMounted(() => {
   createResizableTable();
-  resetSizes(true);
+  const space = getSpace();
+  const newSizeValues = space.sizes.map((s) => s.value + s.type);
+  initColSize(newSizeValues);
   resizeObserver = new ResizeObserver(onResize);
   resizeObserver.observe(table.value);
 });
