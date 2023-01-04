@@ -17,7 +17,7 @@
           class="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 transform transition-all duration-100"
         />
       </div>
-      <div v-if="title" class="w-full select-none truncate pt-px leading-4">
+      <div v-if="title" class="w-full select-none pt-px">
         {{ title }}
       </div>
       <slot v-if="$slots.title" name="title" />

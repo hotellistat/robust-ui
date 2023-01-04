@@ -25,7 +25,7 @@
         ></div>
       </div>
 
-      <div v-if="title" class="w-full select-none truncate pt-px leading-4">
+      <div v-if="title" class="w-full select-none pt-px">
         {{ title }}
       </div>
       <slot v-if="$slots.title" name="title" />
