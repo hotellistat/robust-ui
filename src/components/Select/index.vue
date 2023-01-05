@@ -40,7 +40,9 @@ const props = defineProps({
     default: () => undefined,
   },
   options: {
-    type: Array as PropType<Array<{ title: string; value: string | number }>>,
+    type: Array as PropType<
+      Array<{ title: string; value: string | number | boolean | undefined }>
+    >,
     required: true,
   },
   condensed: {
