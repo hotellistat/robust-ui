@@ -124,7 +124,7 @@ const tmpCompareDateRange = ref<[Date, Date]>();
 //   },
 // })
 
-const showComparisonPicker = ref(false);
+const showComparisonPicker = ref(props.compareDateRange ? true : false);
 
 const displayDate = computed(() => {
   if (!dateRange.value) {
@@ -206,6 +206,15 @@ watch(perspectiveOf, (val) => {
 
 watch(comparePerspectiveOf, (val) => {
   emit('update:comparePerspectiveDate', val);
+});
+
+watch(showComparisonPicker, (val) => {
+  if (!val) {
+    tmpCompareDateRange.value = undefined;
+    emit('update:compareDateRange', tmpCompareDateRange.value);
+  } else {
+    tmpCompareDateRange.value = [new Date(), new Date()];
+  }
 });
 
 defineExpose({
