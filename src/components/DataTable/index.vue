@@ -60,7 +60,7 @@
         <div
           v-for="(entry, idx) in sortedData"
           :key="idx"
-          class="flex flex-col justify-between hover:bg-gray-100 hover:dark:bg-gray-800"
+          class="flex flex-col justify-between hover:bg-gray-100 hover:dark:bg-gray-700"
           @click="onClickRow(entry)"
         >
           <div

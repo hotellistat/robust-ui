@@ -424,7 +424,7 @@ defineExpose({
 </script>
 
 <template>
-  <div class="relative flex w-max select-none">
+  <div class="relative flex w-max select-none flex-col sm:flex-row">
     <div
       v-if="Array.isArray(modelValue)"
       class="relative hidden min-h-0 w-48 border-r border-gray-200 dark:border-gray-700 lg:block"
@@ -617,7 +617,7 @@ defineExpose({
     </section>
     <div
       v-if="Array.isArray(modelValue)"
-      class="flex flex-shrink-0 flex-col items-start border-l border-gray-200 p-4 dark:border-gray-700"
+      class="flex flex-shrink-0 flex-col items-start border-gray-200 p-4 dark:border-gray-700 sm:border-l"
     >
       <label
         class="mb-1 block text-sm font-medium text-gray-500 dark:text-gray-400"
