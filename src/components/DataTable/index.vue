@@ -26,7 +26,12 @@
         class="datatable-grid-columns robust-datatable-header hidden select-none items-center gap-x-2 sm:grid"
         :class="headerClass"
       >
-        <Checkbox v-model="checkAllModel" class="checkbox" />
+        <div class="checkbox">
+          <Checkbox
+            v-if="options.selection !== false"
+            v-model="checkAllModel"
+          />
+        </div>
         <div
           v-for="column in options.columns"
           :key="column.key"
@@ -66,7 +71,13 @@
           <div
             class="datatable-grid-columns flex flex-col gap-x-2 gap-y-2 sm:grid sm:items-center"
           >
-            <Checkbox v-model="checkboxSelected" :value="entry[options.id]" />
+            <div>
+              <Checkbox
+                v-if="options.selection !== false"
+                v-model="checkboxSelected"
+                :value="entry[options.id]"
+              />
+            </div>
             <!-- Columns -->
             <div
               v-for="column in options.columns"
@@ -178,6 +189,7 @@ type DataTableOptions = {
   minColSize: number;
   ghostColumns?: boolean;
   defaultColSize?: string;
+  selection?: boolean;
 };
 
 const defaultOptions: Partial<DataTableOptions> = {
@@ -190,6 +202,7 @@ const defaultOptions: Partial<DataTableOptions> = {
   minColSize: 100,
   ghostColumns: true,
   defaultColSize: '150px',
+  selection: true,
 };
 
 const props = defineProps({
@@ -395,7 +408,8 @@ const initSizes = () => {
   );
 
   // checkbox
-  colsSizeArray.unshift('24px');
+  const size = options.value.selection === false ? '0px' : '24px';
+  colsSizeArray.unshift(size);
   return colsSizeArray;
 };
 
