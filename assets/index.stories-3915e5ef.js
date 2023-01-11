@@ -1,4 +1,4 @@
-import{_ as n}from"./index-a0a0db71.js";import"./vue.esm-bundler-bdd4c61f.js";import"./_plugin-vue_export-helper-c27b6911.js";const B={title:"Ui/ContentBox",component:n,argTypes:{title:{control:{type:"text"}}}},l=t=>({template:`<ContentBox v-bind="args" >
+import{_ as n}from"./index-3e98cfa5.js";import"./vue.esm-bundler-bdd4c61f.js";import"./_plugin-vue_export-helper-c27b6911.js";const B={title:"Ui/ContentBox",component:n,argTypes:{title:{control:{type:"text"}}}},l=t=>({template:`<ContentBox v-bind="args" >
       <div class="p-8">content</div>
   </ContentBox>`,components:{ContentBox:n},setup(){return{args:t}}}),s=l.bind(),m=t=>({template:`<ContentBox v-bind="args" >
   <template v-slot:title>
@@ -61,4 +61,4 @@ import{_ as n}from"./index-a0a0db71.js";import"./vue.esm-bundler-bdd4c61f.js";im
     };
   }
 })`,...(c=r.parameters)==null?void 0:c.storySource}};const C=["Default","Title","TitleProp","Stripe"];export{s as Default,r as Stripe,e as Title,o as TitleProp,C as __namedExportsOrder,B as default};
-//# sourceMappingURL=index.stories-68d7ab56.js.map
+//# sourceMappingURL=index.stories-3915e5ef.js.map
