@@ -1,5 +1,5 @@
 <template>
-  <section class="relative rounded-lg bg-white dark:bg-gray-800">
+  <section class="relative rounded-lg bg-white shadow-widget dark:bg-gray-800">
     <header
       v-if="description !== undefined || title !== undefined"
       class="relative overflow-hidden rounded-md p-4 sm:p-6"
