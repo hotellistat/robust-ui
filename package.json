@@ -77,7 +77,7 @@
     "vue-tsc": "1.0.19"
   },
   "dependencies": {
-    "@dnlsndr/vue-phosphor-icons": "^1.17.0",
+    "@dnlsndr/vue-phosphor-icons": "^3.1.2",
     "@hotellistat/robust-ui": "^1.25.2",
     "@popperjs/core": "^2.11.6",
     "@vueuse/core": "^9.3.0",
