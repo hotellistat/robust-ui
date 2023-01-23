@@ -9,7 +9,7 @@
       class="flex-1 bg-gray-100 dark:bg-gray-700"
       :class="[vert ? 'w-px self-stretch' : 'h-px w-full']"
     ></div>
-    <div class="flex-shrink-0 px-2 text-gray-300 dark:text-gray-500">
+    <div class="flex-shrink-0 px-2">
       <slot />
     </div>
     <div
