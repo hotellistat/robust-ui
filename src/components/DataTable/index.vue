@@ -66,7 +66,7 @@
           v-for="(entry, idx) in sortedData"
           :key="idx"
           class="flex flex-col justify-between hover:bg-gray-100 hover:dark:bg-gray-700"
-          @click="onClickRow(entry)"
+          @click="onClickRow(entry, idx)"
         >
           <div
             class="datatable-grid-columns flex flex-col gap-x-2 gap-y-2 sm:grid sm:items-center"
@@ -815,8 +815,8 @@ const isSelectedAll = () => {
   );
 };
 
-const onClickRow = (data: any) => {
-  emit('clickRow', data);
+const onClickRow = (data: any, idx: number) => {
+  emit('clickRow', data, idx);
 };
 
 let resizeObserver: ResizeObserver;
