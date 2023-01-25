@@ -92,6 +92,7 @@
                 v-if="$slots[column.key] && !loading"
                 :name="`${column.key}`"
                 :data="entry"
+                :idx="idx"
               />
               <!-- Column content -->
               <div
