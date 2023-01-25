@@ -621,6 +621,8 @@ watch(data, () => {
     }
     selectedRows.value = newSelectedRows;
   }
+  if (options.value.rowsLimit === undefined)
+    rowsLimitController.value = data.value.length;
 });
 
 /*
