@@ -303,10 +303,10 @@ const daySelect = (day) => {
             seconds: 59,
           }),
         ];
-        to.value = newModelValue[1].toLocaleDateString();
+        to.value = format(newModelValue[1], 'MM/dd/yyyy');
       }
     }
-    from.value = newModelValue[0].toLocaleDateString();
+    from.value = format(newModelValue[0], 'MM/dd/yyyy');
     emit('update:modelValue', newModelValue);
   } else {
     selectedDate.value = new Date(cursor.value);
@@ -321,11 +321,30 @@ const reset = () => {
 watch(modelValue, (val) => {
   const f = val[0] || undefined;
   const t = val[1] || undefined;
-  if (f) from.value = f.toLocaleDateString();
+  if (f) from.value = format(f, 'MM/dd/yyyy');
   else from.value = '';
-  if (t) to.value = t.toLocaleDateString();
+  if (t) to.value = format(t, 'MM/dd/yyyy');
   else to.value = '';
 });
+
+const fromChanged = (value: string) => {
+  const fromDate = value;
+  const toDate = to.value;
+  const regexp = /^(0?[1-9]|1[012])[\/\-](0?[1-9]|[12][0-9]|3[01])[\/\-]\d{4}$/;
+  if (regexp.test(fromDate) && regexp.test(toDate)) {
+    console.log('changed valid');
+    emit('update:modelValue', [new Date(fromDate), new Date(toDate)]);
+  }
+};
+
+const toChanged = (value: string) => {
+  const toDate = value;
+  const fromDate = from.value;
+  const regexp = /^(0?[1-9]|1[012])[\/\-](0?[1-9]|[12][0-9]|3[01])[\/\-]\d{4}$/;
+  if (regexp.test(fromDate) && regexp.test(toDate)) {
+    emit('update:modelValue', [new Date(fromDate), new Date(toDate)]);
+  }
+};
 
 onMounted(() => {
   if (Array.isArray(modelValue.value)) {
@@ -333,9 +352,9 @@ onMounted(() => {
     selectedDate.value = cursor.value;
     const f = modelValue.value[0] || undefined;
     const t = modelValue.value[1] || undefined;
-    if (f) from.value = f.toLocaleDateString();
+    if (f) from.value = format(f, 'MM/dd/yyyy');
     else from.value = '';
-    if (t) to.value = t.toLocaleDateString();
+    if (t) to.value = format(t, 'MM/dd/yyyy');
     else to.value = '';
   } else {
     cursor.value = new Date(modelValue.value || new Date());
@@ -628,6 +647,7 @@ defineExpose({
         placeholder="Date"
         :error="errorFrom"
         class="mb-2 w-full"
+        @change="fromChanged"
       />
 
       <label
@@ -639,6 +659,7 @@ defineExpose({
         placeholder="Date"
         :error="errorTo"
         class="mb-2 w-full"
+        @change="toChanged"
       />
       <slot />
     </div>
