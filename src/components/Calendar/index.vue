@@ -330,7 +330,7 @@ watch(modelValue, (val) => {
 const fromChanged = (value: string) => {
   const fromDate = value;
   const toDate = to.value;
-  const regexp = /^(0?[1-9]|1[012])[\/\-](0?[1-9]|[12][0-9]|3[01])[\/\-]\d{4}$/;
+  const regexp = /^(0?[1-9]|1[012])[/-](0?[1-9]|[12][0-9]|3[01])[/-]\d{4}$/;
   if (regexp.test(fromDate) && regexp.test(toDate)) {
     console.log('changed valid');
     emit('update:modelValue', [new Date(fromDate), new Date(toDate)]);
@@ -340,7 +340,7 @@ const fromChanged = (value: string) => {
 const toChanged = (value: string) => {
   const toDate = value;
   const fromDate = from.value;
-  const regexp = /^(0?[1-9]|1[012])[\/\-](0?[1-9]|[12][0-9]|3[01])[\/\-]\d{4}$/;
+  const regexp = /^(0?[1-9]|1[012])[/-](0?[1-9]|[12][0-9]|3[01])[/-]\d{4}$/;
   if (regexp.test(fromDate) && regexp.test(toDate)) {
     emit('update:modelValue', [new Date(fromDate), new Date(toDate)]);
   }
