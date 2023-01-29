@@ -8,7 +8,7 @@ import {
   RobustCheckbox,
   RobustDatePicker,
 } from '..';
-import { PhCaretDown, PhCalendar } from '@dnlsndr/vue-phosphor-icons';
+import { PhCaretDown, PhCalendar } from '@phosphor-icons/vue';
 import { format } from 'date-fns';
 import { computed, PropType, readonly, ref, toRefs, watch } from 'vue';
 

@@ -3,7 +3,7 @@ import RobustPopper from '../Popper';
 import RobustCalendar from '../Calendar/index.vue';
 import RobustInputWrapper from '../InputWrapper/index.vue';
 import { format } from 'date-fns';
-import { PhCaretDown, PhCalendar } from '@dnlsndr/vue-phosphor-icons';
+import { PhCaretDown, PhCalendar } from '@phosphor-icons/vue';
 import { computed, ref, toRefs, PropType, readonly } from 'vue';
 import { onClickOutside } from '@vueuse/core';
 

@@ -7,7 +7,7 @@ export default {
 <script lang="ts" setup>
 import { ref } from 'vue';
 import RobustPopper from '../Popper';
-import { PhDotsThreeVertical } from '@dnlsndr/vue-phosphor-icons';
+import { PhDotsThreeVertical } from '@phosphor-icons/vue';
 import { onClickOutside } from '@vueuse/core';
 
 defineProps({

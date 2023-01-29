@@ -42,7 +42,7 @@
 
 <script lang="ts" setup>
 import { computed, onMounted, toRefs, watch } from 'vue';
-import { PhX } from '@dnlsndr/vue-phosphor-icons';
+import { PhX } from '@phosphor-icons/vue';
 import { useScrollLock } from '@vueuse/core';
 
 const props = defineProps({

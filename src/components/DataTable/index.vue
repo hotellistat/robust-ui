@@ -150,7 +150,7 @@ import {
   PhCaretDoubleLeft,
   PhCaretRight,
   PhCaretDoubleRight,
-} from '@dnlsndr/vue-phosphor-icons';
+} from '@phosphor-icons/vue';
 import Select from '../Select/index.vue';
 import Checkbox from '../Checkbox/index.vue';
 import Input from '../Input/index.vue';

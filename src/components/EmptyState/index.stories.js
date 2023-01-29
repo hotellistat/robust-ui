@@ -1,5 +1,5 @@
 import EmptyState from './index.vue';
-import { PhWarning } from '@dnlsndr/vue-phosphor-icons';
+import { PhWarning } from '@phosphor-icons/vue';
 import RobustButton from '../Button/index.vue';
 import RobustImg from '../Img/index.ts';
 

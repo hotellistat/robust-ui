@@ -26,7 +26,7 @@ import {
   toRefs,
   watch,
 } from 'vue';
-import { PhCaretLeft, PhCaretRight } from '@dnlsndr/vue-phosphor-icons';
+import { PhCaretLeft, PhCaretRight } from '@phosphor-icons/vue';
 import defaultPresets, { Preset } from './presets';
 import variants from './variants';
 

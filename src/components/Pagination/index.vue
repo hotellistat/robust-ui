@@ -92,7 +92,7 @@ import {
   PhCaretLeft,
   PhCaretRight,
   PhCaretDown,
-} from '@dnlsndr/vue-phosphor-icons';
+} from '@phosphor-icons/vue';
 import { onClickOutside } from '@vueuse/core';
 
 const props = defineProps({

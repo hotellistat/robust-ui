@@ -27,7 +27,7 @@
 
 <script lang="ts" setup>
 import { computed } from 'vue';
-import { PhCheck } from '@dnlsndr/vue-phosphor-icons';
+import { PhCheck } from '@phosphor-icons/vue';
 
 const props = defineProps({
   modelValue: {

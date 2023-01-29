@@ -12,7 +12,7 @@ import { ref, computed, nextTick, toRefs, onMounted, PropType } from 'vue';
 import { debouncedWatch } from '@vueuse/core';
 import { Modifier } from '@popperjs/core';
 import { onClickOutside } from '@vueuse/core';
-import { PhCheck, PhCaretDown } from '@dnlsndr/vue-phosphor-icons';
+import { PhCheck, PhCaretDown } from '@phosphor-icons/vue';
 
 const props = defineProps({
   title: {

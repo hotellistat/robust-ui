@@ -1,5 +1,5 @@
 import Button from './index.vue';
-import { PhSmiley, PhPaperPlaneTilt } from '@dnlsndr/vue-phosphor-icons';
+import { PhSmiley, PhPaperPlaneTilt } from '@phosphor-icons/vue';
 export default {
   title: 'Ui/Button',
   component: Button,

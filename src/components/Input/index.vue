@@ -1,7 +1,7 @@
 <script lang="ts" setup>
 import RobustInputWrapper from '../InputWrapper/index.vue';
 import { computed, ref } from 'vue';
-import { PhWarningCircle } from '@dnlsndr/vue-phosphor-icons';
+import { PhWarningCircle } from '@phosphor-icons/vue';
 
 const props = defineProps({
   title: {

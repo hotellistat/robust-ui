@@ -27,7 +27,7 @@ export default defineConfig(async (config) => ({
         'vee-validate',
         'gsap',
         'fuse.js',
-        '@dnlsndr/vue-phosphor-icons',
+        '@phosphor-icons/vue',
       ],
     },
   },
