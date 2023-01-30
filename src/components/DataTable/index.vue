@@ -20,7 +20,7 @@
       >
     </RobustNotice>
     <slot name="header" />
-    <div class="rows-wrapper">
+    <div class="rows-wrapper flex flex-col overflow-hidden">
       <div
         ref="header"
         class="datatable-grid-columns robust-datatable-header hidden select-none items-center gap-x-2 sm:grid"
@@ -58,7 +58,7 @@
       <Separator class="hidden sm:block" />
 
       <div
-        class="datatable-grid-rows"
+        class="overflow-y-auto"
         :class="sortedData.length ? '' : 'datatable-grid-rows-empty'"
       >
         <!-- Rows -->
