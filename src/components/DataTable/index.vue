@@ -1,6 +1,6 @@
 <template>
   <div ref="table" class="flex w-full flex-col gap-y-2 sm:gap-y-2">
-    <div class="search-wrapper">
+    <div v-if="search" class="search-wrapper">
       <Input v-model="searchModel" placeholder="Search" />
       <!-- Display filters -->
       <div>
@@ -191,6 +191,7 @@ type DataTableOptions = {
   ghostColumns?: boolean;
   defaultColSize?: string;
   selection?: boolean;
+  search?: boolean;
 };
 
 const defaultOptions: Partial<DataTableOptions> = {
@@ -204,6 +205,7 @@ const defaultOptions: Partial<DataTableOptions> = {
   ghostColumns: true,
   defaultColSize: '150px',
   selection: true,
+  search: true,
 };
 
 const props = defineProps({
@@ -239,6 +241,11 @@ const { data, options, loading, headerClass } = toRefs(props);
 
 const table = ref();
 const header = ref();
+const search = ref(
+  options.value.search === undefined
+    ? defaultOptions.search
+    : options.value.search
+);
 
 const minColSize = computed(() => {
   return options.value.minColSize ?? defaultOptions.minColSize;
