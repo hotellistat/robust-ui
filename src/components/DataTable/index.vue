@@ -112,9 +112,11 @@
         </div>
       </div>
     </div>
-    <div v-if="$slots.footer">
-      <slot name="footer" :data="{ className: 'datatable-grid-columns' }" />
-    </div>
+    <slot
+      name="footer"
+      v-if="$slots.footer"
+      :data="{ className: 'datatable-grid-columns' }"
+    />
     <div v-if="isFooterVisible" class="flex items-center justify-between py-2">
       <div v-if="page !== undefined" class="flex items-center gap-x-2">
         <div class="flex gap-x-2">
