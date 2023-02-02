@@ -71,7 +71,7 @@ defineExpose({
     <div
       v-bind="listeners"
       ref="wrapperRef"
-      class="relative flex rounded-md border border-gray-200 bg-gray-50 ring-primary-500 ring-opacity-30 focus-within:border-primary-500 focus-within:outline-none focus-within:ring dark:border-gray-600 dark:bg-gray-800 focus-within:dark:border-primary-500"
+      class="relative flex rounded-md border border-gray-200 ring-primary-500 ring-opacity-30 focus-within:border-primary-500 focus-within:outline-none focus-within:ring dark:border-gray-600 focus-within:dark:border-primary-500"
       :class="[
         $props.boxClass,
         fixedHeight ? (condensed ? 'h-8' : 'h-10') : undefined,
