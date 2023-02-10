@@ -1,6 +1,13 @@
 <template>
   <Teleport to="body">
-    <Transition v-bind="$attrs" :name="animationName">
+    <Transition
+      v-bind="$attrs"
+      :name="animationName"
+      @after-leave="emit('close')"
+      @leave-cancelled="emit('close')"
+      @after-enter="emit('open')"
+      @enter-cancelled="emit('open')"
+    >
       <div
         v-if="opened"
         ref="root"
@@ -157,13 +164,11 @@ onMounted(() => {
 async function open() {
   opened.value = true;
   emit('update:opened', true);
-  emit('open');
 }
 
 async function close() {
   opened.value = false;
   emit('update:opened', false);
-  emit('close');
 }
 
 defineExpose({
@@ -174,36 +179,37 @@ defineExpose({
 
 <style lang="postcss">
 .robust-ui-modal__backdrop {
-  backdrop-filter: blur(2px);
+  backdrop-filter: blur(4px);
 }
 
 .robust-ui-modal__fade-enter-active {
-  transition: all 200ms ease-in-out;
+  transition: all 100ms ease-in-out;
 
   .robust-ui-modal__backdrop {
     transition: all 100ms ease-in-out;
   }
 
   .robust-ui-modal__box {
-    transition: all 200ms ease-in-out;
+    transition: all 100ms ease-in-out;
   }
 }
 
 .robust-ui-modal__fade-leave-active {
-  transition: all 50ms ease-in-out;
+  transition: all 100ms ease-in-out;
 
   .robust-ui-modal__backdrop {
-    transition: all 50ms ease-in-out;
+    transition: all 100ms ease-in-out;
   }
 
   .robust-ui-modal__box {
-    transition: all 50ms ease-in-out;
+    transition: all 100ms ease-in-out;
   }
 }
 
 .robust-ui-modal__fade-enter-from {
   .robust-ui-modal__backdrop {
     opacity: 0;
+    backdrop-filter: blur(0px);
   }
 
   .robust-ui-modal__box {
@@ -214,6 +220,7 @@ defineExpose({
 .robust-ui-modal__fade-leave-to {
   .robust-ui-modal__backdrop {
     opacity: 0;
+    backdrop-filter: blur(0px);
   }
 
   .robust-ui-modal__box {
@@ -250,6 +257,7 @@ defineExpose({
 .robust-ui-modal__slide-right-enter-from {
   .robust-ui-modal__backdrop {
     opacity: 0;
+    backdrop-filter: blur(0px);
   }
 
   .robust-ui-modal__box {
@@ -261,6 +269,7 @@ defineExpose({
 .robust-ui-modal__slide-right-leave-to {
   .robust-ui-modal__backdrop {
     opacity: 0;
+    backdrop-filter: blur(0px);
   }
 
   .robust-ui-modal__box {
@@ -272,6 +281,7 @@ defineExpose({
 .robust-ui-modal__slide-left-enter-from {
   .robust-ui-modal__backdrop {
     opacity: 0;
+    backdrop-filter: blur(0px);
   }
 
   .robust-ui-modal__box {
@@ -283,6 +293,7 @@ defineExpose({
 .robust-ui-modal__slide-left-leave-to {
   .robust-ui-modal__backdrop {
     opacity: 0;
+    backdrop-filter: blur(0px);
   }
 
   .robust-ui-modal__box {

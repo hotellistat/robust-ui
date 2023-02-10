@@ -80,7 +80,7 @@ SlideLeft.args = {
 
 const LargeTemplate = (args) => ({
   template:
-    ' <RobustButton @click="args.opened.value = true">modal open {{args.opened}}</RobustButton><Modal size="lg" v-bind="args">test</Modal>',
+    ' <RobustButton @click="args.opened.value = true">modal open {{args.opened}}</RobustButton><Modal opened="open1" v-bind="args">test</Modal>',
   components: { Modal, RobustButton },
   setup() {
     return { args };
@@ -90,6 +90,31 @@ const LargeTemplate = (args) => ({
 export const Large = LargeTemplate.bind();
 
 Large.args = {
+  title: 'Modal title',
+  opened: opened,
+  'onUpdate:opened': (value) => {
+    console.log('opeone');
+    opened.value = value;
+  },
+};
+
+const SequentialTemplate = (args) => ({
+  template: `<RobustButton @click="open1 = true">modal open {{args.opened}}</RobustButton>
+    <Modal v-model:opened="open1" @close="open2 = true">test 1</Modal>
+    <Modal v-model:opened="open2" @close="open1 = true">test 2</Modal>
+    `,
+  components: { Modal, RobustButton },
+  setup() {
+    const open1 = ref(false);
+    const open2 = ref(false);
+
+    return { args, open1, open2 };
+  },
+});
+
+export const Sequential = SequentialTemplate.bind();
+
+Sequential.args = {
   title: 'Modal title',
   opened: opened,
   'onUpdate:opened': (value) => {

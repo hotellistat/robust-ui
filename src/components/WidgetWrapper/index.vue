@@ -10,28 +10,26 @@ defineProps({
   },
 });
 
-const emit = defineEmits(['blur']);
+const emit = defineEmits(['optionsOpened', 'optionsClosed']);
 
 const open = ref(false);
-
-const closeDropdown = () => {
-  if (open.value === true) {
-    open.value = false;
-    emit('blur');
-  }
-};
 </script>
 
 <template>
-  <RobustModal v-model:opened="open" slide-out-right @close="closeDropdown">
+  <RobustModal
+    v-model:opened="open"
+    slide-out-right
+    @close="emit('optionsClosed')"
+    @open="emit('optionsOpened')"
+  >
     <template #title>
       <slot v-if="$slots.title" name="title" />
     </template>
     <slot
       name="options"
-      :close="
-        () => {
-          open = false;
+      :set="
+        (value: boolean) => {
+          open = value;
         }
       "
     />
