@@ -131,7 +131,8 @@ module.exports = {
         },
       },
       boxShadow: {
-        widget: 'rgba(0, 0, 0, 0.1) 0px 4px 12px',
+        widget: 'rgba(0, 0, 0, 0.05) 0px 4px 8px',
+        glow: 'var(--tw-shadow) 0px 0px 8px',
       },
       fontFamily: {
         courier: ['Courier Prime', 'monospace'],

@@ -28,7 +28,7 @@ export default {
 
 const DefaultTemplate = (args) => ({
   components: { Button },
-  template: '<Button v-bind="args" variant="dark">Click here</Button>',
+  template: '<Button v-bind="args" variant="danger">Click here</Button>',
   setup() {
     return { args };
   },
