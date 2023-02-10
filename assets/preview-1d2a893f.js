@@ -12,4 +12,4 @@ In order to be iterable, non-array objects must have a [Symbol.iterator]() metho
       },
     });
   `])))),db=function(e,t){t&&$i(e,t)};sb({name:"withActions",parameterName:gi,skipIfNoParametersOrOptions:!0,wrapper:function(e,t,a){var n=a.parameters,o=a.options;return db(hn,o),n&&n.handles&&$i.apply(void 0,[hn].concat(eb(n.handles))),e(t)}});module&&module.hot&&module.hot.decline&&module.hot.decline();const bb=__STORYBOOK_MODULE_ADDONS__.makeDecorator,gb=bb({name:"withEvents",wrapper:(r,e,{parameters:t})=>{const n=Object.values(e.argTypes).reduce((o,v)=>(v.table&&v.table.category==="events"&&o.push(v.name),o),[]).reduce((o,v)=>(o[v]=ti(v),o),{});return r({...e,events:n})}}),Eb=[gb],Ib={actions:{argTypesRegex:"^on[A-Z].*"},layout:"centered",backgrounds:{disable:!0},themes:{clearable:!1,default:"Light",list:[{name:"Light",class:["light-mode"]},{name:"Dark",class:["dark","dark-mode"]}]}};export{Eb as decorators,Ib as parameters};
-//# sourceMappingURL=preview-c76fde13.js.map
+//# sourceMappingURL=preview-1d2a893f.js.map
