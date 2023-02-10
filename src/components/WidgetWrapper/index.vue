@@ -27,7 +27,14 @@ const closeDropdown = () => {
     <template #title>
       <slot v-if="$slots.title" name="title" />
     </template>
-    <slot name="options" />
+    <slot
+      name="options"
+      :close="
+        () => {
+          open = false;
+        }
+      "
+    />
   </RobustModal>
   <div
     v-bind="$attrs"
