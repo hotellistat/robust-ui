@@ -17,8 +17,9 @@ export default {
 };
 
 const DefaultTemplate = (args) => ({
-  template:
-    ' <RobustButton @click="args.opened.value = true">modal open {{args.opened}}</RobustButton><Modal v-bind="args">test</Modal>',
+  template: `<RobustButton @click="args.opened.value = true">modal open {{args.opened}}</RobustButton><Modal v-bind="args">
+      <div class="w-32 h-32 bg-gray-300"></div>
+    </Modal>`,
   components: { Modal, RobustButton },
   setup() {
     return { args };

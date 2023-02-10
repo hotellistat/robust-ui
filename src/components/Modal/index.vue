@@ -15,7 +15,7 @@
         role="dialog"
       >
         <div
-          class="robust-ui-modal__backdrop absolute top-0 left-0 right-0 bottom-0 bg-gray-900 bg-opacity-50"
+          class="robust-ui-modal__backdrop absolute top-0 left-0 right-0 bottom-0 bg-black bg-opacity-60"
           @click.self="close"
         ></div>
 
@@ -25,8 +25,8 @@
           @keydown.esc="close"
         >
           <div
-            class="relative flex max-h-full min-h-0 w-full flex-col bg-white shadow-xl dark:bg-gray-800"
-            :class="[modalClass, !isSlideOut ? 'rounded-md' : 'h-full']"
+            class="relative flex max-h-full min-h-0 w-full flex-col overflow-hidden bg-white shadow-xl dark:bg-gray-800"
+            :class="[modalClass, !isSlideOut ? 'rounded-xl' : 'h-full']"
           >
             <div
               v-if="$slots.title"
@@ -179,30 +179,30 @@ defineExpose({
 
 <style lang="postcss">
 .robust-ui-modal__backdrop {
-  backdrop-filter: blur(4px);
+  backdrop-filter: blur(1px);
 }
 
 .robust-ui-modal__fade-enter-active {
-  transition: all 100ms ease-in-out;
+  transition: all 200ms ease-in-out;
 
   .robust-ui-modal__backdrop {
-    transition: all 100ms ease-in-out;
+    transition: all 200ms ease-in-out;
   }
 
   .robust-ui-modal__box {
-    transition: all 100ms ease-in-out;
+    transition: all 50ms ease-in-out;
   }
 }
 
 .robust-ui-modal__fade-leave-active {
-  transition: all 100ms ease-in-out;
+  transition: all 50ms ease-in-out;
 
   .robust-ui-modal__backdrop {
-    transition: all 100ms ease-in-out;
+    transition: all 50ms ease-in-out;
   }
 
   .robust-ui-modal__box {
-    transition: all 100ms ease-in-out;
+    transition: all 50ms ease-in-out;
   }
 }
 
