@@ -11,7 +11,7 @@ export default {
 };
 
 const DefaultTemplate = (args) => ({
-  template: `<WidgetWrapper v-bind="args">
+  template: `<WidgetWrapper v-bind="args" class="test">
     <template #title>Widget wrapper</template>
     Test content
     <template #options>

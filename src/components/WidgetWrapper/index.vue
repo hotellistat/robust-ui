@@ -1,14 +1,7 @@
-<script lang="ts">
-export default {
-  name: 'RobustWidgetWrapper',
-};
-</script>
-
 <script lang="ts" setup>
 import { ref } from 'vue';
-import RobustPopper from '../Popper';
 import { PhDotsThreeVertical } from '@phosphor-icons/vue';
-import { onClickOutside } from '@vueuse/core';
+import { RobustModal } from '..';
 
 defineProps({
   draggable: {
@@ -20,19 +13,6 @@ defineProps({
 const emit = defineEmits(['blur']);
 
 const open = ref(false);
-const contextButtonRef = ref();
-const popperRef = ref();
-
-onClickOutside(popperRef, (event) => {
-  if (open.value) {
-    if (contextButtonRef.value.contains(event.target)) {
-      event.stopPropagation();
-      event.preventDefault();
-    }
-    closeDropdown();
-    emit('blur');
-  }
-});
 
 const closeDropdown = () => {
   if (open.value === true) {
@@ -43,6 +23,12 @@ const closeDropdown = () => {
 </script>
 
 <template>
+  <RobustModal v-model:opened="open" slide-out-right @close="closeDropdown">
+    <template #title>
+      <slot v-if="$slots.title" name="title" />
+    </template>
+    <slot name="options" />
+  </RobustModal>
   <div
     v-bind="$attrs"
     class="group relative flex flex-col rounded-md bg-white dark:bg-gray-800"
@@ -57,24 +43,12 @@ const closeDropdown = () => {
       <slot v-if="$slots.title" name="title" />
       <div
         v-if="$slots.options"
-        ref="contextButtonRef"
         class="-m-1 cursor-default rounded-full border-none p-1 opacity-0 transition-all duration-150 hover:bg-gray-100 group-hover:opacity-100 dark:hover:bg-gray-700"
         @click="open = !open"
       >
         <PhDotsThreeVertical size="20" weight="bold" />
       </div>
     </div>
-    <RobustPopper
-      ref="popperRef"
-      v-model:open="open"
-      class="z-[100]"
-      :append-to="contextButtonRef"
-      :options="{
-        placement: 'bottom-end',
-      }"
-    >
-      <slot name="options" />
-    </RobustPopper>
     <section
       v-if="$slots.default"
       class="h-full w-full px-4 pb-4 pt-2"
