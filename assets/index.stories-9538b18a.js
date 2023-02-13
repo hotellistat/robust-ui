@@ -1,4 +1,4 @@
-import{_ as s}from"./index-94313148.js";import"./vue.esm-bundler-88d2a0e4.js";const _={title:"Ui/ContentBox",component:s,argTypes:{title:{control:{type:"text"}}}},C=t=>({template:`<ContentBox v-bind="args" >
+import{_ as s}from"./index-d2b117ab.js";import"./vue.esm-bundler-88d2a0e4.js";const _={title:"Ui/ContentBox",component:s,argTypes:{title:{control:{type:"text"}}}},C=t=>({template:`<ContentBox v-bind="args" >
       <div class="p-8">content</div>
   </ContentBox>`,components:{ContentBox:s},setup(){return{args:t}}}),r=C.bind(),b=t=>({template:`<ContentBox v-bind="args" >
   <template v-slot:title>
@@ -61,4 +61,4 @@ import{_ as s}from"./index-94313148.js";import"./vue.esm-bundler-88d2a0e4.js";co
     };
   }
 })`,...(B=(v=o.parameters)==null?void 0:v.docs)==null?void 0:B.source}}};const D=["Default","Title","TitleProp","Stripe"];export{r as Default,o as Stripe,e as Title,n as TitleProp,D as __namedExportsOrder,_ as default};
-//# sourceMappingURL=index.stories-5249d448.js.map
+//# sourceMappingURL=index.stories-9538b18a.js.map
