@@ -15,7 +15,6 @@ export default defineConfig(async (config) => ({
     lib: {
       entry: resolve(__dirname, 'src/index.ts'),
       name: 'robust-ui',
-      formats: ['es'],
     },
     rollupOptions: {
       // make sure to externalize deps that shouldn't be bundled
@@ -28,6 +27,14 @@ export default defineConfig(async (config) => ({
         'gsap',
         'fuse.js',
         '@phosphor-icons/vue',
+      ],
+      output: [
+        {
+          preserveModules: true,
+          format: 'esm',
+          entryFileNames: `[name].mjs`,
+          dir: 'dist',
+        },
       ],
     },
   },

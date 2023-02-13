@@ -9,13 +9,13 @@
   "files": [
     "dist"
   ],
-  "main": "dist/robust-ui.umd.js",
-  "browser": "dist/robust-ui.mjs",
-  "module": "dist/robust-ui.mjs",
-  "types": "dist/index.d.ts",
+  "main": "dist/src/index.mjs",
+  "browser": "dist/src/index.mjs",
+  "module": "dist/src/index.mjs",
+  "types": "dist/src/index.d.ts",
   "exports": {
     ".": {
-      "import": "./dist/robust-ui.mjs"
+      "import": "./dist/src/index.mjs"
     }
   },
   "scripts": {

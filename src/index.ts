@@ -1,5 +1,3 @@
-export { lockScroll, unlockScroll } from './utils/scrollLock';
-
 import * as components from './components';
 
 export function install(app) {
