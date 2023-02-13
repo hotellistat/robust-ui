@@ -24,7 +24,7 @@ const DefaultTemplate = (args) => ({
   <template #header>
     <div class="p-4">header</div>
   </template>
-   <div class="w-32 h-[50vh] bg-gray-300"></div>
+   <div class="w-32 h-[1000px] bg-gray-300"></div>
   <template #footer>
    <div class="p-4">footer</div>
   </template>

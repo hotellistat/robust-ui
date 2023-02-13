@@ -1,7 +1,12 @@
 <template>
   <section class="relative rounded-lg bg-white shadow-widget dark:bg-gray-800">
     <header
-      v-if="description !== undefined || title !== undefined"
+      v-if="
+        description !== undefined ||
+        $slots.description !== undefined ||
+        title !== undefined ||
+        $slots.title !== undefined
+      "
       class="relative overflow-hidden rounded-md p-4 sm:p-6"
     >
       <div
