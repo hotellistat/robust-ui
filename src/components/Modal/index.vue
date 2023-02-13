@@ -39,13 +39,13 @@
                 <PhX size="20" class="block" />
               </div>
             </div>
-            <div v-if="$slots.header" class="flex flex-shrink-0">
+            <div v-if="$slots.header" class="w-full flex-shrink-0">
               <slot name="header"></slot>
             </div>
             <section class="overflow-[overlay] flex-1 overflow-y-auto">
               <slot></slot>
             </section>
-            <div v-if="$slots.footer" class="flex flex-shrink-0">
+            <div v-if="$slots.footer" class="w-full flex-shrink-0">
               <slot name="footer"></slot>
             </div>
           </div>
