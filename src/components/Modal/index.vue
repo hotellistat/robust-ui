@@ -11,7 +11,7 @@
       <div
         v-if="opened"
         ref="root"
-        class="fixed top-0 bottom-0 left-0 right-0 z-[100] p-4 lg:pt-24"
+        class="fixed top-0 bottom-0 left-0 right-0 z-[100] p-4 lg:py-12"
         role="dialog"
       >
         <div
@@ -39,7 +39,15 @@
                 <PhX size="20" class="block" />
               </div>
             </div>
-            <slot></slot>
+            <div v-if="$slots.header" class="flex flex-shrink-0">
+              <slot name="header"></slot>
+            </div>
+            <section class="overflow-[overlay] flex-1 overflow-y-auto">
+              <slot></slot>
+            </section>
+            <div v-if="$slots.footer" class="flex flex-shrink-0">
+              <slot name="footer"></slot>
+            </div>
           </div>
         </div>
       </div>
