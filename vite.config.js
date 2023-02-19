@@ -35,7 +35,7 @@ export default defineConfig(async (config) => ({
           preserveModules: true,
           format: 'esm',
           entryFileNames: `[name].mjs`,
-          dir: 'dist',
+          dir: 'dist/src',
         },
       ],
     },
