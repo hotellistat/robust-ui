@@ -23,6 +23,7 @@ export default defineConfig(async (config) => ({
         'vue',
         'date-fns',
         '@popperjs/core',
+        '@vueuse/core',
         'vee-validate',
         'gsap',
         'fuse.js',
