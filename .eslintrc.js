@@ -13,8 +13,8 @@ module.exports = {
     'eslint:recommended',
     'plugin:vue/vue3-recommended',
     'prettier',
+    'plugin:storybook/recommended',
   ],
-
   overrides: [
     {
       files: ['*.ts'],
@@ -27,7 +27,6 @@ module.exports = {
       ],
     },
   ],
-
   rules: {
     'no-unused-vars': 'off',
     'unused-imports/no-unused-imports': 'error',

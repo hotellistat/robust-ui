@@ -4,7 +4,6 @@ module.exports = {
     "../src/**/*.stories.@(js|jsx|ts|tsx)"
   ],
   addons: [
-    'storybook-addon-themes/register',
     "@storybook/addon-links",
     "@storybook/addon-essentials",
     "@storybook/addon-interactions"
@@ -13,7 +12,5 @@ module.exports = {
     name: "@storybook/vue3-vite",
     options: {}
   },
-  docs: {
-    docsPage: false
-  }
+  docs: false
 }

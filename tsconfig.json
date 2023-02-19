@@ -9,9 +9,13 @@
     "types": [
       "vite/client",
       "web-bluetooth"
+    ],
+    "typeRoots": [
+      "./src/types"
     ]
   },
   "include": [
+    "src/*.d.ts",
     "src/**/*",
   ],
   "exclude": [
