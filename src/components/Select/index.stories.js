@@ -21,6 +21,14 @@ const DefaultTemplate = (args, { events }) => ({
 
     const options = ref([
       {
+        title: 'Item undefined',
+        value: undefined,
+      },
+      {
+        title: 'Item null',
+        value: null,
+      },
+      {
         title: 'Item 1',
         value: true,
       },

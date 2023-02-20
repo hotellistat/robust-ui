@@ -8,59 +8,46 @@ export default {
 <script lang="ts" setup>
 import RobustInputWrapper from '../InputWrapper/index.vue';
 import RobustPopper from '../Popper';
-import { ref, computed, nextTick, toRefs, onMounted, PropType } from 'vue';
+import { ref, computed, nextTick, toRefs, onMounted } from 'vue';
 import { debouncedWatch } from '@vueuse/core';
 import { Modifier } from '@popperjs/core';
 import { onClickOutside } from '@vueuse/core';
 import { PhCheck, PhCaretDown } from '@phosphor-icons/vue';
 
-const props = defineProps({
-  title: {
-    type: String,
-    default: undefined,
-  },
-  zIndex: {
-    type: String,
-    default: 'z-[50]',
-  },
-  hint: {
-    type: String,
-    default: undefined,
-  },
-  error: {
-    type: String,
-    default: undefined,
-  },
-  class: {
-    type: String,
-    default: undefined,
-  },
-  modelValue: {
-    type: [String, Boolean, Number, Array],
-    default: () => undefined,
-  },
-  options: {
-    type: Array as PropType<
-      Array<{ title: string; value: string | number | boolean | undefined }>
-    >,
-    required: true,
-  },
-  condensed: {
-    type: Boolean,
-    default: false,
-  },
-  searchable: {
-    type: Boolean,
-    default: true,
-  },
-  readonly: {
-    type: Boolean,
-    default: false,
-  },
-  searchFunction: {
-    type: Function,
-  },
-});
+export type Value = string | number | boolean | null | undefined;
+
+export interface Option {
+  title: string;
+  value: Value;
+}
+
+const props = withDefaults(
+  defineProps<{
+    title?: string;
+    zIndex?: string;
+    hint?: string;
+    error?: string;
+    class?: string;
+    modelValue?: Value | Array<Value>;
+    options: Array<Option>;
+    condensed: boolean;
+    searchable: boolean;
+    readonly: boolean;
+    searchFunction?: (query: string) => Promise<Array<Option>>;
+  }>(),
+  {
+    title: undefined,
+    hint: undefined,
+    error: undefined,
+    class: undefined,
+    modelValue: undefined,
+    zIndex: 'z-[50]',
+    condensed: false,
+    searchable: true,
+    readonly: false,
+    searchFunction: undefined,
+  }
+);
 
 const emit = defineEmits([
   'update:modelValue',
@@ -83,7 +70,7 @@ const popperRef = ref();
 
 const search = ref('');
 
-const computedOptions = ref([]);
+const computedOptions = ref<Option[]>([]);
 
 async function filterBySearchTerm(value) {
   if (props.searchFunction !== undefined) {
@@ -364,7 +351,7 @@ function deselectAll() {
     <ul v-if="computedOptions.length > 0" class="max-h-72 overflow-auto">
       <li
         v-for="option in computedOptions"
-        :key="option.value"
+        :key="String(option.value)"
         class="flex cursor-default items-center gap-4 px-4 py-2 transition-colors duration-200 hover:bg-gray-100 dark:hover:bg-gray-700"
         @click="selectItem(option)"
       >
