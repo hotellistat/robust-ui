@@ -15,7 +15,7 @@
         role="dialog"
       >
         <div
-          class="absolute top-0 left-0 right-0 bottom-0 bg-black bg-opacity-60 backdrop-blur-sm"
+          class="robust-ui-modal__backdrop absolute top-0 left-0 right-0 bottom-0 bg-black bg-opacity-50"
           @click.self="close"
         ></div>
 
@@ -188,6 +188,10 @@ defineExpose({
 </script>
 
 <style lang="postcss">
+.robust-ui-modal__backdrop {
+  backdrop-filter: blur(2px);
+}
+
 .robust-ui-modal__fade-enter-active {
   transition: all 200ms ease-in-out;
 

@@ -8,16 +8,23 @@ export default {
   argTypes: {
     onModal: { action: 'Modal' },
     readonly: { control: { type: 'boolean' } },
-    condensed: { control: { type: 'boolean' } },
-    modelValue: { control: { type: 'text' } },
+    opened: {
+      defaultValue: true,
+      default: true,
+      control: { type: 'boolean', defaultValue: true, default: true },
+    },
+    condensed: { control: { type: 'boolean', defaultValue: 'true' } },
     outline: { control: { type: 'boolean' } },
     hint: { control: { type: 'text' } },
     error: { control: { type: 'text' } },
   },
+  defaultValue: {
+    opened: true,
+  },
 };
 
 const DefaultTemplate = (args) => ({
-  template: `<RobustButton @click="args.opened.value = true">modal open {{args.opened}}</RobustButton><Modal v-bind="args">
+  template: `<Modal v-bind="args">
   <template #title>
    Title
   </template>
