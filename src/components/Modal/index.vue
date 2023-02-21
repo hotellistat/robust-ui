@@ -15,7 +15,7 @@
         role="dialog"
       >
         <div
-          class="robust-ui-modal__backdrop absolute top-0 left-0 right-0 bottom-0 bg-black bg-opacity-60"
+          class="absolute top-0 left-0 right-0 bottom-0 bg-black bg-opacity-60 backdrop-blur-sm"
           @click.self="close"
         ></div>
 
@@ -42,7 +42,9 @@
             <div v-if="$slots.header" class="w-full flex-shrink-0">
               <slot name="header"></slot>
             </div>
-            <section class="overflow-[overlay] flex-1 [overflow:overlay]">
+            <section
+              class="flex-1 overflow-y-auto supports-[overflow:overlay]:[overflow-y:overlay]"
+            >
               <slot></slot>
             </section>
             <div v-if="$slots.footer" class="w-full flex-shrink-0">
@@ -186,10 +188,6 @@ defineExpose({
 </script>
 
 <style lang="postcss">
-.robust-ui-modal__backdrop {
-  backdrop-filter: blur(1px);
-}
-
 .robust-ui-modal__fade-enter-active {
   transition: all 200ms ease-in-out;
 
