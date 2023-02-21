@@ -20,7 +20,7 @@
       class="base-slider__hidden-input"
       type="hidden"
       :name="name"
-      :value="value"
+      :value="modelValue[0]"
     />
 
     <div
@@ -104,10 +104,6 @@ const props = defineProps({
   },
   modelValue: {
     type: Array as PropType<number[]>,
-    required: true,
-  },
-  value: {
-    type: Number,
     required: true,
   },
   min: {
