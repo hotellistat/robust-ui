@@ -1,5 +1,4 @@
 <script lang="ts" setup>
-import RobustInput from '../Input/index.vue';
 import {
   subMonths,
   addMonths,
@@ -13,22 +12,14 @@ import {
   min,
   max,
   set,
-  isValid,
   addYears,
   subYears,
 } from 'date-fns';
-import {
-  computed,
-  nextTick,
-  onMounted,
-  PropType,
-  ref,
-  toRefs,
-  watch,
-} from 'vue';
+import { computed, nextTick, onMounted, PropType, ref, toRefs } from 'vue';
 import { PhCaretLeft, PhCaretRight } from '@phosphor-icons/vue';
 import defaultPresets, { Preset } from './presets';
 import variants from './variants';
+import { RobustDatePicker } from '..';
 
 const props = defineProps({
   future: {
@@ -60,10 +51,6 @@ const emit = defineEmits(['update:modelValue', 'click:relativeDate']);
 
 const { future, past, today, modelValue } = toRefs(props);
 
-const from = ref();
-const to = ref();
-const errorFrom = ref();
-const errorTo = ref();
 const now = ref();
 // const cursor = ref<Date>()
 const cursor = Array.isArray(modelValue.value)
@@ -114,22 +101,22 @@ const activeYear = computed(() => {
   return date.getFullYear();
 });
 
-const applyTime = () => {
-  console.log('applying time');
+// const applyTime = () => {
+//   console.log('applying time');
 
-  if (from.value != '' && !isValid(new Date(from.value))) {
-    errorFrom.value = 'Please enter a valid date.';
-  }
-  if (to.value != '' && !isValid(new Date(to.value))) {
-    errorTo.value = 'Please enter a valid date.';
-  }
-  if (isValid(new Date(from.value)) && isValid(new Date(to.value))) {
-    errorFrom.value = '';
-    errorTo.value = '';
-    const newModelValue = [new Date(from.value), new Date(to.value)];
-    emit('update:modelValue', newModelValue);
-  }
-};
+//   if (from.value != '' && !isValid(new Date(from.value))) {
+//     errorFrom.value = 'Please enter a valid date.';
+//   }
+//   if (to.value != '' && !isValid(new Date(to.value))) {
+//     errorTo.value = 'Please enter a valid date.';
+//   }
+//   if (isValid(new Date(from.value)) && isValid(new Date(to.value))) {
+//     errorFrom.value = '';
+//     errorTo.value = '';
+//     const newModelValue = [new Date(from.value), new Date(to.value)];
+//     emit('update:modelValue', newModelValue);
+//   }
+// };
 
 const compareDates = (dateOne, dateTwo) => {
   const diff = dayDiff(dateOne, dateTwo);
@@ -281,12 +268,9 @@ const daySelect = (day) => {
   cursor.value = tmpDate;
 
   if (Array.isArray(modelValue.value)) {
-    errorFrom.value = '';
-    errorTo.value = '';
     let newModelValue = [];
     if (modelValue.value.length >= 2) {
       newModelValue.push(new Date(cursor.value));
-      to.value = '';
     } else {
       newModelValue = modelValue.value;
       newModelValue.push(new Date(cursor.value));
@@ -303,10 +287,8 @@ const daySelect = (day) => {
             seconds: 59,
           }),
         ];
-        to.value = format(newModelValue[1], 'MM/dd/yyyy');
       }
     }
-    from.value = format(newModelValue[0], 'MM/dd/yyyy');
     emit('update:modelValue', newModelValue);
   } else {
     selectedDate.value = new Date(cursor.value);
@@ -318,44 +300,29 @@ const reset = () => {
   cursor.value = new Date(new Date().setHours(12));
 };
 
-watch(modelValue, (val) => {
-  const f = val[0] || undefined;
-  const t = val[1] || undefined;
-  if (f) from.value = format(f, 'MM/dd/yyyy');
-  else from.value = '';
-  if (t) to.value = format(t, 'MM/dd/yyyy');
-  else to.value = '';
-});
+// const fromChanged = (value: string) => {
+//   const fromDate = value;
+//   const toDate = to.value;
+//   const regexp = /^(0?[1-9]|1[012])[/-](0?[1-9]|[12][0-9]|3[01])[/-]\d{4}$/;
+//   if (regexp.test(fromDate) && regexp.test(toDate)) {
+//     console.log('changed valid');
+//     emit('update:modelValue', [new Date(fromDate), new Date(toDate)]);
+//   }
+// };
 
-const fromChanged = (value: string) => {
-  const fromDate = value;
-  const toDate = to.value;
-  const regexp = /^(0?[1-9]|1[012])[/-](0?[1-9]|[12][0-9]|3[01])[/-]\d{4}$/;
-  if (regexp.test(fromDate) && regexp.test(toDate)) {
-    console.log('changed valid');
-    emit('update:modelValue', [new Date(fromDate), new Date(toDate)]);
-  }
-};
-
-const toChanged = (value: string) => {
-  const toDate = value;
-  const fromDate = from.value;
-  const regexp = /^(0?[1-9]|1[012])[/-](0?[1-9]|[12][0-9]|3[01])[/-]\d{4}$/;
-  if (regexp.test(fromDate) && regexp.test(toDate)) {
-    emit('update:modelValue', [new Date(fromDate), new Date(toDate)]);
-  }
-};
+// const toChanged = (value: string) => {
+//   const toDate = value;
+//   const fromDate = from.value;
+//   const regexp = /^(0?[1-9]|1[012])[/-](0?[1-9]|[12][0-9]|3[01])[/-]\d{4}$/;
+//   if (regexp.test(fromDate) && regexp.test(toDate)) {
+//     emit('update:modelValue', [new Date(fromDate), new Date(toDate)]);
+//   }
+// };
 
 onMounted(() => {
   if (Array.isArray(modelValue.value)) {
     cursor.value = new Date(modelValue.value[1] || new Date());
     selectedDate.value = cursor.value;
-    const f = modelValue.value[0] || undefined;
-    const t = modelValue.value[1] || undefined;
-    if (f) from.value = format(f, 'MM/dd/yyyy');
-    else from.value = '';
-    if (t) to.value = format(t, 'MM/dd/yyyy');
-    else to.value = '';
   } else {
     cursor.value = new Date(modelValue.value || new Date());
     selectedDate.value = cursor.value;
@@ -433,7 +400,6 @@ const months = computed(() => {
 });
 
 defineExpose({
-  applyTime,
   addYear,
   subYear,
   addMonth,
@@ -642,24 +608,20 @@ defineExpose({
         class="mb-1 block text-sm font-medium text-gray-500 dark:text-gray-400"
         >From</label
       >
-      <RobustInput
-        v-model="from"
+      <RobustDatePicker
+        v-model="modelValue[0]"
         placeholder="Date"
-        :error="errorFrom"
         class="mb-2 w-full"
-        @change="fromChanged"
       />
 
       <label
         class="mb-1 block text-sm font-medium text-gray-500 dark:text-gray-400"
         >To</label
       >
-      <RobustInput
-        v-model="to"
+      <RobustDatePicker
+        v-model="modelValue[1]"
         placeholder="Date"
-        :error="errorTo"
         class="mb-2 w-full"
-        @change="toChanged"
       />
       <slot />
     </div>
