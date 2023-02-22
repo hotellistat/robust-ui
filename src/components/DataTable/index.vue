@@ -35,23 +35,33 @@
         <div
           v-for="column in options.columns"
           :key="column.key"
-          class="robust-table-column relative flex h-12 cursor-pointer items-center"
+          class="robust-table-column relative flex h-12 cursor-pointer items-center justify-between"
           :class="column.class ?? ''"
-          @click="sortColumn(column, $event)"
         >
-          <div class="mr-auto overflow-hidden truncate break-words">
+          <div
+            v-if="!$slots[`c_${column.key}`]"
+            class="mr-auto overflow-hidden truncate break-words"
+          >
             {{ column.name }}
           </div>
-          <PhSortAscending
-            v-show="getDirection(column) === 1"
-            class="text-gray-500"
-            :size="20"
-          />
-          <PhSortDescending
-            v-show="getDirection(column) === -1"
-            class="text-gray-500"
-            :size="20"
-          />
+          <slot v-else :name="`c_${column.key}`" :data="column" />
+          <div @click="sortColumn(column, $event)">
+            <PhSortAscending
+              v-show="getDirection(column) === 1"
+              class="text-gray-500"
+              :size="20"
+            />
+            <PhSortDescending
+              v-show="getDirection(column) === -1"
+              class="text-gray-500"
+              :size="20"
+            />
+            <PhEquals
+              v-show="getDirection(column) === 0"
+              class="text-gray-500"
+              :size="20"
+            />
+          </div>
         </div>
       </div>
 
@@ -113,8 +123,8 @@
       </div>
     </div>
     <slot
-      name="footer"
       v-if="$slots.footer"
+      name="footer"
       :data="{ className: 'datatable-grid-columns' }"
     />
     <div v-if="isFooterVisible" class="flex items-center justify-between py-2">
@@ -155,6 +165,7 @@ import {
   PhCaretDoubleLeft,
   PhCaretRight,
   PhCaretDoubleRight,
+  PhEquals,
 } from '@phosphor-icons/vue';
 import Select from '../Select/index.vue';
 import Checkbox from '../Checkbox/index.vue';
