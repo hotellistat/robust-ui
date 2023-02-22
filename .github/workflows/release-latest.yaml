@@ -27,8 +27,6 @@ jobs:
         run: npm run lint
 
   build-container:
-    needs:
-      - lint
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v3
