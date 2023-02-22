@@ -70,7 +70,7 @@ const cursor = Array.isArray(modelValue.value)
   ? ref<Date>(new Date())
   : ref<Date>(new Date(modelValue.value));
 
-const selectedDate = ref();
+const selectedDate = ref<Date>(new Date());
 const refYearEntry = ref({});
 
 const variantStyling = computed(() => {
@@ -207,11 +207,11 @@ const isBetweenRange = (day) => {
   return false;
 };
 
-const isSelectedDay = (day) => {
+const isSelectedDay = (day: number) => {
   const tmpDate = new Date();
-  tmpDate.setDate(day);
-  tmpDate.setMonth(cursor.value.getMonth());
   tmpDate.setFullYear(cursor.value.getFullYear());
+  tmpDate.setMonth(cursor.value.getMonth());
+  tmpDate.setDate(day);
 
   if (Array.isArray(modelValue.value)) {
     const selectedDates = modelValue.value.map((date) => new Date(date));
@@ -221,7 +221,7 @@ const isSelectedDay = (day) => {
       }
     }
   } else {
-    if (!compareDates(new Date(selectedDate.value), tmpDate)) {
+    if (isSameDay(selectedDate.value, tmpDate)) {
       return true;
     }
   }
