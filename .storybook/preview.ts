@@ -10,15 +10,17 @@ export const parameters = {
 
   themes: {
     clearable: false,
-    default: 'Light',
+    default: 'light',
     list: [
       {
-        name: 'Light',
+        name: 'light',
         class: ['light-mode'],
+        color: '#fbfcfd'
       },
       {
-        name: 'Dark',
+        name: 'dark',
         class: ['dark', 'dark-mode'],
+        color: '#12171d',
       },
     ],
   },
