@@ -155,9 +155,9 @@ const isFirst = (day) => {
   if (!compareDates(...modelValue.value)) return false;
 
   const tmpDate = new Date();
-  tmpDate.setDate(day);
-  tmpDate.setMonth(cursor.value.getMonth());
   tmpDate.setFullYear(cursor.value.getFullYear());
+  tmpDate.setMonth(cursor.value.getMonth());
+  tmpDate.setDate(day);
 
   const minDate = min(modelValue.value);
 
@@ -176,9 +176,9 @@ const isLast = (day) => {
   if (!compareDates(...modelValue.value)) return false;
 
   const tmpDate = new Date();
-  tmpDate.setDate(day);
-  tmpDate.setMonth(cursor.value.getMonth());
   tmpDate.setFullYear(cursor.value.getFullYear());
+  tmpDate.setMonth(cursor.value.getMonth());
+  tmpDate.setDate(day);
 
   const maxDate = max(modelValue.value);
 
@@ -192,9 +192,9 @@ const isBetweenRange = (day) => {
   if (modelValue.value.length < 2) return false;
 
   const tmpDate = new Date();
-  tmpDate.setDate(day);
-  tmpDate.setMonth(cursor.value.getMonth());
   tmpDate.setFullYear(cursor.value.getFullYear());
+  tmpDate.setMonth(cursor.value.getMonth());
+  tmpDate.setDate(day);
   const minDate = min(modelValue.value);
   const maxDate = max(modelValue.value);
 
@@ -275,9 +275,9 @@ const daySelect = (day) => {
   }
 
   const tmpDate = new Date();
-  tmpDate.setDate(day);
-  tmpDate.setMonth(cursor.value.getMonth());
   tmpDate.setFullYear(cursor.value.getFullYear());
+  tmpDate.setMonth(cursor.value.getMonth());
+  tmpDate.setDate(day);
   cursor.value = tmpDate;
 
   if (Array.isArray(modelValue.value)) {
