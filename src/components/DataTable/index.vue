@@ -80,6 +80,7 @@
         >
           <div
             class="datatable-grid-columns flex flex-col gap-x-2 gap-y-2 sm:grid sm:items-center"
+            :class="entry.rowClass ?? ''"
           >
             <div>
               <Checkbox
