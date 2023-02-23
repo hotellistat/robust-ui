@@ -77,6 +77,8 @@
           :key="idx"
           class="flex flex-col justify-between hover:bg-gray-100 hover:dark:bg-gray-700"
           @click="onClickRow(entry, idx)"
+          @mouseover="emitMouseOverRow($event, entry)"
+          @mouseleave="emitMouseLeaveRow($event, entry)"
         >
           <div
             class="datatable-grid-columns flex flex-col gap-x-2 gap-y-2 sm:grid sm:items-center"
@@ -252,6 +254,8 @@ const emit = defineEmits([
   'update:selectedRows',
   'update:resize',
   'clickRow',
+  'onHoverRow',
+  'onLeaveRow',
 ]);
 
 const { data, options, loading, headerClass } = toRefs(props);
@@ -900,6 +904,14 @@ const getSpace = () => {
     available: availableSpace,
     responsive_space: responsiveSpace,
   };
+};
+
+const emitMouseOverRow = (e: MouseEvent, data: any) => {
+  emit('onHoverRow', e, data);
+};
+
+const emitMouseLeaveRow = (e: MouseEvent, data: any) => {
+  emit('onLeaveRow', e, data);
 };
 
 onMounted(() => {
