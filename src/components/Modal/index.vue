@@ -26,7 +26,7 @@
         >
           <div
             class="relative flex max-h-full min-h-0 w-full flex-col bg-white shadow-xl dark:bg-gray-800"
-            :class="[modalClass, !isSlideOut ? 'rounded-xl' : 'h-full']"
+            :class="[modalClass, !isSlideOut ? 'rounded-2xl' : 'h-full']"
           >
             <div
               v-if="$slots.title"
