@@ -239,7 +239,6 @@ function deselectAll() {
 <template>
   <div ref="anchorRef">
     <RobustInputWrapper
-      v-if="searchable"
       ref="refSelectWrapper"
       v-slot="slotProps"
       :title="title"
@@ -261,7 +260,7 @@ function deselectAll() {
         <slot tag="div" name="prefix" />
       </div>
       <div
-        v-show="!open"
+        v-show="!open || !searchable"
         :id="slotProps.cuid"
         ref="select"
         class="flex h-full min-w-0 flex-1 flex-shrink items-center bg-transparent text-current outline-none"
@@ -272,49 +271,25 @@ function deselectAll() {
           {{ getInputTitle() }}
         </div>
       </div>
+
       <input
-        v-show="open"
+        v-if="open && searchable"
         ref="refSelectInput"
         v-model="search"
         size="1"
         class="block h-full min-w-0 flex-1 flex-shrink bg-transparent text-current outline-none"
         :class="[$slots.prefix || condensed ? 'pl-2' : 'pl-3']"
       />
-
-      <div
-        class="flex h-full flex-shrink-0 items-center pr-3 text-gray-400 dark:text-gray-500"
-        :class="[condensed ? 'pl-2' : 'pl-3']"
-      >
-        <PhCaretDown
-          :size="14"
-          weight="bold"
-          class="transition-transform duration-200"
-          :class="{ 'rotate-180 transform': open }"
-        />
-      </div>
-    </RobustInputWrapper>
-    <RobustInputWrapper
-      v-else
-      ref="refSelectWrapper"
-      :title="title"
-      :hint="hint"
-      :error="error"
-      :class="$props.class"
-      class=""
-      :readonly="readonly"
-      :condensed="condensed"
-      @click="openDropdown"
-      @focus="openDropdown"
-      @blur="closeDropdown"
-    >
-      <div
+      <!-- <div
+        v-else
         class="flex h-full min-w-0 flex-1 flex-shrink items-center bg-transparent text-current outline-none"
         :class="[$slots.prefix || condensed ? 'pl-2' : 'pl-3']"
       >
         <div class="min-w-0 select-none truncate">
           {{ activeItem ? activeItem.title : 'Select' }}
         </div>
-      </div>
+      </div> -->
+
       <div
         class="flex h-full flex-shrink-0 items-center pr-3 text-gray-400 dark:text-gray-500"
         :class="[condensed ? 'pl-2' : 'pl-3']"
