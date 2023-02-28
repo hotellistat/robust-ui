@@ -307,7 +307,7 @@ function deselectAll() {
     v-if="refSelectWrapper?.wrapperRef"
     ref="popperRef"
     v-model:open="open"
-    class="z-[100] origin-top"
+    class="z-[100] origin-top overflow-hidden"
     :append-to="refSelectWrapper?.wrapperRef"
     :modifiers="popperModifiers"
     :options="{
