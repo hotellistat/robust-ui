@@ -25,7 +25,7 @@
           @keydown.esc="close"
         >
           <div
-            class="relative flex max-h-full min-h-0 w-full flex-col overflow-hidden bg-white shadow-xl dark:bg-gray-800"
+            class="relative flex max-h-full min-h-0 w-full flex-col bg-white shadow-xl dark:bg-gray-800"
             :class="[modalClass, !isSlideOut ? 'rounded-xl' : 'h-full']"
           >
             <div
@@ -43,7 +43,12 @@
               <slot name="header"></slot>
             </div>
             <section
-              class="flex-1 overflow-y-auto supports-[overflow:overlay]:[overflow-y:overlay]"
+              :class="[
+                autoOverflow
+                  ? 'overflow-y-auto supports-[overflow:overlay]:[overflow-y:overlay]'
+                  : undefined,
+              ]"
+              class="flex-1"
             >
               <slot></slot>
             </section>
@@ -74,6 +79,10 @@ const props = defineProps({
   size: {
     type: String,
     default: 'md',
+  },
+  autoOverflow: {
+    type: Boolean,
+    default: true,
   },
   slideOutLeft: {
     type: Boolean,
