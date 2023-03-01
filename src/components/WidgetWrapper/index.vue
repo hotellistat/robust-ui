@@ -8,6 +8,10 @@ defineProps({
     type: Boolean,
     default: false,
   },
+  showOptions: {
+    type: Boolean,
+    default: true,
+  },
 });
 
 const emit = defineEmits(['optionsOpened', 'optionsClosed']);
@@ -17,6 +21,7 @@ const open = ref(false);
 
 <template>
   <RobustModal
+    v-if="showOptions"
     v-model:opened="open"
     slide-out-right
     @close="emit('optionsClosed')"
@@ -47,7 +52,7 @@ const open = ref(false);
     >
       <slot v-if="$slots.title" name="title" />
       <div
-        v-if="$slots.options"
+        v-if="$slots.options && showOptions"
         class="-m-1 cursor-default rounded-full border-none p-1 opacity-0 transition-all duration-150 hover:bg-gray-100 group-hover:opacity-100 dark:hover:bg-gray-700"
         @click="open = !open"
       >
