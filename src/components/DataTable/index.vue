@@ -35,7 +35,7 @@
         <div
           v-for="column in options.columns"
           :key="column.key"
-          class="robust-table-column relative flex h-12 cursor-pointer items-center justify-between"
+          class="robust-table-column relative flex min-h-[48px] cursor-pointer items-center justify-between"
           :class="column.class ?? ''"
         >
           <div
