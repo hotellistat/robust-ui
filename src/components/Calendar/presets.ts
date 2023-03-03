@@ -12,6 +12,7 @@ import {
   startOfWeek,
   startOfYear,
   subDays,
+  subYears,
 } from 'date-fns';
 
 export default [
@@ -107,10 +108,18 @@ export default [
     },
   },
   {
-    title: 'Last year',
+    title: 'Last calendar year',
     preset: () => {
       const startDay = startOfYear(subDays(startOfYear(new Date()), 1));
       return [startDay, endOfYear(new Date(startDay))];
+    },
+  },
+  {
+    title: 'Past year',
+    preset: () => {
+      const now = new Date();
+      const startDay = subYears(now, 1);
+      return [startDay, now];
     },
   },
 ] as Array<Preset>;

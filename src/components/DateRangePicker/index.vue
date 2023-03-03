@@ -7,6 +7,7 @@ import {
   RobustButton,
   RobustCheckbox,
   RobustDatePicker,
+  RobustTabs,
 } from '..';
 import { PhCaretDown, PhCalendar } from '@phosphor-icons/vue';
 import { format } from 'date-fns';
@@ -289,7 +290,14 @@ defineExpose({
       <div class="p-2">
         {{ active == 'main' ? 'Main' : 'Comparison' }} date range
       </div>
-      <div v-if="enableComparison && showComparisonPicker" class="flex gap-x-2">
+      <RobustTabs
+        v-model="active"
+        :tabs="[
+          { title: 'Main', value: 'main' },
+          { title: 'Comparison', value: 'comparison' },
+        ]"
+      />
+      <!-- <div v-if="enableComparison && showComparisonPicker" class="flex gap-x-2">
         <div
           class="cursor flex justify-center rounded-md p-2"
           :class="
@@ -312,7 +320,7 @@ defineExpose({
         >
           Comparison
         </div>
-      </div>
+      </div> -->
     </div>
     <section v-if="active === 'main'">
       <!-- <h3 -->
