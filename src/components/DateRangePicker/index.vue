@@ -97,6 +97,7 @@ const enabledHistory = ref(false);
 const displayCompare = ref();
 const storeHistory = ref(true);
 const popperRef = ref();
+const active = ref<'comparison' | 'main'>('main');
 
 // const pickedCompare = computed(() => {
 //   return compareDates.value.length > 1
@@ -144,6 +145,7 @@ const displayDate = computed(() => {
 function closeDropdown() {
   if (open.value === true) {
     open.value = false;
+    active.value = 'main';
     enabledHistory.value = false;
     emit('blur');
   }
@@ -179,7 +181,10 @@ onClickOutside(popperRef, (event) => {
 
 const handleClick = () => {
   tmpDateRange.value = dateRange.value;
-  tmpCompareDateRange.value = compareDateRange.value;
+  tmpCompareDateRange.value = compareDateRange.value ?? [
+    new Date(),
+    new Date(),
+  ];
   open.value = !open.value;
 };
 
@@ -211,8 +216,10 @@ watch(comparePerspectiveOf, (val) => {
 watch(showComparisonPicker, (val) => {
   if (!val) {
     tmpCompareDateRange.value = undefined;
+    active.value = 'main';
     emit('update:compareDateRange', tmpCompareDateRange.value);
   } else {
+    active.value = 'comparison';
     tmpCompareDateRange.value = [new Date(), new Date()];
   }
 });
@@ -275,12 +282,43 @@ defineExpose({
       placement: 'bottom-start',
     }"
   >
-    <section>
-      <h3
-        class="font-lg border-b border-gray-200 p-4 font-medium dark:border-gray-700"
-      >
-        Date range
-      </h3>
+    <div
+      class="flex items-center justify-between border-b border-t border-gray-200 p-2 dark:border-gray-700"
+    >
+      <div class="p-2">
+        {{ active == 'main' ? 'Main' : 'Comparison' }} date range
+      </div>
+      <div v-if="enableComparison && showComparisonPicker" class="flex gap-x-2">
+        <div
+          class="cursor flex justify-center rounded-md p-2"
+          :class="
+            active == 'main'
+              ? 'bg-gray-300 dark:bg-gray-500'
+              : 'bg-gray-200 dark:bg-gray-700'
+          "
+          @click="() => (active = 'main')"
+        >
+          Main
+        </div>
+        <div
+          class="justify-cneter cursor flex rounded-md p-2"
+          :class="
+            active == 'comparison'
+              ? 'bg-gray-300 dark:bg-gray-500'
+              : 'bg-gray-200 dark:bg-gray-700'
+          "
+          @click="() => (active = 'comparison')"
+        >
+          Comparison
+        </div>
+      </div>
+    </div>
+    <section v-if="active === 'main'">
+      <!-- <h3 -->
+      <!--   class="font-lg border-b border-gray-200 p-4 font-medium dark:border-gray-700" -->
+      <!-- > -->
+      <!--   Date range -->
+      <!-- </h3> -->
       <RobustCalendar ref="mainCalendar" v-model="tmpDateRange">
         <div v-if="enablePerspective" class="flex flex-col items-start gap-y-3">
           <div>
@@ -297,16 +335,11 @@ defineExpose({
       </RobustCalendar>
     </section>
 
-    <section v-if="enableComparison && showComparisonPicker">
-      <h3
-        class="font-lg border-b border-t border-gray-200 p-4 font-medium dark:border-gray-700"
-      >
-        Comparison date range
-      </h3>
+    <section v-else>
       <RobustCalendar
         v-model="tmpCompareDateRange"
         variant="secondary"
-        @click:relativeDate="enableStoringHistory(false)"
+        @click:relative-date="enableStoringHistory(false)"
       >
         <div v-if="enablePerspective" class="flex flex-col items-start">
           <label
