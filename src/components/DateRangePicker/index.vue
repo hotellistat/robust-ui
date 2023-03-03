@@ -181,10 +181,11 @@ onClickOutside(popperRef, (event) => {
 
 const handleClick = () => {
   tmpDateRange.value = dateRange.value;
-  tmpCompareDateRange.value = compareDateRange.value ?? [
-    new Date(),
-    new Date(),
-  ];
+  if (showComparisonPicker.value)
+    tmpCompareDateRange.value = compareDateRange.value ?? [
+      new Date(),
+      new Date(),
+    ];
   open.value = !open.value;
 };
 
