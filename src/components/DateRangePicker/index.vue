@@ -291,6 +291,7 @@ defineExpose({
         {{ active == 'main' ? 'Main' : 'Comparison' }} date range
       </div>
       <RobustTabs
+        v-if="enableComparison && showComparisonPicker"
         v-model="active"
         :tabs="[
           { title: 'Main', value: 'main' },
