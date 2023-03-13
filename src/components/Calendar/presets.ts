@@ -1,6 +1,6 @@
 export interface Preset {
   title: string;
-  preset: () => [Date, Date];
+  preset: () => [Date, Date] | Date;
 }
 
 import {
@@ -14,6 +14,56 @@ import {
   subDays,
   subYears,
 } from 'date-fns';
+
+export const perspectiveDatePresets = [
+  {
+    title: 'Today',
+    preset: () => {
+      const date = set(new Date(), {
+        hours: 0,
+        minutes: 0,
+        seconds: 0,
+        milliseconds: 0,
+      });
+      return date;
+    },
+  },
+  {
+    title: 'Yesterday',
+    preset: () => {
+      const date = subDays(new Date(), 1);
+      return date;
+    },
+  },
+  {
+    title: '7 days ago',
+    preset: () => {
+      const date = subDays(new Date(), 7);
+      return date;
+    },
+  },
+  {
+    title: 'Start of week',
+    preset: () => {
+      const date = startOfWeek(new Date());
+      return date;
+    },
+  },
+  {
+    title: 'Start of month',
+    preset: () => {
+      const date = startOfMonth(new Date());
+      return date;
+    },
+  },
+  {
+    title: 'Start of year',
+    preset: () => {
+      const date = startOfYear(new Date());
+      return date;
+    },
+  },
+];
 
 export default [
   {

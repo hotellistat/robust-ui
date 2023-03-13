@@ -12,6 +12,7 @@ import {
 import { PhCaretDown, PhCalendar } from '@phosphor-icons/vue';
 import { format } from 'date-fns';
 import { computed, PropType, readonly, ref, toRefs, watch } from 'vue';
+import { perspectiveDatePresets } from '../Calendar/presets';
 
 const props = defineProps({
   title: {
@@ -336,7 +337,11 @@ defineExpose({
               class="mb-1 block text-sm font-medium text-gray-500 dark:text-gray-400"
               >Perspective of</label
             >
-            <RobustDatePicker v-model="perspectiveOf" placeholder="Date" />
+            <RobustDatePicker
+              v-model="perspectiveOf"
+              placeholder="Date"
+              :presets="perspectiveDatePresets"
+            />
           </div>
           <RobustCheckbox v-model="showComparisonPicker">
             <template #title>Compare</template>

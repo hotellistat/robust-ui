@@ -6,6 +6,7 @@ import { format } from 'date-fns';
 import { PhCaretDown, PhCalendar } from '@phosphor-icons/vue';
 import { computed, ref, toRefs, PropType, readonly } from 'vue';
 import { onClickOutside } from '@vueuse/core';
+import { Preset } from '../Calendar/presets';
 
 const props = defineProps({
   title: {
@@ -40,11 +41,15 @@ const props = defineProps({
     type: Boolean,
     default: false,
   },
+  presets: {
+    type: Array as PropType<Preset[]>,
+    default: () => [],
+  },
 });
 
 const emit = defineEmits(['blur', 'update:modelValue', 'change', 'blur']);
 
-const { modelValue } = toRefs(props);
+const { modelValue, presets } = toRefs(props);
 const open = ref(false);
 const popperRef = ref();
 const inputWrapperRef = ref();
@@ -142,6 +147,6 @@ function closeDropdown() {
       placement: 'bottom-start',
     }"
   >
-    <RobustCalendar v-model="computedValue" />
+    <RobustCalendar v-model="computedValue" :presets="presets" />
   </RobustPopper>
 </template>
