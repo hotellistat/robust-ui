@@ -49,7 +49,7 @@ const props = defineProps({
 });
 const emit = defineEmits(['update:modelValue', 'click:relativeDate']);
 
-const { future, past, today, modelValue } = toRefs(props);
+const { future, past, today, modelValue, presets } = toRefs(props);
 
 const now = ref();
 // const cursor = ref<Date>()
@@ -214,9 +214,10 @@ const isSelectedDay = (day: number) => {
   }
 };
 
-function setQuickAction(dateRange: [Date, Date]) {
+function setQuickAction(dateRange: [Date, Date] | Date) {
   emit('update:modelValue', dateRange);
-  cursor.value = dateRange[1];
+  if (Array.isArray(dateRange)) cursor.value = dateRange[1];
+  else cursor.value = dateRange;
 }
 function addYear() {
   cursor.value = addYears(cursor.value, 1);
@@ -411,7 +412,7 @@ defineExpose({
 <template>
   <div class="relative flex w-max select-none flex-col sm:flex-row">
     <div
-      v-if="Array.isArray(modelValue)"
+      v-if="presets.length"
       class="relative hidden min-h-0 w-48 border-r border-gray-200 dark:border-gray-700 lg:block"
     >
       <div class="absolute inset-0 overflow-auto py-2">
