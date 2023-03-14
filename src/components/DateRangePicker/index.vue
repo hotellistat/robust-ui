@@ -88,8 +88,8 @@ const emit = defineEmits([
   'update:perspectiveDate',
   'update:comparePerspectiveDate',
   'update:dateRange',
-  'update:relative',
-  'update:compareRelative',
+  'update:activePreset',
+  'update:activeComparePreset',
   'change',
 ]);
 
@@ -221,9 +221,9 @@ const goBack = () => {
 
 const saveTime = async () => {
   emit('update:dateRange', tmpDateRange.value);
-  emit('update:relative', dateType.value);
+  emit('update:activePreset', dateType.value);
   emit('update:compareDateRange', tmpCompareDateRange.value);
-  emit('update:compareRelative', compareDateType.value);
+  emit('update:activeComparePreset', compareDateType.value);
   emit('change', tmpDateRange.value);
   emit('blur');
   open.value = false;
@@ -239,7 +239,7 @@ const updateRelative = (preset: { key: string; date: Date | Date[] }) => {
     value: preset.key,
   };
   tmpDateRange.value = preset.date as [Date, Date];
-  emit('update:relative', dateType.value);
+  emit('update:activePreset', dateType.value);
 };
 
 const updateCompareRelative = (preset: {
@@ -251,7 +251,7 @@ const updateCompareRelative = (preset: {
     value: preset.key,
   };
   tmpCompareDateRange.value = preset.date as [Date, Date];
-  emit('update:compareRelative', compareDateType.value);
+  emit('update:activeComparePreset', compareDateType.value);
 };
 
 const updateMain = (val: [Date, Date]) => {
@@ -259,7 +259,7 @@ const updateMain = (val: [Date, Date]) => {
   dateType.value = {
     name: 'custom',
   };
-  emit('update:relative', undefined);
+  emit('update:activePreset', undefined);
 };
 
 const updateCompare = (val: [Date, Date]) => {
@@ -267,7 +267,7 @@ const updateCompare = (val: [Date, Date]) => {
   compareDateType.value = {
     name: 'custom',
   };
-  emit('update:compareRelative', undefined);
+  emit('update:activeComparePreset', undefined);
 };
 
 // const updateDate = () => {
