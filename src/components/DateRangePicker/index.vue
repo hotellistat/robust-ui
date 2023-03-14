@@ -12,7 +12,7 @@ import {
 import { PhCaretDown, PhCalendar } from '@phosphor-icons/vue';
 import { format } from 'date-fns';
 import { computed, PropType, readonly, ref, toRefs, watch } from 'vue';
-import presets from '../Calendar/presets';
+import defaultPresets, { Preset } from '../Calendar/presets';
 
 const props = defineProps({
   title: {
@@ -79,6 +79,10 @@ const props = defineProps({
     type: String,
     default: () => undefined,
   },
+  presets: {
+    type: Array as PropType<Preset[]>,
+    default: () => defaultPresets,
+  },
 });
 
 const emit = defineEmits([
@@ -100,6 +104,7 @@ const {
   comparePerspectiveDate,
   activePreset,
   activeComparePreset,
+  presets,
 } = toRefs(props);
 
 const open = ref(false);
@@ -121,34 +126,11 @@ const dateType = ref<any>('custom');
 const compareDateType = ref<any>('custom');
 
 const perspectiveDatePresets = ref(
-  presets.filter((d) => d.type === 'perspective')
+  presets.value.filter((d) => d.type === 'perspective')
 );
-
-// const pickedCompare = computed(() => {
-//   return compareDates.value.length > 1
-// })
-
-// const formatDate = (date: Date, time?: boolean) => {
-//   if (!time) return format(date, 'dd.MM.yyyy')
-//   return format(date, 'dd.MM.yyyy HH:mm:ss')
-// }
-
-// const dateHistory = computed(() => {
-//   return props.dateHistory || []
-// })
 
 const tmpDateRange = ref<[Date, Date]>();
 const tmpCompareDateRange = ref<[Date, Date]>();
-
-// const computedDateRange = computed<[Date, Date]>({
-//   get() {
-//     return dateRange.value
-//   },
-//   set(value) {
-//     // if (value.length > 1) open.value = false
-//     tmpDateRange.value = value
-//   },
-// })
 
 const showComparisonPicker = ref(props.compareDateRange ? true : false);
 
@@ -176,15 +158,6 @@ function closeDropdown() {
   }
 }
 
-// const showCompare = (val: boolean) => {
-//   if (val) {
-//     displayCompare.value = val
-//   } else {
-//     emit('update:compareDate', undefined)
-//     computedCompare.value = undefined
-//   }
-// }
-
 onClickOutside(popperRef, (event) => {
   if (open.value) {
     if (inputWrapperRef.value.wrapperRef.contains(event.target)) {
@@ -195,14 +168,6 @@ onClickOutside(popperRef, (event) => {
     emit('blur');
   }
 });
-
-// const updatePerspective = (val: Date) => {
-//   emit('update:perspectiveDate', val)
-// }
-
-// const updateComparePerspective = (val: Date) => {
-//   emit('update:comparePerspectiveDate', val)
-// }
 
 const handleClick = () => {
   tmpDateRange.value = dateRange.value;
