@@ -443,12 +443,12 @@ const getPresetStyle = (preset: Preset) => {
   return '';
 };
 
-watch(currentPreset, (newVal, oldValue) => {
-  if (newVal !== oldValue && currentPreset.value) {
-    const preset = defaultPresets.find((d) => d.key === currentPreset.value);
-    setQuickAction(preset.preset(), preset);
-  }
-});
+// watch(currentPreset, (newVal, oldValue) => {
+//   if (newVal !== oldValue && currentPreset.value) {
+//     const preset = defaultPresets.find((d) => d.key === currentPreset.value);
+//     setQuickAction(preset.preset(), preset);
+//   }
+// });
 
 defineExpose({
   addYear,
