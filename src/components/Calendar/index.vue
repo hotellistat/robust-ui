@@ -15,7 +15,15 @@ import {
   addYears,
   subYears,
 } from 'date-fns';
-import { computed, nextTick, onMounted, PropType, ref, toRefs } from 'vue';
+import {
+  computed,
+  nextTick,
+  onMounted,
+  PropType,
+  ref,
+  toRefs,
+  watch,
+} from 'vue';
 import { PhCaretLeft, PhCaretRight } from '@phosphor-icons/vue';
 import defaultPresets, { Preset } from './presets';
 import variants from './variants';
@@ -44,12 +52,28 @@ const props = defineProps({
   },
   presets: {
     type: Array as PropType<Array<Preset>>,
-    default: () => defaultPresets,
+    default: () => defaultPresets.filter((d) => d.type === 'range'),
+  },
+  activePreset: {
+    type: String,
+    default: () => undefined,
   },
 });
-const emit = defineEmits(['update:modelValue', 'click:relativeDate']);
 
-const { future, past, today, modelValue, presets } = toRefs(props);
+const emit = defineEmits([
+  'update:modelValue',
+  'click:relativeDate',
+  'update:relative',
+]);
+
+const {
+  future,
+  past,
+  today,
+  modelValue,
+  presets,
+  activePreset: currentPreset,
+} = toRefs(props);
 
 const now = ref();
 // const cursor = ref<Date>()
@@ -59,6 +83,14 @@ const cursor = Array.isArray(modelValue.value)
 
 const selectedDate = ref<Date>(new Date());
 const refYearEntry = ref({});
+
+const activePreset = computed(() => {
+  if (currentPreset.value) {
+    const preset = defaultPresets.find((d) => d.key === currentPreset.value);
+    emit('update:modelValue', preset.preset());
+  }
+  return currentPreset.value;
+});
 
 const variantStyling = computed(() => {
   return variants[props.variant];
@@ -214,8 +246,12 @@ const isSelectedDay = (day: number) => {
   }
 };
 
-function setQuickAction(dateRange: [Date, Date] | Date) {
+function setQuickAction(dateRange: [Date, Date] | Date, preset: Preset) {
   emit('update:modelValue', dateRange);
+  emit('update:relative', {
+    key: preset.key,
+    date: preset.preset(),
+  });
   if (Array.isArray(dateRange)) cursor.value = dateRange[1];
   else cursor.value = dateRange;
 }
@@ -400,6 +436,17 @@ const months = computed(() => {
   ];
 });
 
+const getPresetStyle = (preset: Preset) => {
+  if (!activePreset.value) return '';
+  if (preset.key === activePreset.value) {
+    if (props.variant === 'secondary') {
+      return 'bg-emerald-500 hover:bg-emerald-500 text-white';
+    }
+    return 'bg-primary-500 hover:bg-primary-500 text-white';
+  }
+  return '';
+};
+
 defineExpose({
   addYear,
   subYear,
@@ -419,8 +466,9 @@ defineExpose({
         <div
           v-for="(preset, index) in presets"
           :key="index"
-          class="py-2 px-4 hover:bg-gray-50 dark:hover:bg-gray-800"
-          @click="setQuickAction(preset.preset())"
+          class="py-2 px-4"
+          :class="getPresetStyle(preset)"
+          @click="setQuickAction(preset.preset(), preset)"
         >
           {{ preset.title }}
         </div>

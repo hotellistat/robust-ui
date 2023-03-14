@@ -12,7 +12,7 @@ import {
 import { PhCaretDown, PhCalendar } from '@phosphor-icons/vue';
 import { format } from 'date-fns';
 import { computed, PropType, readonly, ref, toRefs, watch } from 'vue';
-import { perspectiveDatePresets } from '../Calendar/presets';
+import presets from '../Calendar/presets';
 
 const props = defineProps({
   title: {
@@ -71,6 +71,14 @@ const props = defineProps({
     type: Array,
     default: () => [],
   },
+  activePreset: {
+    type: String,
+    default: () => undefined,
+  },
+  activeComparePreset: {
+    type: String,
+    default: () => undefined,
+  },
 });
 
 const emit = defineEmits([
@@ -80,11 +88,19 @@ const emit = defineEmits([
   'update:perspectiveDate',
   'update:comparePerspectiveDate',
   'update:dateRange',
+  'update:relative',
+  'update:compareRelative',
   'change',
 ]);
 
-const { dateRange, compareDateRange, perspectiveDate, comparePerspectiveDate } =
-  toRefs(props);
+const {
+  dateRange,
+  compareDateRange,
+  perspectiveDate,
+  comparePerspectiveDate,
+  activePreset,
+  activeComparePreset,
+} = toRefs(props);
 
 const open = ref(false);
 const inputWrapperRef = ref();
@@ -100,6 +116,13 @@ const displayCompare = ref();
 const storeHistory = ref(true);
 const popperRef = ref();
 const active = ref<'comparison' | 'main'>('main');
+
+const dateType = ref<any>('custom');
+const compareDateType = ref<any>('custom');
+
+const perspectiveDatePresets = ref(
+  presets.filter((d) => d.type === 'perspective')
+);
 
 // const pickedCompare = computed(() => {
 //   return compareDates.value.length > 1
@@ -197,8 +220,14 @@ const goBack = () => {
 };
 
 const saveTime = async () => {
-  emit('update:dateRange', tmpDateRange.value);
-  emit('update:compareDateRange', tmpCompareDateRange.value);
+  emit('update:dateRange', {
+    date: tmpDateRange.value,
+    type: dateType.value,
+  });
+  emit('update:compareDateRange', {
+    date: tmpCompareDateRange.value,
+    type: compareDateType.value,
+  });
   emit('change', tmpDateRange.value);
   emit('blur');
   open.value = false;
@@ -207,6 +236,47 @@ const saveTime = async () => {
 const enableStoringHistory = (enable: boolean) => {
   storeHistory.value = enable;
 };
+
+const updateRelative = (preset: { key: string; date: Date | Date[] }) => {
+  dateType.value = {
+    name: 'preset',
+    value: preset.key,
+  };
+  tmpDateRange.value = preset.date as [Date, Date];
+  emit('update:relative', dateType.value);
+};
+
+const updateCompareRelative = (preset: {
+  key: string;
+  date: Date | Date[];
+}) => {
+  compareDateType.value = {
+    name: 'preset',
+    value: preset.key,
+  };
+  tmpCompareDateRange.value = preset.date as [Date, Date];
+  emit('update:compareRelative', compareDateType.value);
+};
+
+const updateMain = (val: [Date, Date]) => {
+  tmpDateRange.value = val;
+  dateType.value = {
+    name: 'custom',
+  };
+  emit('update:relative', undefined);
+};
+
+const updateCompare = (val: [Date, Date]) => {
+  tmpCompareDateRange.value = val;
+  compareDateType.value = {
+    name: 'custom',
+  };
+  emit('update:compareRelative', undefined);
+};
+
+// const updateDate = () => {
+//   dateType.value = 'custom';
+// };
 
 watch(perspectiveOf, (val) => {
   emit('update:perspectiveDate', val);
@@ -330,7 +400,13 @@ defineExpose({
       <!-- > -->
       <!--   Date range -->
       <!-- </h3> -->
-      <RobustCalendar ref="mainCalendar" v-model="tmpDateRange">
+      <RobustCalendar
+        ref="mainCalendar"
+        :model-value="tmpDateRange"
+        :active-preset="activePreset"
+        @update:model-value="updateMain"
+        @update:relative="updateRelative"
+      >
         <div v-if="enablePerspective" class="flex flex-col items-start gap-y-3">
           <div>
             <label
@@ -352,9 +428,12 @@ defineExpose({
 
     <section v-else>
       <RobustCalendar
-        v-model="tmpCompareDateRange"
+        :model-value="tmpCompareDateRange"
+        :active-preset="activeComparePreset"
         variant="secondary"
+        @update:model-value="updateCompare"
         @click:relative-date="enableStoringHistory(false)"
+        @update:relative="updateCompareRelative"
       >
         <div v-if="enablePerspective" class="flex flex-col items-start">
           <label
