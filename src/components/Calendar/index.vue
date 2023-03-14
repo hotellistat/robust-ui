@@ -84,14 +84,6 @@ const cursor = Array.isArray(modelValue.value)
 const selectedDate = ref<Date>(new Date());
 const refYearEntry = ref({});
 
-const activePreset = computed(() => {
-  if (currentPreset.value) {
-    const preset = defaultPresets.find((d) => d.key === currentPreset.value);
-    emit('update:modelValue', preset.preset());
-  }
-  return currentPreset.value;
-});
-
 const variantStyling = computed(() => {
   return variants[props.variant];
 });
@@ -357,6 +349,10 @@ const reset = () => {
 // };
 
 onMounted(() => {
+  if (currentPreset.value) {
+    const preset = defaultPresets.find((d) => d.key === currentPreset.value);
+    setQuickAction(preset.preset(), preset);
+  }
   if (Array.isArray(modelValue.value)) {
     cursor.value = new Date(modelValue.value[1] || new Date());
     selectedDate.value = cursor.value;
@@ -437,8 +433,8 @@ const months = computed(() => {
 });
 
 const getPresetStyle = (preset: Preset) => {
-  if (!activePreset.value) return '';
-  if (preset.key === activePreset.value) {
+  if (!currentPreset.value) return '';
+  if (preset.key === currentPreset.value) {
     if (props.variant === 'secondary') {
       return 'bg-emerald-500 hover:bg-emerald-500 text-white';
     }
@@ -446,6 +442,13 @@ const getPresetStyle = (preset: Preset) => {
   }
   return '';
 };
+
+watch(currentPreset, (newVal, oldValue) => {
+  if (newVal !== oldValue && currentPreset.value) {
+    const preset = defaultPresets.find((d) => d.key === currentPreset.value);
+    setQuickAction(preset.preset(), preset);
+  }
+});
 
 defineExpose({
   addYear,

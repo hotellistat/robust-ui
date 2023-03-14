@@ -220,14 +220,10 @@ const goBack = () => {
 };
 
 const saveTime = async () => {
-  emit('update:dateRange', {
-    date: tmpDateRange.value,
-    type: dateType.value,
-  });
-  emit('update:compareDateRange', {
-    date: tmpCompareDateRange.value,
-    type: compareDateType.value,
-  });
+  emit('update:dateRange', tmpDateRange.value);
+  emit('update:relative', dateType.value);
+  emit('update:compareDateRange', tmpCompareDateRange.value);
+  emit('update:compareRelative', compareDateType.value);
   emit('change', tmpDateRange.value);
   emit('blur');
   open.value = false;
