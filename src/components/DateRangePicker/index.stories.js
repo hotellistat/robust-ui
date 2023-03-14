@@ -40,14 +40,14 @@ Default.args = {
   'onUpdate:compareDateRange': (val) => {
     compareDateRange.value = val;
   },
-  'onUpdate:relative': (type) => {
+  'onUpdate:activePreset': (type) => {
     if (type && type.name === 'preset') {
       activePreset.value = type.value;
     } else {
       activePreset.value = undefined;
     }
   },
-  'onUpdate:compareRelative': (type) => {
+  'onUpdate:activeComparePreset': (type) => {
     if (type && type.name === 'preset') {
       activeComparePreset.value = type.value;
     } else {
