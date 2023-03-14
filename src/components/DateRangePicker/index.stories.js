@@ -34,21 +34,11 @@ Default.args = {
   activeComparePreset,
   dateRange: dateRange,
   'onUpdate:dateRange': (val) => {
-    dateRange.value = val?.date;
-    if (val && val.type.name === 'preset') {
-      activePreset.value = val.type.value;
-    } else {
-      activePreset.value = undefined;
-    }
+    dateRange.value = val;
   },
   compareDateRange: compareDateRange,
   'onUpdate:compareDateRange': (val) => {
-    compareDateRange.value = val?.date;
-    if (val && val.type.name === 'preset') {
-      activeComparePreset.value = val.type.value;
-    } else {
-      activeComparePreset.value = undefined;
-    }
+    compareDateRange.value = val;
   },
   'onUpdate:relative': (type) => {
     if (type && type.name === 'preset') {
