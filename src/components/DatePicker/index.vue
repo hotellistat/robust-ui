@@ -41,15 +41,29 @@ const props = defineProps({
     type: Boolean,
     default: false,
   },
+  activePreset: {
+    type: String,
+    default: () => undefined,
+  },
   presets: {
     type: Array as PropType<Preset[]>,
     default: () => [],
   },
+  variant: {
+    type: String,
+    default: () => 'primary',
+  },
 });
 
-const emit = defineEmits(['blur', 'update:modelValue', 'change', 'blur']);
+const emit = defineEmits([
+  'blur',
+  'update:modelValue',
+  'change',
+  'blur',
+  'update:relative',
+]);
 
-const { modelValue, presets } = toRefs(props);
+const { modelValue, presets, activePreset, variant } = toRefs(props);
 const open = ref(false);
 const popperRef = ref();
 const inputWrapperRef = ref();
@@ -96,6 +110,10 @@ function closeDropdown() {
     emit('blur');
   }
 }
+
+const updateRelative = (preset: any) => {
+  emit('update:relative', preset);
+};
 </script>
 
 <template>
@@ -147,6 +165,12 @@ function closeDropdown() {
       placement: 'bottom-start',
     }"
   >
-    <RobustCalendar v-model="computedValue" :presets="presets" />
+    <RobustCalendar
+      v-model="computedValue"
+      :presets="presets"
+      :active-preset="activePreset"
+      :variant="variant"
+      @update:relative="updateRelative"
+    />
   </RobustPopper>
 </template>

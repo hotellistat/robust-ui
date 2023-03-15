@@ -349,10 +349,10 @@ const reset = () => {
 // };
 
 onMounted(() => {
-  if (currentPreset.value) {
-    const preset = defaultPresets.find((d) => d.key === currentPreset.value);
-    setQuickAction(preset.preset(), preset);
-  }
+  // if (currentPreset.value) {
+  //   const preset = defaultPresets.find((d) => d.key === currentPreset.value);
+  //   setQuickAction(preset.preset(), preset);
+  // }
   if (Array.isArray(modelValue.value)) {
     cursor.value = new Date(modelValue.value[1] || new Date());
     selectedDate.value = cursor.value;

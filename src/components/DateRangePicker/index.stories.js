@@ -24,14 +24,22 @@ const Template = (args) => ({
 
 const date = [new Date(), new Date()];
 const dateRange = ref(date);
+const perspectiveDate = ref(date[0]);
+const comparePerspectiveDate = ref(date[0]);
 const compareDateRange = ref(date);
 const activePreset = ref();
 const activeComparePreset = ref();
+const perspectivePreset = ref();
+const comparePerspectivePreset = ref();
 
 export const Default = Template.bind({});
 Default.args = {
+  perspectiveDate,
+  comparePerspectiveDate,
   activePreset,
   activeComparePreset,
+  perspectivePreset,
+  comparePerspectivePreset,
   dateRange: dateRange,
   'onUpdate:dateRange': (val) => {
     dateRange.value = val;
@@ -53,6 +61,26 @@ Default.args = {
     } else {
       activeComparePreset.value = undefined;
     }
+  },
+  'onUpdate:perspectivePreset': (type) => {
+    if (type && type.name === 'preset') {
+      perspectivePreset.value = type.value;
+    } else {
+      perspectivePreset.value = undefined;
+    }
+  },
+  'onUpdate:comparePerspectivePreset': (type) => {
+    if (type && type.name === 'preset') {
+      comparePerspectivePreset.value = type.value;
+    } else {
+      comparePerspectivePreset.value = undefined;
+    }
+  },
+  'onUpdate:perspectiveDate': (d) => {
+    perspectiveDate.value = d;
+  },
+  'onUpdate:comparePerspectiveDate': (d) => {
+    comparePerspectiveDate.value = d;
   },
   // 'onUpdate:relative': (val) => {
   //   console.log('update:relative', val);

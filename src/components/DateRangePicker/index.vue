@@ -79,6 +79,14 @@ const props = defineProps({
     type: String,
     default: () => undefined,
   },
+  perspectivePreset: {
+    type: String,
+    default: () => undefined,
+  },
+  comparePerspectivePreset: {
+    type: String,
+    default: () => undefined,
+  },
   presets: {
     type: Array as PropType<Preset[]>,
     default: () => defaultPresets,
@@ -94,6 +102,8 @@ const emit = defineEmits([
   'update:dateRange',
   'update:activePreset',
   'update:activeComparePreset',
+  'update:perspectivePreset',
+  'update:comparePerspectivePreset',
   'change',
 ]);
 
@@ -102,10 +112,16 @@ const {
   compareDateRange,
   perspectiveDate,
   comparePerspectiveDate,
-  activePreset,
   activeComparePreset,
+  perspectivePreset,
+  comparePerspectivePreset,
   presets,
 } = toRefs(props);
+
+const localActivePreset = ref(props.activePreset);
+const localActiveComparePreset = ref(props.activeComparePreset);
+const localPerspectivePreset = ref(props.perspectivePreset);
+const localComparePerspectivePreset = ref(props.comparePerspectivePreset);
 
 const open = ref(false);
 const inputWrapperRef = ref();
@@ -124,6 +140,8 @@ const active = ref<'comparison' | 'main'>('main');
 
 const dateType = ref<any>('custom');
 const compareDateType = ref<any>('custom');
+const perspectiveDateType = ref<any>('custom');
+const comparePerspectiveDateType = ref<any>('custom');
 
 const perspectiveDatePresets = ref(
   presets.value.filter((d) => d.type === 'perspective')
@@ -176,6 +194,50 @@ const handleClick = () => {
       new Date(),
       new Date(),
     ];
+  localActivePreset.value = props.activePreset;
+  localActiveComparePreset.value = props.activeComparePreset;
+  perspectivePreset.value = props.perspectivePreset;
+  comparePerspectivePreset.value = props.comparePerspectivePreset;
+
+  let preset = presets.value.find((d) => d.key === localActivePreset.value);
+  dateType.value = preset
+    ? {
+        name: 'preset',
+        value: preset.key,
+      }
+    : {
+        name: 'custom',
+      };
+  preset = presets.value.find((d) => d.key === localActiveComparePreset.value);
+  compareDateType.value = preset
+    ? {
+        name: 'preset',
+        value: preset.key,
+      }
+    : {
+        name: 'custom',
+      };
+  preset = presets.value.find((d) => d.key === localPerspectivePreset.value);
+  perspectiveDateType.value = preset
+    ? {
+        name: 'preset',
+        value: preset.key,
+      }
+    : {
+        name: 'custom',
+      };
+  preset = presets.value.find(
+    (d) => d.key === localComparePerspectivePreset.value
+  );
+  comparePerspectiveDateType.value = preset
+    ? {
+        name: 'preset',
+        value: preset.key,
+      }
+    : {
+        name: 'custom',
+      };
+
   open.value = !open.value;
 };
 
@@ -186,9 +248,13 @@ const goBack = () => {
 
 const saveTime = async () => {
   emit('update:dateRange', tmpDateRange.value);
-  emit('update:activePreset', dateType.value);
   emit('update:compareDateRange', tmpCompareDateRange.value);
+  emit('update:perspectiveDate', perspectiveOf.value);
+  emit('update:comparePerspectiveDate', comparePerspectiveOf.value);
+  emit('update:activePreset', dateType.value);
   emit('update:activeComparePreset', compareDateType.value);
+  emit('update:perspectivePreset', perspectiveDateType.value);
+  emit('update:comparePerspectivePreset', comparePerspectiveDateType.value);
   emit('change', tmpDateRange.value);
   emit('blur');
   open.value = false;
@@ -204,7 +270,8 @@ const updateRelative = (preset: { key: string; date: Date | Date[] }) => {
     value: preset.key,
   };
   tmpDateRange.value = preset.date as [Date, Date];
-  emit('update:activePreset', dateType.value);
+  localActivePreset.value = preset.key;
+  // emit('update:activePreset', dateType.value);
 };
 
 const updateCompareRelative = (preset: {
@@ -216,7 +283,34 @@ const updateCompareRelative = (preset: {
     value: preset.key,
   };
   tmpCompareDateRange.value = preset.date as [Date, Date];
-  emit('update:activeComparePreset', compareDateType.value);
+  localActiveComparePreset.value = preset.key;
+  // emit('update:activeComparePreset', compareDateType.value);
+};
+
+const updatePerspectiveRelative = (preset: {
+  key: string;
+  date: Date | Date[];
+}) => {
+  perspectiveDateType.value = {
+    name: 'preset',
+    value: preset.key,
+  };
+  perspectiveOf.value = preset.date as Date;
+  localPerspectivePreset.value = preset.key;
+  // emit('update:perspectivePreset', perspectiveDateType.value);
+};
+
+const updateComparePerspectiveRelative = (preset: {
+  key: string;
+  date: Date | Date[];
+}) => {
+  comparePerspectiveDateType.value = {
+    name: 'preset',
+    value: preset.key,
+  };
+  comparePerspectiveOf.value = preset.date as Date;
+  localComparePerspectivePreset.value = preset.key;
+  // emit('update:comparePerspectivePreset', comparePerspectiveDateType.value);
 };
 
 const updateMain = (val: [Date, Date]) => {
@@ -224,7 +318,8 @@ const updateMain = (val: [Date, Date]) => {
   dateType.value = {
     name: 'custom',
   };
-  emit('update:activePreset', undefined);
+  localActivePreset.value = undefined;
+  // emit('update:activePreset', undefined);
 };
 
 const updateCompare = (val: [Date, Date]) => {
@@ -232,20 +327,21 @@ const updateCompare = (val: [Date, Date]) => {
   compareDateType.value = {
     name: 'custom',
   };
-  emit('update:activeComparePreset', undefined);
+  localActiveComparePreset.value = undefined;
+  // emit('update:activeComparePreset', undefined);
 };
 
-// const updateDate = () => {
-//   dateType.value = 'custom';
-// };
-
-watch(perspectiveOf, (val) => {
-  emit('update:perspectiveDate', val);
+watch(activeComparePreset, () => {
+  localActiveComparePreset.value = activeComparePreset.value;
 });
 
-watch(comparePerspectiveOf, (val) => {
-  emit('update:comparePerspectiveDate', val);
-});
+// watch(perspectiveOf, (val) => {
+//   emit('update:perspectiveDate', val);
+// });
+//
+// watch(comparePerspectiveOf, (val) => {
+//   emit('update:comparePerspectiveDate', val);
+// });
 
 watch(showComparisonPicker, (val) => {
   if (!val) {
@@ -364,7 +460,7 @@ defineExpose({
       <RobustCalendar
         ref="mainCalendar"
         :model-value="tmpDateRange"
-        :active-preset="activePreset"
+        :active-preset="localActivePreset"
         @update:model-value="updateMain"
         @update:relative="updateRelative"
       >
@@ -378,6 +474,8 @@ defineExpose({
               v-model="perspectiveOf"
               placeholder="Date"
               :presets="perspectiveDatePresets"
+              :active-preset="localPerspectivePreset"
+              @update:relative="updatePerspectiveRelative"
             />
           </div>
           <RobustCheckbox v-model="showComparisonPicker">
@@ -390,7 +488,7 @@ defineExpose({
     <section v-else>
       <RobustCalendar
         :model-value="tmpCompareDateRange"
-        :active-preset="activeComparePreset"
+        :active-preset="localActiveComparePreset"
         variant="secondary"
         @update:model-value="updateCompare"
         @click:relative-date="enableStoringHistory(false)"
@@ -401,7 +499,14 @@ defineExpose({
             class="mb-1 block text-sm font-medium text-gray-500 dark:text-gray-400"
             >Perspective of</label
           >
-          <RobustDatePicker v-model="comparePerspectiveOf" placeholder="Date" />
+          <RobustDatePicker
+            v-model="comparePerspectiveOf"
+            placeholder="Date"
+            variant="secondary"
+            :presets="perspectiveDatePresets"
+            :active-preset="localComparePerspectivePreset"
+            @update:relative="updateComparePerspectiveRelative"
+          />
         </div>
       </RobustCalendar>
     </section>
