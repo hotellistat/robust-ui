@@ -157,14 +157,25 @@ const displayDate = computed(() => {
     return 'Select date';
   }
 
-  const realDate = dateRange.value;
-  try {
-    return realDate.length > 1
-      ? format(realDate[0], 'P') + ' - ' + format(realDate[1], 'P')
-      : format(realDate[0], 'P') + ' - ' + format(realDate[0], 'P');
-  } catch (e) {
-    return undefined;
+  if (localActivePreset.value) {
+    const preset = presets.value.find((d) => d.key === localActivePreset.value);
+    return preset.title;
   }
+
+  const realDate = dateRange.value;
+  const formatter = Intl.DateTimeFormat(navigator.language, {
+    day: '2-digit',
+    month: '2-digit',
+    year: 'numeric',
+  });
+  return formatter.format(realDate[0]) + ' - ' + formatter.format(realDate[1]);
+  // try {
+  //   return realDate.length > 1
+  //     ? format(realDate[0], 'P') + ' - ' + format(realDate[1], 'P')
+  //     : format(realDate[0], 'P') + ' - ' + format(realDate[0], 'P');
+  // } catch (e) {
+  //   return undefined;
+  // }
 });
 
 function closeDropdown() {
@@ -182,6 +193,7 @@ onClickOutside(popperRef, (event) => {
       event.stopPropagation();
       event.preventDefault();
     }
+    localActivePreset.value = props.activePreset;
     closeDropdown();
     emit('blur');
   }
