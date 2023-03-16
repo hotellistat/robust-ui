@@ -2,7 +2,6 @@
 import RobustPopper from '../Popper';
 import RobustCalendar from '../Calendar/index.vue';
 import RobustInputWrapper from '../InputWrapper/index.vue';
-import { format } from 'date-fns';
 import { PhCaretDown, PhCalendar } from '@phosphor-icons/vue';
 import { computed, ref, toRefs, PropType, readonly } from 'vue';
 import { onClickOutside } from '@vueuse/core';
@@ -97,11 +96,17 @@ const displayDate = computed(() => {
   }
 
   const realDate = computedValue.value;
-  try {
-    return realDate ? format(realDate, 'P') : 'Unknown';
-  } catch (e) {
-    return undefined;
-  }
+  const formatter = Intl.DateTimeFormat(navigator.language, {
+    day: '2-digit',
+    month: '2-digit',
+    year: 'numeric',
+  });
+  return formatter.format(realDate);
+  // try {
+  //   return realDate ? format(realDate, 'P') : 'Unknown';
+  // } catch (e) {
+  //   return undefined;
+  // }
 });
 
 function closeDropdown() {

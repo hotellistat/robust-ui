@@ -391,43 +391,72 @@ function hideYearSelection() {
   showYearSelectionActive.value = false;
 }
 
+const capitalize = (str: string) => {
+  const s = str.charAt(0).toUpperCase();
+
+  return s + str.slice(1, str.length);
+};
+
+const getShortMonthName = (month: number) => {
+  const formatter = Intl.DateTimeFormat(navigator.language, {
+    month: 'long',
+  });
+  const objDate = new Date();
+  objDate.setDate(1);
+  objDate.setMonth(month - 1);
+  console.log(formatter.format(objDate));
+  return capitalize(formatter.format(objDate).slice(0, 3));
+};
+
+const getDayNames = () => {
+  const days = [1, 2, 3, 4, 5, 6, 7].map((day) => {
+    const dd = day < 10 ? `0${day}` : day;
+    return new Date(`2016-02-${dd}T00:00:00+00:00`);
+  });
+  return days.map((date) =>
+    date.toLocaleString(navigator.language, {
+      weekday: 'long',
+    })
+  );
+};
+
 const months = computed(() => {
   return [
     {
-      title: 'Jan',
+      title: getShortMonthName(1),
     },
     {
-      title: 'Feb',
+      title: getShortMonthName(2),
     },
     {
-      title: 'Mar',
+      title: getShortMonthName(3),
     },
     {
-      title: 'Apr',
+      title: getShortMonthName(4),
     },
     {
-      title: 'May',
+      title: getShortMonthName(5),
     },
     {
-      title: 'Jun',
+      title: getShortMonthName(6),
     },
     {
-      title: 'Jul',
+      title: getShortMonthName(7),
     },
     {
-      title: 'Aug',
+      title: getShortMonthName(8),
     },
     {
-      title: 'Sep',
+      title: getShortMonthName(9),
     },
     {
-      title: 'Oct',
+      title: getShortMonthName(10),
     },
     {
-      title: 'Nov',
+      title: getShortMonthName(11),
     },
     {
-      title: 'Dec',
+      title: getShortMonthName(12),
     },
   ];
 });
@@ -579,40 +608,47 @@ defineExpose({
           ]"
         >
           <div
+            v-for="(day, idx) in getDayNames()"
+            :key="idx"
             class="pb-2 text-center text-sm text-gray-400 dark:text-gray-400"
           >
-            M
+            {{ day.charAt(0).toUpperCase() }}
           </div>
-          <div
-            class="pb-2 text-center text-sm text-gray-400 dark:text-gray-400"
-          >
-            T
-          </div>
-          <div
-            class="pb-2 text-center text-sm text-gray-400 dark:text-gray-400"
-          >
-            W
-          </div>
-          <div
-            class="pb-2 text-center text-sm text-gray-400 dark:text-gray-400"
-          >
-            T
-          </div>
-          <div
-            class="pb-2 text-center text-sm text-gray-400 dark:text-gray-400"
-          >
-            F
-          </div>
-          <div
-            class="pb-2 text-center text-sm text-gray-400 dark:text-gray-400"
-          >
-            S
-          </div>
-          <div
-            class="pb-2 text-center text-sm text-gray-400 dark:text-gray-400"
-          >
-            S
-          </div>
+          <!-- <div -->
+          <!--   class="pb-2 text-center text-sm text-gray-400 dark:text-gray-400" -->
+          <!-- > -->
+          <!--   M -->
+          <!-- </div> -->
+          <!-- <div -->
+          <!--   class="pb-2 text-center text-sm text-gray-400 dark:text-gray-400" -->
+          <!-- > -->
+          <!--   T -->
+          <!-- </div> -->
+          <!-- <div -->
+          <!--   class="pb-2 text-center text-sm text-gray-400 dark:text-gray-400" -->
+          <!-- > -->
+          <!--   W -->
+          <!-- </div> -->
+          <!-- <div -->
+          <!--   class="pb-2 text-center text-sm text-gray-400 dark:text-gray-400" -->
+          <!-- > -->
+          <!--   T -->
+          <!-- </div> -->
+          <!-- <div -->
+          <!--   class="pb-2 text-center text-sm text-gray-400 dark:text-gray-400" -->
+          <!-- > -->
+          <!--   F -->
+          <!-- </div> -->
+          <!-- <div -->
+          <!--   class="pb-2 text-center text-sm text-gray-400 dark:text-gray-400" -->
+          <!-- > -->
+          <!--   S -->
+          <!-- </div> -->
+          <!-- <div -->
+          <!--   class="pb-2 text-center text-sm text-gray-400 dark:text-gray-400" -->
+          <!-- > -->
+          <!--   S -->
+          <!-- </div> -->
 
           <div v-for="offset in firstWeekday" :key="offset + '_offset'"></div>
           <div
