@@ -692,24 +692,19 @@ defineExpose({
       v-if="Array.isArray(modelValue)"
       class="flex flex-shrink-0 flex-col items-start border-gray-200 p-4 dark:border-gray-700 sm:border-l"
     >
-      <label
-        class="mb-1 block text-sm font-medium text-gray-500 dark:text-gray-400"
-        >From</label
-      >
       <RobustDatePicker
         v-model="modelValue[0]"
+        title="From"
+        condensed
         placeholder="Date"
-        class="mb-2 w-full"
+        class="mb-3 w-full"
       />
-
-      <label
-        class="mb-1 block text-sm font-medium text-gray-500 dark:text-gray-400"
-        >To</label
-      >
       <RobustDatePicker
         v-model="modelValue[1]"
+        title="To"
+        condensed
         placeholder="Date"
-        class="mb-2 w-full"
+        class="mb-3 w-full"
       />
       <slot />
     </div>

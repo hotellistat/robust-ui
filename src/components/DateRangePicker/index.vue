@@ -10,7 +10,6 @@ import {
   RobustTabs,
 } from '..';
 import { PhCaretDown, PhCalendar } from '@phosphor-icons/vue';
-import { format } from 'date-fns';
 import { computed, PropType, readonly, ref, toRefs, watch } from 'vue';
 import defaultPresets, { Preset } from '../Calendar/presets';
 
@@ -157,11 +156,6 @@ const displayDate = computed(() => {
     return 'Select date';
   }
 
-  if (localActivePreset.value) {
-    const preset = presets.value.find((d) => d.key === localActivePreset.value);
-    return preset.title;
-  }
-
   const realDate = dateRange.value;
   const formatter = Intl.DateTimeFormat(navigator.language, {
     day: '2-digit',
@@ -176,6 +170,18 @@ const displayDate = computed(() => {
   // } catch (e) {
   //   return undefined;
   // }
+});
+
+const displayPreset = computed(() => {
+  if (!dateRange.value) {
+    return undefined;
+  }
+  if (props.activePreset) {
+    const preset = presets.value.find((d) => d.key === props.activePreset);
+    return preset.title;
+  }
+
+  return undefined;
 });
 
 function closeDropdown() {
@@ -393,12 +399,21 @@ defineExpose({
     <div
       :id="slotProps.cuid"
       ref="select"
-      class="w-full cursor-default items-center bg-transparent text-current outline-none"
+      class="relative w-full cursor-default items-center bg-transparent text-current outline-none"
       :class="[condensed ? 'pl-2' : 'pl-3']"
       v-bind="$attrs"
     >
-      <div class="min-w-0 truncate text-sm tabular-nums sm:text-base">
+      <div
+        :style="{ visibility: displayPreset ? 'hidden' : 'visible' }"
+        class="min-w-0 truncate text-sm tabular-nums sm:text-base"
+      >
         {{ displayDate }}
+      </div>
+      <div
+        v-show="displayPreset"
+        class="absolute inset-0 min-w-0 truncate text-center text-sm sm:text-base"
+      >
+        {{ displayPreset }}
       </div>
     </div>
 
@@ -425,18 +440,21 @@ defineExpose({
     }"
   >
     <div
-      class="flex items-center justify-between border-b border-t border-gray-200 p-2 dark:border-gray-700"
+      class="flex items-center justify-between border-gray-200 dark:border-gray-700"
     >
-      <div class="p-2">
+      <!-- <div class="p-2">
         {{ active == 'main' ? 'Main' : 'Comparison' }} date range
-      </div>
+      </div> -->
       <RobustTabs
-        v-if="enableComparison && showComparisonPicker"
+        v-if="showComparisonPicker"
         v-model="active"
-        :tabs="[
-          { title: 'Main', value: 'main' },
-          { title: 'Comparison', value: 'comparison' },
-        ]"
+        class="w-full"
+        :tabs="
+          [
+            { title: 'Main date range', value: 'main' },
+            { title: 'Comparison date range', value: 'comparison' },
+          ].filter((item) => enableComparison || item?.value !== 'comparison')
+        "
       />
       <!-- <div v-if="enableComparison && showComparisonPicker" class="flex gap-x-2">
         <div
@@ -478,13 +496,11 @@ defineExpose({
       >
         <div v-if="enablePerspective" class="flex flex-col items-start gap-y-3">
           <div>
-            <label
-              class="mb-1 block text-sm font-medium text-gray-500 dark:text-gray-400"
-              >Perspective of</label
-            >
             <RobustDatePicker
               v-model="perspectiveOf"
               placeholder="Date"
+              title="Perspective of"
+              condensed
               :presets="perspectiveDatePresets"
               :active-preset="localPerspectivePreset"
               @update:relative="updatePerspectiveRelative"
@@ -507,13 +523,11 @@ defineExpose({
         @update:relative="updateCompareRelative"
       >
         <div v-if="enablePerspective" class="flex flex-col items-start">
-          <label
-            class="mb-1 block text-sm font-medium text-gray-500 dark:text-gray-400"
-            >Perspective of</label
-          >
           <RobustDatePicker
             v-model="comparePerspectiveOf"
             placeholder="Date"
+            title="Perspective of"
+            condensed
             variant="secondary"
             :presets="perspectiveDatePresets"
             :active-preset="localComparePerspectivePreset"
