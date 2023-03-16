@@ -137,10 +137,29 @@ const storeHistory = ref(true);
 const popperRef = ref();
 const active = ref<'comparison' | 'main'>('main');
 
-const dateType = ref<any>('custom');
-const compareDateType = ref<any>('custom');
-const perspectiveDateType = ref<any>('custom');
-const comparePerspectiveDateType = ref<any>('custom');
+type DateType = DateTypeCustom | DateTypePreset;
+
+interface DateTypeCustom {
+  name: 'custom';
+}
+
+interface DateTypePreset {
+  name: 'preset';
+  value: string;
+}
+
+const dateType = ref<DateType>({
+  name: 'custom',
+});
+const compareDateType = ref<DateType>({
+  name: 'custom',
+});
+const perspectiveDateType = ref<DateType>({
+  name: 'custom',
+});
+const comparePerspectiveDateType = ref<DateType>({
+  name: 'custom',
+});
 
 const perspectiveDatePresets = ref(
   presets.value.filter((d) => d.type === 'perspective')
@@ -163,13 +182,6 @@ const displayDate = computed(() => {
     year: 'numeric',
   });
   return formatter.format(realDate[0]) + ' - ' + formatter.format(realDate[1]);
-  // try {
-  //   return realDate.length > 1
-  //     ? format(realDate[0], 'P') + ' - ' + format(realDate[1], 'P')
-  //     : format(realDate[0], 'P') + ' - ' + format(realDate[0], 'P');
-  // } catch (e) {
-  //   return undefined;
-  // }
 });
 
 const displayPreset = computed(() => {
@@ -411,7 +423,7 @@ defineExpose({
       </div>
       <div
         v-show="displayPreset"
-        class="absolute inset-0 min-w-0 truncate text-center text-sm sm:text-base"
+        class="absolute inset-0 min-w-0 truncate px-4 text-sm sm:text-base"
       >
         {{ displayPreset }}
       </div>
