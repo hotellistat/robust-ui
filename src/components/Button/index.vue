@@ -60,7 +60,7 @@ const props = defineProps({
     default: false,
   },
   variant: {
-    type: String as PropType<string | false>,
+    type: [String, Boolean] as PropType<string | false>,
     default: 'primary',
   },
   condensed: {
