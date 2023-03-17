@@ -75,3 +75,13 @@ const LoadingTemplate = (args) => ({
 });
 
 export const Loading = LoadingTemplate.bind();
+
+const NoVariantTemplate = (args) => ({
+  template: `<Button :variant="false" v-bind="args">Click here</Button>`,
+  components: { Button },
+  setup() {
+    return { args };
+  },
+});
+
+export const NoVariant = NoVariantTemplate.bind();

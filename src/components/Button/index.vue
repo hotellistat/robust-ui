@@ -2,11 +2,14 @@
   <Component
     :is="(tag as any)"
     :disabled="disabled"
-    class="flex cursor-default items-center justify-center truncate font-medium ring-opacity-50 focus:ring"
+    class="flex cursor-default items-center justify-center truncate font-medium"
     :class="[
-      disabled
+      variantStyles && disabled
         ? 'bg-gray-100 text-gray-400 dark:bg-gray-700 dark:text-gray-400'
-        : variantStyles,
+        : undefined,
+      variantStyles && !disabled
+        ? variantStyles + 'ring-opacity-50 focus:ring'
+        : undefined,
       condensed ? 'h-8 px-3' : 'h-10 px-4',
       rounded ? 'rounded-full' : 'rounded-md',
     ]"
@@ -35,7 +38,7 @@
 </template>
 
 <script lang="ts" setup>
-import { computed, toRefs } from 'vue';
+import { computed, PropType, toRefs } from 'vue';
 import RobustSpinner from '../Spinner/index.vue';
 import variants from './variants';
 
@@ -57,7 +60,7 @@ const props = defineProps({
     default: false,
   },
   variant: {
-    type: String,
+    type: String as PropType<string | false>,
     default: 'primary',
   },
   condensed: {
@@ -69,6 +72,10 @@ const props = defineProps({
 const { loading, variant } = toRefs(props);
 
 const variantStyles = computed<string>(() => {
+  if (variant.value === false) {
+    return undefined;
+  }
+
   return variants[variant.value];
 });
 </script>
