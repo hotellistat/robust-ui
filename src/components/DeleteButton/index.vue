@@ -19,7 +19,7 @@
         </div>
       </div>
     </RobustModal>
-    <RobustButton v-bind="props" @click.stop="() => (open = true)">
+    <RobustButton v-bind="props" @click.stop="handleClick">
       <slot />
     </RobustButton>
   </div>
@@ -73,4 +73,9 @@ const decline = () => {
 };
 
 const open = ref(false);
+
+const handleClick = (e: MouseEvent) => {
+  if (e.shiftKey) return confirm();
+  open.value = true;
+};
 </script>
