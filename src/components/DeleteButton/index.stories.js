@@ -7,7 +7,10 @@ export default {
 };
 
 const Template = (args) => ({
-  template: '<DeleteButton v-bind="args">DELETE</DeleteButton>',
+  template: `
+  <DeleteButton v-bind="args">
+    DELETE
+  </DeleteButton>`,
   components: { DeleteButton },
   setup() {
     return { args };

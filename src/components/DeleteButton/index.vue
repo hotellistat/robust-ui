@@ -6,15 +6,15 @@
         <slot name="body" />
         <div v-if="!$slots.body" class="flex flex-col gap-y-2">
           <div class="mb-4">Are you sure you want to delete this item?</div>
-          <div class="flex justify-end">
-            <div class="flex gap-x-2">
-              <RobustButton variant="danger" class="uppercase" @click="confirm">
-                Delete</RobustButton
-              >
-              <RobustButton variant="muted" class="uppercase" @click="decline">
-                Cancel
-              </RobustButton>
-            </div>
+        </div>
+        <div class="flex justify-end">
+          <div class="flex gap-x-2">
+            <RobustButton variant="danger" class="uppercase" @click="confirm">
+              Delete</RobustButton
+            >
+            <RobustButton variant="muted" class="uppercase" @click="decline">
+              Cancel
+            </RobustButton>
           </div>
         </div>
       </div>
