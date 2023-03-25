@@ -8,7 +8,7 @@
         ? 'bg-gray-100 text-gray-400 dark:bg-gray-700 dark:text-gray-400'
         : undefined,
       variantStyles && !disabled
-        ? variantStyles + 'ring-opacity-50 focus:ring'
+        ? variantStyles + ' ring-opacity-50 focus:ring'
         : undefined,
       condensed ? 'h-8 px-3' : 'h-10 px-4',
       rounded ? 'rounded-full' : 'rounded-md',
