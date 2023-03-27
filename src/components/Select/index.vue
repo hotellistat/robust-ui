@@ -152,7 +152,7 @@ function openDropdown() {
   open.value = true;
   sortOptionsBySelected();
   nextTick(() => {
-    refSelectInput.value.focus();
+    if (refSelectInput.value) refSelectInput.value.focus();
   });
   emit('focus');
 }
