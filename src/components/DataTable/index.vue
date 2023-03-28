@@ -24,6 +24,9 @@
       <div
         ref="header"
         class="datatable-grid-columns robust-datatable-header hidden select-none items-center gap-x-2 sm:grid"
+        :style="{
+          gridTemplateColumns: sizes,
+        }"
         :class="headerClass"
       >
         <div class="checkbox">
@@ -84,6 +87,9 @@
         >
           <div
             class="datatable-grid-columns flex flex-col gap-x-2 gap-y-2 sm:grid sm:items-center"
+            :style="{
+              gridTemplateColumns: sizes,
+            }"
             :class="entry.rowClass ?? ''"
           >
             <div>
@@ -130,7 +136,9 @@
     <slot
       v-if="$slots.footer"
       name="footer"
-      :data="{ className: 'datatable-grid-columns' }"
+      :data="{
+        size: sizes,
+      }"
     />
     <div v-if="isFooterVisible" class="flex items-center justify-between py-2">
       <div v-if="page !== undefined" class="flex items-center gap-x-2">
@@ -941,9 +949,9 @@ onUnmounted(() => {
 </script>
 
 <style lang="postcss">
-.datatable-grid-columns {
-  grid-template-columns: v-bind('sizes');
-}
+/* .datatable-grid-columns { */
+/*   grid-template-columns: v-bind('sizes'); */
+/* } */
 
 /* use v-bind for (max rows per page) */
 .datatable-grid-rows {
