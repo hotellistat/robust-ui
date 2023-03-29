@@ -9,12 +9,12 @@
         </div>
         <div class="flex justify-end">
           <div class="flex gap-x-2">
-            <RobustButton variant="danger" class="uppercase" @click="confirm">
-              Delete</RobustButton
-            >
             <RobustButton variant="muted" class="uppercase" @click="decline">
               Cancel
             </RobustButton>
+            <RobustButton variant="danger" class="uppercase" @click="confirm">
+              Delete</RobustButton
+            >
           </div>
         </div>
       </div>
