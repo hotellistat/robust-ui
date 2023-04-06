@@ -14,7 +14,8 @@
     >
       You've selected {{ selectedRows.length }} entries.
       <span
-        class="dark:text-primay-300 cursor-pointer font-semibold text-primary-400"
+        class="dark:text-primay-300 font-semibold text-primary-400"
+        :class="[cursorPointer ? 'cursor-pointer' : 'cursor-default']"
         @click="selectAll(true)"
         >Select all.</span
       >
@@ -38,8 +39,11 @@
         <div
           v-for="column in options.columns"
           :key="column.key"
-          class="robust-table-column relative flex min-h-[48px] cursor-pointer items-center justify-between"
-          :class="column.class ?? ''"
+          class="robust-table-column relative flex min-h-[48px] items-center justify-between"
+          :class="[
+            column.class ?? '',
+            cursorPointer ? 'cursor-pointer' : 'cursor-default',
+          ]"
         >
           <div
             v-if="!$slots[`c_${column.key}`]"
@@ -168,7 +172,7 @@
 </template>
 
 <script setup lang="ts">
-import { computed } from 'vue';
+import { computed, inject } from 'vue';
 import { onMounted, onUnmounted, PropType, ref, toRefs, watch } from 'vue';
 import Separator from '../Separator/index.vue';
 import {
@@ -222,6 +226,8 @@ type DataTableOptions = {
   selection?: boolean;
   search?: boolean;
 };
+
+const cursorPointer = inject('enableCursorPointer', true);
 
 const defaultOptions: Partial<DataTableOptions> = {
   serverSide: false,

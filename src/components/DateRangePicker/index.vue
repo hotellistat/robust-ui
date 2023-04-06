@@ -10,7 +10,7 @@ import {
   RobustTabs,
 } from '..';
 import { PhCaretDown, PhCalendar } from '@phosphor-icons/vue';
-import { computed, PropType, readonly, ref, toRefs, watch } from 'vue';
+import { computed, inject, PropType, readonly, ref, toRefs, watch } from 'vue';
 import defaultPresets, { Preset } from '../Calendar/presets';
 
 const props = defineProps({
@@ -116,6 +116,8 @@ const {
   comparePerspectivePreset,
   presets,
 } = toRefs(props);
+
+const cursorPointer = inject('enableCursorPointer', true);
 
 const localActivePreset = ref(props.activePreset);
 const localActiveComparePreset = ref(props.activeComparePreset);
@@ -411,8 +413,11 @@ defineExpose({
     <div
       :id="slotProps.cuid"
       ref="select"
-      class="relative w-full cursor-default items-center bg-transparent text-current outline-none"
-      :class="[condensed ? 'pl-2' : 'pl-3']"
+      class="relative w-full items-center bg-transparent text-current outline-none"
+      :class="[
+        condensed ? 'pl-2' : 'pl-3',
+        cursorPointer ? 'cursor-pointer' : 'cursor-default',
+      ]"
       v-bind="$attrs"
     >
       <div

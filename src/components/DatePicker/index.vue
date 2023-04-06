@@ -3,7 +3,7 @@ import RobustPopper from '../Popper';
 import RobustCalendar from '../Calendar/index.vue';
 import RobustInputWrapper from '../InputWrapper/index.vue';
 import { PhCaretDown, PhCalendar } from '@phosphor-icons/vue';
-import { computed, ref, toRefs, PropType, readonly } from 'vue';
+import { computed, ref, toRefs, PropType, readonly, inject } from 'vue';
 import { onClickOutside } from '@vueuse/core';
 import { Preset } from '../Calendar/presets';
 
@@ -61,6 +61,8 @@ const emit = defineEmits([
   'blur',
   'update:relative',
 ]);
+
+const cursorPointer = inject('enableCursorPointer', true);
 
 const { modelValue, presets, activePreset, variant } = toRefs(props);
 const open = ref(false);
@@ -142,7 +144,8 @@ const updateRelative = (preset: any) => {
     <div
       :id="slotProps.cuid"
       ref="select"
-      class="flex h-full w-full cursor-default items-center bg-transparent pl-2 text-current outline-none"
+      class="flex h-full w-full items-center bg-transparent pl-2 text-current outline-none"
+      :class="[cursorPointer ? 'cursor-pointer' : 'cursor-default']"
       v-bind="$attrs"
     >
       <div class="min-w-0 truncate tabular-nums">{{ displayDate }}</div>

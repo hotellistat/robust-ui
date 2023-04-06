@@ -8,7 +8,7 @@ export default {
 <script lang="ts" setup>
 import RobustInputWrapper from '../InputWrapper/index.vue';
 import RobustPopper from '../Popper';
-import { ref, computed, nextTick, toRefs, onMounted } from 'vue';
+import { ref, computed, nextTick, toRefs, onMounted, inject } from 'vue';
 import { debouncedWatch } from '@vueuse/core';
 import { Modifier } from '@popperjs/core';
 import { onClickOutside } from '@vueuse/core';
@@ -48,6 +48,8 @@ const props = withDefaults(
     searchFunction: undefined,
   }
 );
+
+const cursorPointer = inject('enableCursorPointer', true);
 
 const emit = defineEmits([
   'update:modelValue',
@@ -316,7 +318,11 @@ function deselectAll() {
     @closed="resetFields"
   >
     <div v-if="Array.isArray(modelValue)" class="flex justify-end py-2 px-4">
-      <div class="cursor-pointer font-light" @click="controlAll">
+      <div
+        class="font-light"
+        :class="[cursorPointer ? 'cursor-pointer' : 'cursor-default']"
+        @click="controlAll"
+      >
         <div v-if="Array.isArray(modelValue) && modelValue.length > 0">
           Clear all
         </div>
@@ -327,7 +333,8 @@ function deselectAll() {
       <li
         v-for="option in computedOptions"
         :key="String(option.value)"
-        class="flex cursor-default items-center gap-4 px-4 py-2 transition-colors duration-200 hover:bg-gray-100 dark:hover:bg-gray-700"
+        class="flex items-center gap-4 px-4 py-2 transition-colors duration-200 hover:bg-gray-100 dark:hover:bg-gray-700"
+        :class="[cursorPointer ? 'cursor-pointer' : 'cursor-default']"
         @click="selectItem(option)"
       >
         <span>{{ option.title }}</span>

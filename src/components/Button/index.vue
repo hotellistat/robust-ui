@@ -2,8 +2,9 @@
   <Component
     :is="(tag as any)"
     :disabled="disabled"
-    class="flex cursor-default items-center justify-center truncate font-medium"
+    class="flex items-center justify-center truncate font-medium"
     :class="[
+      cursorPointer ? '' : 'cursor-default',
       variantStyles && disabled
         ? 'bg-gray-100 text-gray-400 dark:bg-gray-700 dark:text-gray-400'
         : undefined,
@@ -38,9 +39,11 @@
 </template>
 
 <script lang="ts" setup>
-import { computed, PropType, toRefs } from 'vue';
+import { computed, inject, PropType, toRefs } from 'vue';
 import RobustSpinner from '../Spinner/index.vue';
 import variants from './variants';
+
+const cursorPointer = inject('enableCursorPointer', true);
 
 const props = defineProps({
   tag: {

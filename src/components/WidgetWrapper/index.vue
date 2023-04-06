@@ -1,5 +1,5 @@
 <script lang="ts" setup>
-import { ref } from 'vue';
+import { inject, ref } from 'vue';
 import { PhDotsThreeVertical } from '@phosphor-icons/vue';
 import { RobustModal } from '..';
 
@@ -13,6 +13,7 @@ defineProps({
     default: true,
   },
 });
+const cursorPointer = inject('enableCursorPointer', true);
 
 const emit = defineEmits(['optionsOpened', 'optionsClosed']);
 
@@ -53,7 +54,8 @@ const open = ref(false);
       <slot v-if="$slots.title" name="title" />
       <div
         v-if="$slots.options && showOptions"
-        class="-m-1 cursor-default rounded-full border-none p-1 opacity-0 transition-all duration-150 hover:bg-gray-100 group-hover:opacity-100 dark:hover:bg-gray-700"
+        class="-m-1 rounded-full border-none p-1 opacity-0 transition-all duration-150 hover:bg-gray-100 group-hover:opacity-100 dark:hover:bg-gray-700"
+        :class="[cursorPointer ? 'cursor-pointer' : 'cursor-default']"
         @click="open = !open"
       >
         <PhDotsThreeVertical size="20" weight="bold" />

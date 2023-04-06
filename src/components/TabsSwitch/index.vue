@@ -9,8 +9,9 @@
       :key="tab.value"
       :ref="registerTab"
       :data-value="tab.value"
-      class="whitespace-no-wrap z-10 flex h-full flex-1 flex-shrink-0 flex-grow cursor-default items-center justify-center self-stretch whitespace-nowrap rounded transition-colors duration-75"
+      class="whitespace-no-wrap z-10 flex h-full flex-1 flex-shrink-0 flex-grow items-center justify-center self-stretch whitespace-nowrap rounded transition-colors duration-75"
       :class="[
+        cursorPointer ? 'cursor-pointer' : 'cursor-default',
         condensed ? 'px-3 py-1' : 'px-4  py-1.5',
         {
           'bg-primary-500 text-white': modelValue === tab.value,
@@ -26,7 +27,7 @@
 </template>
 
 <script lang="ts" setup>
-import { PropType, ref } from 'vue';
+import { PropType, inject, ref } from 'vue';
 
 export interface Tab {
   title: string;
@@ -52,6 +53,7 @@ defineProps({
   },
 });
 
+const cursorPointer = inject('enableCursorPointer', true);
 const emit = defineEmits(['update:modelValue']);
 
 const registeredTabs = ref<HTMLElement[]>([]);
