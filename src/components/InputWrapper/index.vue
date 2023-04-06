@@ -74,7 +74,7 @@ defineExpose({
       class="relative flex rounded-md border border-black/[.15] border-gray-200 ring-primary-500 ring-opacity-30 focus-within:border-primary-500 focus-within:outline-none focus-within:ring dark:border-white/[.15] dark:border-gray-600 focus-within:dark:border-primary-500"
       :class="[
         $props.boxClass,
-        fixedHeight ? (condensed ? 'h-8' : 'h-10') : undefined,
+        fixedHeight ? (condensed ? 'h-7' : 'h-10') : undefined,
         disabled ? 'text-gray-500' : '',
       ]"
     >
