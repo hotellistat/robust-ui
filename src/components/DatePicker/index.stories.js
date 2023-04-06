@@ -24,8 +24,9 @@ const date = new Date();
 const modelValue = ref(date);
 
 export const Default = Template.bind({});
+
 Default.args = {
-  modelValue: modelValue,
+  modelValue: undefined,
   'onUpdate:modelValue': (val) => {
     modelValue.value = val;
   },

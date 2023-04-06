@@ -80,7 +80,7 @@ onClickOutside(popperRef, (event) => {
 
 const computedValue = computed<Date>({
   get() {
-    return modelValue?.value ? modelValue.value : new Date();
+    return modelValue?.value;
   },
   set(value) {
     open.value = false;
