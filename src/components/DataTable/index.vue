@@ -89,7 +89,11 @@
           @mousemove="emitMouseMoveRow($event, entry)"
           @mouseenter="emitMouseEnterRow($event, entry)"
         >
+          <div v-if="entry.isHeader">
+            <slot name="header-row" :data="entry" />
+          </div>
           <div
+            v-else
             class="datatable-grid-columns flex flex-col gap-x-2 gap-y-2 sm:grid sm:items-center"
             :style="{
               gridTemplateColumns: sizes,
@@ -940,11 +944,22 @@ const emitMouseLeaveRow = (e: MouseEvent, data: any) => {
   emit('onLeaveRow', e, data);
 };
 
-onMounted(() => {
-  createResizableTable();
+const initSpace = () => {
   const space = getSpace();
   const newSizeValues = space.sizes.map((s) => s.value + s.type);
   initColSize(newSizeValues);
+};
+
+watch(
+  () => options.value.columns,
+  () => {
+    initSpace();
+  }
+);
+
+onMounted(() => {
+  createResizableTable();
+  initSpace();
   resizeObserver = new ResizeObserver(onResize);
   resizeObserver.observe(table.value);
 });
