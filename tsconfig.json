@@ -3,6 +3,7 @@
     "module": "ESNext",
     "target": "esnext",
     "moduleResolution": "node",
+    "noImplicitAny": false,
     "outDir": "dist/src",
     "declaration": true,
     "allowJs": true,

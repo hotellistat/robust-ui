@@ -15,7 +15,7 @@
         role="dialog"
       >
         <div
-          class="robust-ui-modal__backdrop absolute top-0 left-0 right-0 bottom-0 bg-black bg-opacity-50"
+          class="robust-ui-modal__backdrop absolute top-0 left-0 right-0 bottom-0 bg-white/50 dark:bg-black/50"
           @click.self="close"
         ></div>
 
@@ -25,19 +25,22 @@
           @keydown.esc="close"
         >
           <div
-            class="relative flex max-h-full min-h-0 w-full flex-col bg-white shadow-xl dark:bg-gray-800"
+            class="relative flex max-h-full min-h-0 w-full flex-col bg-white/50 shadow-xl backdrop-blur-3xl dark:bg-gray-800/50"
             :class="[modalClass, !isSlideOut ? 'rounded-2xl' : 'h-full']"
           >
             <div
               v-if="$slots.title"
-              class="flex flex-shrink-0 items-center p-4 text-xl"
+              class="flex flex-shrink-0 items-center p-6 text-xl"
             >
               <div class="leading-4">
                 <slot name="title"></slot>
               </div>
-              <div class="ml-auto" @click="close">
+              <button
+                class="-m-4 ml-auto p-4 text-gray-400 transition-colors duration-150 hover:text-gray-900 dark:hover:text-gray-100"
+                @click="close"
+              >
                 <PhX size="20" class="block" />
-              </div>
+              </button>
             </div>
             <div v-if="$slots.header" class="w-full flex-shrink-0">
               <slot name="header"></slot>
