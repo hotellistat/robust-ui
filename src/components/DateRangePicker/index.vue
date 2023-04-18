@@ -363,9 +363,25 @@ const updateCompare = (val: [Date, Date]) => {
   // emit('update:activeComparePreset', undefined);
 };
 
-watch(activeComparePreset, () => {
-  localActiveComparePreset.value = activeComparePreset.value;
-});
+watch(
+  activeComparePreset,
+  () => {
+    localActiveComparePreset.value = activeComparePreset.value;
+  },
+  {
+    deep: true,
+  }
+);
+
+watch(
+  comparePerspectivePreset,
+  () => {
+    localComparePerspectivePreset.value = comparePerspectivePreset.value;
+  },
+  {
+    deep: true,
+  }
+);
 
 // watch(perspectiveOf, (val) => {
 //   emit('update:perspectiveDate', val);
