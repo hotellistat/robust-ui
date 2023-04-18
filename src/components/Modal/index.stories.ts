@@ -9,6 +9,10 @@ const meta: Meta<typeof Modal> = {
     opened: {
       control: { type: 'boolean' },
     },
+    size: {
+      options: ['sm', 'md', 'lg', 'xl', '2xl', '3xl', 'full'],
+      control: { type: 'select' },
+    },
   },
   args: {
     opened: true,
@@ -24,8 +28,8 @@ export const Default: Story = {
     components: { Modal },
     setup: () => ({ args }),
     template: `
-   <div class="dark:text-white"> ${lorem}</div>
-<Modal v-model:opened="args.opened">
+<div class="dark:text-white"> ${lorem}</div>
+<Modal v-model:opened="args.opened" v-bind="args">
   <template #title>
     Title
   </template>

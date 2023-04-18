@@ -11,11 +11,11 @@
       <div
         v-if="opened"
         ref="root"
-        class="fixed top-0 bottom-0 left-0 right-0 z-[100] p-4 lg:py-12"
+        class="fixed top-0 bottom-0 left-0 right-0 z-[100] p-4 lg:p-12"
         role="dialog"
       >
         <div
-          class="robust-ui-modal__backdrop absolute top-0 left-0 right-0 bottom-0 bg-white/50 dark:bg-black/50"
+          class="robust-ui-modal__backdrop absolute top-0 left-0 right-0 bottom-0 bg-white/40 dark:bg-black/40"
           @click.self="close"
         ></div>
 
@@ -25,8 +25,12 @@
           @keydown.esc="close"
         >
           <div
-            class="relative flex max-h-full min-h-0 w-full flex-col bg-white/50 shadow-xl backdrop-blur-3xl dark:bg-gray-800/50"
-            :class="[modalClass, !isSlideOut ? 'rounded-2xl' : 'h-full']"
+            class="relative flex max-h-full min-h-0 w-full flex-col border border-gray-200 bg-white/10 backdrop-blur-2xl dark:border-gray-800 dark:bg-gray-900/10"
+            :class="[
+              modalClass,
+              modalBoxInnerClass,
+              !isSlideOut ? 'rounded-2xl' : 'h-full',
+            ]"
           >
             <div
               v-if="$slots.title"
@@ -125,6 +129,10 @@ const modalBoxClass = computed(() => {
   }
 
   switch (props.size) {
+    case 'full': {
+      classString += ' w-full';
+      break;
+    }
     case '3xl': {
       classString += ' max-w-7xl';
       break;
@@ -147,6 +155,18 @@ const modalBoxClass = computed(() => {
     }
     default: {
       classString += ' max-w-lg';
+      break;
+    }
+  }
+
+  return classString;
+});
+const modalBoxInnerClass = computed(() => {
+  let classString = '';
+
+  switch (props.size) {
+    case 'full': {
+      classString += ' h-full';
       break;
     }
   }
@@ -201,7 +221,6 @@ defineExpose({
 
 <style lang="postcss">
 .robust-ui-modal__backdrop {
-  backdrop-filter: blur(2px);
 }
 
 .robust-ui-modal__fade-enter-active {
@@ -231,7 +250,6 @@ defineExpose({
 .robust-ui-modal__fade-enter-from {
   .robust-ui-modal__backdrop {
     opacity: 0;
-    backdrop-filter: blur(0px);
   }
 
   .robust-ui-modal__box {
@@ -242,7 +260,6 @@ defineExpose({
 .robust-ui-modal__fade-leave-to {
   .robust-ui-modal__backdrop {
     opacity: 0;
-    backdrop-filter: blur(0px);
   }
 
   .robust-ui-modal__box {
@@ -279,7 +296,6 @@ defineExpose({
 .robust-ui-modal__slide-right-enter-from {
   .robust-ui-modal__backdrop {
     opacity: 0;
-    backdrop-filter: blur(0px);
   }
 
   .robust-ui-modal__box {
@@ -291,7 +307,6 @@ defineExpose({
 .robust-ui-modal__slide-right-leave-to {
   .robust-ui-modal__backdrop {
     opacity: 0;
-    backdrop-filter: blur(0px);
   }
 
   .robust-ui-modal__box {
@@ -303,7 +318,6 @@ defineExpose({
 .robust-ui-modal__slide-left-enter-from {
   .robust-ui-modal__backdrop {
     opacity: 0;
-    backdrop-filter: blur(0px);
   }
 
   .robust-ui-modal__box {
@@ -315,7 +329,6 @@ defineExpose({
 .robust-ui-modal__slide-left-leave-to {
   .robust-ui-modal__backdrop {
     opacity: 0;
-    backdrop-filter: blur(0px);
   }
 
   .robust-ui-modal__box {
