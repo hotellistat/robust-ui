@@ -424,8 +424,8 @@ watch(showComparisonPicker, (val) => {
     };
 
     emit('update:compareDateRange', tmpCompareDateRange.value);
-    emit('update:activeComparePreset', compareDateType);
-    emit('update:comparePerspectivePreset', comparePerspectiveDateType);
+    emit('update:activeComparePreset', compareDateType.value);
+    emit('update:comparePerspectivePreset', comparePerspectiveDateType.value);
     localActiveComparePreset.value = undefined;
     localComparePerspectivePreset.value = undefined;
   } else {
