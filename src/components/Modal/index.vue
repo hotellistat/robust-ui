@@ -25,7 +25,7 @@
           @keydown.esc="close"
         >
           <div
-            class="relative flex max-h-full min-h-0 w-full flex-col border border-gray-200 bg-white/10 backdrop-blur-2xl dark:border-gray-800 dark:bg-gray-900/10"
+            class="relative flex max-h-full min-h-0 w-full flex-col border border-gray-200 bg-white/20 backdrop-blur-2xl dark:border-gray-800 dark:bg-gray-600/20"
             :class="[
               modalClass,
               modalBoxInnerClass,
