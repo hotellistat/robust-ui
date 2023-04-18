@@ -395,7 +395,19 @@ watch(showComparisonPicker, (val) => {
   if (!val) {
     tmpCompareDateRange.value = undefined;
     active.value = 'main';
+
+    compareDateType.value = {
+      name: 'custom',
+    };
+    comparePerspectiveDateType.value = {
+      name: 'custom',
+    };
+
     emit('update:compareDateRange', tmpCompareDateRange.value);
+    emit('update:activeComparePreset', compareDateType);
+    emit('update:comparePerspectivePreset', comparePerspectiveDateType);
+    localActiveComparePreset.value = undefined;
+    localComparePerspectivePreset.value = undefined;
   } else {
     active.value = 'comparison';
     tmpCompareDateRange.value = [new Date(), new Date()];
