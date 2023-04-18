@@ -366,6 +366,16 @@ const updateCompare = (val: [Date, Date]) => {
 watch(
   activeComparePreset,
   () => {
+    if (activeComparePreset.value) {
+      compareDateType.value = {
+        name: 'preset',
+        value: activeComparePreset.value,
+      };
+    } else {
+      compareDateType.value = {
+        name: 'custom',
+      };
+    }
     localActiveComparePreset.value = activeComparePreset.value;
   },
   {
@@ -376,6 +386,16 @@ watch(
 watch(
   comparePerspectivePreset,
   () => {
+    if (comparePerspectivePreset.value) {
+      comparePerspectiveDateType.value = {
+        name: 'preset',
+        value: comparePerspectivePreset.value,
+      };
+    } else {
+      comparePerspectiveDateType.value = {
+        name: 'custom',
+      };
+    }
     localComparePerspectivePreset.value = comparePerspectivePreset.value;
   },
   {
