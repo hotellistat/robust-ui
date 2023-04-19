@@ -164,7 +164,7 @@ const comparePerspectiveDateType = ref<DateType>({
 });
 
 const perspectiveDatePresets = ref(
-  presets.value.filter((d) => d.type === 'perspective')
+  presets.value.filter((d) => d.type === 'perspective' || d.type === 'remove')
 );
 
 const tmpDateRange = ref<[Date, Date]>();

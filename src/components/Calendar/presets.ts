@@ -206,4 +206,10 @@ export default [
       return [startDay, now];
     },
   },
+  {
+    title: 'Remove',
+    key: 'remove',
+    type: 'remove',
+    preset: () => undefined,
+  },
 ] as Array<Preset>;

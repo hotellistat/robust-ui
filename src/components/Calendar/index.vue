@@ -238,13 +238,17 @@ const isSelectedDay = (day: number) => {
   }
 };
 
-function setQuickAction(dateRange: [Date, Date] | Date, preset: Preset) {
+function setQuickAction(
+  dateRange: [Date, Date] | Date | undefined,
+  preset: Preset
+) {
   emit('update:modelValue', dateRange);
   emit('update:relative', {
     key: preset.key,
     date: preset.preset(),
   });
   if (Array.isArray(dateRange)) cursor.value = dateRange[1];
+  else if (dateRange == undefined) cursor.value = new Date();
   else cursor.value = dateRange;
 }
 function addYear() {
@@ -463,7 +467,7 @@ const months = computed(() => {
 
 const getPresetStyle = (preset: Preset) => {
   if (!currentPreset.value) return '';
-  if (preset.key === currentPreset.value) {
+  if (preset.key === currentPreset.value && preset.key !== 'remove') {
     if (props.variant === 'secondary') {
       return 'bg-emerald-500 hover:bg-emerald-500 text-white';
     }
@@ -475,6 +479,7 @@ const getPresetStyle = (preset: Preset) => {
 watch(currentPreset, (newVal, oldValue) => {
   if (newVal !== oldValue && currentPreset.value) {
     const preset = defaultPresets.find((d) => d.key === currentPreset.value);
+    console.log('preset', preset);
     setQuickAction(preset.preset(), preset);
   }
 });
