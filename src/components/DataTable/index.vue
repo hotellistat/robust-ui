@@ -52,7 +52,10 @@
             {{ column.name }}
           </div>
           <slot v-else :name="`c_${column.key}`" :data="column" />
-          <div @click="sortColumn(column, $event)">
+          <div
+            v-if="column.sortable !== false"
+            @click="sortColumn(column, $event)"
+          >
             <PhSortAscending
               v-show="getDirection(column) === 1"
               class="text-gray-500"
