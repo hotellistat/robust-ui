@@ -493,7 +493,7 @@ defineExpose({
     <div
       :id="slotProps.cuid"
       ref="select"
-      class="relative w-full select-none items-center bg-transparent text-current outline-none"
+      class="w-full select-none items-center bg-transparent text-current outline-none"
       :class="[
         condensed ? 'pl-2' : 'pl-3',
         cursorPointer ? 'cursor-pointer' : 'cursor-default',
@@ -501,52 +501,55 @@ defineExpose({
       v-bind="$attrs"
     >
       <div
-        class="relative flex items-center gap-1 text-sm"
+        class="flex items-center gap-2 text-sm"
         :class="[
           condensed && enableComparison && showComparisonPicker
             ? 'text-xs'
             : 'text-sm',
         ]"
       >
-        <div
-          :style="{ visibility: displayPreset ? 'hidden' : 'visible' }"
-          class="min-w-0 truncate tabular-nums"
-        >
-          {{ displayDate }}
+        <div class="relative flex flex-shrink-0">
+          <div
+            :style="{ visibility: displayPreset ? 'hidden' : 'visible' }"
+            class="min-w-0 truncate tabular-nums"
+          >
+            {{ displayDate }}
+          </div>
+          <div v-show="displayPreset" class="absolute inset-0 min-w-0 truncate">
+            {{ displayPreset }}
+          </div>
         </div>
-        <div v-show="displayPreset" class="absolute inset-0 min-w-0 truncate">
-          {{ displayPreset }}
-        </div>
-
         <div
-          :class="[perspectiveDate ? 'visible' : '']"
-          class="h-[8px] w-[8px] rounded-full bg-primary-300/50"
+          :class="[perspectiveDate ? 'visible' : 'invisible']"
+          class="ml-auto h-[8px] w-[8px] rounded-full bg-primary-300/50"
           title="Perspective date enabled"
         ></div>
       </div>
 
       <div
         v-if="showComparisonPicker && enableComparison"
-        class="relative flex items-center gap-1 text-gray-400 dark:text-gray-400"
+        class="flex items-center gap-2 text-gray-400 dark:text-gray-400"
         :class="[!condensed ? 'text-xs' : 'text-[0.6rem]']"
       >
-        <div
-          :style="{
-            visibility: displayComparisonPreset ? 'hidden' : 'visible',
-          }"
-          class="min-w-0 truncate tabular-nums"
-        >
-          {{ displayComparisonDate }}
+        <div class="relative flex flex-shrink-0">
+          <div
+            :style="{
+              visibility: displayComparisonPreset ? 'hidden' : 'visible',
+            }"
+            class="min-w-0 truncate tabular-nums"
+          >
+            {{ displayComparisonDate }}
+          </div>
+          <div
+            v-show="displayComparisonPreset"
+            class="absolute inset-0 min-w-0 truncate"
+          >
+            {{ displayComparisonPreset }}
+          </div>
         </div>
         <div
-          v-show="displayComparisonPreset"
-          class="absolute inset-0 min-w-0 truncate"
-        >
-          {{ displayComparisonPreset }}
-        </div>
-        <div
-          :class="[comparePerspectiveDate ? 'visible' : '']"
-          class="h-[6px] w-[6px] rounded-full bg-primary-300/50"
+          :class="[comparePerspectiveDate ? 'visible' : 'invisible']"
+          class="ml-auto h-[6px] w-[6px] rounded-full bg-primary-300/50"
           title="Perspective date enabled"
         ></div>
       </div>
