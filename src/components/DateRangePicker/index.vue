@@ -186,12 +186,44 @@ const displayDate = computed(() => {
   return formatter.format(realDate[0]) + ' - ' + formatter.format(realDate[1]);
 });
 
+const displayComparisonDate = computed(() => {
+  if (!props.enableComparison) {
+    return undefined;
+  }
+
+  if (!compareDateRange.value) {
+    return 'Select date';
+  }
+
+  const realDate = compareDateRange.value;
+  const formatter = Intl.DateTimeFormat(navigator.language, {
+    day: '2-digit',
+    month: '2-digit',
+    year: 'numeric',
+  });
+  return formatter.format(realDate[0]) + ' - ' + formatter.format(realDate[1]);
+});
+
 const displayPreset = computed(() => {
   if (!dateRange.value) {
     return undefined;
   }
   if (props.activePreset) {
     const preset = presets.value.find((d) => d.key === props.activePreset);
+    return preset.title;
+  }
+
+  return undefined;
+});
+
+const displayComparisonPreset = computed(() => {
+  if (!compareDateRange.value) {
+    return undefined;
+  }
+  if (props.activeComparePreset) {
+    const preset = presets.value.find(
+      (d) => d.key === props.activeComparePreset
+    );
     return preset.title;
   }
 
@@ -461,7 +493,7 @@ defineExpose({
     <div
       :id="slotProps.cuid"
       ref="select"
-      class="relative w-full items-center bg-transparent text-current outline-none"
+      class="relative w-full select-none items-center bg-transparent text-current outline-none"
       :class="[
         condensed ? 'pl-2' : 'pl-3',
         cursorPointer ? 'cursor-pointer' : 'cursor-default',
@@ -469,16 +501,54 @@ defineExpose({
       v-bind="$attrs"
     >
       <div
-        :style="{ visibility: displayPreset ? 'hidden' : 'visible' }"
-        class="min-w-0 truncate text-sm tabular-nums sm:text-base"
+        class="relative flex items-center gap-1 text-sm"
+        :class="[
+          condensed && enableComparison && showComparisonPicker
+            ? 'text-xs'
+            : 'text-sm',
+        ]"
       >
-        {{ displayDate }}
+        <div
+          :style="{ visibility: displayPreset ? 'hidden' : 'visible' }"
+          class="min-w-0 truncate tabular-nums"
+        >
+          {{ displayDate }}
+        </div>
+        <div v-show="displayPreset" class="absolute inset-0 min-w-0 truncate">
+          {{ displayPreset }}
+        </div>
+
+        <div
+          :class="[perspectiveDate ? 'visible' : '']"
+          class="h-[8px] w-[8px] rounded-full bg-primary-300/50"
+          title="Perspective date enabled"
+        ></div>
       </div>
+
       <div
-        v-show="displayPreset"
-        class="absolute inset-0 min-w-0 truncate px-4 text-sm sm:text-base"
+        v-if="showComparisonPicker && enableComparison"
+        class="relative flex items-center gap-1 text-gray-400 dark:text-gray-400"
+        :class="[!condensed ? 'text-xs' : 'text-[0.6rem]']"
       >
-        {{ displayPreset }}
+        <div
+          :style="{
+            visibility: displayComparisonPreset ? 'hidden' : 'visible',
+          }"
+          class="min-w-0 truncate tabular-nums"
+        >
+          {{ displayComparisonDate }}
+        </div>
+        <div
+          v-show="displayComparisonPreset"
+          class="absolute inset-0 min-w-0 truncate"
+        >
+          {{ displayComparisonPreset }}
+        </div>
+        <div
+          :class="[comparePerspectiveDate ? 'visible' : '']"
+          class="h-[6px] w-[6px] rounded-full bg-primary-300/50"
+          title="Perspective date enabled"
+        ></div>
       </div>
     </div>
 
@@ -511,7 +581,7 @@ defineExpose({
         {{ active == 'main' ? 'Main' : 'Comparison' }} date range
       </div> -->
       <RobustTabs
-        v-if="showComparisonPicker"
+        v-if="showComparisonPicker && enableComparison"
         v-model="active"
         class="w-full"
         :tabs="
@@ -559,8 +629,8 @@ defineExpose({
         @update:model-value="updateMain"
         @update:relative="updateRelative"
       >
-        <div v-if="enablePerspective" class="flex flex-col items-start gap-y-3">
-          <div>
+        <div class="flex flex-col items-start gap-y-3">
+          <div v-if="enablePerspective">
             <RobustDatePicker
               v-model="perspectiveOf"
               placeholder="Date"
@@ -571,7 +641,11 @@ defineExpose({
               @update:relative="updatePerspectiveRelative"
             />
           </div>
-          <RobustCheckbox v-model="showComparisonPicker">
+
+          <RobustCheckbox
+            v-if="enableComparison"
+            v-model="showComparisonPicker"
+          >
             <template #title>Compare</template>
           </RobustCheckbox>
         </div>

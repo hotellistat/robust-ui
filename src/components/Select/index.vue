@@ -111,7 +111,7 @@ const popperModifiers: Array<
     fn: (args) => {
       args.state.styles.popper.width = `${Math.max(
         args.state.rects.reference.width,
-        200
+        320
       )}px`;
     },
     effect: (args) => {
@@ -319,7 +319,7 @@ function deselectAll() {
   >
     <div v-if="Array.isArray(modelValue)" class="flex justify-end py-2 px-4">
       <div
-        class="font-light"
+        class="select-none font-light"
         :class="[cursorPointer ? 'cursor-pointer' : 'cursor-default']"
         @click="controlAll"
       >

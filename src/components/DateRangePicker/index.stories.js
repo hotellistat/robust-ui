@@ -24,8 +24,8 @@ const Template = (args) => ({
 
 const date = [new Date(), new Date()];
 const dateRange = ref(date);
-const perspectiveDate = ref(date[0]);
-const comparePerspectiveDate = ref(date[0]);
+const perspectiveDate = ref(undefined);
+const comparePerspectiveDate = ref(undefined);
 const compareDateRange = ref(date);
 const activePreset = ref();
 const activeComparePreset = ref();
@@ -40,6 +40,7 @@ Default.args = {
   activeComparePreset,
   perspectivePreset,
   comparePerspectivePreset,
+  enableComparison: true,
   dateRange: dateRange,
   'onUpdate:dateRange': (val) => {
     dateRange.value = val;
