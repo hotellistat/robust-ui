@@ -2,7 +2,7 @@
 import RobustPopper from '../Popper';
 import RobustCalendar from '../Calendar/index.vue';
 import RobustInputWrapper from '../InputWrapper/index.vue';
-import { PhCaretDown, PhCalendar } from '@phosphor-icons/vue';
+import { PhCaretDown, PhCalendar, PhArrowClockwise } from '@phosphor-icons/vue';
 import { computed, ref, toRefs, PropType, readonly, inject } from 'vue';
 import { onClickOutside } from '@vueuse/core';
 import { Preset } from '../Calendar/presets';
@@ -29,6 +29,14 @@ const props = defineProps({
     default: undefined,
   },
   condensed: {
+    type: Boolean,
+    default: false,
+  },
+  placeholder: {
+    type: String,
+    default: 'Select date',
+  },
+  resetable: {
     type: Boolean,
     default: false,
   },
@@ -94,7 +102,7 @@ const computedValue = computed<Date>({
 
 const displayDate = computed(() => {
   if (!computedValue.value) {
-    return 'Select date';
+    return props.placeholder;
   }
 
   const realDate = computedValue.value;
@@ -156,6 +164,18 @@ const updateRelative = (preset: any) => {
       :class="[condensed ? 'pl-2' : 'pl-3']"
     >
       <PhCaretDown
+        :size="14"
+        weight="bold"
+        class="transition-transform duration-200"
+        :class="{ 'rotate-180 transform': open }"
+      />
+    </div>
+    <div
+      v-if="resetable"
+      class="flex h-full flex-shrink-0 items-center px-3 pr-3 text-gray-400 hover:bg-gray-100 dark:text-gray-500 dark:hover:bg-gray-700"
+      @click.stop="computedValue = undefined"
+    >
+      <PhArrowClockwise
         :size="14"
         weight="bold"
         class="transition-transform duration-200"

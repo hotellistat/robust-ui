@@ -501,11 +501,13 @@ defineExpose({
       v-bind="$attrs"
     >
       <div
-        class="flex items-center gap-2 text-sm"
+        class="flex items-center gap-2"
         :class="[
-          condensed && enableComparison && showComparisonPicker
-            ? 'text-xs'
-            : 'text-sm',
+          enableComparison && showComparisonPicker
+            ? condensed
+              ? 'text-xs font-medium'
+              : 'text-sm'
+            : 'text-base',
         ]"
       >
         <div class="relative flex flex-shrink-0">
@@ -529,7 +531,7 @@ defineExpose({
       <div
         v-if="showComparisonPicker && enableComparison"
         class="flex items-center gap-2 text-gray-400 dark:text-gray-400"
-        :class="[!condensed ? 'text-xs' : 'text-[0.6rem]']"
+        :class="[!condensed ? 'text-xs' : 'text-[0.6rem] font-medium']"
       >
         <div class="relative flex flex-shrink-0">
           <div
@@ -632,26 +634,22 @@ defineExpose({
         @update:model-value="updateMain"
         @update:relative="updateRelative"
       >
-        <div class="flex flex-col items-start gap-y-3">
-          <div v-if="enablePerspective">
-            <RobustDatePicker
-              v-model="perspectiveOf"
-              placeholder="Date"
-              title="Perspective of"
-              condensed
-              :presets="perspectiveDatePresets"
-              :active-preset="localPerspectivePreset"
-              @update:relative="updatePerspectiveRelative"
-            />
-          </div>
+        <RobustDatePicker
+          v-if="enablePerspective"
+          v-model="perspectiveOf"
+          placeholder="Newest"
+          title="Perspective of"
+          condensed
+          resetable
+          class="mb-4 w-56"
+          :presets="perspectiveDatePresets"
+          :active-preset="localPerspectivePreset"
+          @update:relative="updatePerspectiveRelative"
+        />
 
-          <RobustCheckbox
-            v-if="enableComparison"
-            v-model="showComparisonPicker"
-          >
-            <template #title>Compare</template>
-          </RobustCheckbox>
-        </div>
+        <RobustCheckbox v-if="enableComparison" v-model="showComparisonPicker">
+          <template #title>Compare</template>
+        </RobustCheckbox>
       </RobustCalendar>
     </section>
 
@@ -664,18 +662,18 @@ defineExpose({
         @click:relative-date="enableStoringHistory(false)"
         @update:relative="updateCompareRelative"
       >
-        <div v-if="enablePerspective" class="flex flex-col items-start">
-          <RobustDatePicker
-            v-model="comparePerspectiveOf"
-            placeholder="Date"
-            title="Perspective of"
-            condensed
-            variant="secondary"
-            :presets="perspectiveDatePresets"
-            :active-preset="localComparePerspectivePreset"
-            @update:relative="updateComparePerspectiveRelative"
-          />
-        </div>
+        <RobustDatePicker
+          v-if="enablePerspective"
+          v-model="comparePerspectiveOf"
+          placeholder="Newest"
+          title="Perspective of"
+          condensed
+          resetable
+          class="mb-4 w-56"
+          :presets="perspectiveDatePresets"
+          :active-preset="localComparePerspectivePreset"
+          @update:relative="updateComparePerspectiveRelative"
+        />
       </RobustCalendar>
     </section>
     <div

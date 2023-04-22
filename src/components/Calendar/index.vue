@@ -696,15 +696,13 @@ defineExpose({
         v-model="modelValue[0]"
         title="From"
         condensed
-        placeholder="Date"
-        class="mb-3 w-full"
+        class="mb-4 w-full"
       />
       <RobustDatePicker
         v-model="modelValue[1]"
         title="To"
         condensed
-        placeholder="Date"
-        class="mb-3 w-full"
+        class="mb-4 w-full"
       />
       <slot />
     </div>
