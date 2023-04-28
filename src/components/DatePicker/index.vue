@@ -95,6 +95,7 @@ const computedValue = computed<Date>({
   set(value) {
     open.value = false;
     emit('update:modelValue', value);
+    emit('update:relative', undefined);
     emit('change', value);
     emit('blur');
   },
@@ -125,6 +126,7 @@ function closeDropdown() {
     emit('blur');
   }
 }
+function resetValues() {}
 
 const updateRelative = (preset: any) => {
   emit('update:relative', preset);
@@ -173,13 +175,12 @@ const updateRelative = (preset: any) => {
     <div
       v-if="resetable"
       class="flex h-full flex-shrink-0 items-center px-3 pr-3 text-gray-400 hover:bg-gray-100 dark:text-gray-500 dark:hover:bg-gray-700"
-      @click.stop="computedValue = undefined"
+      @click.stop="resetValues"
     >
       <PhArrowClockwise
         :size="14"
         weight="bold"
         class="transition-transform duration-200"
-        :class="{ 'rotate-180 transform': open }"
       />
     </div>
   </RobustInputWrapper>
