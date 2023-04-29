@@ -30,9 +30,9 @@ const props = withDefaults(
     class?: string;
     modelValue?: Value | Array<Value>;
     options: Array<Option>;
-    condensed: boolean;
-    searchable: boolean;
-    readonly: boolean;
+    condensed?: boolean;
+    searchable?: boolean;
+    readonly?: boolean;
     searchFunction?: (query: string) => Promise<Array<Option>>;
   }>(),
   {
@@ -97,6 +97,14 @@ debouncedWatch(
 );
 
 onMounted(async () => {
+  onClickOutside(refSelectWrapper.value.wrapperRef, () => {
+    console.log('outside');
+
+    resetFields();
+    closeDropdown();
+    emit('blur');
+  });
+
   await filterBySearchTerm('');
 });
 
@@ -159,17 +167,16 @@ function openDropdown() {
   emit('focus');
 }
 
-onClickOutside(popperRef, (event) => {
-  if (open.value) {
-    if (anchorRef.value.contains(event.target)) {
-      event.stopPropagation();
-      event.preventDefault();
-    }
-    resetFields();
-    closeDropdown();
-    emit('blur');
-  }
-});
+console.log(refSelectWrapper);
+
+// onClickOutside(popperRef, (event) => {
+//   if (open.value) {
+//     if (anchorRef.value.contains(event.target)) {
+//       event.stopPropagation();
+//       event.preventDefault();
+//     }
+//   }
+// });
 
 function closeDropdown() {
   open.value = false;
@@ -239,50 +246,49 @@ function deselectAll() {
 </script>
 
 <template>
-  <div ref="anchorRef">
-    <RobustInputWrapper
-      ref="refSelectWrapper"
-      v-slot="slotProps"
-      :title="title"
-      :hint="hint"
-      :error="error"
-      :class="$props.class"
-      class=""
-      :readonly="readonly"
-      :condensed="condensed"
-      @click="openDropdown"
-      @focus="openDropdown"
-      @blur="closeDropdown"
+  <RobustInputWrapper
+    ref="refSelectWrapper"
+    v-slot="slotProps"
+    :title="title"
+    :hint="hint"
+    :error="error"
+    :class="$props.class"
+    :readonly="readonly"
+    :condensed="condensed"
+    v-bind="$attrs"
+    @click="openDropdown"
+    @focus="openDropdown"
+    @blur="closeDropdown"
+  >
+    <div
+      v-if="$slots.prefix"
+      class="flex h-full items-center pr-2 text-gray-400"
+      :class="[condensed ? 'pl-2' : 'pl-3']"
     >
-      <div
-        v-if="$slots.prefix"
-        class="flex h-full items-center pr-2 text-gray-400"
-        :class="[condensed ? 'pl-2' : 'pl-3']"
-      >
-        <slot tag="div" name="prefix" />
+      <slot tag="div" name="prefix" />
+    </div>
+    <div
+      v-show="!open || !searchable"
+      :id="slotProps.cuid"
+      ref="select"
+      class="flex h-full min-w-0 flex-1 flex-shrink items-center bg-transparent text-current outline-none"
+      :class="[$slots.prefix || condensed ? 'pl-2' : 'pl-3']"
+      v-bind="$attrs"
+    >
+      <div class="min-w-0 select-none truncate">
+        {{ getInputTitle() }}
       </div>
-      <div
-        v-show="!open || !searchable"
-        :id="slotProps.cuid"
-        ref="select"
-        class="flex h-full min-w-0 flex-1 flex-shrink items-center bg-transparent text-current outline-none"
-        :class="[$slots.prefix || condensed ? 'pl-2' : 'pl-3']"
-        v-bind="$attrs"
-      >
-        <div class="min-w-0 select-none truncate">
-          {{ getInputTitle() }}
-        </div>
-      </div>
+    </div>
 
-      <input
-        v-if="open && searchable"
-        ref="refSelectInput"
-        v-model="search"
-        size="1"
-        class="block h-full min-w-0 flex-1 flex-shrink bg-transparent text-current outline-none"
-        :class="[$slots.prefix || condensed ? 'pl-2' : 'pl-3']"
-      />
-      <!-- <div
+    <input
+      v-if="open && searchable"
+      ref="refSelectInput"
+      v-model="search"
+      size="1"
+      class="block h-full min-w-0 flex-1 flex-shrink bg-transparent text-current outline-none"
+      :class="[$slots.prefix || condensed ? 'pl-2' : 'pl-3']"
+    />
+    <!-- <div
         v-else
         class="flex h-full min-w-0 flex-1 flex-shrink items-center bg-transparent text-current outline-none"
         :class="[$slots.prefix || condensed ? 'pl-2' : 'pl-3']"
@@ -292,19 +298,18 @@ function deselectAll() {
         </div>
       </div> -->
 
-      <div
-        class="flex h-full flex-shrink-0 items-center pr-3 text-gray-400 dark:text-gray-500"
-        :class="[condensed ? 'pl-2' : 'pl-3']"
-      >
-        <PhCaretDown
-          :size="14"
-          weight="bold"
-          class="transition-transform duration-200"
-          :class="{ 'rotate-180 transform': open }"
-        />
-      </div>
-    </RobustInputWrapper>
-  </div>
+    <div
+      class="flex h-full flex-shrink-0 items-center pr-3 text-gray-400 dark:text-gray-500"
+      :class="[condensed ? 'pl-2' : 'pl-3']"
+    >
+      <PhCaretDown
+        :size="14"
+        weight="bold"
+        class="transition-transform duration-200"
+        :class="{ 'rotate-180 transform': open }"
+      />
+    </div>
+  </RobustInputWrapper>
   <RobustPopper
     v-if="refSelectWrapper?.wrapperRef"
     ref="popperRef"
