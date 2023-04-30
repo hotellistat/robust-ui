@@ -68,7 +68,9 @@ const ServerSideTemplate = (args) => ({
 
     const pageUpdated = (p) => {
       console.log('page updated', p);
-      if (!p || p > options.value.maxPage) return;
+      if (!p || p > options.value.maxPage) {
+        return;
+      }
       options.value.page = p;
       const pageOffset = p - 1;
       const currPage = pageOffset * options.value.rowsLimit;
@@ -79,8 +81,9 @@ const ServerSideTemplate = (args) => ({
       console.log('rows limit is updated: ', r);
       options.value.maxPage = Math.ceil(data.length / r);
       console.log('maxPage', options.value.maxPage);
-      if (options.value.maxPage < options.value.page)
+      if (options.value.maxPage < options.value.page) {
         options.value.page = options.value.maxPage;
+      }
       options.value.rowsLimit = r;
     };
     const sortUpdated = (s) => {

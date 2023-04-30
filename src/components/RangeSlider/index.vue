@@ -271,10 +271,12 @@ const setValue = (value: number) => {
     return;
   }
 
-  if (handleIndex.value === 0 && value >= localValue.value[1])
+  if (handleIndex.value === 0 && value >= localValue.value[1]) {
     value = localValue.value[1];
-  if (handleIndex.value === 1 && value <= localValue.value[0])
+  }
+  if (handleIndex.value === 1 && value <= localValue.value[0]) {
     value = localValue.value[0];
+  }
 
   localValue.value[handleIndex.value] = value;
   emit('update:modelValue', localValue.value);
@@ -346,14 +348,18 @@ const closestHandle = (value: number) => {
   let tempHandleIndex = 0;
   if (localValue.value[0] === localValue.value[1]) {
     const avg = localValue.value[0];
-    if (value > avg) return 1;
+    if (value > avg) {
+      return 1;
+    }
     return 0;
   }
 
   const firstHandleDiff = Math.abs(localValue.value[0] - value);
   const secondHandleDiff = Math.abs(localValue.value[1] - value);
 
-  if (secondHandleDiff < firstHandleDiff) tempHandleIndex = 1;
+  if (secondHandleDiff < firstHandleDiff) {
+    tempHandleIndex = 1;
+  }
   return tempHandleIndex;
 };
 

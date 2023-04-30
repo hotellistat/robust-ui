@@ -27,6 +27,7 @@
 </template>
 
 <script lang="ts" setup>
+import { MaybeRef } from '@vueuse/core';
 import { PropType, inject, ref } from 'vue';
 
 export interface Tab {
@@ -53,7 +54,7 @@ defineProps({
   },
 });
 
-const cursorPointer = inject('enableCursorPointer', true);
+const cursorPointer = inject<MaybeRef<boolean>>('enableCursorPointer', true);
 const emit = defineEmits(['update:modelValue']);
 
 const registeredTabs = ref<HTMLElement[]>([]);

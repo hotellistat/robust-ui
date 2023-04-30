@@ -2,6 +2,7 @@
 import { inject, ref } from 'vue';
 import { PhDotsThreeVertical } from '@phosphor-icons/vue';
 import { RobustModal } from '..';
+import { MaybeRef } from '@vueuse/core';
 
 defineProps({
   draggable: {
@@ -13,7 +14,7 @@ defineProps({
     default: true,
   },
 });
-const cursorPointer = inject('enableCursorPointer', true);
+const cursorPointer = inject<MaybeRef<boolean>>('enableCursorPointer', true);
 
 const emit = defineEmits(['optionsOpened', 'optionsClosed']);
 

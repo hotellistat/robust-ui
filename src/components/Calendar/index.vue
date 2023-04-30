@@ -54,17 +54,13 @@ const props = defineProps({
     type: Array as PropType<Array<Preset>>,
     default: () => defaultPresets.filter((d) => d.type === 'range'),
   },
-  activePreset: {
+  preset: {
     type: String,
     default: () => undefined,
   },
 });
 
-const emit = defineEmits([
-  'update:modelValue',
-  'click:relativeDate',
-  'update:relative',
-]);
+const emit = defineEmits(['update:modelValue', 'update:preset']);
 
 const {
   future,
@@ -72,7 +68,7 @@ const {
   today,
   modelValue,
   presets,
-  activePreset: currentPreset,
+  preset: currentPreset,
 } = toRefs(props);
 
 const now = ref();
@@ -145,8 +141,11 @@ const activeYear = computed(() => {
 const compareDates = (dateOne, dateTwo) => {
   const diff = dayDiff(dateOne, dateTwo);
 
-  if (diff < 0) return 1;
-  else if (diff > 0) return -1;
+  if (diff < 0) {
+    return 1;
+  } else if (diff > 0) {
+    return -1;
+  }
   return 0;
 };
 
@@ -158,12 +157,18 @@ const dayDiff = (d1, d2) => {
 
 const isFirst = (day) => {
   // checking if it is daterange or only datepicker
-  if (!Array.isArray(modelValue.value)) return false;
+  if (!Array.isArray(modelValue.value)) {
+    return false;
+  }
 
   // doesn't do any actions if you've choosen only one date
-  if (modelValue.value.length < 2) return false;
+  if (modelValue.value.length < 2) {
+    return false;
+  }
 
-  if (!compareDates(...modelValue.value)) return false;
+  if (!compareDates(...modelValue.value)) {
+    return false;
+  }
 
   const tmpDate = new Date();
   tmpDate.setFullYear(cursor.value.getFullYear());
@@ -173,18 +178,26 @@ const isFirst = (day) => {
   const minDate = min(modelValue.value);
 
   // minimal value
-  if (!compareDates(tmpDate, minDate)) return true;
+  if (!compareDates(tmpDate, minDate)) {
+    return true;
+  }
   return false;
 };
 
 const isLast = (day) => {
   // checking if it is daterange or only datepicker
-  if (!Array.isArray(modelValue.value)) return false;
+  if (!Array.isArray(modelValue.value)) {
+    return false;
+  }
 
   // doesn't do any actions if you've choosen only one date
-  if (modelValue.value.length < 2) return false;
+  if (modelValue.value.length < 2) {
+    return false;
+  }
 
-  if (!compareDates(...modelValue.value)) return false;
+  if (!compareDates(...modelValue.value)) {
+    return false;
+  }
 
   const tmpDate = new Date();
   tmpDate.setFullYear(cursor.value.getFullYear());
@@ -194,13 +207,19 @@ const isLast = (day) => {
   const maxDate = max(modelValue.value);
 
   // max value
-  if (!compareDates(tmpDate, maxDate)) return true;
+  if (!compareDates(tmpDate, maxDate)) {
+    return true;
+  }
   return false;
 };
 
 const isBetweenRange = (day) => {
-  if (!Array.isArray(modelValue.value)) return false;
-  if (modelValue.value.length < 2) return false;
+  if (!Array.isArray(modelValue.value)) {
+    return false;
+  }
+  if (modelValue.value.length < 2) {
+    return false;
+  }
 
   const tmpDate = new Date();
   tmpDate.setFullYear(cursor.value.getFullYear());
@@ -238,14 +257,18 @@ const isSelectedDay = (day: number) => {
   }
 };
 
-function setQuickAction(dateRange: [Date, Date] | Date, preset: Preset) {
-  emit('update:modelValue', dateRange);
-  emit('update:relative', {
-    key: preset.key,
-    date: preset.preset(),
-  });
-  if (Array.isArray(dateRange)) cursor.value = dateRange[1];
-  else cursor.value = dateRange;
+function setQuickAction(preset: Preset) {
+  console.log('quick action');
+
+  const presetValue = preset.eval();
+  emit('update:modelValue', presetValue);
+  emit('update:preset', preset.key);
+
+  if (Array.isArray(presetValue)) {
+    cursor.value = presetValue[1];
+  } else {
+    cursor.value = presetValue;
+  }
 }
 function addYear() {
   cursor.value = addYears(cursor.value, 1);
@@ -319,9 +342,11 @@ const daySelect = (day) => {
       }
     }
     emit('update:modelValue', newModelValue);
+    emit('update:preset', undefined);
   } else {
     selectedDate.value = new Date(cursor.value);
     emit('update:modelValue', cursor.value);
+    emit('update:preset', undefined);
   }
 };
 
@@ -462,7 +487,9 @@ const months = computed(() => {
 });
 
 const getPresetStyle = (preset: Preset) => {
-  if (!currentPreset.value) return '';
+  if (!currentPreset.value) {
+    return '';
+  }
   if (preset.key === currentPreset.value) {
     if (props.variant === 'secondary') {
       return 'bg-emerald-500 hover:bg-emerald-500 text-white';
@@ -472,12 +499,14 @@ const getPresetStyle = (preset: Preset) => {
   return '';
 };
 
-watch(currentPreset, (newVal, oldValue) => {
-  if (newVal !== oldValue && currentPreset.value) {
-    const preset = defaultPresets.find((d) => d.key === currentPreset.value);
-    setQuickAction(preset.preset(), preset);
-  }
-});
+// watch(currentPreset, (newVal, oldValue) => {
+//   if (newVal !== oldValue && currentPreset.value) {
+//     const preset = defaultPresets.find((d) => d.key === currentPreset.value);
+//     if (preset) {
+//       setQuickAction(preset);
+//     }
+//   }
+// });
 
 defineExpose({
   addYear,
@@ -500,7 +529,7 @@ defineExpose({
           :key="index"
           class="py-2 px-4"
           :class="getPresetStyle(preset)"
-          @click="setQuickAction(preset.preset(), preset)"
+          @click="setQuickAction(preset)"
         >
           {{ preset.title }}
         </div>
@@ -614,42 +643,6 @@ defineExpose({
           >
             {{ day.charAt(0).toUpperCase() }}
           </div>
-          <!-- <div -->
-          <!--   class="pb-2 text-center text-sm text-gray-400 dark:text-gray-400" -->
-          <!-- > -->
-          <!--   M -->
-          <!-- </div> -->
-          <!-- <div -->
-          <!--   class="pb-2 text-center text-sm text-gray-400 dark:text-gray-400" -->
-          <!-- > -->
-          <!--   T -->
-          <!-- </div> -->
-          <!-- <div -->
-          <!--   class="pb-2 text-center text-sm text-gray-400 dark:text-gray-400" -->
-          <!-- > -->
-          <!--   W -->
-          <!-- </div> -->
-          <!-- <div -->
-          <!--   class="pb-2 text-center text-sm text-gray-400 dark:text-gray-400" -->
-          <!-- > -->
-          <!--   T -->
-          <!-- </div> -->
-          <!-- <div -->
-          <!--   class="pb-2 text-center text-sm text-gray-400 dark:text-gray-400" -->
-          <!-- > -->
-          <!--   F -->
-          <!-- </div> -->
-          <!-- <div -->
-          <!--   class="pb-2 text-center text-sm text-gray-400 dark:text-gray-400" -->
-          <!-- > -->
-          <!--   S -->
-          <!-- </div> -->
-          <!-- <div -->
-          <!--   class="pb-2 text-center text-sm text-gray-400 dark:text-gray-400" -->
-          <!-- > -->
-          <!--   S -->
-          <!-- </div> -->
-
           <div v-for="offset in firstWeekday" :key="offset + '_offset'"></div>
           <div
             v-for="day in daysInMonth"

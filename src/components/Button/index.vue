@@ -42,8 +42,9 @@
 import { computed, inject, PropType, toRefs } from 'vue';
 import RobustSpinner from '../Spinner/index.vue';
 import variants from './variants';
+import { MaybeRef } from '@vueuse/core';
 
-const cursorPointer = inject('enableCursorPointer', true);
+const cursorPointer = inject<MaybeRef<boolean>>('enableCursorPointer', true);
 
 const props = defineProps({
   tag: {

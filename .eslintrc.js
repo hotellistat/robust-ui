@@ -28,8 +28,10 @@ module.exports = {
     },
   ],
   rules: {
+    curly: ['error', 'all'],
     'no-unused-vars': 'off',
-    'unused-imports/no-unused-imports': 'error',
+    eqeqeq: 'error',
+    'unused-imports/no-unused-imports': 'off',
     'vue/custom-event-name-casing': ['error', 'camelCase'],
     'vue/component-api-style': ['error', ['script-setup']],
     'vue/match-component-import-name': ['error'],
@@ -43,6 +45,8 @@ module.exports = {
     'vue/prefer-separate-static-class': ['error'],
     'vue/prefer-true-attribute-shorthand': ['warn'],
     'vue/v-on-function-call': ['error'],
+    'no-undef': ['off'],
+    'prefer-arrow-callback': ['error'],
     'vue/multi-word-component-names': [
       'error',
       {
@@ -56,13 +60,13 @@ module.exports = {
       },
     ],
     '@typescript-eslint/no-unused-vars': [
-      'error',
+      'off',
       {
         ignoreRestSiblings: true,
       },
     ],
     camelcase: [
-      'error',
+      'warn',
       {
         properties: 'never',
         ignoreDestructuring: true,

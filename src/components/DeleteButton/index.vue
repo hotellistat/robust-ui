@@ -75,7 +75,9 @@ const decline = () => {
 const open = ref(false);
 
 const handleClick = (e: MouseEvent) => {
-  if (e.shiftKey) return confirm();
+  if (e.shiftKey) {
+    return confirm();
+  }
   open.value = true;
 };
 </script>

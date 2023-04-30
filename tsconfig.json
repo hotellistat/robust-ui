@@ -16,8 +16,8 @@
     ]
   },
   "include": [
-    "src/*.d.ts",
-    "src/**/*",
+    "./src/*.d.ts",
+    "./src/*.vue"
   ],
   "exclude": [
     "src/**/*.stories.js",

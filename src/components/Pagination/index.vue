@@ -88,11 +88,7 @@
 
 <script lang="ts" setup>
 import { ref, watch, toRefs, onMounted } from 'vue';
-import {
-  PhCaretLeft,
-  PhCaretRight,
-  PhCaretDown,
-} from '@phosphor-icons/vue';
+import { PhCaretLeft, PhCaretRight, PhCaretDown } from '@phosphor-icons/vue';
 import { onClickOutside } from '@vueuse/core';
 
 const props = defineProps({
@@ -159,8 +155,12 @@ const listPageShow = () => {
 
   // if start or end is not next to two side, remove a page
   // because this case we will have 2 ... each side
-  if (start === 1) end = 7 + start;
-  if (end === pageCount.value) start = end - 7;
+  if (start === 1) {
+    end = 7 + start;
+  }
+  if (end === pageCount.value) {
+    start = end - 7;
+  }
 
   if (end < pageCount.value - 1 && start > 2 && end - start === 6) {
     end -= 1;
@@ -180,7 +180,9 @@ const listPageShow = () => {
   return listPages.value;
 };
 const showDot = (index: number) => {
-  if (listPages.value[index + 1] - listPages.value[index] > 1) return true;
+  if (listPages.value[index + 1] - listPages.value[index] > 1) {
+    return true;
+  }
   return false;
 };
 

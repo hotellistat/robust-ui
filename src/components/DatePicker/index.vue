@@ -4,7 +4,7 @@ import RobustCalendar from '../Calendar/index.vue';
 import RobustInputWrapper from '../InputWrapper/index.vue';
 import { PhCaretDown, PhCalendar, PhArrowClockwise } from '@phosphor-icons/vue';
 import { computed, ref, toRefs, PropType, readonly, inject } from 'vue';
-import { onClickOutside } from '@vueuse/core';
+import { MaybeRef, onClickOutside } from '@vueuse/core';
 import { Preset } from '../Calendar/presets';
 
 const props = defineProps({
@@ -48,7 +48,7 @@ const props = defineProps({
     type: Boolean,
     default: false,
   },
-  activePreset: {
+  preset: {
     type: String,
     default: () => undefined,
   },
@@ -63,29 +63,29 @@ const props = defineProps({
 });
 
 const emit = defineEmits([
-  'blur',
   'update:modelValue',
+  'update:preset',
   'change',
   'blur',
-  'update:relative',
 ]);
 
-const cursorPointer = inject('enableCursorPointer', true);
+const cursorPointer = inject<MaybeRef<boolean>>('enableCursorPointer', true);
 
-const { modelValue, presets, activePreset, variant } = toRefs(props);
+const { modelValue, presets, variant } = toRefs(props);
+
 const open = ref(false);
 const popperRef = ref();
 const inputWrapperRef = ref();
 
 onClickOutside(popperRef, (event) => {
-  if (open.value) {
-    if (inputWrapperRef.value.wrapperRef.contains(event.target)) {
-      event.stopPropagation();
-      event.preventDefault();
-    }
-    closeDropdown();
-    emit('blur');
+  if (!open.value) {
+    return;
   }
+
+  event.stopPropagation();
+
+  closeDropdown();
+  emit('blur');
 });
 
 const computedValue = computed<Date>({
@@ -94,10 +94,23 @@ const computedValue = computed<Date>({
   },
   set(value) {
     open.value = false;
-    emit('update:modelValue', value);
-    emit('update:relative', undefined);
-    emit('change', value);
+    if (Array.isArray(value)) {
+      emit('update:modelValue', value[0]);
+      emit('change', value[0]);
+    } else {
+      emit('update:modelValue', value);
+      emit('change', value);
+    }
     emit('blur');
+  },
+});
+
+const preset = computed({
+  get() {
+    return props.preset;
+  },
+  set(value) {
+    emit('update:preset', value);
   },
 });
 
@@ -112,12 +125,11 @@ const displayDate = computed(() => {
     month: '2-digit',
     year: 'numeric',
   });
-  return formatter.format(realDate);
-  // try {
-  //   return realDate ? format(realDate, 'P') : 'Unknown';
-  // } catch (e) {
-  //   return undefined;
-  // }
+  if (Array.isArray(realDate)) {
+    return formatter.format(realDate[0]);
+  } else {
+    return formatter.format(realDate);
+  }
 });
 
 function closeDropdown() {
@@ -126,11 +138,11 @@ function closeDropdown() {
     emit('blur');
   }
 }
-function resetValues() {}
-
-const updateRelative = (preset: any) => {
-  emit('update:relative', preset);
-};
+function resetValue() {
+  open.value = false;
+  computedValue.value = undefined;
+  preset.value = undefined;
+}
 </script>
 
 <template>
@@ -154,7 +166,7 @@ const updateRelative = (preset: any) => {
     <div
       :id="slotProps.cuid"
       ref="select"
-      class="flex h-full w-full items-center bg-transparent pl-2 text-current outline-none"
+      class="flex h-full w-full select-none items-center bg-transparent pl-2 text-current outline-none"
       :class="[cursorPointer ? 'cursor-pointer' : 'cursor-default']"
       v-bind="$attrs"
     >
@@ -175,7 +187,7 @@ const updateRelative = (preset: any) => {
     <div
       v-if="resetable"
       class="flex h-full flex-shrink-0 items-center px-3 pr-3 text-gray-400 hover:bg-gray-100 dark:text-gray-500 dark:hover:bg-gray-700"
-      @click.stop="resetValues"
+      @click.stop="resetValue"
     >
       <PhArrowClockwise
         :size="14"
@@ -196,10 +208,9 @@ const updateRelative = (preset: any) => {
   >
     <RobustCalendar
       v-model="computedValue"
+      v-model:preset="preset"
       :presets="presets"
-      :active-preset="activePreset"
       :variant="variant"
-      @update:relative="updateRelative"
     />
   </RobustPopper>
 </template>

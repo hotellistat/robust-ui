@@ -8,8 +8,16 @@ export default {
 <script lang="ts" setup>
 import RobustInputWrapper from '../InputWrapper/index.vue';
 import RobustPopper from '../Popper';
-import { ref, computed, nextTick, toRefs, onMounted, inject } from 'vue';
-import { debouncedWatch } from '@vueuse/core';
+import {
+  ref,
+  computed,
+  nextTick,
+  toRefs,
+  onMounted,
+  inject,
+  PropType,
+} from 'vue';
+import { MaybeRef, debouncedWatch } from '@vueuse/core';
 import { Modifier } from '@popperjs/core';
 import { onClickOutside } from '@vueuse/core';
 import { PhCheck, PhCaretDown } from '@phosphor-icons/vue';
@@ -21,35 +29,62 @@ export interface Option {
   value: Value;
 }
 
-const props = withDefaults(
-  defineProps<{
-    title?: string;
-    zIndex?: string;
-    hint?: string;
-    error?: string;
-    class?: string;
-    modelValue?: Value | Array<Value>;
-    options: Array<Option>;
-    condensed?: boolean;
-    searchable?: boolean;
-    readonly?: boolean;
-    searchFunction?: (query: string) => Promise<Array<Option>>;
-  }>(),
-  {
-    title: undefined,
-    hint: undefined,
-    error: undefined,
-    class: undefined,
-    modelValue: undefined,
-    zIndex: 'z-[50]',
-    condensed: false,
-    searchable: true,
-    readonly: false,
-    searchFunction: undefined,
-  }
-);
+const props = defineProps({
+  title: {
+    type: String,
+    default: undefined,
+  },
+  class: {
+    type: String as PropType<string | string[] | object>,
+    default: undefined,
+  },
+  boxClass: {
+    type: String as PropType<string | string[] | object>,
+    default: undefined,
+  },
+  hint: {
+    type: String,
+    default: undefined,
+  },
+  error: {
+    type: String,
+    default: undefined,
+  },
+  fixedHeight: {
+    type: Boolean,
+    default: true,
+  },
+  readonly: {
+    type: Boolean,
+    default: false,
+  },
+  condensed: {
+    type: Boolean,
+    default: false,
+  },
+  disabled: {
+    type: Boolean,
+    default: false,
+  },
+  searchable: {
+    type: Boolean,
+    default: true,
+  },
+  searchFunction: {
+    type: Function as PropType<(query: string) => Promise<Array<Option>>>,
+    default: undefined,
+  },
+  options: {
+    type: Array as PropType<Array<Option>>,
+    default: () => [],
+  },
+  modelValue: {
+    type: [String, Number, Boolean, Array] as PropType<Value | Array<Value>>,
+    default: undefined,
+  },
+});
 
-const cursorPointer = inject('enableCursorPointer', true);
+const cursorPointer = inject<MaybeRef<boolean>>('enableCursorPointer', true);
 
 const emit = defineEmits([
   'update:modelValue',
@@ -96,15 +131,20 @@ debouncedWatch(
   { debounce: 150 }
 );
 
+onClickOutside(popperRef, (event) => {
+  if (!open.value) {
+    return;
+  }
+
+  event.stopPropagation();
+  console.log('outside');
+
+  resetFields();
+  closeDropdown();
+  emit('blur');
+});
+
 onMounted(async () => {
-  onClickOutside(refSelectWrapper.value.wrapperRef, () => {
-    console.log('outside');
-
-    resetFields();
-    closeDropdown();
-    emit('blur');
-  });
-
   await filterBySearchTerm('');
 });
 
@@ -162,7 +202,9 @@ function openDropdown() {
   open.value = true;
   sortOptionsBySelected();
   nextTick(() => {
-    if (refSelectInput.value) refSelectInput.value.focus();
+    if (refSelectInput.value) {
+      refSelectInput.value.focus();
+    }
   });
   emit('focus');
 }
@@ -197,7 +239,9 @@ function optionSelected(option: any) {
 
 function getInputTitle() {
   if (Array.isArray(modelValue.value)) {
-    if (modelValue.value.length < 1) return 'Select';
+    if (modelValue.value.length < 1) {
+      return 'Select';
+    }
     const titles = [];
     for (const value of modelValue.value) {
       const found = options.value.find((o) => o.value === value);
@@ -215,8 +259,11 @@ function sortOptionsBySelected() {
     const notSelectedOptions = [];
 
     for (const option of computedOptions.value) {
-      if (modelValue.value.includes(option.value)) selectedOptions.push(option);
-      else notSelectedOptions.push(option);
+      if (modelValue.value.includes(option.value)) {
+        selectedOptions.push(option);
+      } else {
+        notSelectedOptions.push(option);
+      }
     }
 
     computedOptions.value = [...selectedOptions, ...notSelectedOptions];
@@ -225,9 +272,14 @@ function sortOptionsBySelected() {
 }
 
 function controlAll() {
-  if (!Array.isArray(modelValue.value)) return;
-  if (modelValue.value.length < 1) selectAll();
-  else deselectAll();
+  if (!Array.isArray(modelValue.value)) {
+    return;
+  }
+  if (modelValue.value.length < 1) {
+    selectAll();
+  } else {
+    deselectAll();
+  }
 }
 
 function selectAll() {
@@ -284,7 +336,7 @@ function deselectAll() {
       v-if="open && searchable"
       ref="refSelectInput"
       v-model="search"
-      size="1"
+      :size="1"
       class="block h-full min-w-0 flex-1 flex-shrink bg-transparent text-current outline-none"
       :class="[$slots.prefix || condensed ? 'pl-2' : 'pl-3']"
     />

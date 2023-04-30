@@ -196,6 +196,7 @@ import Checkbox from '../Checkbox/index.vue';
 import Input from '../Input/index.vue';
 import Fuse from 'fuse.js';
 import { debouncedWatch } from '@vueuse/shared';
+import { MaybeRef } from '@vueuse/core';
 import { RobustNotice } from '..';
 
 export type Direction = 0 | -1 | 1;
@@ -234,7 +235,7 @@ type DataTableOptions = {
   search?: boolean;
 };
 
-const cursorPointer = inject('enableCursorPointer', true);
+const cursorPointer = inject<MaybeRef<boolean>>('enableCursorPointer', true);
 
 const defaultOptions: Partial<DataTableOptions> = {
   serverSide: false,
@@ -342,8 +343,9 @@ const checkboxSelected = computed({
     if (options.value.serverSide && selectedAll.value) {
       const excluded = [];
       for (const row of data.value) {
-        if (!value.includes(row[options.value.id]))
+        if (!value.includes(row[options.value.id])) {
           excluded.push(row[options.value.id]);
+        }
       }
       excludedRows.value = excluded;
     } else {
@@ -358,7 +360,9 @@ const checkboxSelected = computed({
 const rowsLimitController = ref(options.value.rowsLimit ?? data.value.length);
 const rowsLimit = computed({
   get() {
-    if (options.value.serverSide) return options.value.rowsLimit;
+    if (options.value.serverSide) {
+      return options.value.rowsLimit;
+    }
     return rowsLimitController.value;
   },
   set(value: number) {
@@ -368,7 +372,9 @@ const rowsLimit = computed({
 
 const rowsLimitOptionsInit = () => {
   const optionsArray = options.value.rowsLimitOptions;
-  if (!optionsArray) return undefined;
+  if (!optionsArray) {
+    return undefined;
+  }
   return optionsArray.map((o) => ({
     value: o,
     title: `${o}`,
@@ -387,8 +393,12 @@ const ghostColumns = computed(() => {
 });
 
 const sortedData = computed(() => {
-  if (loading.value) return Array(rowsLimit.value).fill({});
-  if (options.value.serverSide) return data.value;
+  if (loading.value) {
+    return Array(rowsLimit.value).fill({});
+  }
+  if (options.value.serverSide) {
+    return data.value;
+  }
   const sorted = sortData();
   gotoPage(page.value);
   const pageOffset = page.value - 1;
@@ -397,15 +407,18 @@ const sortedData = computed(() => {
 });
 
 const initMaxPage = () => {
-  if (options.value.serverSide)
+  if (options.value.serverSide) {
     return options.value.maxPage ?? defaultOptions.maxPage;
+  }
   return Math.ceil(data.value.length / rowsLimit.value);
 };
 const maxPageController = ref(initMaxPage());
 
 const maxPage = computed({
   get() {
-    if (options.value.serverSide) return initMaxPage();
+    if (options.value.serverSide) {
+      return initMaxPage();
+    }
     return maxPageController.value;
   },
   set(value) {
@@ -414,8 +427,12 @@ const maxPage = computed({
 });
 
 const initPage = () => {
-  if (!options.value.page) return defaultOptions.page;
-  if (options.value.page > maxPage.value) return defaultOptions.page;
+  if (!options.value.page) {
+    return defaultOptions.page;
+  }
+  if (options.value.page > maxPage.value) {
+    return defaultOptions.page;
+  }
   return options.value.page;
 };
 
@@ -423,7 +440,9 @@ const pageController = ref(initPage());
 
 const page = computed({
   get() {
-    if (options.value.serverSide) return options.value.page;
+    if (options.value.serverSide) {
+      return options.value.page;
+    }
     return pageController.value;
   },
   set(value) {
@@ -448,11 +467,15 @@ const initSorting = () => {
 const sorting = ref<Column[]>(initSorting());
 
 const isPercentage = (str: string) => {
-  if (str) return str.includes('%');
+  if (str) {
+    return str.includes('%');
+  }
 };
 
 const isPx = (str: string) => {
-  if (str) return str.includes('px');
+  if (str) {
+    return str.includes('px');
+  }
 };
 
 const initSizes = () => {
@@ -484,13 +507,16 @@ const sortData = () => {
     cpData = fuse.search(searchModel.value).map((d) => d.item);
   }
 
-  if (!options.value.serverSide)
+  if (!options.value.serverSide) {
     maxPage.value = Math.ceil(cpData.length / rowsLimit.value);
+  }
 
   const sorted = cpData.sort((a, b) => {
     for (const sort of sorting.value) {
       // Skip unsorted keys
-      if (sort.direction === 0) continue;
+      if (sort.direction === 0) {
+        continue;
+      }
 
       const sortKey = sort.key;
 
@@ -501,10 +527,16 @@ const sortData = () => {
             (b as any)[sortKey],
             'desc'
           );
-          if (rSort) return rSort;
+          if (rSort) {
+            return rSort;
+          }
         } else {
-          if (a[sortKey] > b[sortKey]) return -1;
-          if (a[sortKey] < b[sortKey]) return 1;
+          if (a[sortKey] > b[sortKey]) {
+            return -1;
+          }
+          if (a[sortKey] < b[sortKey]) {
+            return 1;
+          }
         }
       } else if (sort.direction === 1) {
         if (sort.sort) {
@@ -513,10 +545,16 @@ const sortData = () => {
             (b as any)[sortKey],
             'asc'
           );
-          if (rSort) return rSort;
+          if (rSort) {
+            return rSort;
+          }
         } else {
-          if (a[sortKey] > b[sortKey]) return 1;
-          if (a[sortKey] < b[sortKey]) return -1;
+          if (a[sortKey] > b[sortKey]) {
+            return 1;
+          }
+          if (a[sortKey] < b[sortKey]) {
+            return -1;
+          }
         }
       }
     }
@@ -554,10 +592,14 @@ const sortOnShiftClick = (cSort: Column) => {
 
   // placing element at the end of the array to keep history
   // in case of ascending and descendng direction
-  if (tempSortObj.direction) sorting.value.push(tempSortObj);
+  if (tempSortObj.direction) {
+    sorting.value.push(tempSortObj);
+  }
   // if element is at default direction
   // placing it at the beginning
-  else sorting.value.unshift(tempSortObj);
+  else {
+    sorting.value.unshift(tempSortObj);
+  }
 
   // emit directions for server side sorting
   const directions = sorting.value.filter((c) => c.direction !== 0);
@@ -602,13 +644,17 @@ const sortOnSimpleClick = (cSort: Column) => {
 };
 
 const sortColumn = (cSort: Column, event: MouseEvent) => {
-  if (loading.value) return;
+  if (loading.value) {
+    return;
+  }
   // if sortable is explicitly false -> not sorting
   // since it's sortable by default
   if (cSort.sortable === false) {
     return;
   }
-  if (event.shiftKey) return sortOnShiftClick(cSort);
+  if (event.shiftKey) {
+    return sortOnShiftClick(cSort);
+  }
   return sortOnSimpleClick(cSort);
 };
 
@@ -621,9 +667,13 @@ const clamp = (num: number, min: number, max: number) =>
   Math.min(Math.max(num, min), max);
 
 const gotoPage = (pageNum: number, emitEvent = true) => {
-  if (loading.value) return;
+  if (loading.value) {
+    return;
+  }
   if (options.value.serverSide) {
-    if (emitEvent) emit('update:page', pageNum);
+    if (emitEvent) {
+      emit('update:page', pageNum);
+    }
     return;
   }
   page.value = clamp(pageNum, 1, maxPage.value);
@@ -633,7 +683,9 @@ const nextPage = () => gotoPage(page.value + 1);
 const prevPage = () => gotoPage(page.value - 1);
 const firstPage = () => gotoPage(1);
 const lastPage = () => {
-  if (!options.value.serverSide) return gotoPage(Infinity);
+  if (!options.value.serverSide) {
+    return gotoPage(Infinity);
+  }
   return gotoPage(options.value.maxPage);
 };
 
@@ -658,24 +710,27 @@ watch(maxPage, () => {
 });
 
 watch(excludedRows, () => {
-  if (options.value.serverSide && selectedAll.value)
+  if (options.value.serverSide && selectedAll.value) {
     emit('update:selectedRows', {
       type: 'exclude',
       data: excludedRows.value,
     });
+  }
 });
 
 watch(data, () => {
   if (options.value.serverSide && selectedAll.value) {
     const newSelectedRows = [];
     for (const row of data.value) {
-      if (!excludedRows.value.includes(row[options.value.id]))
+      if (!excludedRows.value.includes(row[options.value.id])) {
         newSelectedRows.push(row[options.value.id]);
+      }
     }
     selectedRows.value = newSelectedRows;
   }
-  if (options.value.rowsLimit === undefined)
+  if (options.value.rowsLimit === undefined) {
     rowsLimitController.value = data.value.length;
+  }
 });
 
 /*
@@ -697,7 +752,9 @@ const resetSizes = (resizable = false) => {
       sizes.push(`${col.clientWidth}px`);
     }
   });
-  if (resizable) emit('update:resize', sizes);
+  if (resizable) {
+    emit('update:resize', sizes);
+  }
 };
 
 const initColSize = (sizes: string[]) => {
@@ -717,7 +774,9 @@ const createResizableColumn = function (
   resizerHandle: HTMLElement,
   idx: number
 ) {
-  if (!options.value.resize) return;
+  if (!options.value.resize) {
+    return;
+  }
   // Track the current position of mouse
   let x = 0;
   let w = 0;
@@ -793,7 +852,9 @@ const createResizableColumn = function (
 
 // resetting resize Line
 const resizeLine = () => {
-  if (!options.value.resize) return;
+  if (!options.value.resize) {
+    return;
+  }
   const tableEl = table.value;
   const cols: HTMLElement[] = tableEl.querySelectorAll('.robust-table-column');
   const rowsWrapper = tableEl.querySelector('.rows-wrapper');
@@ -804,16 +865,21 @@ const resizeLine = () => {
       const resizerHandle =
         col.querySelector<HTMLDivElement>('.resizer-handle');
 
-      if (resizer) resizer.style.height = `${rowsWrapper.clientHeight}px`;
+      if (resizer) {
+        resizer.style.height = `${rowsWrapper.clientHeight}px`;
+      }
 
-      if (resizerHandle)
+      if (resizerHandle) {
         resizerHandle.style.height = `${header.value.clientHeight}px`;
+      }
     }
   });
 };
 
 const createResizableTable = () => {
-  if (!options.value.resize) return;
+  if (!options.value.resize) {
+    return;
+  }
 
   const tableEl = table.value;
   const cols: HTMLElement[] = tableEl.querySelectorAll('.robust-table-column');
@@ -821,7 +887,9 @@ const createResizableTable = () => {
 
   cols.forEach((col, idx) => {
     if (idx < cols.length - 1) {
-      if (options.value.columns[idx].resizable === false) return;
+      if (options.value.columns[idx].resizable === false) {
+        return;
+      }
       const resizer = document.createElement('div');
       const resizerHandle = document.createElement('div');
 
@@ -853,7 +921,9 @@ const selectAll = (value: boolean) => {
     });
     displayInfo.value = false;
   } else {
-    if (options.value.serverSide) excludedRows.value = [];
+    if (options.value.serverSide) {
+      excludedRows.value = [];
+    }
     selectedRows.value = [];
     displayInfo.value = false;
   }
