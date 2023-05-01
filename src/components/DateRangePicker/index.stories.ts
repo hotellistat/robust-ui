@@ -46,9 +46,9 @@ export const Default: Story = {
     components: { DaterangePicker },
     setup: () => {
       const dateRange = ref([new Date(), addDays(new Date(), 30)]);
-      const dateRangeComparison = ref([new Date(), addDays(new Date(), 30)]);
-      const perspectiveDate = ref(new Date());
-      const perspectiveDateComparison = ref(new Date());
+      const dateRangeComparison = ref(undefined);
+      const perspectiveDate = ref(undefined);
+      const perspectiveDateComparison = ref(undefined);
       const activePreset = ref(undefined);
       const activePresetComparison = ref(undefined);
       const perspectivePreset = ref(undefined);
@@ -78,6 +78,7 @@ export const Default: Story = {
         v-model:perspective-preset="perspectivePreset"
         v-model:perspective-preset-comparison="perspectivePresetComparison"
       >
-      </DaterangePicker>`,
+      </DaterangePicker>
+      `,
   }),
 };

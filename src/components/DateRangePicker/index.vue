@@ -110,8 +110,6 @@ const storeHistory = ref(true);
 const popperRef = ref();
 const active = ref<'comparison' | 'main'>('main');
 
-const showComparisonPicker = ref(props.dateRangeComparison ? true : false);
-
 const stagedDateRange = ref<[Date, Date]>();
 watch(
   () => props.dateRange,
@@ -183,6 +181,22 @@ watch(
   { immediate: true }
 );
 
+const showComparisonPicker = ref(props.dateRangeComparison ? true : false);
+watch(showComparisonPicker, (value) => {
+  console.log('showComparisonPicker', value);
+
+  if (value) {
+    stagedDateRangeComparison.value = [
+      stagedDateRange.value[0],
+      stagedDateRange.value[1],
+    ];
+  } else {
+    stagedDateRangeComparison.value = undefined;
+    stagedPerspectivePresetComparison.value = undefined;
+    stagedActivePresetComparison.value = undefined;
+  }
+});
+
 type DateType = DateTypeCustom | DateTypePreset;
 
 interface DateTypeCustom {
@@ -216,6 +230,8 @@ const displayComparisonDate = computed(() => {
   if (!props.enableComparison) {
     return undefined;
   }
+
+  console.log(props.dateRangeComparison);
 
   if (!props.dateRangeComparison) {
     return 'Select date';
