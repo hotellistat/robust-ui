@@ -1,6 +1,5 @@
 import { createPopper, OptionsGeneric } from '@popperjs/core';
 import type { Instance, Options, Modifier } from '@popperjs/core';
-import gsap from 'gsap';
 
 import {
   defineComponent,
@@ -95,41 +94,13 @@ export default defineComponent({
       await init(appendTo.value);
       if (root.value) {
         popper?.update();
-        gsap
-          .fromTo(
-            root.value,
-            {
-              opacity: 0,
-            },
-            {
-              opacity: 1,
-              duration: 0.05,
-              ease: 'power1',
-            }
-          )
-          .then(() => {
-            emit('opened');
-          });
+        emit('opened');
       }
     }
 
     async function destroyPopper() {
       if (root.value) {
-        gsap
-          .fromTo(
-            root.value,
-            {
-              opacity: 1,
-            },
-            {
-              opacity: 0,
-              duration: 0.05,
-              ease: 'power1',
-            }
-          )
-          .then(() => {
-            destroy();
-          });
+        destroy();
       }
     }
 
