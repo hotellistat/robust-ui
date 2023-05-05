@@ -30,7 +30,6 @@ export default defineConfig(async (config) => ({
         '@vueuse/core',
         '@vueuse/shared',
         'vee-validate',
-        'gsap',
         'fuse.js',
         '@phosphor-icons/vue',
       ],
