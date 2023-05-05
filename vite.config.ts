@@ -11,6 +11,9 @@ export default defineConfig(async (config) => ({
       ? visualizer({ open: true, title: 'Robust-UI Bundle Visualizer' })
       : undefined,
   ],
+  esbuild: {
+    pure: ['console.log'],
+  },
   build: {
     sourcemap: true,
     lib: {
