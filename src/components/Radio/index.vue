@@ -8,7 +8,10 @@
     />
     <label
       :for="`radio_${cuid}`"
-      :class="[$slots.title ? 'items-start' : 'items-center']"
+      :class="[
+        $slots.title ? 'items-start' : 'items-center',
+        cursorPointer ? 'cursor-pointer' : 'cursor-default',
+      ]"
       class="flex items-center"
     >
       <div
@@ -38,7 +41,8 @@ let uid = 0;
 </script>
 
 <script lang="ts" setup>
-import { computed } from 'vue';
+import { MaybeRef } from '@vueuse/core';
+import { computed, inject } from 'vue';
 
 const props = defineProps({
   modelValue: {
@@ -54,6 +58,8 @@ const props = defineProps({
     default: '',
   },
 });
+
+const cursorPointer = inject<MaybeRef<boolean>>('enableCursorPointer', true);
 
 const emit = defineEmits(['update:modelValue', 'change']);
 const cuid = (++uid).toString();

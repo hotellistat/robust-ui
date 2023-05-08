@@ -13,6 +13,7 @@
         tab.value === modelValue
           ? 'border-b-2 border-primary-500'
           : 'border-b  text-gray-400 dark:border-gray-700 dark:text-gray-500',
+        cursorPointer ? 'cursor-pointer' : 'cursor-default',
       ]"
     >
       <slot name="tab" :tab="tab" :select="() => select(tab.value)">
@@ -27,11 +28,14 @@
 </template>
 
 <script lang="ts" setup>
-import { onMounted, PropType, ref } from 'vue';
+import { MaybeRef } from '@vueuse/core';
+import { inject, onMounted, PropType, ref } from 'vue';
 export interface Tab {
   title: string;
   value: string;
 }
+
+const cursorPointer = inject<MaybeRef<boolean>>('enableCursorPointer', true);
 
 const props = defineProps({
   tabs: {

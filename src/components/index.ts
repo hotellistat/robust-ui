@@ -27,4 +27,4 @@ export { default as RobustTabsSwitch } from './TabsSwitch/index.vue';
 export { default as RobustTextarea } from './Textarea/index.vue';
 export { default as RobustWidgetWrapper } from './WidgetWrapper/index.vue';
 export { default as RobustRangeSlider } from './RangeSlider/index.vue';
-export { default as RobustDeleteButton } from './DeleteButton/index.vue';
+export { default as RobustConfirmationModal } from './ConfirmationModal/index.vue';

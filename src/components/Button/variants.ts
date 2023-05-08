@@ -8,7 +8,7 @@ export default {
   warn: 'bg-yellow-500 active:bg-yellow-600 text-gray-900/75 shadow ring-yellow-500 shadow-glow shadow-yellow-500/50',
 
   danger:
-    'bg-rose-500 active:bg-rose-600 text-gray-900/75 shadow ring-rose-500 shadow-glow shadow-rose-500/50',
+    'bg-rose-400 active:bg-rose-600 text-gray-900 shadow ring-rose-500 shadow-glow shadow-rose-500/50',
   'danger-text':
     'hover:bg-rose-500/20 active:bg-rose-500/30 text-rose-500 ring-rose-500',
   'danger-outline':
