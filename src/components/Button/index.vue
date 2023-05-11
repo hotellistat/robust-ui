@@ -4,36 +4,35 @@
     :disabled="disabled"
     class="flex items-center justify-center font-medium"
     :class="[
-      cursorPointer ? '' : 'cursor-default',
+      cursorPointer ? (disabled ? 'cursor-not-allowed' : '') : 'cursor-default',
       variantStyles && disabled
-        ? 'bg-gray-100 text-gray-400 dark:bg-gray-700 dark:text-gray-400'
+        ? ' bg-gray-900/5 text-gray-900/40 dark:bg-white/10 dark:text-white/50'
         : undefined,
       variantStyles && !disabled
         ? variantStyles + ' ring-opacity-50 focus:ring'
         : undefined,
-      condensed ? 'h-8 px-3' : 'h-10 px-4',
+      condensed ? 'h-8 gap-2 px-3' : ' h-10 gap-3 px-4',
       rounded ? 'rounded-full' : 'rounded-md',
     ]"
   >
     <slot name="raw">
-      <div
-        class="flex select-none items-center"
-        :class="[loading ? 'opacity-0' : 'opacity-1']"
-      >
-        <div v-if="$slots.prefix" class="mr-2">
-          <slot tag="div" name="prefix" />
-        </div>
-
-        <span class="whitespace-no-wrap inline-block truncate align-top">
-          <slot />
-        </span>
-        <div v-if="$slots.suffix" class="ml-2">
-          <slot tag="div" name="suffix" />
-        </div>
+      <div v-if="$slots.prefix" :class="[loading ? 'invisible' : 'visible']">
+        <slot tag="div" name="prefix" />
       </div>
+
+      <span
+        :class="[loading ? 'invisible' : 'visible']"
+        class="whitespace-no-wrap inline-block truncate align-top"
+      >
+        <slot />
+      </span>
+      <div v-if="$slots.suffix" :class="[loading ? 'invisible' : 'visible']">
+        <slot tag="div" name="suffix" />
+      </div>
+
       <RobustSpinner
         v-if="loading"
-        :size="20"
+        :size="condensed ? 16 : 20"
         :stroke="2"
         class="spinner absolute"
       />
