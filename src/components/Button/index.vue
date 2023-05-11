@@ -2,7 +2,7 @@
   <Component
     :is="(tag as any)"
     :disabled="disabled"
-    class="flex items-center justify-center truncate font-medium"
+    class="flex items-center justify-center font-medium"
     :class="[
       cursorPointer ? '' : 'cursor-default',
       variantStyles && disabled
