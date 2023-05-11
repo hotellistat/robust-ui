@@ -15,26 +15,29 @@
       rounded ? 'rounded-full' : 'rounded-md',
     ]"
   >
-    <div
-      class="flex select-none items-center"
-      :class="[loading ? 'opacity-0' : 'opacity-1']"
-    >
-      <div v-if="$slots.prefix" class="mr-2">
-        <slot tag="div" name="prefix" />
+    <slot name="raw">
+      <div
+        class="flex select-none items-center"
+        :class="[loading ? 'opacity-0' : 'opacity-1']"
+      >
+        <div v-if="$slots.prefix" class="mr-2">
+          <slot tag="div" name="prefix" />
+        </div>
+
+        <span class="whitespace-no-wrap inline-block truncate align-top">
+          <slot />
+        </span>
+        <div v-if="$slots.suffix" class="ml-2">
+          <slot tag="div" name="suffix" />
+        </div>
       </div>
-      <span class="whitespace-no-wrap inline-block truncate align-top">
-        <slot />
-      </span>
-      <div v-if="$slots.suffix" class="ml-2">
-        <slot tag="div" name="suffix" />
-      </div>
-    </div>
-    <RobustSpinner
-      v-if="loading"
-      :size="20"
-      :stroke="2"
-      class="spinner absolute"
-    />
+      <RobustSpinner
+        v-if="loading"
+        :size="20"
+        :stroke="2"
+        class="spinner absolute"
+      />
+    </slot>
   </Component>
 </template>
 

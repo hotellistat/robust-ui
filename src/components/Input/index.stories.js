@@ -14,7 +14,14 @@ export default {
 };
 
 const DefaultTemplate = (args, { events }) => ({
-  template: '<Input class="mb-4" :cthulu="true" @="events" v-bind="args"/>',
+  template: `<Input class="mb-4" :cthulu="true" @="events" v-bind="args">
+    <template #prefix>
+    test
+    </template>
+    <template #suffix>
+    test
+    </template>
+  </Input>`,
   components: { Input },
   setup() {
     return { args, events };

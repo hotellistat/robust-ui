@@ -1,7 +1,8 @@
 <script lang="ts" setup>
 import RobustInputWrapper from '../InputWrapper/index.vue';
-import { computed, ref } from 'vue';
+import { computed, inject, ref } from 'vue';
 import { PhWarningCircle } from '@phosphor-icons/vue';
+import { MaybeRef } from '@vueuse/core';
 
 const props = defineProps({
   title: {
@@ -22,7 +23,6 @@ const props = defineProps({
   },
   readonly: {
     type: Boolean,
-    default: false,
   },
   inputClass: {
     type: String,
@@ -34,14 +34,18 @@ const props = defineProps({
   },
   condensed: {
     type: Boolean,
-    default: false,
   },
   disabled: {
     type: Boolean,
-    default: false,
+  },
+  interactive: {
+    type: Boolean,
   },
 });
+
 const emit = defineEmits(['update:modelValue', 'input', 'change']);
+
+const cursorPointer = inject<MaybeRef<boolean>>('enableCursorPointer', true);
 
 const inputRef = ref();
 
@@ -83,7 +87,14 @@ defineExpose({
     <div
       v-if="$slots.prefix"
       class="flex h-full select-none items-center pr-2 text-gray-400"
-      :class="[condensed ? 'pl-2' : 'pl-3']"
+      :class="[
+        condensed ? 'pl-2' : 'pl-3',
+        interactive
+          ? cursorPointer
+            ? 'cursor-pointer'
+            : 'cursor-default'
+          : 'pointer-events-none',
+      ]"
     >
       <slot tag="div" name="prefix" />
     </div>
@@ -108,8 +119,15 @@ defineExpose({
     />
     <div
       v-if="$slots.suffix || error"
-      class="pointer-events-none absolute inset-y-0 right-0 ml-auto flex h-full select-none items-center pl-2 text-gray-400"
-      :class="[condensed ? 'pr-2' : 'pr-3']"
+      class="ml-auto flex h-full select-none items-center pl-2 text-gray-400"
+      :class="[
+        condensed ? 'pr-2' : 'pr-3',
+        interactive
+          ? cursorPointer
+            ? 'cursor-pointer'
+            : 'cursor-default'
+          : 'pointer-events-none',
+      ]"
     >
       <slot v-if="!error" tag="div" name="suffix" />
       <div v-else class="text-red-400">

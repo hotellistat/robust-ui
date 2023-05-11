@@ -28,7 +28,7 @@ export const Default: Story = {
     components: { Modal },
     setup: () => ({ args }),
     template: `
-<div class="dark:text-white"> ${lorem}</div>
+<div class="dark:text-white max-w-screen-lg" @click="args.opened = true"> ${lorem}</div>
 <Modal v-model:opened="args.opened" v-bind="args">
   <template #title>
     Title
