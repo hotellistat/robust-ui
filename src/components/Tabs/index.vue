@@ -7,6 +7,7 @@
       v-for="tab in tabs"
       :key="(tab.value as any)"
       :ref="registerTab"
+      type="button"
       :data-value="tab.value"
       class="whitespace-no-wrap flex-shrink-0"
       :class="[

@@ -146,7 +146,6 @@ function resetValue() {
 <template>
   <RobustInputWrapper
     ref="inputWrapperRef"
-    tag="button"
     :title="title"
     :hint="hint"
     :error="error"

@@ -523,6 +523,7 @@ defineExpose({
         <button
           v-for="(preset, index) in presets"
           :key="index"
+          type="button"
           class="w-full rounded-lg py-2 px-4 text-left hover:bg-gray-100 dark:hover:bg-white/5"
           :class="getPresetStyle(preset)"
           @click="setQuickAction(preset)"
@@ -536,6 +537,7 @@ defineExpose({
       <div class="mb-4 flex items-center text-center text-lg font-semibold">
         <div class="flex flex-1">
           <button
+            type="button"
             class="flex h-8 items-center rounded-lg px-2 tabular-nums hover:bg-gray-100 dark:hover:bg-white/5"
             @click="
               () => {
@@ -547,6 +549,7 @@ defineExpose({
             {{ monthHeading }}
           </button>
           <button
+            type="button"
             class="flex h-8 items-center rounded-lg px-2 tabular-nums hover:bg-gray-100 dark:hover:bg-white/5"
             @click="
               () => {
@@ -559,6 +562,7 @@ defineExpose({
           </button>
         </div>
         <button
+          type="button"
           class="flex h-8 w-8 items-center justify-center rounded-lg text-gray-800 hover:bg-gray-100 hover:text-gray-800 active:bg-gray-100 dark:text-gray-400 dark:hover:bg-white/5 dark:hover:text-gray-100"
           @click="subMonth"
         >
@@ -566,6 +570,7 @@ defineExpose({
         </button>
 
         <button
+          type="button"
           class="flex h-8 w-8 items-center justify-center rounded-lg text-gray-800 hover:bg-gray-100 hover:text-gray-800 active:bg-gray-100 dark:text-gray-400 dark:hover:bg-white/5 dark:hover:text-gray-100"
           @click="addMonth"
         >
@@ -581,6 +586,7 @@ defineExpose({
           <button
             v-for="(month, index) in months"
             :key="index"
+            type="button"
             class="flex items-center justify-center rounded-lg py-2 text-center"
             :class="[
               activeMonth === index
@@ -606,6 +612,7 @@ defineExpose({
             v-for="year in yearSelectionYears"
             :ref="(ref) => (refYearEntry[year] = ref)"
             :key="year"
+            type="button"
             class="rounded-lg py-2 text-center tabular-nums"
             :class="[
               activeYear === year
@@ -643,6 +650,7 @@ defineExpose({
           <button
             v-for="day in daysInMonth"
             :key="day + '_day'"
+            type="button"
             class="relative"
             :disabled="!dayAllowed(day)"
             :class="[isBetweenRange(day) ? variantStyling.background : '']"

@@ -14,6 +14,7 @@
     >
       You've selected {{ selectedRows.length }} entries.
       <button
+        type="button"
         class="dark:text-primay-300 font-semibold text-primary-400"
         @click="selectAll(true)"
       >
@@ -51,6 +52,7 @@
           <slot v-else :name="`c_${column.key}`" :data="column" />
           <button
             v-if="column.sortable !== false"
+            type="button"
             @click="sortColumn(column, $event)"
           >
             <PhSortAscending

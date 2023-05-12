@@ -310,7 +310,6 @@ const saveTime = async () => {
 <template>
   <RobustInputWrapper
     ref="inputWrapperRef"
-    tag="button"
     box-class="items-center"
     :title="title"
     :hint="hint"

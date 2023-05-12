@@ -8,6 +8,7 @@
       v-for="tab in tabs"
       :key="tab.value"
       :ref="registerTab"
+      type="button"
       :data-value="tab.value"
       class="whitespace-no-wrap z-10 flex h-full flex-1 flex-shrink-0 flex-grow items-center justify-center self-stretch whitespace-nowrap rounded transition-colors duration-75"
       :class="[

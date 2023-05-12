@@ -57,6 +57,7 @@ const open = ref(false);
       <slot v-if="$slots.title" name="title" />
       <button
         v-if="$slots.options && showOptions"
+        type="button"
         class="-m-1 rounded-full border-none p-1 opacity-0 transition-all duration-150 hover:bg-gray-100 group-hover:opacity-100 dark:hover:bg-gray-700"
         @click="open = !open"
       >

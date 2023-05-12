@@ -40,6 +40,7 @@
                 <slot name="title" :close="close"></slot>
               </div>
               <button
+                type="button"
                 class="-m-4 ml-auto p-4 text-gray-400 transition-colors duration-150 hover:text-gray-900 dark:hover:text-gray-100"
                 @click="close"
               >

@@ -299,7 +299,6 @@ function deselectAll() {
   <RobustInputWrapper
     ref="refSelectWrapper"
     :title="title"
-    tag="button"
     :hint="hint"
     :error="error"
     :class="$props.class"
@@ -370,7 +369,7 @@ function deselectAll() {
     @closed="resetFields"
   >
     <div v-if="Array.isArray(modelValue)" class="flex justify-end py-2 px-4">
-      <button class="select-none font-light" @click="controlAll">
+      <button type="button" class="select-none font-light" @click="controlAll">
         <div v-if="Array.isArray(modelValue) && modelValue.length > 0">
           Clear all
         </div>
@@ -381,6 +380,7 @@ function deselectAll() {
       <button
         v-for="option in computedOptions"
         :key="String(option.value)"
+        type="button"
         class="flex w-full min-w-0 max-w-full items-center gap-4 whitespace-pre-wrap px-4 py-2 text-left transition-colors duration-200 hover:bg-gray-100 dark:hover:bg-gray-700"
         @click="selectItem(option)"
       >
