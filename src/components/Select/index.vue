@@ -299,6 +299,7 @@ function deselectAll() {
   <RobustInputWrapper
     ref="refSelectWrapper"
     :title="title"
+    tag="button"
     :hint="hint"
     :error="error"
     :class="$props.class"
@@ -306,8 +307,6 @@ function deselectAll() {
     :condensed="condensed"
     v-bind="$attrs"
     @click="openDropdown"
-    @focus="openDropdown"
-    @blur="closeDropdown"
   >
     <div
       v-if="$slots.prefix"
