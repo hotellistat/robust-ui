@@ -69,8 +69,6 @@ const emit = defineEmits([
   'blur',
 ]);
 
-const cursorPointer = inject<MaybeRef<boolean>>('enableCursorPointer', true);
-
 const { modelValue, presets, variant } = toRefs(props);
 
 const open = ref(false);
@@ -163,15 +161,14 @@ function resetValue() {
     >
       <PhCalendar size="20" />
     </div>
-    <div
+    <button
       :id="slotProps.cuid"
       ref="select"
       class="flex h-full w-full select-none items-center bg-transparent pl-2 text-current outline-none"
-      :class="[cursorPointer ? 'cursor-pointer' : 'cursor-default']"
       v-bind="$attrs"
     >
       <div class="min-w-0 truncate tabular-nums">{{ displayDate }}</div>
-    </div>
+    </button>
 
     <div
       class="flex h-full flex-shrink-0 items-center pr-3 text-gray-400 dark:text-gray-500"

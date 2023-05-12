@@ -3,7 +3,7 @@
     ref="root"
     class="relative flex select-none justify-start overflow-x-auto"
   >
-    <div
+    <button
       v-for="tab in tabs"
       :key="(tab.value as any)"
       :ref="registerTab"
@@ -13,7 +13,6 @@
         tab.value === modelValue
           ? 'border-b-2 border-primary-500'
           : 'border-b  text-gray-400 dark:border-gray-700 dark:text-gray-500',
-        cursorPointer ? 'cursor-pointer' : 'cursor-default',
       ]"
     >
       <slot name="tab" :tab="tab" :select="() => select(tab.value)">
@@ -21,7 +20,7 @@
           {{ tab.title }}
         </div>
       </slot>
-    </div>
+    </button>
 
     <div class="flex-1 border-b dark:border-gray-700"></div>
   </div>
@@ -34,8 +33,6 @@ export interface Tab {
   title: string;
   value: string;
 }
-
-const cursorPointer = inject<MaybeRef<boolean>>('enableCursorPointer', true);
 
 const props = defineProps({
   tabs: {

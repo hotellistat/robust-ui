@@ -4,7 +4,6 @@
     :disabled="disabled"
     class="flex items-center justify-center font-medium"
     :class="[
-      cursorPointer ? (disabled ? 'cursor-not-allowed' : '') : 'cursor-default',
       variantStyles && disabled
         ? ' bg-gray-900/5 text-gray-900/40 dark:bg-white/10 dark:text-white/50'
         : undefined,
@@ -45,8 +44,6 @@ import { computed, inject, PropType, toRefs } from 'vue';
 import RobustSpinner from '../Spinner/index.vue';
 import variants from './variants';
 import { MaybeRef } from '@vueuse/core';
-
-const cursorPointer = inject<MaybeRef<boolean>>('enableCursorPointer', true);
 
 const props = defineProps({
   tag: {

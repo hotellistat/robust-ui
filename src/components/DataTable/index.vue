@@ -13,12 +13,12 @@
       class="mb-0"
     >
       You've selected {{ selectedRows.length }} entries.
-      <span
+      <button
         class="dark:text-primay-300 font-semibold text-primary-400"
-        :class="[cursorPointer ? 'cursor-pointer' : 'cursor-default']"
         @click="selectAll(true)"
-        >Select all.</span
       >
+        Select all.
+      </button>
     </RobustNotice>
     <slot name="header" />
     <div class="rows-wrapper flex flex-col overflow-hidden">
@@ -40,10 +40,7 @@
           v-for="column in options.columns"
           :key="column.key"
           class="robust-table-column relative flex min-h-[48px] items-center justify-between"
-          :class="[
-            column.class ?? '',
-            cursorPointer ? 'cursor-pointer' : 'cursor-default',
-          ]"
+          :class="[column.class]"
         >
           <div
             v-if="!$slots[`c_${column.key}`]"
@@ -52,7 +49,7 @@
             {{ column.name }}
           </div>
           <slot v-else :name="`c_${column.key}`" :data="column" />
-          <div
+          <button
             v-if="column.sortable !== false"
             @click="sortColumn(column, $event)"
           >
@@ -71,7 +68,7 @@
               class="text-gray-500"
               :size="20"
             />
-          </div>
+          </button>
         </div>
       </div>
 
@@ -234,8 +231,6 @@ type DataTableOptions = {
   selection?: boolean;
   search?: boolean;
 };
-
-const cursorPointer = inject<MaybeRef<boolean>>('enableCursorPointer', true);
 
 const defaultOptions: Partial<DataTableOptions> = {
   serverSide: false,

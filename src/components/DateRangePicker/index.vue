@@ -98,8 +98,6 @@ const emit = defineEmits([
   'change',
 ]);
 
-const cursorPointer = inject<MaybeRef<boolean>>('enableCursorPointer', true);
-
 const open = ref(false);
 const inputWrapperRef = ref();
 const mainCalendar = ref();
@@ -326,14 +324,11 @@ const saveTime = async () => {
     >
       <PhCalendar size="20" />
     </div>
-    <div
+    <button
       :id="slotProps.cuid"
       ref="select"
       class="w-full select-none items-center bg-transparent text-current outline-none"
-      :class="[
-        condensed ? 'pl-2' : 'pl-3',
-        cursorPointer ? 'cursor-pointer' : 'cursor-default',
-      ]"
+      :class="[condensed ? 'pl-2' : 'pl-3']"
       v-bind="$attrs"
     >
       <div
@@ -391,7 +386,7 @@ const saveTime = async () => {
           title="Perspective date enabled"
         ></div>
       </div>
-    </div>
+    </button>
 
     <div
       class="flex-shrink-0 items-center pr-3 text-gray-400 dark:text-gray-500"

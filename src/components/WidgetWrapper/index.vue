@@ -14,7 +14,6 @@ defineProps({
     default: true,
   },
 });
-const cursorPointer = inject<MaybeRef<boolean>>('enableCursorPointer', true);
 
 const emit = defineEmits(['optionsOpened', 'optionsClosed']);
 
@@ -32,14 +31,17 @@ const open = ref(false);
     <template #title>
       <slot v-if="$slots.title" name="title" />
     </template>
-    <slot
-      name="options"
-      :set="
+    <template #default="{ close }">
+      <slot
+        name="options"
+        :close="close"
+        :set="
         (value: boolean) => {
           open = value;
         }
-      "
-    />
+        "
+      />
+    </template>
   </RobustModal>
   <div
     v-bind="$attrs"
@@ -53,14 +55,13 @@ const open = ref(false);
       }"
     >
       <slot v-if="$slots.title" name="title" />
-      <div
+      <button
         v-if="$slots.options && showOptions"
         class="-m-1 rounded-full border-none p-1 opacity-0 transition-all duration-150 hover:bg-gray-100 group-hover:opacity-100 dark:hover:bg-gray-700"
-        :class="[cursorPointer ? 'cursor-pointer' : 'cursor-default']"
         @click="open = !open"
       >
         <PhDotsThreeVertical size="20" weight="bold" />
-      </div>
+      </button>
     </div>
     <section
       v-if="$slots.default"

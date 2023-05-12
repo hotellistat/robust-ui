@@ -84,8 +84,6 @@ const props = defineProps({
   },
 });
 
-const cursorPointer = inject<MaybeRef<boolean>>('enableCursorPointer', true);
-
 const emit = defineEmits([
   'update:modelValue',
   'input',
@@ -375,23 +373,18 @@ function deselectAll() {
     @closed="resetFields"
   >
     <div v-if="Array.isArray(modelValue)" class="flex justify-end py-2 px-4">
-      <div
-        class="select-none font-light"
-        :class="[cursorPointer ? 'cursor-pointer' : 'cursor-default']"
-        @click="controlAll"
-      >
+      <button class="select-none font-light" @click="controlAll">
         <div v-if="Array.isArray(modelValue) && modelValue.length > 0">
           Clear all
         </div>
         <div v-else>Select all</div>
-      </div>
+      </button>
     </div>
-    <ul v-if="computedOptions.length > 0" class="max-h-72 overflow-auto">
-      <li
+    <div v-if="computedOptions.length > 0" class="max-h-72 overflow-auto">
+      <button
         v-for="option in computedOptions"
         :key="String(option.value)"
-        class="flex items-center gap-4 px-4 py-2 transition-colors duration-200 hover:bg-gray-100 dark:hover:bg-gray-700"
-        :class="[cursorPointer ? 'cursor-pointer' : 'cursor-default']"
+        class="flex w-full min-w-0 max-w-full items-center gap-4 whitespace-pre-wrap px-4 py-2 text-left transition-colors duration-200 hover:bg-gray-100 dark:hover:bg-gray-700"
         @click="selectItem(option)"
       >
         <span>{{ option.title }}</span>
@@ -401,8 +394,8 @@ function deselectAll() {
           weight="bold"
           size="14"
         />
-      </li>
-    </ul>
+      </button>
+    </div>
     <div v-else class="py-2 text-center text-gray-400">No options</div>
   </RobustPopper>
 </template>

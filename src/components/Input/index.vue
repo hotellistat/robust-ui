@@ -45,8 +45,6 @@ const props = defineProps({
 
 const emit = defineEmits(['update:modelValue', 'input', 'change']);
 
-const cursorPointer = inject<MaybeRef<boolean>>('enableCursorPointer', true);
-
 const inputRef = ref();
 
 const inputFieldValue = computed({
@@ -84,20 +82,14 @@ defineExpose({
     :disabled="disabled"
     :condensed="condensed"
   >
-    <div
+    <Component
+      :is="interactive ? 'button' : 'label'"
       v-if="$slots.prefix"
       class="flex h-full select-none items-center pr-2 text-gray-400"
-      :class="[
-        condensed ? 'pl-2' : 'pl-3',
-        interactive
-          ? cursorPointer
-            ? 'cursor-pointer'
-            : 'cursor-default'
-          : 'pointer-events-none',
-      ]"
+      :class="[condensed ? 'pl-2' : 'pl-3']"
     >
       <slot tag="div" name="prefix" />
-    </div>
+    </Component>
     <input
       :id="slotProps.cuid"
       ref="inputRef"
@@ -117,22 +109,16 @@ defineExpose({
       ]"
       :readonly="readonly"
     />
-    <div
+    <Component
+      :is="interactive ? 'button' : 'label'"
       v-if="$slots.suffix || error"
       class="ml-auto flex h-full select-none items-center pl-2 text-gray-400"
-      :class="[
-        condensed ? 'pr-2' : 'pr-3',
-        interactive
-          ? cursorPointer
-            ? 'cursor-pointer'
-            : 'cursor-default'
-          : 'pointer-events-none',
-      ]"
+      :class="[condensed ? 'pr-2' : 'pr-3']"
     >
       <slot v-if="!error" tag="div" name="suffix" />
       <div v-else class="text-red-400">
         <PhWarningCircle size="20" class="block" />
       </div>
-    </div>
+    </Component>
   </RobustInputWrapper>
 </template>

@@ -37,7 +37,7 @@
               class="flex flex-shrink-0 items-center p-6 text-xl"
             >
               <div class="leading-4">
-                <slot name="title"></slot>
+                <slot name="title" :close="close"></slot>
               </div>
               <button
                 class="-m-4 ml-auto p-4 text-gray-400 transition-colors duration-150 hover:text-gray-900 dark:hover:text-gray-100"
@@ -47,7 +47,7 @@
               </button>
             </div>
             <div v-if="$slots.header" class="w-full flex-shrink-0">
-              <slot name="header"></slot>
+              <slot name="header" :close="close"></slot>
             </div>
             <section
               :class="[
@@ -57,10 +57,10 @@
               ]"
               class="flex-1"
             >
-              <slot></slot>
+              <slot :close="close"></slot>
             </section>
             <div v-if="$slots.footer" class="w-full flex-shrink-0">
-              <slot name="footer"></slot>
+              <slot name="footer" :close="close"></slot>
             </div>
           </div>
         </div>

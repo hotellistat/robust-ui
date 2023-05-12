@@ -11,7 +11,6 @@
       :data-value="tab.value"
       class="whitespace-no-wrap z-10 flex h-full flex-1 flex-shrink-0 flex-grow items-center justify-center self-stretch whitespace-nowrap rounded transition-colors duration-75"
       :class="[
-        cursorPointer ? 'cursor-pointer' : 'cursor-default',
         condensed ? 'px-3 py-1' : 'px-4  py-1.5',
         {
           'bg-primary-500 text-white': modelValue === tab.value,
@@ -54,7 +53,6 @@ defineProps({
   },
 });
 
-const cursorPointer = inject<MaybeRef<boolean>>('enableCursorPointer', true);
 const emit = defineEmits(['update:modelValue']);
 
 const registeredTabs = ref<HTMLElement[]>([]);

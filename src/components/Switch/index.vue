@@ -1,20 +1,19 @@
 <template>
   <label class="flex items-center gap-x-3">
     <input v-model="isChecked" class="hidden" type="checkbox" />
-    <div
+    <button
       class="duration-250 relative box-content h-4 w-8 rounded-2xl border-4 transition-colors"
       :class="[
         isChecked
           ? 'border-primary-500 bg-primary-500'
           : 'border-gray-300 bg-gray-300 dark:border-gray-500 dark:bg-gray-500',
-        cursorPointer ? 'cursor-pointer' : 'cursor-default',
       ]"
     >
       <div
         class="duration-250 absolute top-0 left-0 h-4 w-4 rounded-full bg-white transition ease-in-out"
         :class="[isChecked ? 'translate-x-4' : '']"
       ></div>
-    </div>
+    </button>
     <div v-if="title">
       <div>{{ title }}</div>
       <div class="text-sm text-gray-400">{{ description }}</div>
@@ -25,8 +24,6 @@
 <script lang="ts" setup>
 import { MaybeRef } from '@vueuse/core';
 import { computed, inject, toRefs } from 'vue';
-
-const cursorPointer = inject<MaybeRef<boolean>>('enableCursorPointer', true);
 
 const props = defineProps({
   title: {
