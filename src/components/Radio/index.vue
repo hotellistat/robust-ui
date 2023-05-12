@@ -28,7 +28,7 @@
 </template>
 
 <script lang="ts">
-let uid = 0;
+const uid = 0;
 </script>
 
 <script lang="ts" setup>
@@ -51,7 +51,6 @@ const props = defineProps({
 });
 
 const emit = defineEmits(['update:modelValue', 'change']);
-const cuid = (++uid).toString();
 
 const isChecked = computed({
   get() {

@@ -298,7 +298,6 @@ function deselectAll() {
 <template>
   <RobustInputWrapper
     ref="refSelectWrapper"
-    v-slot="slotProps"
     :title="title"
     :hint="hint"
     :error="error"
@@ -319,7 +318,6 @@ function deselectAll() {
     </div>
     <div
       v-show="!open || !searchable"
-      :id="slotProps.cuid"
       ref="select"
       class="flex h-full min-w-0 flex-1 flex-shrink items-center bg-transparent text-current outline-none"
       :class="[$slots.prefix || condensed ? 'pl-2' : 'pl-3']"

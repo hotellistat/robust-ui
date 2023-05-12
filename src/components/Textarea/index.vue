@@ -71,7 +71,6 @@ defineExpose({
 
 <template>
   <RobustInputWrapper
-    v-slot="slotProps"
     :fixed-height="false"
     :title="title"
     :hint="hint"
@@ -90,7 +89,6 @@ defineExpose({
       <slot tag="div" name="prefix" />
     </div>
     <textarea
-      :id="slotProps.cuid"
       ref="inputRef"
       v-bind="$attrs"
       v-model="inputFieldValue"

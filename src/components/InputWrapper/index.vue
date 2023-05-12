@@ -1,11 +1,15 @@
 <script lang="ts">
-let uid = 0;
+const uid = 0;
 </script>
 
 <script lang="ts" setup>
 import { computed, PropType, ref, useAttrs } from 'vue';
 
 defineProps({
+  tag: {
+    type: String,
+    default: 'label',
+  },
   title: {
     type: String,
     default: undefined,
@@ -45,8 +49,6 @@ defineProps({
 });
 const attrs = useAttrs();
 
-const cuid = (++uid).toString();
-
 const listeners = computed(() => {
   return Object.fromEntries(
     Object.entries(attrs).filter((entry) => /^on[^a-z]/.test(entry[0]))
@@ -61,7 +63,7 @@ defineExpose({
 </script>
 
 <template>
-  <label :for="cuid" class="inline-block" :class="[$props.class]">
+  <Component :is="tag" class="inline-block" :class="[$props.class]">
     <div
       v-if="title"
       class="mb-1 block select-none text-sm font-medium text-gray-500 dark:text-gray-400"
@@ -78,7 +80,7 @@ defineExpose({
         disabled ? 'text-gray-500' : '',
       ]"
     >
-      <slot :cuid="cuid" :wrapper-ref="wrapperRef" />
+      <slot :wrapper-ref="wrapperRef" />
     </div>
     <div v-if="hint !== undefined || error !== undefined" class="mt-2">
       <div v-if="hint !== undefined" class="select-none text-xs text-gray-400">
@@ -91,5 +93,5 @@ defineExpose({
         {{ error }}
       </div>
     </div>
-  </label>
+  </Component>
 </template>

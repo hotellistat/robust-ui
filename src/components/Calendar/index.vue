@@ -520,23 +520,23 @@ defineExpose({
       class="relative hidden min-h-0 w-48 border-r border-gray-200 dark:border-gray-700 lg:block"
     >
       <div class="absolute inset-0 overflow-auto py-2">
-        <div
+        <button
           v-for="(preset, index) in presets"
           :key="index"
-          class="py-2 px-4"
+          class="w-full rounded-lg py-2 px-4 text-left hover:bg-gray-100 dark:hover:bg-white/5"
           :class="getPresetStyle(preset)"
           @click="setQuickAction(preset)"
         >
           {{ preset.title }}
-        </div>
+        </button>
       </div>
     </div>
 
     <section class="p-4 dark:border-gray-700">
       <div class="mb-4 flex items-center text-center text-lg font-semibold">
         <div class="flex flex-1">
-          <div
-            class="flex h-8 items-center rounded-lg px-2 tabular-nums hover:bg-gray-100 dark:hover:bg-gray-800"
+          <button
+            class="flex h-8 items-center rounded-lg px-2 tabular-nums hover:bg-gray-100 dark:hover:bg-white/5"
             @click="
               () => {
                 showMonthSelection();
@@ -545,9 +545,9 @@ defineExpose({
             "
           >
             {{ monthHeading }}
-          </div>
-          <div
-            class="flex h-8 items-center rounded-lg px-2 tabular-nums hover:bg-gray-100 dark:hover:bg-gray-800"
+          </button>
+          <button
+            class="flex h-8 items-center rounded-lg px-2 tabular-nums hover:bg-gray-100 dark:hover:bg-white/5"
             @click="
               () => {
                 showYearSelection();
@@ -556,21 +556,21 @@ defineExpose({
             "
           >
             {{ yearHeading }}
-          </div>
+          </button>
         </div>
-        <div
-          class="flex h-8 w-8 items-center justify-center rounded-lg text-gray-800 hover:bg-gray-100 hover:text-gray-800 active:bg-gray-100 dark:text-gray-400 dark:hover:bg-gray-800 dark:hover:text-gray-100"
+        <button
+          class="flex h-8 w-8 items-center justify-center rounded-lg text-gray-800 hover:bg-gray-100 hover:text-gray-800 active:bg-gray-100 dark:text-gray-400 dark:hover:bg-white/5 dark:hover:text-gray-100"
           @click="subMonth"
         >
           <PhCaretLeft type="chevron-left" size="14" weight="bold" />
-        </div>
+        </button>
 
-        <div
-          class="flex h-8 w-8 items-center justify-center rounded-lg text-gray-800 hover:bg-gray-100 hover:text-gray-800 active:bg-gray-100 dark:text-gray-400 dark:hover:bg-gray-800 dark:hover:text-gray-100"
+        <button
+          class="flex h-8 w-8 items-center justify-center rounded-lg text-gray-800 hover:bg-gray-100 hover:text-gray-800 active:bg-gray-100 dark:text-gray-400 dark:hover:bg-white/5 dark:hover:text-gray-100"
           @click="addMonth"
         >
           <PhCaretRight type="chevron-right" size="14" weight="bold" />
-        </div>
+        </button>
       </div>
 
       <div class="relative w-max">
@@ -578,7 +578,7 @@ defineExpose({
           v-if="showMonthSelectionActive"
           class="absolute inset-0 z-10 grid grid-cols-3 gap-4"
         >
-          <div
+          <button
             v-for="(month, index) in months"
             :key="index"
             class="flex items-center justify-center rounded-lg py-2 text-center"
@@ -595,14 +595,14 @@ defineExpose({
             "
           >
             {{ month.title }}
-          </div>
+          </button>
         </div>
 
         <div
           v-if="showYearSelectionActive"
           class="absolute inset-0 z-10 flex flex-col gap-2 overflow-y-auto"
         >
-          <div
+          <button
             v-for="year in yearSelectionYears"
             :ref="(ref) => (refYearEntry[year] = ref)"
             :key="year"
@@ -621,7 +621,7 @@ defineExpose({
             "
           >
             {{ year }}
-          </div>
+          </button>
         </div>
 
         <div
@@ -640,7 +640,7 @@ defineExpose({
             {{ day.charAt(0).toUpperCase() }}
           </div>
           <div v-for="offset in firstWeekday" :key="offset + '_offset'"></div>
-          <div
+          <button
             v-for="day in daysInMonth"
             :key="day + '_day'"
             class="relative"
@@ -668,12 +668,12 @@ defineExpose({
                 isFirst(day) ||
                 isSelectedDay(day)
                   ? `rounded-0 ${variantStyling.background}`
-                  : 'hover:bg-gray-100 dark:hover:bg-gray-800',
+                  : 'hover:bg-gray-100 dark:hover:bg-white/5',
               ]"
             >
               {{ day }}
             </div>
-          </div>
+          </button>
         </div>
       </div>
     </section>

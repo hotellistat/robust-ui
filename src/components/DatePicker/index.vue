@@ -146,7 +146,7 @@ function resetValue() {
 <template>
   <RobustInputWrapper
     ref="inputWrapperRef"
-    v-slot="slotProps"
+    tag="button"
     :title="title"
     :hint="hint"
     :error="error"
@@ -161,14 +161,13 @@ function resetValue() {
     >
       <PhCalendar size="20" />
     </div>
-    <button
-      :id="slotProps.cuid"
+    <div
       ref="select"
       class="flex h-full w-full select-none items-center bg-transparent pl-2 text-current outline-none"
       v-bind="$attrs"
     >
       <div class="min-w-0 truncate tabular-nums">{{ displayDate }}</div>
-    </button>
+    </div>
 
     <div
       class="flex h-full flex-shrink-0 items-center pr-3 text-gray-400 dark:text-gray-500"

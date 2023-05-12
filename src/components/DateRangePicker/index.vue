@@ -309,7 +309,7 @@ const saveTime = async () => {
 <template>
   <RobustInputWrapper
     ref="inputWrapperRef"
-    v-slot="slotProps"
+    tag="button"
     box-class="items-center"
     :title="title"
     :hint="hint"
@@ -324,8 +324,7 @@ const saveTime = async () => {
     >
       <PhCalendar size="20" />
     </div>
-    <button
-      :id="slotProps.cuid"
+    <div
       ref="select"
       class="w-full select-none items-center bg-transparent text-current outline-none"
       :class="[condensed ? 'pl-2' : 'pl-3']"
@@ -386,7 +385,7 @@ const saveTime = async () => {
           title="Perspective date enabled"
         ></div>
       </div>
-    </button>
+    </div>
 
     <div
       class="flex-shrink-0 items-center pr-3 text-gray-400 dark:text-gray-500"
