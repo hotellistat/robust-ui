@@ -1,7 +1,8 @@
 <template>
   <label class="flex items-center gap-x-3">
     <input v-model="isChecked" class="hidden" type="checkbox" />
-    <button
+    <div
+      type="checkbox"
       class="duration-250 relative box-content h-4 w-8 rounded-2xl border-4 transition-colors"
       :class="[
         isChecked
@@ -13,7 +14,7 @@
         class="duration-250 absolute top-0 left-0 h-4 w-4 rounded-full bg-white transition ease-in-out"
         :class="[isChecked ? 'translate-x-4' : '']"
       ></div>
-    </button>
+    </div>
     <div v-if="title">
       <div>{{ title }}</div>
       <div class="text-sm text-gray-400">{{ description }}</div>
