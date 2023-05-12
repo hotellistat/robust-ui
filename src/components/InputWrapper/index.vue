@@ -8,7 +8,7 @@ import { computed, PropType, ref, useAttrs } from 'vue';
 defineProps({
   tag: {
     type: String,
-    default: 'label',
+    default: 'div',
   },
   title: {
     type: String,
@@ -63,17 +63,18 @@ defineExpose({
 </script>
 
 <template>
-  <Component :is="tag" class="inline-block" :class="[$props.class]">
+  <label class="inline-block" :class="[$props.class]">
     <div
       v-if="title"
       class="mb-1 block select-none text-sm font-medium text-gray-500 dark:text-gray-400"
     >
       {{ title }}
     </div>
-    <div
+    <Component
+      :is="tag"
       v-bind="listeners"
       ref="wrapperRef"
-      class="relative flex rounded-md border border-black/[.15] border-gray-200 ring-primary-500 ring-opacity-30 focus-within:border-primary-500 focus-within:outline-none focus-within:ring dark:border-white/[.15] dark:border-gray-600 focus-within:dark:border-primary-500"
+      class="relative flex rounded-md border border-black/[.15] border-gray-200 text-left ring-primary-500 ring-opacity-30 focus-within:border-primary-500 focus-within:outline-none focus-within:ring dark:border-white/[.15] dark:border-gray-600 focus-within:dark:border-primary-500"
       :class="[
         $props.boxClass,
         fixedHeight ? (condensed ? 'h-8' : 'h-10') : undefined,
@@ -81,7 +82,7 @@ defineExpose({
       ]"
     >
       <slot :wrapper-ref="wrapperRef" />
-    </div>
+    </Component>
     <div v-if="hint !== undefined || error !== undefined" class="mt-2">
       <div v-if="hint !== undefined" class="select-none text-xs text-gray-400">
         {{ hint }}
@@ -93,5 +94,5 @@ defineExpose({
         {{ error }}
       </div>
     </div>
-  </Component>
+  </label>
 </template>

@@ -106,7 +106,7 @@ const enabledHistory = ref(false);
 const displayCompare = ref();
 const storeHistory = ref(true);
 const popperRef = ref();
-const active = ref<'comparison' | 'main'>('main');
+const activeSection = ref<'comparison' | 'main'>('main');
 
 const stagedDateRange = ref<[Date, Date]>();
 watch(
@@ -188,6 +188,7 @@ watch(showComparisonPicker, (value) => {
       stagedDateRange.value[0],
       stagedDateRange.value[1],
     ];
+    activeSection.value = 'comparison';
   } else {
     stagedDateRangeComparison.value = undefined;
     stagedPerspectivePresetComparison.value = undefined;
@@ -414,7 +415,7 @@ const saveTime = async () => {
     >
       <RobustTabs
         v-if="showComparisonPicker && enableComparison"
-        v-model="active"
+        v-model="activeSection"
         class="w-full"
         :tabs="
           [
@@ -424,7 +425,7 @@ const saveTime = async () => {
         "
       />
     </div>
-    <section v-if="active === 'main'">
+    <section v-if="activeSection === 'main'">
       <RobustCalendar
         ref="mainCalendar"
         v-model="stagedDateRange"
