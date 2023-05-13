@@ -7,7 +7,7 @@ export default {
 
 <script lang="ts" setup>
 import RobustInputWrapper from '../InputWrapper/index.vue';
-import RobustPopper from '../Popper';
+import FLoating from '../Floating/index.vue';
 import {
   ref,
   computed,
@@ -358,15 +358,12 @@ function deselectAll() {
       />
     </div>
   </RobustInputWrapper>
-  <RobustPopper
+  <FLoating
     ref="popperRef"
     v-model:open="open"
     class="z-[100] origin-top overflow-hidden"
-    :append-to="refSelectWrapper?.wrapperRef"
+    :reference="refSelectWrapper?.wrapperRef"
     :modifiers="popperModifiers"
-    :options="{
-      placement: 'bottom-start',
-    }"
     @closed="resetFields"
   >
     <div v-if="Array.isArray(modelValue)" class="flex justify-end py-2 px-4">
@@ -395,5 +392,5 @@ function deselectAll() {
       </button>
     </div>
     <div v-else class="py-2 text-center text-gray-400">No options</div>
-  </RobustPopper>
+  </FLoating>
 </template>

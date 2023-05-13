@@ -1,7 +1,8 @@
 <script lang="ts" setup>
 import { MaybeRef, onClickOutside } from '@vueuse/core';
+import RobustFloating from '../Floating/index.vue';
+
 import {
-  RobustPopper,
   RobustCalendar,
   RobustInputWrapper,
   RobustButton,
@@ -277,10 +278,15 @@ onClickOutside(popperRef, (event) => {
   }
 
   event.stopPropagation();
-
-  open.value = false;
-  emit('blur');
+  closeDropdown();
 });
+
+function closeDropdown() {
+  if (open.value === true) {
+    open.value = false;
+    emit('blur');
+  }
+}
 
 const handleClick = () => {
   open.value = !open.value;
@@ -399,12 +405,11 @@ const saveTime = async () => {
       />
     </div>
   </RobustInputWrapper>
-  <RobustPopper
-    v-if="inputWrapperRef?.wrapperRef"
+  <RobustFloating
     ref="popperRef"
     v-model:open="open"
     class="z-[100] origin-top-left"
-    :append-to="inputWrapperRef?.wrapperRef"
+    :reference="inputWrapperRef?.wrapperRef"
     :options="{
       placement: 'bottom-start',
     }"
@@ -474,5 +479,5 @@ const saveTime = async () => {
         >Apply time range</RobustButton
       >
     </div>
-  </RobustPopper>
+  </RobustFloating>
 </template>

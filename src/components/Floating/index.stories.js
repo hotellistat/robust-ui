@@ -1,9 +1,9 @@
 import { ref } from 'vue';
-import Popper from '.';
+import FLoating from './index.vue';
 
 export default {
-  title: 'Ui/Popper',
-  component: Popper,
+  title: 'Ui/FLoating',
+  component: FLoating,
   argTypes: {
     title: { control: { type: 'text' } },
     description: { control: { type: 'text' } },
@@ -11,8 +11,8 @@ export default {
 };
 
 const DefaultTemplate = (args) => ({
-  template: '<Popper v-bind="args" v-model="value">ldsajfk</Popper>',
-  components: { Popper },
+  template: '<FLoating v-bind="args" v-model="value">ldsajfk</FLoating>',
+  components: { FLoating },
   setup() {
     const value = ref(false);
     return { args, value };
@@ -21,6 +21,6 @@ const DefaultTemplate = (args) => ({
 
 export const Default = DefaultTemplate.bind({});
 Default.args = {
-  title: 'Popper title',
-  description: 'Popper description text to be placed here',
+  title: 'FLoating title',
+  description: 'FLoating description text to be placed here',
 };

@@ -1,5 +1,5 @@
 <script lang="ts" setup>
-import RobustPopper from '../Popper';
+import RobustFloating from '../Floating/index.vue';
 import RobustCalendar from '../Calendar/index.vue';
 import RobustInputWrapper from '../InputWrapper/index.vue';
 import { PhCaretDown, PhCalendar, PhArrowClockwise } from '@phosphor-icons/vue';
@@ -83,7 +83,6 @@ onClickOutside(popperRef, (event) => {
   event.stopPropagation();
 
   closeDropdown();
-  emit('blur');
 });
 
 const computedValue = computed<Date>({
@@ -191,12 +190,11 @@ function resetValue() {
       />
     </div>
   </RobustInputWrapper>
-  <RobustPopper
-    v-if="inputWrapperRef?.wrapperRef"
+  <RobustFloating
     ref="popperRef"
     v-model:open="open"
     class="z-[100] origin-top-left"
-    :append-to="inputWrapperRef?.wrapperRef"
+    :reference="inputWrapperRef?.wrapperRef"
     :options="{
       placement: 'bottom-start',
     }"
@@ -207,5 +205,5 @@ function resetValue() {
       :presets="presets"
       :variant="variant"
     />
-  </RobustPopper>
+  </RobustFloating>
 </template>

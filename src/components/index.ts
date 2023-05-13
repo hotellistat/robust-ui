@@ -14,7 +14,7 @@ export { default as RobustInputWrapper } from './InputWrapper/index.vue';
 export { default as RobustLinearProgress } from './LinearProgress/index.vue';
 export { default as RobustModal } from './Modal/index.vue';
 export { default as RobustNotice } from './Notice/index.vue';
-export { default as RobustPopper } from './Popper';
+export { default as RobustFloating } from './Floating/index.vue';
 export { default as RobustRadio } from './Radio/index.vue';
 export { default as RobustSelect } from './Select/index.vue';
 export { default as RobustSeparator } from './Separator/index.vue';
