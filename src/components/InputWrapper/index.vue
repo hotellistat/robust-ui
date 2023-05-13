@@ -55,7 +55,7 @@ const listeners = computed(() => {
   );
 });
 
-const wrapperRef = ref();
+const wrapperRef = ref<HTMLElement>();
 
 defineExpose({
   wrapperRef,
@@ -63,6 +63,7 @@ defineExpose({
 </script>
 
 <template>
+  <!-- We can't use label as a wrapper since it causes events not to trigger when e.g. using it in a select component -->
   <div class="inline-block" :class="[$props.class]">
     <label
       v-if="title"

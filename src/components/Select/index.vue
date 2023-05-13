@@ -133,13 +133,29 @@ onClickOutside(elementRef, (event) => {
     return;
   }
 
-  event.stopPropagation();
-  console.log('outside');
+  if (refSelectWrapper.value?.wrapperRef.contains(event.target)) {
+    event.stopPropagation();
+  }
 
   resetFields();
   closeDropdown();
-  emit('blur');
 });
+
+function openDropdown(event) {
+  open.value = true;
+  sortOptionsBySelected();
+  nextTick(() => {
+    if (refSelectInput.value) {
+      refSelectInput.value.focus();
+    }
+  });
+  emit('focus');
+}
+
+function closeDropdown() {
+  open.value = false;
+  emit('blur');
+}
 
 onMounted(async () => {
   await filterBySearchTerm('');
@@ -173,22 +189,7 @@ function selectItem(item) {
   }
 }
 
-function openDropdown() {
-  open.value = true;
-  sortOptionsBySelected();
-  nextTick(() => {
-    if (refSelectInput.value) {
-      refSelectInput.value.focus();
-    }
-  });
-  emit('focus');
-}
-
 console.log(refSelectWrapper);
-
-function closeDropdown() {
-  open.value = false;
-}
 
 function resetFields() {
   search.value = '';
@@ -273,9 +274,9 @@ function deselectAll() {
     :readonly="readonly"
     :condensed="condensed"
     v-bind="$attrs"
-    @click="openDropdown"
-    @focus="openDropdown"
-    @blur="closeDropdown"
+    @click.stop="openDropdown"
+    @focus.stop="openDropdown"
+    @blur.stop="closeDropdown"
   >
     <div
       v-if="$slots.prefix"

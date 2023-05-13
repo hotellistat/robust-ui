@@ -75,16 +75,6 @@ const open = ref(false);
 const elementRef = ref();
 const inputWrapperRef = ref();
 
-onClickOutside(elementRef, (event) => {
-  if (!open.value) {
-    return;
-  }
-
-  event.stopPropagation();
-
-  closeDropdown();
-});
-
 const computedValue = computed<Date>({
   get() {
     return modelValue?.value;
@@ -127,6 +117,18 @@ const displayDate = computed(() => {
   } else {
     return formatter.format(realDate);
   }
+});
+
+onClickOutside(elementRef, (event) => {
+  if (!open.value) {
+    return;
+  }
+
+  if (inputWrapperRef.value?.wrapperRef.contains(event.target)) {
+    event.stopPropagation();
+  }
+
+  closeDropdown();
 });
 
 function closeDropdown() {

@@ -277,6 +277,10 @@ onClickOutside(elementRef, (event) => {
     return;
   }
 
+  if (inputWrapperRef.value?.wrapperRef.contains(event.target)) {
+    event.stopPropagation();
+  }
+
   event.stopPropagation();
   closeDropdown();
 });
