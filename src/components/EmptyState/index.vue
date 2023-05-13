@@ -22,7 +22,7 @@
               fill="none"
               stroke="currentColor"
               stroke-width="1"
-              opacity="0.2"
+              opacity="0.25"
             />
           </pattern>
         </defs>
@@ -76,6 +76,6 @@ defineProps({
 
 <style scoped>
 .svg {
-  mask-image: radial-gradient(black, transparent);
+  mask-image: radial-gradient(closest-side, black 0%, transparent 100%);
 }
 </style>
