@@ -306,6 +306,8 @@ function deselectAll() {
     :condensed="condensed"
     v-bind="$attrs"
     @click="openDropdown"
+    @focus="openDropdown"
+    @blur="closeDropdown"
   >
     <div
       v-if="$slots.prefix"
@@ -357,7 +359,6 @@ function deselectAll() {
     </div>
   </RobustInputWrapper>
   <RobustPopper
-    v-if="refSelectWrapper?.wrapperRef"
     ref="popperRef"
     v-model:open="open"
     class="z-[100] origin-top overflow-hidden"
