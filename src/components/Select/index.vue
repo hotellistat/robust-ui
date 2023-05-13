@@ -20,6 +20,7 @@ import {
 import { MaybeRef, debouncedWatch } from '@vueuse/core';
 import { onClickOutside } from '@vueuse/core';
 import { PhCheck, PhCaretDown } from '@phosphor-icons/vue';
+import { size } from '@floating-ui/vue';
 
 export type Value = string | number | boolean | null | undefined;
 
@@ -103,6 +104,16 @@ const elementRef = ref();
 // const inputWrapper = ref()
 
 const search = ref('');
+
+const middleware = [
+  // size({
+  //   apply({ rects }) {
+  //     Object.assign(elementRef.value.style, {
+  //       width: `${rects.reference.width}px`,
+  //     });
+  //   },
+  // }),
+];
 
 const computedOptions = ref<Option[]>([]);
 
@@ -330,8 +341,10 @@ function deselectAll() {
   <FLoating
     ref="elementRef"
     v-model:open="open"
+    same-size
     class="z-[100] origin-top overflow-hidden"
     :reference="refSelectWrapper?.wrapperRef"
+    :middleware="middleware"
   >
     <div v-if="Array.isArray(modelValue)" class="flex justify-end py-2 px-4">
       <button type="button" class="select-none font-light" @click="controlAll">

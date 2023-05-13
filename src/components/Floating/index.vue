@@ -1,5 +1,6 @@
 <script setup lang="ts">
 import {
+  Middleware,
   Placement,
   ReferenceElement,
   Strategy,
@@ -7,6 +8,7 @@ import {
   flip,
   hide,
   offset,
+  size,
   useFloating,
 } from '@floating-ui/vue';
 import {
@@ -29,6 +31,10 @@ const props = defineProps({
     type: Boolean,
     default: false,
   },
+  sameSize: {
+    type: Boolean,
+    default: false,
+  },
   offset: {
     type: Number,
     default: 0,
@@ -44,6 +50,10 @@ const props = defineProps({
   transform: {
     type: Boolean as PropType<boolean>,
     default: true,
+  },
+  middleware: {
+    type: Array as PropType<Middleware[]>,
+    default: () => [],
   },
 });
 
@@ -62,6 +72,16 @@ const { floatingStyles, update } = useFloating(reference, floating, {
       mainAxis: 4,
     }),
     hide(),
+    props.sameSize
+      ? size({
+          apply({ rects, elements }) {
+            Object.assign(elements.floating.style, {
+              width: `${rects.reference.width}px`,
+            });
+          },
+        })
+      : undefined,
+    ...props.middleware,
   ],
 });
 
