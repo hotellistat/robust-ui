@@ -77,7 +77,11 @@ export const Default: Story = {
       };
     },
     template: `
-      <Select v-bind="args" :options="options" v-model="value" />
+      <Select v-bind="args" :options="options" v-model="value" >
+        <template #prefix>
+          test
+        </template>
+      </Select>
       `,
   }),
 };

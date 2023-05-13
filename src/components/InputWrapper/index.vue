@@ -73,7 +73,7 @@ defineExpose({
     </label>
     <Component
       :is="tag"
-      v-bind="listeners"
+      v-bind="attrs"
       ref="wrapperRef"
       class="relative flex w-full rounded-md border border-black/[.15] border-gray-200 text-left ring-primary-500 ring-opacity-30 focus-within:border-primary-500 focus-within:outline-none focus-within:ring dark:border-white/[.15] dark:border-gray-600 focus-within:dark:border-primary-500"
       :class="[

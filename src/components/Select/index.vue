@@ -278,6 +278,7 @@ function deselectAll() {
 <template>
   <RobustInputWrapper
     ref="refSelectWrapper"
+    type="button"
     :title="title"
     :hint="hint"
     :error="error"
@@ -291,7 +292,7 @@ function deselectAll() {
   >
     <div
       v-if="$slots.prefix"
-      class="flex h-full items-center pr-2 text-gray-400"
+      class="pointer-events-none flex h-full select-none items-center pr-2 text-gray-400"
       :class="[condensed ? 'pl-2' : 'pl-3']"
     >
       <slot tag="div" name="prefix" />
@@ -313,7 +314,7 @@ function deselectAll() {
       ref="refSelectInput"
       v-model="search"
       :size="1"
-      class="block h-full min-w-0 flex-1 flex-shrink bg-transparent text-current outline-none"
+      class="pointer-events-none block h-full min-w-0 flex-1 flex-shrink select-none bg-transparent text-current outline-none"
       :class="[$slots.prefix || condensed ? 'pl-2' : 'pl-3']"
     />
     <!-- <div
@@ -327,7 +328,7 @@ function deselectAll() {
       </div> -->
 
     <div
-      class="flex h-full flex-shrink-0 items-center pr-3 text-gray-400 dark:text-gray-500"
+      class="pointer-events-none flex h-full flex-shrink-0 select-none items-center pr-3 text-gray-400 dark:text-gray-500"
       :class="[condensed ? 'pl-2' : 'pl-3']"
     >
       <PhCaretDown
@@ -342,7 +343,7 @@ function deselectAll() {
     ref="elementRef"
     v-model:open="open"
     same-size
-    class="z-[100] origin-top overflow-hidden"
+    class="z-[100] origin-top select-none overflow-hidden"
     :reference="refSelectWrapper?.wrapperRef"
     :middleware="middleware"
   >
