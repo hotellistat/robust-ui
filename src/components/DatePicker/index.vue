@@ -72,10 +72,10 @@ const emit = defineEmits([
 const { modelValue, presets, variant } = toRefs(props);
 
 const open = ref(false);
-const popperRef = ref();
+const elementRef = ref();
 const inputWrapperRef = ref();
 
-onClickOutside(popperRef, (event) => {
+onClickOutside(elementRef, (event) => {
   if (!open.value) {
     return;
   }
@@ -191,7 +191,7 @@ function resetValue() {
     </div>
   </RobustInputWrapper>
   <RobustFloating
-    ref="popperRef"
+    ref="elementRef"
     v-model:open="open"
     class="z-[100] origin-top-left"
     :reference="inputWrapperRef?.wrapperRef"

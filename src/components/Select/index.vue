@@ -18,7 +18,6 @@ import {
   PropType,
 } from 'vue';
 import { MaybeRef, debouncedWatch } from '@vueuse/core';
-import { Modifier } from '@popperjs/core';
 import { onClickOutside } from '@vueuse/core';
 import { PhCheck, PhCaretDown } from '@phosphor-icons/vue';
 
@@ -100,7 +99,7 @@ const { options, modelValue } = toRefs(props);
 const anchorRef = ref();
 
 const open = ref(false);
-const popperRef = ref();
+const elementRef = ref();
 // const inputWrapper = ref()
 
 const search = ref('');
@@ -129,7 +128,7 @@ debouncedWatch(
   { debounce: 150 }
 );
 
-onClickOutside(popperRef, (event) => {
+onClickOutside(elementRef, (event) => {
   if (!open.value) {
     return;
   }
@@ -145,28 +144,6 @@ onClickOutside(popperRef, (event) => {
 onMounted(async () => {
   await filterBySearchTerm('');
 });
-
-const popperModifiers: Array<
-  Partial<Modifier<string, Record<string, unknown>>>
-> = [
-  {
-    name: 'sameWidth',
-    enabled: true,
-    phase: 'beforeWrite',
-    requires: ['computeStyles'],
-    fn: (args) => {
-      args.state.styles.popper.width = `${Math.max(
-        args.state.rects.reference.width,
-        320
-      )}px`;
-    },
-    effect: (args) => {
-      args.state.elements.popper.style.width = `${
-        args.state.elements.reference.getBoundingClientRect().width
-      }px`;
-    },
-  },
-];
 
 const activeItem = computed(() => {
   return props.options.find((item) => item.value === props.modelValue);
@@ -208,15 +185,6 @@ function openDropdown() {
 }
 
 console.log(refSelectWrapper);
-
-// onClickOutside(popperRef, (event) => {
-//   if (open.value) {
-//     if (anchorRef.value.contains(event.target)) {
-//       event.stopPropagation();
-//       event.preventDefault();
-//     }
-//   }
-// });
 
 function closeDropdown() {
   open.value = false;
@@ -359,12 +327,10 @@ function deselectAll() {
     </div>
   </RobustInputWrapper>
   <FLoating
-    ref="popperRef"
+    ref="elementRef"
     v-model:open="open"
     class="z-[100] origin-top overflow-hidden"
     :reference="refSelectWrapper?.wrapperRef"
-    :modifiers="popperModifiers"
-    @closed="resetFields"
   >
     <div v-if="Array.isArray(modelValue)" class="flex justify-end py-2 px-4">
       <button type="button" class="select-none font-light" @click="controlAll">

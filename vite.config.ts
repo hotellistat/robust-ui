@@ -26,7 +26,7 @@ export default defineConfig(async (config) => ({
       external: [
         'vue',
         'date-fns',
-        '@popperjs/core',
+        '@floating-ui/vue',
         '@vueuse/core',
         '@vueuse/shared',
         'vee-validate',

@@ -106,7 +106,7 @@ const mainCalendar = ref();
 const enabledHistory = ref(false);
 const displayCompare = ref();
 const storeHistory = ref(true);
-const popperRef = ref();
+const elementRef = ref();
 const activeSection = ref<'comparison' | 'main'>('main');
 
 const stagedDateRange = ref<[Date, Date]>();
@@ -272,7 +272,7 @@ const displayComparisonPreset = computed(() => {
   return undefined;
 });
 
-onClickOutside(popperRef, (event) => {
+onClickOutside(elementRef, (event) => {
   if (!open.value) {
     return;
   }
@@ -406,7 +406,7 @@ const saveTime = async () => {
     </div>
   </RobustInputWrapper>
   <RobustFloating
-    ref="popperRef"
+    ref="elementRef"
     v-model:open="open"
     class="z-[100] origin-top-left"
     :reference="inputWrapperRef?.wrapperRef"
