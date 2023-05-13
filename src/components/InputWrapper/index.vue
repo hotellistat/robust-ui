@@ -63,13 +63,13 @@ defineExpose({
 </script>
 
 <template>
-  <label class="inline-block" :class="[$props.class]">
-    <div
+  <div class="inline-block" :class="[$props.class]">
+    <label
       v-if="title"
       class="mb-1 block select-none text-sm font-medium text-gray-500 dark:text-gray-400"
     >
       {{ title }}
-    </div>
+    </label>
     <Component
       :is="tag"
       v-bind="listeners"
@@ -94,5 +94,5 @@ defineExpose({
         {{ error }}
       </div>
     </div>
-  </label>
+  </div>
 </template>
