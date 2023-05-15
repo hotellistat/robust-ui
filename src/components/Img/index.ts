@@ -1,4 +1,4 @@
-import { defineComponent, h, onMounted, ref } from 'vue';
+import { defineComponent, h, onMounted, ref, toRefs, watch } from 'vue';
 import RobustSpinner from '../Spinner/index.vue';
 import { PhWarning } from '@phosphor-icons/vue';
 export default defineComponent({
@@ -21,6 +21,8 @@ export default defineComponent({
     const loading = ref(true);
     const error = ref(false);
 
+    const { src } = toRefs(props);
+
     const image = new Image();
 
     image.onload = () => {
@@ -35,7 +37,11 @@ export default defineComponent({
     };
 
     onMounted(() => {
-      image.src = props.src;
+      image.src = src.value;
+    });
+
+    watch(src, () => {
+      image.src = src.value;
     });
 
     return {
