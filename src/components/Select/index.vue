@@ -317,16 +317,6 @@ function deselectAll() {
       class="pointer-events-none block h-full min-w-0 flex-1 flex-shrink select-none bg-transparent text-current outline-none"
       :class="[$slots.prefix || condensed ? 'pl-2' : 'pl-3']"
     />
-    <!-- <div
-        v-else
-        class="flex h-full min-w-0 flex-1 flex-shrink items-center bg-transparent text-current outline-none"
-        :class="[$slots.prefix || condensed ? 'pl-2' : 'pl-3']"
-      >
-        <div class="min-w-0 select-none truncate">
-          {{ activeItem ? activeItem.title : 'Select' }}
-        </div>
-      </div> -->
-
     <div
       class="pointer-events-none flex h-full flex-shrink-0 select-none items-center pr-3 text-gray-400 dark:text-gray-500"
       :class="[condensed ? 'pl-2' : 'pl-3']"

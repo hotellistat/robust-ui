@@ -19,7 +19,6 @@ const meta: Meta<typeof Select> = {
   },
   args: {
     title: 'Date range picker',
-    class: 'w-64',
     boxClass: '',
     fixedHeight: true,
     readonly: false,

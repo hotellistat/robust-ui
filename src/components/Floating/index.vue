@@ -77,6 +77,7 @@ const { floatingStyles, update } = useFloating(reference, floating, {
           apply({ rects, elements }) {
             Object.assign(elements.floating.style, {
               width: `${rects.reference.width}px`,
+              minWidth: '200px',
             });
           },
         })
