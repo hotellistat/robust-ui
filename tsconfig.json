@@ -4,7 +4,7 @@
     "target": "esnext",
     "moduleResolution": "node",
     "noImplicitAny": false,
-    "outDir": "dist/src",
+    "outDir": "dist",
     "declaration": true,
     "allowJs": true,
     "types": [

@@ -40,7 +40,7 @@ export default defineConfig(async (config) => ({
           entryFileNames: (asset: ChunkInfo) => {
             return asset.name.replace('.vue', '') + '.mjs';
           },
-          dir: 'dist/src',
+          dir: 'dist',
         },
       ],
     },
