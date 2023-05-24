@@ -103,6 +103,8 @@ const open = ref(false);
 const inputWrapperRef = ref();
 const mainCalendar = ref();
 
+const presets = computed(() => props.presets.filter((d) => d.type === 'range'));
+
 const enabledHistory = ref(false);
 const displayCompare = ref();
 const storeHistory = ref(true);
@@ -438,6 +440,7 @@ const saveTime = async () => {
         ref="mainCalendar"
         v-model="stagedDateRange"
         v-model:preset="stagedActivePreset"
+        :presets="presets"
       >
         <RobustDatePicker
           v-if="enablePerspective"
@@ -462,6 +465,7 @@ const saveTime = async () => {
         v-model="stagedDateRangeComparison"
         v-model:preset="stagedActivePresetComparison"
         variant="secondary"
+        :presets="presets"
       >
         <RobustDatePicker
           v-if="enablePerspective"
