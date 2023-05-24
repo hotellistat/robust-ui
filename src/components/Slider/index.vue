@@ -1,7 +1,7 @@
 <template>
   <div
     ref="slider"
-    class="base-slider"
+    class="base-slider select-none"
     role="slider"
     :aria-valuemax="moderatedMax()"
     :aria-valuemin="moderatedMin()"
@@ -25,32 +25,44 @@
 
     <div
       ref="track"
-      class="base-slider__track relative w-full"
+      class="base-slider__track relative"
+      :class="[vertical ? 'vertical ' : '']"
       @mousedown="onDragStart"
       @touchstart="onDragStart"
     >
-      <div class="base-slider__track-background bg-gray-300 dark:bg-gray-400">
+      <div
+        class="base-slider__track-background bg-gray-300 dark:bg-gray-400"
+        :class="[vertical ? 'vertical ' : '']"
+      >
         <div v-if="snapToSteps">
           <span
             v-for="(point, idx) in snapPoints"
             :key="idx"
             class="base-slider__snap-point"
-            :style="{ left: 100 * relativeValue(point) + '%' }"
+            :style="{
+              [vertical ? 'bottom' : 'left']: 100 * relativeValue(point) + '%',
+            }"
           ></span>
         </div>
       </div>
 
       <div
         class="base-slider__track-fill bg-primary-400"
+        :class="[vertical ? 'vertical ' : '']"
         :style="fillStyle"
       ></div>
 
       <div
         ref="thumb"
         class="base-slider__thumb bg-primary-400"
+        :class="[vertical ? 'vertical ' : '']"
         :style="thumbStyle"
       >
-        <div v-if="showMarker" class="base-slider__marker text-xs">
+        <div
+          v-if="showMarker"
+          class="base-slider__marker text-xs"
+          :class="[vertical ? 'vertical ' : '']"
+        >
           <span class="text-xs text-gray-400 dark:text-gray-500">{{
             markerText
           }}</span>
@@ -83,6 +95,10 @@ const props = defineProps({
   max: {
     type: Number,
     default: 100,
+  },
+  vertical: {
+    type: Boolean,
+    default: false,
   },
   step: {
     type: Number,
@@ -119,9 +135,9 @@ const initialValue = ref(props.modelValue);
 const isActive = ref(false);
 const isDragging = ref(false);
 const localValue = ref(props.modelValue);
-const slider = ref();
-const track = ref();
-const thumb = ref();
+const slider = ref<HTMLDivElement>();
+const track = ref<HTMLDivElement>();
+const thumb = ref<HTMLDivElement>();
 
 const classes = computed(() => {
   return [
@@ -133,12 +149,23 @@ const classes = computed(() => {
 });
 
 const fillStyle = computed(() => {
-  return { transform: 'scaleX(' + relativeValue(localValue.value) + ')' };
+  console.log();
+
+  return {
+    transform: `scale(${
+      !props.vertical ? relativeValue(localValue.value) : 1
+    },  ${props.vertical ? relativeValue(localValue.value) : 1})`,
+  };
 });
 
 const thumbStyle = computed(() => {
   return {
-    left: relativeValue(localValue.value) * 100 + '%',
+    left: props.vertical
+      ? undefined
+      : relativeValue(localValue.value) * 100 + '%',
+    top: props.vertical
+      ? 100 - relativeValue(localValue.value) * 100 + '%'
+      : undefined,
   };
 });
 
@@ -268,10 +295,22 @@ const onDragMove = (e) => {
 };
 
 const dragUpdate = (e) => {
-  const sliderOffsetLeft = track.value!.getBoundingClientRect().left;
-  const position = e.touches ? e.touches[0].pageX : e.pageX;
-  const trackLength = track.value.offsetWidth;
-  const relativeValue = (position - sliderOffsetLeft) / trackLength;
+  if (!track.value) {
+    return;
+  }
+
+  const bounds = track.value.getBoundingClientRect();
+
+  let relativeValue: number;
+  if (props.vertical) {
+    const position = e.touches ? e.touches[0].pageY : e.pageY;
+    const trackLength = track.value.offsetHeight;
+    relativeValue = (bounds.bottom - position) / trackLength;
+  } else {
+    const position = e.touches ? e.touches[0].pageX : e.pageX;
+    const trackLength = track.value.offsetWidth;
+    relativeValue = (position - bounds.left) / trackLength;
+  }
 
   const value = moderateValue(
     moderatedMin() + relativeValue * (moderatedMax() - moderatedMin())
@@ -352,8 +391,9 @@ defineExpose({
 
 <style>
 .base-slider {
-  align-items: center;
   display: flex;
+  justify-content: center;
+  align-items: center;
   outline: none;
 }
 
@@ -361,6 +401,12 @@ defineExpose({
 .base-slider:not(.is-disabled).is-dragging .base-slider__marker {
   opacity: 1;
   transform: scale(1) translateY(-26px);
+}
+
+.base-slider:not(.is-disabled).is-active .base-slider__marker.vertical,
+.base-slider:not(.is-disabled).is-dragging .base-slider__marker.vertical {
+  opacity: 1;
+  transform: scale(1) translateX(26px);
 }
 
 .base-slider:not(.is-disabled).is-active .base-slider__marker-text,
@@ -387,13 +433,20 @@ defineExpose({
 }
 
 .base-slider__track {
-  align-items: center;
   cursor: default;
-  display: flex;
   height: 18px;
   margin: 0 auto;
   position: relative;
+  min-width: 60px;
   width: 100%;
+}
+
+.base-slider__track.vertical {
+  flex-direction: column;
+  height: 100%;
+  min-height: 60px;
+  min-width: 18px;
+  width: 18px;
 }
 
 .base-slider__track-background,
@@ -406,12 +459,27 @@ defineExpose({
   top: 7px;
 }
 
+.base-slider__track-background.vertical,
+.base-slider__track-fill.vertical {
+  content: '';
+  display: block;
+  height: 100%;
+  width: 3px;
+  top: 0;
+  position: absolute;
+  left: 7px;
+}
+
 .base-slider__track-background {
   width: 100%;
 }
 
+.base-slider__track-background.vertical {
+  height: 100%;
+}
+
 .base-slider__snap-point {
-  background-color: rgba(0, 0, 0, 0.75);
+  background-color: rgba(0, 0, 0, 0.25);
   height: 3px;
   opacity: 0;
   position: absolute;
@@ -424,6 +492,10 @@ defineExpose({
   transform-origin: left;
   width: 100%;
 }
+.base-slider__track-fill.vertical {
+  transform-origin: bottom;
+  height: 100%;
+}
 
 .base-slider__thumb {
   border-radius: 50%;
@@ -435,6 +507,13 @@ defineExpose({
   width: 14px;
   z-index: 1;
   margin-left: -7px;
+  bottom: 2px;
+}
+
+.base-slider__thumb.vertical {
+  margin-left: 2px;
+  margin-top: -7px;
+  bottom: 0;
 }
 
 .base-slider__thumb::before {
