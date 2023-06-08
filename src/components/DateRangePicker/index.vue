@@ -1,5 +1,5 @@
 <script lang="ts" setup>
-import { MaybeRef, onClickOutside } from '@vueuse/core';
+import { onClickOutside } from '@vueuse/core';
 import RobustFloating from '../Floating/index.vue';
 
 import {
@@ -11,7 +11,7 @@ import {
   RobustTabs,
 } from '..';
 import { PhCaretDown, PhCalendar } from '@phosphor-icons/vue';
-import { computed, inject, PropType, readonly, ref, toRefs, watch } from 'vue';
+import { computed, PropType, ref, watch } from 'vue';
 import defaultPresets, { Preset } from '../Calendar/presets';
 
 const props = defineProps({
@@ -83,6 +83,14 @@ const props = defineProps({
     type: Array as PropType<Preset[]>,
     default: () => defaultPresets,
   },
+  past: {
+    type: Boolean,
+    default: true,
+  },
+  future: {
+    type: Boolean,
+    default: true,
+  },
 });
 
 const emit = defineEmits([
@@ -103,11 +111,13 @@ const open = ref(false);
 const inputWrapperRef = ref();
 const mainCalendar = ref();
 
-const presets = computed(() => props.presets.filter((d) => d.type === 'range'));
+const presetsComputed = computed(() =>
+  props.presets.filter((d) => d.type === 'range')
+);
 
-const enabledHistory = ref(false);
-const displayCompare = ref();
-const storeHistory = ref(true);
+// const enabledHistory = ref(false);
+// const displayCompare = ref();
+// const storeHistory = ref(true);
 const elementRef = ref();
 const activeSection = ref<'comparison' | 'main'>('main');
 
@@ -199,7 +209,7 @@ watch(showComparisonPicker, (value) => {
   }
 });
 
-type DateType = DateTypeCustom | DateTypePreset;
+// type DateType = DateTypeCustom | DateTypePreset;
 
 interface DateTypeCustom {
   name: 'custom';
@@ -440,7 +450,9 @@ const saveTime = async () => {
         ref="mainCalendar"
         v-model="stagedDateRange"
         v-model:preset="stagedActivePreset"
-        :presets="presets"
+        :presets="presetsComputed"
+        :future="future"
+        :past="past"
       >
         <RobustDatePicker
           v-if="enablePerspective"
@@ -465,7 +477,9 @@ const saveTime = async () => {
         v-model="stagedDateRangeComparison"
         v-model:preset="stagedActivePresetComparison"
         variant="secondary"
-        :presets="presets"
+        :presets="presetsComputed"
+        :future="future"
+        :past="past"
       >
         <RobustDatePicker
           v-if="enablePerspective"
