@@ -6,6 +6,7 @@ import {
   setMonth as setFnsMonth,
   format,
   isFuture,
+  isPast,
   differenceInDays,
   isSameDay,
   getDaysInMonth,
@@ -299,7 +300,7 @@ const dayAllowed = (day) => {
   if (!today.value && isSameDay(now.value, date)) {
     return false;
   }
-  if (!past.value && differenceInDays(now.value, date) > 0) {
+  if (!past.value && isPast(date)) {
     return false;
   }
   if (!future.value && isFuture(date)) {
