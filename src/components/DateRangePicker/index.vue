@@ -293,7 +293,6 @@ onClickOutside(elementRef, (event) => {
     event.stopPropagation();
   }
 
-  event.stopPropagation();
   closeDropdown();
 });
 
