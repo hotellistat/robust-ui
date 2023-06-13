@@ -497,6 +497,7 @@ const saveTime = async () => {
     <div
       class="flex items-start justify-between border-t border-gray-200 p-4 dark:border-gray-700"
     >
+      <slot name="footer" />
       <RobustButton type="primary" class="ml-auto" @click="saveTime"
         >Apply time range</RobustButton
       >
