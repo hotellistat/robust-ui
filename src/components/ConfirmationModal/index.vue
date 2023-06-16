@@ -11,12 +11,20 @@
       </div>
       <div class="flex justify-end gap-2">
         <slot name="cancel" :cancel="cancel">
-          <RobustButton variant="muted" class="uppercase" @click="cancel">
+          <RobustButton
+            variant="muted"
+            class="uppercase"
+            @click.capture.stop.prevent="cancel"
+          >
             Cancel
           </RobustButton>
         </slot>
         <slot name="confirm" :confirm="confirm">
-          <RobustButton variant="danger" class="uppercase" @click="confirm">
+          <RobustButton
+            variant="danger"
+            class="uppercase"
+            @click.capture.stop.prevent="confirm"
+          >
             Proceed
           </RobustButton>
         </slot>
@@ -61,15 +69,17 @@ const props = defineProps({
   },
 });
 
-const emit = defineEmits(['confirm', 'cancel']);
+const emit = defineEmits(['confirm', 'cancel', 'update:opened']);
 
 const confirm = () => {
   open.value = false;
+  emit('update:opened', false);
   emit('confirm');
 };
 
 const cancel = () => {
   open.value = false;
+  emit('update:opened', false);
   emit('cancel');
 };
 
@@ -79,6 +89,7 @@ const handleClick = (e: MouseEvent) => {
   if (e.shiftKey) {
     return confirm();
   }
+  emit('update:opened', true);
   open.value = true;
 };
 </script>
