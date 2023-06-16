@@ -1,5 +1,5 @@
 <script lang="ts" setup>
-import { MaybeRef, onClickOutside } from '@vueuse/core';
+import { onClickOutside } from '@vueuse/core';
 import RobustFloating from '../Floating/index.vue';
 
 import {
@@ -11,7 +11,7 @@ import {
   RobustTabs,
 } from '..';
 import { PhCaretDown, PhCalendar } from '@phosphor-icons/vue';
-import { computed, inject, PropType, readonly, ref, toRefs, watch } from 'vue';
+import { computed, PropType, ref, watch } from 'vue';
 import defaultPresets, { Preset } from '../Calendar/presets';
 
 const props = defineProps({
@@ -83,6 +83,14 @@ const props = defineProps({
     type: Array as PropType<Preset[]>,
     default: () => defaultPresets,
   },
+  past: {
+    type: Boolean,
+    default: true,
+  },
+  future: {
+    type: Boolean,
+    default: true,
+  },
 });
 
 const emit = defineEmits([
@@ -103,9 +111,13 @@ const open = ref(false);
 const inputWrapperRef = ref();
 const mainCalendar = ref();
 
-const enabledHistory = ref(false);
-const displayCompare = ref();
-const storeHistory = ref(true);
+const presetsComputed = computed(() =>
+  props.presets.filter((d) => d.type === 'range')
+);
+
+// const enabledHistory = ref(false);
+// const displayCompare = ref();
+// const storeHistory = ref(true);
 const elementRef = ref();
 const activeSection = ref<'comparison' | 'main'>('main');
 
@@ -197,7 +209,7 @@ watch(showComparisonPicker, (value) => {
   }
 });
 
-type DateType = DateTypeCustom | DateTypePreset;
+// type DateType = DateTypeCustom | DateTypePreset;
 
 interface DateTypeCustom {
   name: 'custom';
@@ -281,7 +293,6 @@ onClickOutside(elementRef, (event) => {
     event.stopPropagation();
   }
 
-  event.stopPropagation();
   closeDropdown();
 });
 
@@ -438,6 +449,9 @@ const saveTime = async () => {
         ref="mainCalendar"
         v-model="stagedDateRange"
         v-model:preset="stagedActivePreset"
+        :presets="presetsComputed"
+        :future="future"
+        :past="past"
       >
         <RobustDatePicker
           v-if="enablePerspective"
@@ -462,6 +476,9 @@ const saveTime = async () => {
         v-model="stagedDateRangeComparison"
         v-model:preset="stagedActivePresetComparison"
         variant="secondary"
+        :presets="presetsComputed"
+        :future="future"
+        :past="past"
       >
         <RobustDatePicker
           v-if="enablePerspective"
@@ -479,6 +496,7 @@ const saveTime = async () => {
     <div
       class="flex items-start justify-between border-t border-gray-200 p-4 dark:border-gray-700"
     >
+      <slot name="footer" />
       <RobustButton type="primary" class="ml-auto" @click="saveTime"
         >Apply time range</RobustButton
       >
