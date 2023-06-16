@@ -32,6 +32,7 @@ export default defineConfig(async (config) => ({
         'vee-validate',
         'fuse.js',
         '@phosphor-icons/vue',
+        'vuedraggable',
       ],
       output: [
         {

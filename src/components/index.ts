@@ -26,3 +26,4 @@ export { default as RobustTabsSwitch } from './TabsSwitch/index.vue';
 export { default as RobustTextarea } from './Textarea/index.vue';
 export { default as RobustRangeSlider } from './RangeSlider/index.vue';
 export { default as RobustConfirmationModal } from './ConfirmationModal/index.vue';
+export { default as RobustFormRenderer } from './FormRenderer/index.vue';
