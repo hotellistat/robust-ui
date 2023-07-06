@@ -92,52 +92,60 @@
           @mouseenter="emitMouseEnterRow($event, entry)"
         >
           <div v-if="entry.isHeader">
-            <slot name="header-row" :data="entry" />
+            <slot
+              name="header-row"
+              :data="entry"
+              :style="{
+                gridTemplateColumns: sizes,
+              }"
+            />
           </div>
-          <div
-            v-else
-            class="datatable-grid-columns flex flex-col gap-x-2 gap-y-2 sm:grid sm:items-center"
-            :style="{
-              gridTemplateColumns: sizes,
-            }"
-            :class="entry.rowClass ?? ''"
-          >
-            <div>
-              <Checkbox
-                v-if="options.selection !== false"
-                v-model="checkboxSelected"
-                :value="entry[options.id]"
-              />
-            </div>
-            <!-- Columns -->
+          <div v-else>
             <div
-              v-for="column in options.columns"
-              :key="column.key"
-              class="grid min-h-[48px] grid-cols-2 items-center sm:flex"
-              :class="column.class ?? ''"
+              class="datatable-grid-columns flex flex-col gap-x-2 gap-y-2 sm:grid sm:items-center"
+              :style="{
+                gridTemplateColumns: sizes,
+              }"
+              :class="entry.rowClass ?? ''"
             >
-              <div class="block sm:hidden" :class="column.class ?? ''">
-                {{ column.name }}
+              <div>
+                <Checkbox
+                  v-if="options.selection !== false"
+                  v-model="checkboxSelected"
+                  :value="entry[options.id]"
+                />
               </div>
-              <slot
-                v-if="$slots[column.key] && !loading"
-                :name="`${column.key}`"
-                :data="entry"
-                :idx="idx"
-              />
-              <!-- Column content -->
+              <!-- Columns -->
               <div
-                v-else-if="!$slots[column.key] && !loading"
-                class="w-full overflow-hidden break-words"
+                v-for="column in options.columns"
+                :key="column.key"
+                class="grid min-h-[48px] grid-cols-2 items-center sm:flex"
+                :class="column.class ?? ''"
               >
-                {{
-                  entry[column.key] === undefined
-                    ? 'No data'
-                    : entry[column.key]
-                }}
+                <div class="block sm:hidden" :class="column.class ?? ''">
+                  {{ column.name }}
+                </div>
+                <slot
+                  v-if="$slots[column.key] && !loading"
+                  :name="`${column.key}`"
+                  :data="entry"
+                  :idx="idx"
+                />
+                <!-- Column content -->
+                <div
+                  v-else-if="!$slots[column.key] && !loading"
+                  class="w-full overflow-hidden break-words"
+                >
+                  {{
+                    entry[column.key] === undefined
+                      ? 'No data'
+                      : entry[column.key]
+                  }}
+                </div>
+                <div v-else class="loading dark:loading-dark h-6 w-full"></div>
               </div>
-              <div v-else class="loading dark:loading-dark h-6 w-full"></div>
             </div>
+            <slot name="collapsed" :data="entry" />
           </div>
           <Separator />
         </div>
