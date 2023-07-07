@@ -7,8 +7,8 @@
     "outDir": "dist",
     "declaration": true,
     "allowJs": true,
-    "types": ["vite/client"],
-    "typeRoots": ["./src/types"]
+    "types": ["vite/client", "web-bluetooth"],
+    "typeRoots": ["./src/types", "./node_modules/@types"]
   },
   "include": ["./src/**/*"],
   "exclude": [
