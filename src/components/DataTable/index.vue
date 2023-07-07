@@ -145,7 +145,14 @@
                 <div v-else class="loading dark:loading-dark h-6 w-full"></div>
               </div>
             </div>
-            <slot name="collapsed" :data="entry" />
+            <slot
+              name="collapsed"
+              :data="entry"
+              :style="{
+                display: 'grid',
+                gridTemplateColumns: sizes,
+              }"
+            />
           </div>
           <Separator />
         </div>
