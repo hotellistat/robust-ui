@@ -130,11 +130,13 @@
                   :name="`${column.key}`"
                   :data="entry"
                   :idx="idx"
+                  :on-click="() => onClickCell(entry[column.key])"
                 />
                 <!-- Column content -->
                 <div
                   v-else-if="!$slots[column.key] && !loading"
                   class="w-full overflow-hidden break-words"
+                  @click="() => onClickCell(entry[column.key])"
                 >
                   {{
                     entry[column.key] === undefined
@@ -290,6 +292,7 @@ const emit = defineEmits([
   'update:selectedRows',
   'update:resize',
   'clickRow',
+  'clickCell',
   'onHoverRow',
   'onLeaveRow',
   'onMoveRow',
@@ -955,6 +958,10 @@ const isSelectedAll = () => {
 
 const onClickRow = (data: any, idx: number) => {
   emit('clickRow', data, idx);
+};
+
+const onClickCell = (data: any) => {
+  emit('clickCell', data);
 };
 
 let resizeObserver: ResizeObserver;
