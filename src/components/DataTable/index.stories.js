@@ -49,9 +49,13 @@ const ServerSideTemplate = (args) => ({
     @update:search="searchUpdated"
     @update:selectedRows="selectedRowsUpdated"
     @update:resize="resizeUpdated"
+    @click-cell="handleCellClick"
     :loading="loading"
     :options="options"
   >
+    <template #rating="{data:row, onClick}">
+      <span @click="onClick">{{ row.rating }} &#9733;</span>
+    </template>
   </DataTable>
   </div>`,
   setup() {
@@ -98,6 +102,9 @@ const ServerSideTemplate = (args) => ({
     const resizeUpdated = (sizes) => {
       console.log(sizes);
     };
+    const handleCellClick = (value) => {
+      console.log('clicked on cell:', value);
+    };
 
     return {
       args,
@@ -108,6 +115,7 @@ const ServerSideTemplate = (args) => ({
       rowsLimitUpdated,
       searchUpdated,
       resizeUpdated,
+      handleCellClick,
       loading,
       selectedRowsUpdated,
     };
