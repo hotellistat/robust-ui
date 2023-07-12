@@ -130,13 +130,13 @@
                   :name="`${column.key}`"
                   :data="entry"
                   :idx="idx"
-                  :on-click="() => onClickCell(entry[column.key])"
+                  :on-click="() => onClickCell(entry)"
                 />
                 <!-- Column content -->
                 <div
                   v-else-if="!$slots[column.key] && !loading"
                   class="w-full overflow-hidden break-words"
-                  @click="() => onClickCell(entry[column.key])"
+                  @click="() => onClickCell(entry)"
                 >
                   {{
                     entry[column.key] === undefined
