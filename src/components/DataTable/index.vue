@@ -1046,6 +1046,9 @@ watch(
   () => options.value.columns,
   () => {
     initSpace();
+  },
+  {
+    deep: true,
   }
 );
 
