@@ -106,6 +106,10 @@ const displayDate = computed(() => {
     return props.placeholder;
   }
 
+  if (preset.value) {
+    return presets.value.find((p) => p.key === preset.value)?.title;
+  }
+
   const realDate = computedValue.value;
   const formatter = Intl.DateTimeFormat(navigator.language, {
     day: '2-digit',
