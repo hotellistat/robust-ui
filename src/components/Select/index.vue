@@ -298,25 +298,26 @@ function deselectAll() {
       <slot tag="div" name="prefix" />
     </div>
     <div
-      v-show="!open || !searchable"
-      ref="select"
-      class="flex h-full min-w-0 flex-1 flex-shrink items-center bg-transparent text-current outline-none"
+      ref="refSelect"
+      class="relative flex h-full min-w-0 flex-1 flex-shrink items-center bg-transparent text-current outline-none"
       :class="[$slots.prefix || condensed ? 'pl-2' : 'pl-3']"
       v-bind="$attrs"
     >
-      <div class="min-w-0 select-none truncate">
+      <div
+        :class="[!open || !searchable ? 'opacity-100' : 'opacity-0']"
+        class="min-w-0 select-none truncate"
+      >
         {{ getInputTitle() }}
       </div>
+      <input
+        v-if="open && searchable"
+        ref="refSelectInput"
+        v-model="search"
+        class="pointer-events-none absolute block h-full w-full min-w-0 select-none bg-transparent text-current outline-none"
+        :class="[$slots.prefix || condensed ? 'pl-2' : 'pl-3']"
+      />
     </div>
 
-    <input
-      v-if="open && searchable"
-      ref="refSelectInput"
-      v-model="search"
-      :size="1"
-      class="pointer-events-none block h-full min-w-0 flex-1 flex-shrink select-none bg-transparent text-current outline-none"
-      :class="[$slots.prefix || condensed ? 'pl-2' : 'pl-3']"
-    />
     <div
       class="pointer-events-none flex h-full flex-shrink-0 select-none items-center pr-3 text-gray-400 dark:text-gray-500"
       :class="[condensed ? 'pl-2' : 'pl-3']"
