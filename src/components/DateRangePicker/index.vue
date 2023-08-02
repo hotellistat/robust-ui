@@ -225,7 +225,7 @@ const perspectiveDatePresets = computed(() =>
 );
 
 const displayDate = computed(() => {
-  if (!props.dateRange) {
+  if (!props.dateRange || props.dateRange.length < 2) {
     return 'Select date';
   }
 
