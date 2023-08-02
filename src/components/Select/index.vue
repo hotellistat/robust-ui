@@ -92,7 +92,6 @@ const emit = defineEmits([
   'blur',
 ]);
 // const refSelectContainer = ref()
-const refSelect = ref();
 const refSelectInput = ref();
 
 const refSelectWrapper = ref();
