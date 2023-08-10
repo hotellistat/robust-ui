@@ -171,10 +171,12 @@ const isFirst = (day) => {
     return false;
   }
 
-  const tmpDate = new Date();
-  tmpDate.setFullYear(cursor.value.getFullYear());
-  tmpDate.setMonth(cursor.value.getMonth());
-  tmpDate.setDate(day);
+  const values = {
+    year: cursor.value.getFullYear(),
+    month: cursor.value.getMonth(),
+    day,
+  };
+  const tmpDate = new Date(values.year, values.month, values.day);
 
   const minDate = min(modelValue.value);
 
@@ -200,10 +202,12 @@ const isLast = (day) => {
     return false;
   }
 
-  const tmpDate = new Date();
-  tmpDate.setFullYear(cursor.value.getFullYear());
-  tmpDate.setMonth(cursor.value.getMonth());
-  tmpDate.setDate(day);
+  const values = {
+    year: cursor.value.getFullYear(),
+    month: cursor.value.getMonth(),
+    day,
+  };
+  const tmpDate = new Date(values.year, values.month, values.day);
 
   const maxDate = max(modelValue.value);
 
@@ -222,10 +226,12 @@ const isBetweenRange = (day) => {
     return false;
   }
 
-  const tmpDate = new Date();
-  tmpDate.setFullYear(cursor.value.getFullYear());
-  tmpDate.setMonth(cursor.value.getMonth());
-  tmpDate.setDate(day);
+  const values = {
+    year: cursor.value.getFullYear(),
+    month: cursor.value.getMonth(),
+    day,
+  };
+  const tmpDate = new Date(values.year, values.month, values.day);
   const minDate = min(modelValue.value);
   const maxDate = max(modelValue.value);
 
@@ -259,8 +265,6 @@ const isSelectedDay = (day: number) => {
 };
 
 function setQuickAction(preset: Preset) {
-  console.log('quick action');
-
   const presetValue = preset.eval();
   emit('update:modelValue', presetValue);
   emit('update:preset', preset.key);
@@ -314,10 +318,12 @@ const daySelect = (day) => {
     return;
   }
 
-  const tmpDate = new Date();
-  tmpDate.setFullYear(cursor.value.getFullYear());
-  tmpDate.setMonth(cursor.value.getMonth());
-  tmpDate.setDate(day);
+  const values = {
+    year: cursor.value.getFullYear(),
+    month: cursor.value.getMonth(),
+    day,
+  };
+  const tmpDate = new Date(values.year, values.month, values.day);
   cursor.value = tmpDate;
 
   if (Array.isArray(modelValue.value)) {
@@ -426,7 +432,6 @@ const getShortMonthName = (month: number) => {
   const objDate = new Date();
   objDate.setDate(1);
   objDate.setMonth(month - 1);
-  console.log(formatter.format(objDate));
   return capitalize(formatter.format(objDate).slice(0, 3));
 };
 
@@ -525,7 +530,7 @@ defineExpose({
           v-for="(preset, index) in presets"
           :key="index"
           type="button"
-          class="w-full rounded-lg py-2 px-4 text-left hover:bg-gray-100 dark:hover:bg-white/5"
+          class="w-full rounded-lg px-4 py-2 text-left hover:bg-gray-100 dark:hover:bg-white/5"
           :class="getPresetStyle(preset)"
           @click="setQuickAction(preset)"
         >
