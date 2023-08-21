@@ -7,7 +7,7 @@ module.exports = {
     defineEmits: 'readonly',
     withDefaults: 'readonly',
   },
-  plugins: ['@typescript-eslint', 'prettier', 'unused-imports'],
+  plugins: ['prettier', 'unused-imports'],
   extends: [
     '@vue/typescript/recommended',
     'eslint:recommended',

@@ -9,7 +9,7 @@
       @enter-cancelled="emit('open')"
     >
       <div
-        v-if="opened"
+        v-show="opened"
         ref="root"
         class="fixed top-0 bottom-0 left-0 right-0 z-[100] p-4 lg:p-12"
         role="dialog"
@@ -18,7 +18,6 @@
           class="robust-ui-modal__backdrop absolute top-0 left-0 right-0 bottom-0 bg-white/60 dark:bg-black/40"
           @click.self="close"
         ></div>
-
         <div
           class="robust-ui-modal__box"
           :class="[modalBoxClass]"
