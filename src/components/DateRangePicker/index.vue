@@ -35,6 +35,10 @@ const props = defineProps({
     type: Boolean,
     default: false,
   },
+  showComparison: {
+    type: Boolean,
+    default: false,
+  },
   perspectiveDate: {
     type: Date,
     default: undefined,
@@ -104,6 +108,7 @@ const emit = defineEmits([
   'update:activePresetComparison',
   'update:perspectivePreset',
   'update:perspectivePresetComparison',
+  'update:showComparison',
   'change',
 ]);
 
@@ -192,14 +197,22 @@ watch(
   { immediate: true }
 );
 
-const showComparisonPicker = ref(props.dateRangeComparison ? true : false);
+const showComparisonPicker = computed({
+  get: () => props.showComparison,
+  set: (value) => {
+    if (value) {
+      activeSection.value = 'comparison';
+    }
+    emit('update:showComparison', value);
+  },
+});
+
 watch(showComparisonPicker, (value) => {
   if (value) {
     stagedDateRangeComparison.value = [
       stagedDateRange.value[0],
       stagedDateRange.value[1],
     ];
-    activeSection.value = 'comparison';
   } else {
     stagedDateRangeComparison.value = undefined;
     stagedPerspectivePresetComparison.value = undefined;
@@ -351,7 +364,7 @@ const saveTime = async () => {
       <div
         class="flex items-center gap-2"
         :class="[
-          enableComparison && stagedDateRangeComparison
+          enableComparison && showComparisonPicker
             ? condensed
               ? 'text-xs font-medium'
               : 'text-sm'
@@ -377,7 +390,7 @@ const saveTime = async () => {
       </div>
 
       <div
-        v-if="enableComparison && stagedDateRangeComparison"
+        v-if="enableComparison && showComparisonPicker"
         class="flex items-center gap-2 text-gray-400 dark:text-gray-400"
         :class="[!condensed ? 'text-xs' : 'text-[0.6rem] font-medium']"
       >
