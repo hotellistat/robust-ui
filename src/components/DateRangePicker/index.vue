@@ -194,8 +194,6 @@ watch(
 
 const showComparisonPicker = ref(props.dateRangeComparison ? true : false);
 watch(showComparisonPicker, (value) => {
-  console.log('showComparisonPicker', value);
-
   if (value) {
     stagedDateRangeComparison.value = [
       stagedDateRange.value[0],
@@ -206,6 +204,7 @@ watch(showComparisonPicker, (value) => {
     stagedDateRangeComparison.value = undefined;
     stagedPerspectivePresetComparison.value = undefined;
     stagedActivePresetComparison.value = undefined;
+    stagedPerspectiveDateComparison.value = undefined;
   }
 });
 
@@ -242,8 +241,6 @@ const displayComparisonDate = computed(() => {
   if (!props.enableComparison) {
     return undefined;
   }
-
-  console.log(props.dateRangeComparison);
 
   if (!props.dateRangeComparison) {
     return 'Select date';
@@ -354,7 +351,7 @@ const saveTime = async () => {
       <div
         class="flex items-center gap-2"
         :class="[
-          enableComparison && showComparisonPicker
+          enableComparison && stagedDateRangeComparison
             ? condensed
               ? 'text-xs font-medium'
               : 'text-sm'
@@ -380,7 +377,7 @@ const saveTime = async () => {
       </div>
 
       <div
-        v-if="showComparisonPicker && enableComparison"
+        v-if="enableComparison && stagedDateRangeComparison"
         class="flex items-center gap-2 text-gray-400 dark:text-gray-400"
         :class="[!condensed ? 'text-xs' : 'text-[0.6rem] font-medium']"
       >
