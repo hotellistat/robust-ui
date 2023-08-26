@@ -35,6 +35,10 @@ const props = defineProps({
     type: Boolean,
     default: false,
   },
+  showComparison: {
+    type: Boolean,
+    default: false,
+  },
   perspectiveDate: {
     type: Date,
     default: undefined,
@@ -104,6 +108,7 @@ const emit = defineEmits([
   'update:activePresetComparison',
   'update:perspectivePreset',
   'update:perspectivePresetComparison',
+  'update:showComparison',
   'change',
 ]);
 
@@ -192,20 +197,27 @@ watch(
   { immediate: true }
 );
 
-const showComparisonPicker = ref(props.dateRangeComparison ? true : false);
-watch(showComparisonPicker, (value) => {
-  console.log('showComparisonPicker', value);
+const showComparisonPicker = computed({
+  get: () => props.showComparison,
+  set: (value) => {
+    if (value) {
+      activeSection.value = 'comparison';
+    }
+    emit('update:showComparison', value);
+  },
+});
 
+watch(showComparisonPicker, (value) => {
   if (value) {
     stagedDateRangeComparison.value = [
       stagedDateRange.value[0],
       stagedDateRange.value[1],
     ];
-    activeSection.value = 'comparison';
   } else {
     stagedDateRangeComparison.value = undefined;
     stagedPerspectivePresetComparison.value = undefined;
     stagedActivePresetComparison.value = undefined;
+    stagedPerspectiveDateComparison.value = undefined;
   }
 });
 
@@ -242,8 +254,6 @@ const displayComparisonDate = computed(() => {
   if (!props.enableComparison) {
     return undefined;
   }
-
-  console.log(props.dateRangeComparison);
 
   if (!props.dateRangeComparison) {
     return 'Select date';
@@ -380,7 +390,7 @@ const saveTime = async () => {
       </div>
 
       <div
-        v-if="showComparisonPicker && enableComparison"
+        v-if="enableComparison && showComparisonPicker"
         class="flex items-center gap-2 text-gray-400 dark:text-gray-400"
         :class="[!condensed ? 'text-xs' : 'text-[0.6rem] font-medium']"
       >
