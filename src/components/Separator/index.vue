@@ -4,17 +4,17 @@
     class="flex-shrink-0"
     :class="[colorClass, vert ? 'w-px self-stretch' : 'h-px w-full']"
   ></div>
-  <div v-else class="flex items-center">
+  <div v-else class="flex items-center gap-2" :class="[vert ? 'flex-col' : 'flex-row ']">
     <div
       class="flex-1"
-      :class="[colorClass, vert ? 'w-px self-stretch' : 'h-px w-full']"
+      :class="[colorClass, vert ? 'w-px' : 'h-px']"
     ></div>
-    <div class="flex-shrink-0 px-2">
+    <div class="flex-shrink-0">
       <slot />
     </div>
     <div
       class="flex-1"
-      :class="[colorClass, vert ? 'w-px self-stretch' : 'h-px w-full']"
+      :class="[colorClass, vert ? 'w-px' : 'h-px']"
     ></div>
   </div>
 </template>
