@@ -1,7 +1,7 @@
 <template>
   <div
     :class="computedClass"
-    class="mb-4 flex items-center gap-2 rounded-md border-l-4 p-4"
+    class="flex items-center gap-2 rounded-md border-l-4 p-4"
   >
     <div v-if="variantIcons[props.variant]" class="flex-shrink-0">
       <Component :is="variantIcons[props.variant]" size="20" />
