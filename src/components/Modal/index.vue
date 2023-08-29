@@ -99,6 +99,10 @@ const props = defineProps({
     type: Boolean,
     default: false,
   },
+  center: {
+    type: Boolean,
+    default: false,
+  },
 });
 
 const emit = defineEmits(['open', 'close', 'update:opened']);
@@ -124,6 +128,8 @@ const modalBoxClass = computed(() => {
     classString += 'absolute left-0 top-0 bottom-0 h-full min-h-0 w-full';
   } else if (props.slideOutRight) {
     classString += 'absolute right-0 top-0 bottom-0 h-full min-h-0 w-full';
+  } else if (props.center) {
+    classString += 'mx-auto h-full min-h-0 flex items-center';
   } else {
     classString += 'mx-auto h-full min-h-0';
   }
