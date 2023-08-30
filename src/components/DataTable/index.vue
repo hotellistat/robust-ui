@@ -675,7 +675,18 @@ const sortColumn = (cSort: Column, event: MouseEvent) => {
 
 const getDirection = (column: Column) => {
   const dir = sorting.value.find((s) => s.key === column.key);
-  return dir.direction;
+  if (dir) {
+    return dir.direction;
+  }
+  const foundColumn = options.value.columns.find(
+    (col) => col.key === column.key
+  );
+  const newColumn = {
+    direction: 0,
+    ...foundColumn,
+  };
+  sorting.value.push(newColumn as Column);
+  return newColumn;
 };
 
 const clamp = (num: number, min: number, max: number) =>
