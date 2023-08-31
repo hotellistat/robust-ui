@@ -9,6 +9,9 @@ const meta: Meta<typeof Modal> = {
     opened: {
       control: { type: 'boolean' },
     },
+    dismissable: {
+      control: { type: 'boolean' },
+    },
     size: {
       options: ['sm', 'md', 'lg', 'xl', '2xl', '3xl', 'full'],
       control: { type: 'select' },

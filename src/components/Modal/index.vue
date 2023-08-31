@@ -36,9 +36,10 @@
               class="flex flex-shrink-0 items-center p-6 text-xl"
             >
               <div class="leading-4">
-                <slot name="title" :close="close"></slot>
+                <slot name="title" :close="manualClose"></slot>
               </div>
               <button
+                v-if="props.dismissable"
                 type="button"
                 class="-m-4 ml-auto p-4 text-gray-400 transition-colors duration-150 hover:text-gray-900 dark:hover:text-gray-100"
                 @click="close"
@@ -47,7 +48,7 @@
               </button>
             </div>
             <div v-if="$slots.header" class="w-full flex-shrink-0">
-              <slot name="header" :close="close"></slot>
+              <slot name="header" :close="manualClose"></slot>
             </div>
             <section
               :class="[
@@ -57,10 +58,10 @@
               ]"
               class="flex-1"
             >
-              <slot :close="close"></slot>
+              <slot :close="manualClose"></slot>
             </section>
             <div v-if="$slots.footer" class="w-full flex-shrink-0">
-              <slot name="footer" :close="close"></slot>
+              <slot name="footer" :close="manualClose"></slot>
             </div>
           </div>
         </div>
@@ -86,6 +87,10 @@ const props = defineProps({
   size: {
     type: String,
     default: 'md',
+  },
+  dismissable: {
+    type: Boolean,
+    default: true,
   },
   autoOverflow: {
     type: Boolean,
@@ -215,6 +220,13 @@ async function open() {
 }
 
 async function close() {
+  if (props.dismissable) {
+    opened.value = false;
+    emit('update:opened', false);
+  }
+}
+
+async function manualClose(){
   opened.value = false;
   emit('update:opened', false);
 }
@@ -230,14 +242,14 @@ defineExpose({
 }
 
 .robust-ui-modal__fade-enter-active {
-  transition: all 200ms ease-in-out;
+  transition: all 150ms ease-in-out;
 
   .robust-ui-modal__backdrop {
-    transition: all 200ms ease-in-out;
+    transition: all 150ms ease-in-out;
   }
 
   .robust-ui-modal__box {
-    transition: all 50ms ease-in-out;
+    transition: all 150ms ease-in-out;
   }
 }
 
@@ -259,6 +271,7 @@ defineExpose({
   }
 
   .robust-ui-modal__box {
+    transform: translateY(-10px);
     opacity: 0;
   }
 }
@@ -269,6 +282,7 @@ defineExpose({
   }
 
   .robust-ui-modal__box {
+    transform: translateY(10px);
     opacity: 0;
   }
 }
