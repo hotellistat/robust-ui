@@ -85,6 +85,8 @@ const cancel = () => {
 
 const open = ref(false);
 
+
+
 const handleClick = (e: MouseEvent) => {
   if (e.shiftKey) {
     return confirm();
@@ -92,4 +94,10 @@ const handleClick = (e: MouseEvent) => {
   emit('update:opened', true);
   open.value = true;
 };
+
+defineExpose({
+  click: handleClick,
+  open
+});
+
 </script>
