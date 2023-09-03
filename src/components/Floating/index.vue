@@ -37,7 +37,7 @@ const props = defineProps({
   },
   offset: {
     type: Number,
-    default: 0,
+    default: 4,
   },
   strategy: {
     type: String as PropType<Strategy>,
@@ -69,7 +69,7 @@ const { floatingStyles, update } = useFloating(reference, floating, {
       padding: 10,
     }),
     offset({
-      mainAxis: 4,
+      mainAxis: props.offset,
     }),
     hide(),
     props.sameSize

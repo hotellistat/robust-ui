@@ -238,8 +238,6 @@ defineExpose({
 </script>
 
 <style lang="postcss">
-.robust-ui-modal__backdrop {
-}
 
 .robust-ui-modal__fade-enter-active {
   transition: all 150ms ease-in-out;
