@@ -11,6 +11,8 @@ export default {
 
 const DefaultTemplate = (args) => ({
   template: `
+    {{value}}
+    <div><Radio :value="0" title="Radio title 0" v-model="value"/></div>
     <div><Radio value="test" title="Radio title 1" v-model="value"/></div>
     <div><Radio value="arg" title="Radio title 2" v-model="value"/></div>
     <div><Radio value="more" title="Radio title 3" v-model="value"/></div>

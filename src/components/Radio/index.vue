@@ -27,13 +27,9 @@
   </div>
 </template>
 
-<script lang="ts">
-const uid = 0;
-</script>
 
 <script lang="ts" setup>
-import { MaybeRef } from '@vueuse/core';
-import { computed, inject } from 'vue';
+import { computed } from 'vue';
 
 const props = defineProps({
   modelValue: {
@@ -57,10 +53,8 @@ const isChecked = computed({
     return props.modelValue === props.value;
   },
   set() {
-    let newModelValue = props.modelValue;
-    newModelValue = props.value;
-    emit('update:modelValue', newModelValue);
-    emit('change', newModelValue);
+    emit('update:modelValue', props.value);
+    emit('change', props.value);
   },
 });
 </script>
