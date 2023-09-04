@@ -252,14 +252,14 @@ defineExpose({
 }
 
 .robust-ui-modal__fade-leave-active {
-  transition: all 50ms ease-in-out;
+  transition: all 100ms ease-in-out;
 
   .robust-ui-modal__backdrop {
-    transition: all 50ms ease-in-out;
+    transition: all 100ms ease-in-out;
   }
 
   .robust-ui-modal__box {
-    transition: all 50ms ease-in-out;
+    transition: all 100ms ease-in-out;
   }
 }
 
