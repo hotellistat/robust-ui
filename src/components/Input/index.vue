@@ -66,6 +66,7 @@ function clear() {
 }
 
 defineExpose({
+  inputRef,
   focus,
   clear,
 });
@@ -90,7 +91,7 @@ defineExpose({
       <slot tag="div" name="prefix" />
     </Component>
     <input
-      ref="inputRef"
+      :ref="inputRef"
       v-bind="$attrs"
       v-model="inputFieldValue"
       :disabled="disabled"
