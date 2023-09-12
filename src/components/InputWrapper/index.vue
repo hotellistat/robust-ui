@@ -5,6 +5,10 @@ const uid = 0;
 <script lang="ts" setup>
 import { computed, PropType, ref, useAttrs } from 'vue';
 
+defineOptions({
+  inheritAttrs: false,
+})
+
 defineProps({
   tag: {
     type: String,
