@@ -9,6 +9,8 @@ defineOptions({
   inheritAttrs: false,
 })
 
+const emit = defineEmits(['click', 'blur', 'focus']);
+
 defineProps({
   tag: {
     type: String,
@@ -50,6 +52,18 @@ defineProps({
     type: Boolean,
     default: false,
   },
+  onClick: {
+    type: Function as PropType<(e: MouseEvent) => void>,
+    default: undefined,
+  },
+  onFocus: {
+    type: Function as PropType<(e: MouseEvent) => void>,
+    default: undefined,
+  },
+  onBlur: {
+    type: Function as PropType<(e: MouseEvent) => void>,
+    default: undefined,
+  },
 });
 const attrs = useAttrs();
 
@@ -68,7 +82,7 @@ defineExpose({
 
 <template>
   <!-- We can't use label as a wrapper since it causes events not to trigger when e.g. using it in a select component -->
-  <div class="inline-block" :class="[$props.class]">
+  <div @click="onClick" @focus="onFocus" @blur="onBlur" class="inline-block" :class="[$props.class]">
     <label
       v-if="title"
       class="mb-1 block select-none text-sm font-medium text-gray-500 dark:text-gray-400"
