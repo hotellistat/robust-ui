@@ -7,7 +7,7 @@ export default {
 };
 
 const DefaultTemplate = (args) => ({
-  template: '<Spinner />',
+  template: '<Spinner v-bind="args" />',
   components: { Spinner },
   setup() {
     return { args };

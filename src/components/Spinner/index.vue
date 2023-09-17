@@ -1,79 +1,55 @@
 <template>
   <svg
-    :width="`${size}px`"
-    :height="`${size}px`"
-    x="0px"
-    y="0px"
-    :viewBox="`0 0 ${size} ${size}`"
+    :width="size"
+    :height="size"
+    stroke="currentColor"
+    viewBox="0 0 24 24"
+    xmlns="http://www.w3.org/2000/svg"
   >
-    <circle
-      class="robust-ui-spinner"
-      fill="transparent"
-      stroke="currentColor"
-      :stroke-width="stroke"
-      stroke-linecap="round"
-      :stroke-dasharray="3.1415 * (size - 2 * safeMargin)"
-      :transform-origin="`${0.5 * size} ${0.5 * size} 0`"
-      :cx="size / 2"
-      :cy="size / 2"
-      :r="size / 2 - stroke / 2 - safeMargin"
-    />
+    <g>
+      <circle
+        cx="12"
+        cy="12"
+        r="9.5"
+        fill="none"
+        stroke-width="3"
+        stroke-linecap="round"
+      >
+        <animate
+          attributeName="stroke-dasharray"
+          dur="1.5s"
+          calcMode="spline"
+          values="0 150;42 150;42 150;42 150"
+          keyTimes="0;0.475;0.95;1"
+          keySplines="0.42,0,0.58,1;0.42,0,0.58,1;0.42,0,0.58,1"
+          repeatCount="indefinite"
+        />
+        <animate
+          attributeName="stroke-dashoffset"
+          dur="1.5s"
+          calcMode="spline"
+          values="0;-16;-59;-59"
+          keyTimes="0;0.475;0.95;1"
+          keySplines="0.42,0,0.58,1;0.42,0,0.58,1;0.42,0,0.58,1"
+          repeatCount="indefinite"
+        />
+      </circle>
+      <animateTransform
+        attributeName="transform"
+        type="rotate"
+        dur="2s"
+        values="0 12 12;360 12 12"
+        repeatCount="indefinite"
+      />
+    </g>
   </svg>
 </template>
 
 <script lang="ts" setup>
-import { computed } from 'vue';
-
-const props = defineProps({
+defineProps({
   size: {
     type: Number,
     default: 24,
   },
-  stroke: {
-    type: Number,
-    default: 2,
-  },
-  safeMargin: {
-    type: Number,
-    default: 1,
-  },
-});
-
-const minDashOffset = computed(() => {
-  return 0.666 * (props.size - 2 * props.safeMargin);
-});
-
-const maxDashOffset = computed(() => {
-  return 3.1415 * (props.size - 2 * props.safeMargin);
 });
 </script>
-
-<style>
-.robust-ui-spinner {
-  animation: grow 2s linear infinite, spin 2s linear infinite;
-}
-
-@keyframes grow {
-  0% {
-    stroke-dashoffset: v-bind(minDashOffset);
-  }
-  50% {
-    stroke-dashoffset: v-bind(maxDashOffset);
-  }
-  100% {
-    stroke-dashoffset: v-bind(minDashOffset);
-  }
-}
-
-@keyframes spin {
-  0% {
-    transform: rotate(0deg);
-  }
-  50% {
-    transform: rotate(720deg);
-  }
-  100% {
-    transform: rotate(1080deg);
-  }
-}
-</style>
