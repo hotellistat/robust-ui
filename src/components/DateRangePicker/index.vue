@@ -209,10 +209,15 @@ const showComparisonPicker = computed({
 
 watch(showComparisonPicker, (value) => {
   if (value) {
-    stagedDateRangeComparison.value = [
-      stagedDateRange.value[0],
-      stagedDateRange.value[1],
-    ];
+    // if date range is set, set comparison date range to the same
+    if (stagedDateRange.value.length > 1) {
+      stagedDateRangeComparison.value = [
+        stagedDateRange.value[0],
+        stagedDateRange.value[1],
+      ];
+    } else {
+      stagedDateRangeComparison.value = [new Date(), new Date()];
+    }
   } else {
     stagedDateRangeComparison.value = undefined;
     stagedPerspectivePresetComparison.value = undefined;
