@@ -12,7 +12,7 @@
         cy="12"
         r="9.5"
         fill="none"
-        stroke-width="3"
+        :stroke-width="stroke"
         stroke-linecap="round"
       >
         <animate
@@ -50,6 +50,10 @@ defineProps({
   size: {
     type: Number,
     default: 24,
+  },
+  stroke: {
+    type: Number,
+    default: 3,
   },
 });
 </script>

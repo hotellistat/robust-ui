@@ -32,8 +32,7 @@
       <RobustSpinner
         v-if="loading"
         :size="condensed ? 16 : 20"
-        :stroke="2"
-        class="spinner absolute"
+        class="absolute text-white"
       />
     </slot>
   </Component>
