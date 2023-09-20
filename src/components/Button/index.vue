@@ -32,7 +32,7 @@
       <RobustSpinner
         v-if="loading"
         :size="condensed ? 16 : 20"
-        class="absolute text-white"
+        class="absolute"
       />
     </slot>
   </Component>
