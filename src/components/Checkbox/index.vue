@@ -17,7 +17,7 @@
           class="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 transform transition-all duration-100"
         />
       </div>
-      <div class="w-full select-none pt-px">
+      <div class="w-full select-none">
         {{ title }}
         <slot name="title"/>
       </div>
