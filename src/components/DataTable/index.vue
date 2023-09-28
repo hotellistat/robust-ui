@@ -22,7 +22,10 @@
       </button>
     </RobustNotice>
     <slot name="header" />
-    <div class="rows-wrapper flex flex-col overflow-hidden">
+    <div
+      class="rows-wrapper flex flex-col"
+      :class="horizontalScroll ? 'overflow-auto' : 'overflow-hidden'"
+    >
       <div
         ref="header"
         class="datatable-grid-columns robust-datatable-header hidden select-none items-center gap-x-2 sm:grid"
@@ -77,8 +80,13 @@
       <Separator class="hidden sm:block" />
 
       <div
-        class="overflow-y-auto"
-        :class="sortedData.length ? '' : 'datatable-grid-rows-empty'"
+        class="overflow-y-auto scrollable-content"
+        :class="[
+          sortedData.length ? '' : 'datatable-grid-rows-empty',
+          horizontalScroll
+            ? 'w-[max-content] overflow-x-hidden'
+            : 'overflow-x-auto',
+        ]"
       >
         <!-- Rows -->
         <div
@@ -282,6 +290,10 @@ const props = defineProps({
     type: String,
     default: () => '',
   },
+  horizontalScroll: {
+    type: Boolean,
+    default: false,
+  },
 });
 
 const emit = defineEmits([
@@ -299,7 +311,7 @@ const emit = defineEmits([
   'onEnterRow',
 ]);
 
-const { data, options, loading, headerClass } = toRefs(props);
+const { data, options, loading, headerClass, horizontalScroll } = toRefs(props);
 
 const table = ref();
 const header = ref();
@@ -903,7 +915,7 @@ const resizeLine = () => {
 };
 
 const createResizableTable = () => {
-  if (!options.value.resize) {
+  if (!options.value.resize || horizontalScroll.value) {
     return;
   }
 
@@ -1056,7 +1068,17 @@ const initSpace = () => {
 watch(
   () => options.value.columns,
   () => {
-    initSpace();
+    if (!horizontalScroll.value) initSpace();
+  },
+  {
+    deep: true,
+  }
+);
+
+watch(
+  () => horizontalScroll,
+  () => {
+    if (!horizontalScroll.value) initSpace();
   },
   {
     deep: true,
@@ -1065,7 +1087,7 @@ watch(
 
 onMounted(() => {
   createResizableTable();
-  initSpace();
+  if (!horizontalScroll.value) initSpace();
   resizeObserver = new ResizeObserver(onResize);
   resizeObserver.observe(table.value);
 });
