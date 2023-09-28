@@ -6,11 +6,12 @@ export default {
   component: Checkbox,
   argTypes: {
     title: { control: { type: 'text' } },
+    description: { control: { type: 'text' } },
   },
 };
 
 const DefaultTemplate = (args) => ({
-  template: '<Checkbox v-bind="args" v-model="value"></Checkbox>{{value}}',
+  template: '<Checkbox v-bind="args" v-model="value"></Checkbox>',
   components: { Checkbox },
   setup() {
     const value = ref(false);
