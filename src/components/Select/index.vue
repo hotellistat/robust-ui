@@ -83,6 +83,10 @@ const props = defineProps({
     type: [String, Number, Boolean, Array] as PropType<Value | Array<Value>>,
     default: undefined,
   },
+  lazy: {
+    type: Boolean,
+    default: false,
+  },
 });
 
 const emit = defineEmits([
@@ -91,6 +95,7 @@ const emit = defineEmits([
   'change',
   'focus',
   'blur',
+  'search',
 ]);
 // const refSelectContainer = ref()
 const refSelectInput = ref();
@@ -133,9 +138,22 @@ async function filterBySearchTerm(value) {
 }
 
 debouncedWatch(
-  [search, options],
-  async ([value, optValue]) => {
-    await filterBySearchTerm(value);
+  options,
+  async () => {
+    if (!props.lazy) {
+      await filterBySearchTerm(search.value);
+    }
+  },
+  { debounce: 150 }
+);
+
+debouncedWatch(
+  search,
+  async (value) => {
+    if (!props.lazy) {
+      await filterBySearchTerm(search.value);
+    }
+    emit('search', value);
   },
   { debounce: 150 }
 );
