@@ -75,6 +75,10 @@ const props = defineProps({
     type: Function as PropType<(query: string) => Promise<Array<Option>>>,
     default: undefined,
   },
+  placeholder: {
+    type: String,
+    default: 'Select',
+  },
   options: {
     type: Array as PropType<Array<Option>>,
     default: () => [],
@@ -219,7 +223,7 @@ function optionSelected(option: any) {
 function getInputTitle() {
   if (Array.isArray(modelValue.value)) {
     if (modelValue.value.length < 1) {
-      return 'Select';
+      return props.placeholder;
     }
     const titles = [];
     for (const value of modelValue.value) {
@@ -228,7 +232,7 @@ function getInputTitle() {
     }
     return titles.join(', ');
   } else {
-    return activeItem.value ? activeItem.value.title : 'Select';
+    return activeItem.value ? activeItem.value.title : props.placeholder;
   }
 }
 
