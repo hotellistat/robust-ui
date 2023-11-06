@@ -35,13 +35,13 @@
               v-if="$slots.title"
               class="flex flex-shrink-0 items-center p-6 text-xl"
             >
-              <div class="leading-4">
+              <div class="flex-1 leading-4 truncate">
                 <slot name="title" :close="manualClose"></slot>
               </div>
               <button
                 v-if="props.dismissable"
                 type="button"
-                class="-m-4 ml-auto p-4 text-gray-400 transition-colors duration-150 hover:text-gray-900 dark:hover:text-gray-100"
+                class="-m-4 p-4 text-gray-400 transition-colors duration-150 hover:text-gray-900 dark:hover:text-gray-100"
                 @click="close"
               >
                 <PhX size="20" class="block" />
@@ -226,7 +226,7 @@ async function close() {
   }
 }
 
-async function manualClose(){
+async function manualClose() {
   opened.value = false;
   emit('update:opened', false);
 }
@@ -238,7 +238,6 @@ defineExpose({
 </script>
 
 <style lang="postcss">
-
 .robust-ui-modal__fade-enter-active {
   transition: all 150ms ease-in-out;
 

@@ -32,7 +32,7 @@
         :style="{
           gridTemplateColumns: sizes,
         }"
-        :class="headerClass"
+        :class="[headerClass, horizontalScroll ? 'w-max' : '']"
       >
         <div class="checkbox">
           <Checkbox
@@ -83,9 +83,7 @@
         class="overflow-y-auto scrollable-content"
         :class="[
           sortedData.length ? '' : 'datatable-grid-rows-empty',
-          horizontalScroll
-            ? 'w-[max-content] overflow-x-hidden'
-            : 'overflow-x-auto',
+          horizontalScroll ? 'w-max overflow-x-hidden' : 'overflow-x-auto',
         ]"
       >
         <!-- Rows -->

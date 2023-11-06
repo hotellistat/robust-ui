@@ -95,6 +95,10 @@ const props = defineProps({
     type: Boolean,
     default: true,
   },
+  perspectiveTitle: {
+    type: String,
+    default: 'Perspective of',
+  },
 });
 
 const emit = defineEmits([
@@ -473,7 +477,7 @@ const saveTime = async () => {
           v-model="stagedPerspectiveDate"
           v-model:preset="stagedPerspectivePreset"
           placeholder="Newest"
-          title="Perspective of"
+          :title="perspectiveTitle"
           condensed
           resetable
           class="mb-4 w-56"
@@ -500,7 +504,7 @@ const saveTime = async () => {
           v-model="stagedPerspectiveDateComparison"
           v-model:preset="stagedPerspectivePresetComparison"
           placeholder="Newest"
-          title="Perspective of"
+          :title="perspectiveTitle"
           condensed
           resetable
           class="mb-4 w-56"
