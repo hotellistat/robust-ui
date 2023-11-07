@@ -160,6 +160,13 @@ function resetValue() {
     @click.stop="open = !open"
   >
     <div
+      v-if="$slots.prefix"
+      class="pointer-events-none flex h-full select-none items-center pr-2 text-gray-400"
+      :class="[condensed ? 'pl-2' : 'pl-3']"
+    >
+      <slot tag="div" name="prefix" />
+    </div>
+    <div
       class="flex h-full items-center pr-2 text-gray-400"
       :class="[condensed ? 'pl-2' : 'pl-3']"
     >
