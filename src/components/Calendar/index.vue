@@ -5,9 +5,6 @@ import {
   setYear as setFnsYear,
   setMonth as setFnsMonth,
   format,
-  isFuture,
-  isPast,
-  differenceInDays,
   isSameDay,
   getDaysInMonth,
   min,
@@ -15,6 +12,8 @@ import {
   set,
   addYears,
   subYears,
+  isBefore,
+  isAfter,
 } from 'date-fns';
 import {
   computed,
@@ -298,6 +297,18 @@ function subMonth() {
 function setMonth(month) {
   cursor.value = setFnsMonth(cursor.value, month);
 }
+
+const isPast = (date: Date) => {
+  const today = new Date();
+  today.setHours(0, 0, 0, 0);
+  return isBefore(date, today);
+};
+
+const isFuture = (date: Date) => {
+  const today = new Date();
+  today.setHours(23, 59, 59, 999);
+  return isAfter(date, today);
+};
 
 const dayAllowed = (day) => {
   const date = new Date(cursor.value).setDate(day);
