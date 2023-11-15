@@ -315,10 +315,10 @@ const dayAllowed = (day) => {
   if (!today.value && isSameDay(now.value, date)) {
     return false;
   }
-  if (!past.value && isPast(date)) {
+  if (!past.value && isPast(new Date(date))) {
     return false;
   }
-  if (!future.value && isFuture(date)) {
+  if (!future.value && isFuture(new Date(date))) {
     return false;
   }
   return true;
@@ -711,12 +711,16 @@ defineExpose({
         title="From"
         condensed
         class="mb-4 w-full"
+        :past="past"
+        :future="future"
       />
       <RobustDatePicker
         v-model="modelValue[1]"
         title="To"
         condensed
         class="mb-4 w-full"
+        :past="past"
+        :future="future"
       />
       <slot />
     </div>

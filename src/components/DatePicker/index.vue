@@ -60,6 +60,14 @@ const props = defineProps({
     type: String,
     default: () => 'primary',
   },
+  past: {
+    type: Boolean,
+    default: true,
+  },
+  future: {
+    type: Boolean,
+    default: true,
+  },
 });
 
 const emit = defineEmits([
@@ -217,6 +225,8 @@ function resetValue() {
       v-model:preset="preset"
       :presets="presets"
       :variant="variant"
+      :past="past"
+      :future="future"
     />
   </RobustFloating>
 </template>
