@@ -713,6 +713,7 @@ defineExpose({
         class="mb-4 w-full"
         :past="past"
         :future="future"
+        @change="() => emit('update:preset', undefined)"
       />
       <RobustDatePicker
         v-model="modelValue[1]"
@@ -721,6 +722,7 @@ defineExpose({
         class="mb-4 w-full"
         :past="past"
         :future="future"
+        @change="() => emit('update:preset', undefined)"
       />
       <slot />
     </div>
