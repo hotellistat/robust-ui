@@ -354,6 +354,7 @@ function deselectAll() {
     </div>
   </RobustInputWrapper>
   <FLoating
+    v-if="refSelectWrapper?.wrapperRef"
     ref="elementRef"
     v-model:open="open"
     same-size
