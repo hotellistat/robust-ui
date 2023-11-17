@@ -440,6 +440,7 @@ const saveTime = async () => {
     </div>
   </RobustInputWrapper>
   <RobustFloating
+    v-if="inputWrapperRef?.wrapperRef"
     ref="elementRef"
     v-model:open="open"
     class="z-[100] origin-top-left"

@@ -3,7 +3,7 @@ import RobustFloating from '../Floating/index.vue';
 import RobustCalendar from '../Calendar/index.vue';
 import RobustInputWrapper from '../InputWrapper/index.vue';
 import { PhCaretDown, PhCalendar, PhArrowClockwise } from '@phosphor-icons/vue';
-import { computed, ref, toRefs, PropType, readonly, inject } from 'vue';
+import { computed, ref, toRefs, PropType, inject } from 'vue';
 import { MaybeRef, onClickOutside } from '@vueuse/core';
 import { Preset } from '../Calendar/presets';
 
@@ -212,6 +212,7 @@ function resetValue() {
     </div>
   </RobustInputWrapper>
   <RobustFloating
+    v-if="inputWrapperRef?.wrapperRef"
     ref="elementRef"
     v-model:open="open"
     class="z-[100] origin-top-left"
