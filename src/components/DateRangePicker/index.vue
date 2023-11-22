@@ -9,6 +9,7 @@ import {
   RobustCheckbox,
   RobustDatePicker,
   RobustTabs,
+  RobustModal,
 } from '..';
 import { PhCaretDown, PhCalendar } from '@phosphor-icons/vue';
 import { computed, PropType, ref, watch } from 'vue';
@@ -98,6 +99,10 @@ const props = defineProps({
   perspectiveTitle: {
     type: String,
     default: 'Perspective of',
+  },
+  type: {
+    type: String as PropType<'dropdown' | 'modal'>,
+    default: 'modal',
   },
 });
 
@@ -304,7 +309,7 @@ const displayComparisonPreset = computed(() => {
 });
 
 onClickOutside(elementRef, (event) => {
-  if (!open.value) {
+  if (!open.value || props.type === 'modal') {
     return;
   }
 
@@ -322,9 +327,26 @@ function closeDropdown() {
   }
 }
 
-const handleClick = () => {
-  open.value = !open.value;
-};
+const wrapperAttrs = computed(() => {
+  if (props.type === 'modal') {
+    return {
+      opened: open.value,
+      size: 'xl',
+      center: true,
+      'onUpdate:opened': (value: boolean) => {
+        open.value = false;
+      },
+    };
+  }
+  return {
+    open: open.value,
+    class: 'z-[100] origin-top-left',
+    reference: inputWrapperRef.value?.wrapperRef,
+    options: {
+      placement: 'bottom-start',
+    },
+  };
+});
 
 const saveTime = async () => {
   emit('update:dateRange', stagedDateRange.value);
@@ -439,16 +461,12 @@ const saveTime = async () => {
       />
     </div>
   </RobustInputWrapper>
-  <RobustFloating
-    v-if="inputWrapperRef?.wrapperRef"
+  <Component
+    :is="type === 'modal' ? RobustModal : RobustFloating"
+    v-bind="wrapperAttrs"
     ref="elementRef"
-    v-model:open="open"
-    class="z-[100] origin-top-left"
-    :reference="inputWrapperRef?.wrapperRef"
-    :options="{
-      placement: 'bottom-start',
-    }"
   >
+    <template #title> </template>
     <div
       class="flex items-center justify-between border-gray-200 dark:border-gray-700"
     >
@@ -481,7 +499,7 @@ const saveTime = async () => {
           :title="perspectiveTitle"
           condensed
           resetable
-          class="mb-4 w-56"
+          class="mb-4 w-full"
           :presets="perspectiveDatePresets"
         />
 
@@ -508,7 +526,7 @@ const saveTime = async () => {
           :title="perspectiveTitle"
           condensed
           resetable
-          class="mb-4 w-56"
+          class="mb-4 w-full"
           :presets="perspectiveDatePresets"
         />
       </RobustCalendar>
@@ -521,5 +539,5 @@ const saveTime = async () => {
         >Apply time range</RobustButton
       >
     </div>
-  </RobustFloating>
+  </Component>
 </template>

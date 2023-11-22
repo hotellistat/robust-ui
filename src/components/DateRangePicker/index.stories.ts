@@ -53,6 +53,7 @@ export const Default: Story = {
       const activePresetComparison = ref(undefined);
       const perspectivePreset = ref(undefined);
       const perspectivePresetComparison = ref(undefined);
+      const showComparison = ref(false);
 
       return {
         args,
@@ -64,6 +65,7 @@ export const Default: Story = {
         activePresetComparison,
         perspectivePreset,
         perspectivePresetComparison,
+        showComparison,
       };
     },
     template: `
@@ -77,6 +79,7 @@ export const Default: Story = {
         v-model:active-preset-comparison="activePresetComparison"
         v-model:perspective-preset="perspectivePreset"
         v-model:perspective-preset-comparison="perspectivePresetComparison"
+        v-model:show-comparison="showComparison"
       >
       </DaterangePicker>
       `,

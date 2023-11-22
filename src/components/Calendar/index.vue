@@ -531,7 +531,7 @@ defineExpose({
 </script>
 
 <template>
-  <div class="relative flex w-max select-none flex-col sm:flex-row">
+  <div class="relative flex w-full select-none flex-col sm:flex-row">
     <div
       v-if="presets.length"
       class="relative hidden min-h-0 w-48 border-r border-gray-200 dark:border-gray-700 lg:block"
@@ -595,7 +595,7 @@ defineExpose({
         </button>
       </div>
 
-      <div class="relative w-max">
+      <div class="relative w-full">
         <div
           v-if="showMonthSelectionActive"
           class="absolute inset-0 z-10 grid grid-cols-3 gap-4"
