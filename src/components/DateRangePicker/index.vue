@@ -102,7 +102,7 @@ const props = defineProps({
   },
   type: {
     type: String as PropType<'dropdown' | 'modal'>,
-    default: 'modal',
+    default: 'dropdown',
   },
 });
 
