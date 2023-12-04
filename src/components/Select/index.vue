@@ -246,7 +246,9 @@ function getInputTitle() {
     const titles = [];
     for (const value of modelValue.value) {
       const found = options.value.find((o) => o.value === value);
-      titles.push(found.title);
+      if (found) {
+        titles.push(found.title);
+      }
     }
     return titles.join(', ');
   } else {
