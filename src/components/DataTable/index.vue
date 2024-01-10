@@ -255,6 +255,7 @@ type DataTableOptions = {
   defaultColSize?: string;
   selection?: boolean;
   search?: boolean;
+  robustSearch?: boolean;
 };
 
 const defaultOptions: Partial<DataTableOptions> = {
@@ -524,12 +525,40 @@ const sizes = computed(() => {
   return colsSizeArray.join(' ');
 });
 
+const robustSearch = (search: string, data: unknown[], keys: string[]) => {
+  const matchingDataMapped = data.map((d: any) => {
+    const matchingFilter = [];
+    keys.forEach((k) => matchingFilter.push(String(d[k]).toLowerCase()));
+    d.matchingFilter = matchingFilter;
+    return d;
+  });
+
+  const searchWords = search.toLowerCase().split(' ');
+
+  const filteredData = matchingDataMapped.filter((d: any) => {
+    const searchWordsMatchAny = searchWords.every((s: string) =>
+      d.matchingFilter.some((f: any) => f.includes(s))
+    );
+
+    return (
+      d.matchingFilter.includes(String(search).toLowerCase()) ||
+      searchWordsMatchAny
+    );
+  });
+
+  return filteredData;
+};
+
 const sortData = () => {
   let cpData = Array.from(data.value);
 
   if (searchModel.value !== '') {
-    const fuse = new Fuse(cpData, fuseOptions.value);
-    cpData = fuse.search(searchModel.value).map((d) => d.item);
+    if (options.value.robustSearch) {
+      cpData = robustSearch(searchModel.value, cpData, fuseOptions.value.keys);
+    } else {
+      const fuse = new Fuse(cpData, fuseOptions.value);
+      cpData = fuse.search(searchModel.value).map((d) => d.item);
+    }
   }
 
   if (!options.value.serverSide) {
@@ -822,9 +851,8 @@ const createResizableColumn = function (
   const mouseDownHandler = function (e: MouseEvent) {
     resetSizes();
     const currentCol = idx + 1;
-    sizesController.value[
-      currentCol + 1
-    ] = `minmax(${minColSize.value}px, 1fr)`;
+    sizesController.value[currentCol + 1] =
+      `minmax(${minColSize.value}px, 1fr)`;
     // Get the current mouse position
     x = e.clientX;
 
@@ -853,9 +881,8 @@ const createResizableColumn = function (
     const size = Math.max(calculatedWidth, minColSize.value);
 
     // Update the width of column
-    sizesController.value[
-      currentCol
-    ] = `minmax(${minColSize.value}px,${size}px)`;
+    sizesController.value[currentCol] =
+      `minmax(${minColSize.value}px,${size}px)`;
 
     // we set next column size to 1fr such that
     // it adapts to newly calculated width of previous column
