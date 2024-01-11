@@ -130,6 +130,10 @@ const props = defineProps({
     type: Boolean,
     default: false,
   },
+  alwaysActive: {
+    type: Boolean,
+    default: false,
+  },
 });
 
 const emit = defineEmits([
@@ -150,6 +154,7 @@ const {
   step,
   snapToSteps,
   modelValue,
+  alwaysActive,
 } = toRefs(props);
 
 const initialValue = ref(modelValue.value);
@@ -240,6 +245,7 @@ const onFocus = () => {
 };
 
 const onBlur = () => {
+  if (alwaysActive) return;
   isActive.value = false;
   emit('blur');
 };
@@ -310,6 +316,7 @@ const teardownSlider = () => {
 const initializeDrag = () => {
   // const value = moderateValue(localValue.value ? localValue.value : 0)
   // setValue(value)
+  alwaysActive.value && (isActive.value = true);
   reset();
 };
 
