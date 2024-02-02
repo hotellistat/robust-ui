@@ -68,3 +68,21 @@ CustomIcon.args = {
     'This is an input hint. It is supposed to help the user understand the reason this input exists and what it does',
   icon: PhWarning,
 };
+
+const NoIconTemplate = (args) => ({
+  template: `<EmptyState v-bind="args" >
+  <RobustButton>Call to action</RobustButton>
+  </EmptyState>`,
+  components: { EmptyState, RobustButton, RobustImg },
+  setup() {
+    return { args };
+  },
+});
+
+export const NoIcon = NoIconTemplate.bind();
+
+NoIcon.args = {
+  title: 'Input title',
+  description:
+    'This is an input hint. It is supposed to help the user understand the reason this input exists and what it does',
+};

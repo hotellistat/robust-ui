@@ -1,6 +1,7 @@
 <template>
   <div class="flex flex-col items-center py-4 text-center">
     <div
+      v-if="icon !== undefined || $slots.icon"
       class="relative mb-4 flex w-full max-w-sm items-center justify-center py-12 text-gray-700 dark:text-gray-400"
     >
       <svg
