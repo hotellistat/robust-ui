@@ -47,7 +47,7 @@ const props = defineProps({
     default: 'primary',
   },
   modelValue: {
-    type: Object as PropType<[Date, Date] | Date>,
+    type: Object as PropType<[Date, Date] | Date | [Date, Date][]>,
     default: () => new Date(),
   },
   presets: {
@@ -58,9 +58,30 @@ const props = defineProps({
     type: String,
     default: () => undefined,
   },
+  multiplePeriod: {
+    type: Boolean,
+    default: false,
+  },
+  fixed: {
+    type: Boolean,
+    default: false,
+  },
+  cursorMonth: {
+    type: Number,
+    default: () => undefined,
+  },
+  title: {
+    type: String,
+    default: () => undefined,
+  },
 });
 
-const emit = defineEmits(['update:modelValue', 'update:preset']);
+const emit = defineEmits([
+  'update:modelValue',
+  'update:preset',
+  'dayClick',
+  'dayHover',
+]);
 
 const {
   future,
@@ -69,6 +90,10 @@ const {
   modelValue,
   presets,
   preset: currentPreset,
+  multiplePeriod,
+  fixed,
+  title,
+  cursorMonth,
 } = toRefs(props);
 
 const now = ref();
@@ -161,27 +186,49 @@ const isFirst = (day) => {
     return false;
   }
 
-  // doesn't do any actions if you've choosen only one date
-  if (modelValue.value.length < 2) {
-    return false;
-  }
+  if (multiplePeriod.value) {
+    for (const period of modelValue.value as [Date, Date][]) {
+      if (!compareDates(...period)) {
+        return false;
+      }
 
-  if (!compareDates(...modelValue.value)) {
-    return false;
-  }
+      const values = {
+        year: cursor.value.getFullYear(),
+        month: cursor.value.getMonth(),
+        day,
+      };
+      const tmpDate = new Date(values.year, values.month, values.day);
 
-  const values = {
-    year: cursor.value.getFullYear(),
-    month: cursor.value.getMonth(),
-    day,
-  };
-  const tmpDate = new Date(values.year, values.month, values.day);
+      const minDate = min(period as [Date, Date]);
 
-  const minDate = min(modelValue.value);
+      // minimal value
+      if (!compareDates(tmpDate, minDate)) {
+        return true;
+      }
+    }
+  } else {
+    // doesn't do any actions if you've choosen only one date
+    if (modelValue.value.length < 2) {
+      return false;
+    }
 
-  // minimal value
-  if (!compareDates(tmpDate, minDate)) {
-    return true;
+    if (!compareDates(...(modelValue.value as [Date, Date]))) {
+      return false;
+    }
+
+    const values = {
+      year: cursor.value.getFullYear(),
+      month: cursor.value.getMonth(),
+      day,
+    };
+    const tmpDate = new Date(values.year, values.month, values.day);
+
+    const minDate = min(modelValue.value as [Date, Date]);
+
+    // minimal value
+    if (!compareDates(tmpDate, minDate)) {
+      return true;
+    }
   }
   return false;
 };
@@ -192,27 +239,49 @@ const isLast = (day) => {
     return false;
   }
 
-  // doesn't do any actions if you've choosen only one date
-  if (modelValue.value.length < 2) {
-    return false;
-  }
+  if (multiplePeriod.value) {
+    for (const period of modelValue.value as [Date, Date][]) {
+      if (!compareDates(...period)) {
+        return false;
+      }
 
-  if (!compareDates(...modelValue.value)) {
-    return false;
-  }
+      const values = {
+        year: cursor.value.getFullYear(),
+        month: cursor.value.getMonth(),
+        day,
+      };
+      const tmpDate = new Date(values.year, values.month, values.day);
 
-  const values = {
-    year: cursor.value.getFullYear(),
-    month: cursor.value.getMonth(),
-    day,
-  };
-  const tmpDate = new Date(values.year, values.month, values.day);
+      const maxDate = max(period as [Date, Date]);
 
-  const maxDate = max(modelValue.value);
+      // maximal value
+      if (!compareDates(tmpDate, maxDate)) {
+        return true;
+      }
+    }
+  } else {
+    // doesn't do any actions if you've choosen only one date
+    if (modelValue.value.length < 2) {
+      return false;
+    }
 
-  // max value
-  if (!compareDates(tmpDate, maxDate)) {
-    return true;
+    if (!compareDates(...(modelValue.value as [Date, Date]))) {
+      return false;
+    }
+
+    const values = {
+      year: cursor.value.getFullYear(),
+      month: cursor.value.getMonth(),
+      day,
+    };
+    const tmpDate = new Date(values.year, values.month, values.day);
+
+    const maxDate = max(modelValue.value as [Date, Date]);
+
+    // maximal value
+    if (!compareDates(tmpDate, maxDate)) {
+      return true;
+    }
   }
   return false;
 };
@@ -221,24 +290,45 @@ const isBetweenRange = (day) => {
   if (!Array.isArray(modelValue.value)) {
     return false;
   }
-  if (modelValue.value.length < 2) {
-    return false;
-  }
 
-  const values = {
-    year: cursor.value.getFullYear(),
-    month: cursor.value.getMonth(),
-    day,
-  };
-  const tmpDate = new Date(values.year, values.month, values.day);
-  const minDate = min(modelValue.value);
-  const maxDate = max(modelValue.value);
+  if (multiplePeriod.value) {
+    for (const period of modelValue.value as [Date, Date][]) {
+      const values = {
+        year: cursor.value.getFullYear(),
+        month: cursor.value.getMonth(),
+        day,
+      };
+      const tmpDate = new Date(values.year, values.month, values.day);
+      const minDate = min(period);
+      const maxDate = max(period);
 
-  if (
-    compareDates(tmpDate, maxDate) === -1 &&
-    compareDates(tmpDate, minDate) === 1
-  ) {
-    return true;
+      if (
+        compareDates(tmpDate, maxDate) === -1 &&
+        compareDates(tmpDate, minDate) === 1
+      ) {
+        return true;
+      }
+    }
+  } else {
+    if (modelValue.value.length < 2) {
+      return false;
+    }
+
+    const values = {
+      year: cursor.value.getFullYear(),
+      month: cursor.value.getMonth(),
+      day,
+    };
+    const tmpDate = new Date(values.year, values.month, values.day);
+    const minDate = min(modelValue.value as [Date, Date]);
+    const maxDate = max(modelValue.value as [Date, Date]);
+
+    if (
+      compareDates(tmpDate, maxDate) === -1 &&
+      compareDates(tmpDate, minDate) === 1
+    ) {
+      return true;
+    }
   }
   return false;
 };
@@ -250,7 +340,11 @@ const isSelectedDay = (day: number) => {
   tmpDate.setDate(day);
 
   if (Array.isArray(modelValue.value)) {
-    const selectedDates = modelValue.value.map((date) => new Date(date));
+    const selectedDates: Date[] = multiplePeriod.value
+      ? modelValue.value
+          .map((period) => period.map((date) => new Date(date)))
+          .flat()
+      : modelValue.value.map((date) => new Date(date));
     for (let i = 0; i < selectedDates.length; i++) {
       if (!compareDates(selectedDates[i], tmpDate)) {
         return true;
@@ -324,6 +418,10 @@ const dayAllowed = (day) => {
   return true;
 };
 
+const dayHover = (day) => {
+  return emit('dayHover', day);
+};
+
 const daySelect = (day) => {
   if (!dayAllowed(day)) {
     return;
@@ -338,29 +436,33 @@ const daySelect = (day) => {
   cursor.value = tmpDate;
 
   if (Array.isArray(modelValue.value)) {
-    let newModelValue = [];
-    if (modelValue.value.length >= 2) {
-      newModelValue.push(new Date(cursor.value));
+    if (multiplePeriod.value) {
+      return emit('dayClick', day);
     } else {
-      newModelValue = modelValue.value;
-      newModelValue.push(new Date(cursor.value));
-      if (newModelValue.length > 1) {
-        newModelValue = [
-          set(min(newModelValue), {
-            hours: 0,
-            minutes: 0,
-            seconds: 0,
-          }),
-          set(max(newModelValue), {
-            hours: 23,
-            minutes: 59,
-            seconds: 59,
-          }),
-        ];
+      let newModelValue = [];
+      if (modelValue.value.length >= 2) {
+        newModelValue.push(new Date(cursor.value));
+      } else {
+        newModelValue = modelValue.value;
+        newModelValue.push(new Date(cursor.value));
+        if (newModelValue.length > 1) {
+          newModelValue = [
+            set(min(newModelValue), {
+              hours: 0,
+              minutes: 0,
+              seconds: 0,
+            }),
+            set(max(newModelValue), {
+              hours: 23,
+              minutes: 59,
+              seconds: 59,
+            }),
+          ];
+        }
       }
+      emit('update:modelValue', newModelValue);
+      emit('update:preset', undefined);
     }
-    emit('update:modelValue', newModelValue);
-    emit('update:preset', undefined);
   } else {
     selectedDate.value = new Date(cursor.value);
     emit('update:modelValue', cursor.value);
@@ -392,12 +494,22 @@ const reset = () => {
 // };
 
 onMounted(() => {
-  if (Array.isArray(modelValue.value)) {
-    cursor.value = new Date(modelValue.value[1] || new Date());
+  if (cursorMonth.value) {
+    cursor.value = new Date(new Date().getFullYear(), cursorMonth.value, 1);
     selectedDate.value = cursor.value;
   } else {
-    cursor.value = new Date(modelValue.value || new Date());
-    selectedDate.value = cursor.value;
+    if (Array.isArray(modelValue.value)) {
+      if (multiplePeriod.value && modelValue.value[0]) {
+        cursor.value = new Date(modelValue.value[0][1] || new Date());
+        selectedDate.value = cursor.value;
+      } else {
+        cursor.value = new Date((modelValue.value[1] as Date) || new Date());
+        selectedDate.value = cursor.value;
+      }
+    } else {
+      cursor.value = new Date(modelValue.value || new Date());
+      selectedDate.value = cursor.value;
+    }
   }
 });
 
@@ -533,7 +645,7 @@ defineExpose({
 <template>
   <div class="relative flex w-full select-none flex-col sm:flex-row">
     <div
-      v-if="presets.length"
+      v-if="presets.length && !fixed"
       class="relative hidden min-h-0 w-48 border-r border-gray-200 dark:border-gray-700 lg:block"
     >
       <div class="absolute inset-0 overflow-auto py-2">
@@ -552,7 +664,7 @@ defineExpose({
 
     <section class="p-4 dark:border-gray-700">
       <div class="mb-4 flex items-center text-center text-lg font-semibold">
-        <div class="flex flex-1">
+        <div v-if="!fixed" class="flex flex-1">
           <button
             type="button"
             class="flex h-8 items-center rounded-lg px-2 tabular-nums hover:bg-gray-100 dark:hover:bg-white/5"
@@ -578,7 +690,21 @@ defineExpose({
             {{ yearHeading }}
           </button>
         </div>
+        <div v-else class="flex flex-1">
+          <div v-if="title" class="h-8 items-center px-2 tabular-nums">
+            {{ title }}
+          </div>
+          <div v-else class="flex">
+            <div class="h-8 px-2 tabular-nums">
+              {{ monthHeading }}
+            </div>
+            <div class="h-8 px-2 tabular-nums">
+              {{ yearHeading }}
+            </div>
+          </div>
+        </div>
         <button
+          v-if="!fixed"
           type="button"
           class="flex h-8 w-8 items-center justify-center rounded-lg text-gray-800 hover:bg-gray-100 hover:text-gray-800 active:bg-gray-100 dark:text-gray-400 dark:hover:bg-white/5 dark:hover:text-gray-100"
           @click="subMonth"
@@ -587,6 +713,7 @@ defineExpose({
         </button>
 
         <button
+          v-if="!fixed"
           type="button"
           class="flex h-8 w-8 items-center justify-center rounded-lg text-gray-800 hover:bg-gray-100 hover:text-gray-800 active:bg-gray-100 dark:text-gray-400 dark:hover:bg-white/5 dark:hover:text-gray-100"
           @click="addMonth"
@@ -672,6 +799,7 @@ defineExpose({
             :disabled="!dayAllowed(day)"
             :class="[isBetweenRange(day) ? variantStyling.background : '']"
             @click="daySelect(day)"
+            @mouseover="dayHover(day)"
           >
             <div
               v-if="isLast(day) || isFirst(day)"
@@ -681,8 +809,8 @@ defineExpose({
                 isFirst(day)
                   ? 'right-0 w-1/2'
                   : isLast(day)
-                  ? 'left-0 w-1/2'
-                  : '',
+                    ? 'left-0 w-1/2'
+                    : '',
               ]"
             ></div>
             <div
@@ -703,11 +831,11 @@ defineExpose({
       </div>
     </section>
     <div
-      v-if="Array.isArray(modelValue)"
+      v-if="Array.isArray(modelValue) && !multiplePeriod && !fixed"
       class="flex flex-shrink-0 flex-col items-start border-gray-200 p-4 dark:border-gray-700 sm:border-l"
     >
       <RobustDatePicker
-        v-model="modelValue[0]"
+        v-model="modelValue[0] as Date"
         title="From"
         condensed
         class="mb-4 w-full"
@@ -716,7 +844,7 @@ defineExpose({
         @change="() => emit('update:preset', undefined)"
       />
       <RobustDatePicker
-        v-model="modelValue[1]"
+        v-model="modelValue[1] as Date"
         title="To"
         condensed
         class="mb-4 w-full"
