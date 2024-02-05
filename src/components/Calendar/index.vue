@@ -442,7 +442,7 @@ const daySelect = (day) => {
 
   if (Array.isArray(modelValue.value)) {
     if (multiplePeriod.value) {
-      return emit('dayClick', day);
+      return emit('dayClick', tmpDate);
     } else {
       let newModelValue = [];
       if (modelValue.value.length >= 2) {
