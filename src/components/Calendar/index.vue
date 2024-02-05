@@ -70,6 +70,10 @@ const props = defineProps({
     type: Number,
     default: () => undefined,
   },
+  cursorYear: {
+    type: Number,
+    default: () => undefined,
+  },
   title: {
     type: String,
     default: () => undefined,
@@ -94,6 +98,7 @@ const {
   fixed,
   title,
   cursorMonth,
+  cursorYear,
 } = toRefs(props);
 
 const now = ref();
@@ -494,8 +499,12 @@ const reset = () => {
 // };
 
 onMounted(() => {
-  if (cursorMonth.value) {
-    cursor.value = new Date(new Date().getFullYear(), cursorMonth.value, 1);
+  if (cursorMonth.value || cursorYear.value) {
+    cursor.value = new Date(
+      cursorYear.value || new Date().getFullYear(),
+      cursorMonth.value || new Date().getMonth(),
+      1
+    );
     selectedDate.value = cursor.value;
   } else {
     if (Array.isArray(modelValue.value)) {
