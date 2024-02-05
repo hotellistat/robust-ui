@@ -5,4 +5,7 @@ export default {
   secondary: {
     background: 'bg-emerald-500 text-white hover:bg-emerald-600',
   },
+  red: {
+    background: 'bg-red-400 hover:bg-red-500',
+  },
 };
