@@ -502,7 +502,7 @@ onMounted(() => {
   if (cursorMonth.value || cursorMonth.value === 0 || cursorYear.value) {
     cursor.value = new Date(
       cursorYear.value || new Date().getFullYear(),
-      (cursorMonth.value || cursorMonth.value) === 0
+      cursorMonth.value || cursorMonth.value === 0
         ? cursorMonth.value
         : new Date().getMonth(),
       1
