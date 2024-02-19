@@ -27,7 +27,8 @@ import {
 import { PhCaretLeft, PhCaretRight } from '@phosphor-icons/vue';
 import defaultPresets, { Preset } from './presets';
 import variants from './variants';
-import { RobustDatePicker } from '..';
+import { RobustDatePicker, RobustSelect } from '..';
+import { validate } from 'vee-validate';
 
 const props = defineProps({
   future: {
@@ -58,6 +59,20 @@ const props = defineProps({
     type: String,
     default: () => undefined,
   },
+  filters: {
+    type: Array as PropType<
+      Array<{ title: string; value: number | string } | Preset>
+    >,
+    default: () => [],
+  },
+  filter: {
+    type: String || Number,
+    default: () => undefined,
+  },
+  presetReferenceDate: {
+    type: Date,
+    default: () => new Date(),
+  },
   multiplePeriod: {
     type: Boolean,
     default: false,
@@ -78,11 +93,16 @@ const props = defineProps({
     type: String,
     default: () => undefined,
   },
+  dualCalendar: {
+    type: Boolean,
+    default: () => true,
+  },
 });
 
 const emit = defineEmits([
   'update:modelValue',
   'update:preset',
+  'update:filter',
   'dayClick',
   'dayHover',
 ]);
@@ -94,11 +114,15 @@ const {
   modelValue,
   presets,
   preset: currentPreset,
+  filters,
+  filter: currentFilter,
   multiplePeriod,
   fixed,
   title,
   cursorMonth,
   cursorYear,
+  dualCalendar,
+  presetReferenceDate,
 } = toRefs(props);
 
 const now = ref();
@@ -114,13 +138,54 @@ const variantStyling = computed(() => {
   return variants[props.variant];
 });
 
+const filtersOptions = computed(() => {
+  const mappedFilters = [];
+  for (const filter of filters.value as any[]) {
+    if (!filter.value) {
+      mappedFilters.push({ ...filter, value: filter.key });
+    } else {
+      mappedFilters.push(filter);
+    }
+  }
+  return mappedFilters;
+});
+
 const daysInMonth = computed(() => {
   const date = new Date(cursor.value);
-  return getDaysInMonth(date);
+  const dateMonthDays = getDaysInMonth(date);
+  if (dualCalendar.value) {
+    const secondMonth = new Date(
+      date.getFullYear(),
+      date.getMonth() + 1,
+      date.getDate()
+    );
+    const mappedMonth = mapDaysInMonth(
+      dateMonthDays,
+      date.getMonth(),
+      date.getFullYear()
+    );
+    const mappedSecondMonth = mapDaysInMonth(
+      dateMonthDays,
+      secondMonth.getMonth(),
+      secondMonth.getFullYear()
+    );
+    return [mappedMonth, mappedSecondMonth];
+  }
+  return dateMonthDays;
 });
 
 const monthHeading = computed(() => {
   try {
+    const formattedMonth = format(cursor.value, 'MMM');
+    if (dualCalendar.value) {
+      const date = new Date(cursor.value);
+      const secondMonth = new Date(
+        date.getFullYear(),
+        date.getMonth() + 1,
+        date.getDate()
+      );
+      return [formattedMonth, format(secondMonth, 'MMM')];
+    }
     return format(cursor.value, 'MMM');
   } catch (e) {
     return undefined;
@@ -128,6 +193,16 @@ const monthHeading = computed(() => {
 });
 const yearHeading = computed(() => {
   try {
+    const formattedMonth = format(cursor.value, 'yyyy');
+    if (dualCalendar.value) {
+      const date = new Date(cursor.value);
+      const secondMonth = new Date(
+        date.getFullYear(),
+        date.getMonth() + 1,
+        date.getDate()
+      );
+      return [formattedMonth, format(secondMonth, 'yyyy')];
+    }
     return format(cursor.value, 'yyyy');
   } catch (e) {
     return undefined;
@@ -136,6 +211,21 @@ const yearHeading = computed(() => {
 
 const firstWeekday = computed(() => {
   const date = new Date(cursor.value);
+  if (dualCalendar.value) {
+    const dateSecondMonth = new Date(
+      date.getFullYear(),
+      date.getMonth() + 1,
+      date.getDate()
+    );
+    date.setDate(1);
+    dateSecondMonth.setDate(1);
+    const day = date.getDay();
+    const daySecondMonth = dateSecondMonth.getDay();
+    return [
+      (day === 0 ? 7 : day) - 1,
+      (daySecondMonth === 0 ? 7 : daySecondMonth) - 1,
+    ];
+  }
   date.setDate(1);
   const day = date.getDay();
   return (day === 0 ? 7 : day) - 1;
@@ -167,6 +257,17 @@ const activeYear = computed(() => {
 //     emit('update:modelValue', newModelValue);
 //   }
 // };
+
+const mapDaysInMonth = (days: number, month: number, year: number) => {
+  const mappedMonth = [];
+  for (const day in Array(days).fill(0)) {
+    mappedMonth.push({
+      display: +day + 1,
+      value: new Date(year, month, +day + 1),
+    });
+  }
+  return mappedMonth;
+};
 
 const compareDates = (dateOne, dateTwo) => {
   const diff = dayDiff(dateOne, dateTwo);
@@ -202,7 +303,9 @@ const isFirst = (day) => {
         month: cursor.value.getMonth(),
         day,
       };
-      const tmpDate = new Date(values.year, values.month, values.day);
+      const tmpDate = dualCalendar.value
+        ? day.value
+        : new Date(values.year, values.month, values.day);
 
       const minDate = min(period as [Date, Date]);
 
@@ -226,7 +329,9 @@ const isFirst = (day) => {
       month: cursor.value.getMonth(),
       day,
     };
-    const tmpDate = new Date(values.year, values.month, values.day);
+    const tmpDate = dualCalendar.value
+      ? day.value
+      : new Date(values.year, values.month, values.day);
 
     const minDate = min(modelValue.value as [Date, Date]);
 
@@ -255,7 +360,9 @@ const isLast = (day) => {
         month: cursor.value.getMonth(),
         day,
       };
-      const tmpDate = new Date(values.year, values.month, values.day);
+      const tmpDate = dualCalendar.value
+        ? day.value
+        : new Date(values.year, values.month, values.day);
 
       const maxDate = max(period as [Date, Date]);
 
@@ -279,7 +386,9 @@ const isLast = (day) => {
       month: cursor.value.getMonth(),
       day,
     };
-    const tmpDate = new Date(values.year, values.month, values.day);
+    const tmpDate = dualCalendar.value
+      ? day.value
+      : new Date(values.year, values.month, values.day);
 
     const maxDate = max(modelValue.value as [Date, Date]);
 
@@ -303,7 +412,9 @@ const isBetweenRange = (day) => {
         month: cursor.value.getMonth(),
         day,
       };
-      const tmpDate = new Date(values.year, values.month, values.day);
+      const tmpDate = dualCalendar.value
+        ? day.value
+        : new Date(values.year, values.month, values.day);
       const minDate = min(period);
       const maxDate = max(period);
 
@@ -324,7 +435,9 @@ const isBetweenRange = (day) => {
       month: cursor.value.getMonth(),
       day,
     };
-    const tmpDate = new Date(values.year, values.month, values.day);
+    const tmpDate = dualCalendar.value
+      ? day.value
+      : new Date(values.year, values.month, values.day);
     const minDate = min(modelValue.value as [Date, Date]);
     const maxDate = max(modelValue.value as [Date, Date]);
 
@@ -338,32 +451,51 @@ const isBetweenRange = (day) => {
   return false;
 };
 
-const isSelectedDay = (day: number) => {
-  const tmpDate = new Date();
-  tmpDate.setFullYear(cursor.value.getFullYear());
-  tmpDate.setMonth(cursor.value.getMonth());
-  tmpDate.setDate(day);
-
-  if (Array.isArray(modelValue.value)) {
-    const selectedDates: Date[] = multiplePeriod.value
-      ? modelValue.value
-          .map((period) => period.map((date) => new Date(date)))
-          .flat()
-      : modelValue.value.map((date) => new Date(date));
-    for (let i = 0; i < selectedDates.length; i++) {
-      if (!compareDates(selectedDates[i], tmpDate)) {
+const isSelectedDay = (day) => {
+  if (dualCalendar.value) {
+    if (Array.isArray(modelValue.value)) {
+      const selectedDates: Date[] = multiplePeriod.value
+        ? modelValue.value
+            .map((period) => period.map((date) => new Date(date)))
+            .flat()
+        : modelValue.value.map((date) => new Date(date));
+      for (let i = 0; i < selectedDates.length; i++) {
+        if (!compareDates(selectedDates[i], day.value)) {
+          return true;
+        }
+      }
+    } else {
+      if (isSameDay(selectedDate.value, day.value)) {
         return true;
       }
     }
   } else {
-    if (isSameDay(selectedDate.value, tmpDate)) {
-      return true;
+    const tmpDate = new Date();
+    tmpDate.setFullYear(cursor.value.getFullYear());
+    tmpDate.setMonth(cursor.value.getMonth());
+    tmpDate.setDate(day);
+
+    if (Array.isArray(modelValue.value)) {
+      const selectedDates: Date[] = multiplePeriod.value
+        ? modelValue.value
+            .map((period) => period.map((date) => new Date(date)))
+            .flat()
+        : modelValue.value.map((date) => new Date(date));
+      for (let i = 0; i < selectedDates.length; i++) {
+        if (!compareDates(selectedDates[i], tmpDate)) {
+          return true;
+        }
+      }
+    } else {
+      if (isSameDay(selectedDate.value, tmpDate)) {
+        return true;
+      }
     }
   }
 };
 
 function setQuickAction(preset: Preset) {
-  const presetValue = preset.eval();
+  const presetValue = preset.eval(presetReferenceDate.value);
   emit('update:modelValue', presetValue);
   emit('update:preset', preset.key);
 
@@ -410,7 +542,9 @@ const isFuture = (date: Date) => {
 };
 
 const dayAllowed = (day) => {
-  const date = new Date(cursor.value).setDate(day);
+  const date = dualCalendar.value
+    ? new Date(day.value)
+    : new Date(cursor.value).setDate(day);
   if (!today.value && isSameDay(now.value, date)) {
     return false;
   }
@@ -437,7 +571,10 @@ const daySelect = (day) => {
     month: cursor.value.getMonth(),
     day,
   };
-  const tmpDate = new Date(values.year, values.month, values.day);
+  const tmpDate = dualCalendar.value
+    ? day.value
+    : new Date(values.year, values.month, values.day);
+
   cursor.value = tmpDate;
 
   if (Array.isArray(modelValue.value)) {
@@ -514,7 +651,7 @@ onMounted(() => {
         cursor.value = new Date(modelValue.value[0][1] || new Date());
         selectedDate.value = cursor.value;
       } else {
-        cursor.value = new Date((modelValue.value[1] as Date) || new Date());
+        cursor.value = new Date((modelValue.value[0] as Date) || new Date());
         selectedDate.value = cursor.value;
       }
     } else {
@@ -635,6 +772,23 @@ const getPresetStyle = (preset: Preset) => {
   return '';
 };
 
+const changeFilter = (filter: number | string) => {
+  emit('update:filter', filter);
+  const foundFilter: any = filters.value.find(
+    (filter: any) => filter.value === filter || filter.key === filter
+  );
+  if (foundFilter && foundFilter.eval) {
+    const presetValue = foundFilter.eval(presetReferenceDate.value);
+
+    if (Array.isArray(presetValue)) {
+      cursor.value = presetValue[1];
+    } else {
+      cursor.value = presetValue;
+    }
+    emit('update:modelValue', presetValue);
+  }
+};
+
 // watch(currentPreset, (newVal, oldValue) => {
 //   if (newVal !== oldValue && currentPreset.value) {
 //     const preset = defaultPresets.find((d) => d.key === currentPreset.value);
@@ -655,26 +809,40 @@ defineExpose({
 
 <template>
   <div class="relative flex w-full select-none flex-col sm:flex-row">
-    <div
-      v-if="presets.length && !fixed"
-      class="relative hidden min-h-0 w-48 border-r border-gray-200 dark:border-gray-700 lg:block"
-    >
-      <div class="absolute inset-0 overflow-auto py-2">
-        <button
-          v-for="(preset, index) in presets"
-          :key="index"
-          type="button"
-          class="w-full rounded-lg px-4 py-2 text-left hover:bg-gray-100 dark:hover:bg-white/5"
-          :class="getPresetStyle(preset)"
-          @click="setQuickAction(preset)"
-        >
-          {{ preset.title }}
-        </button>
+    <div class="flex flex-col relative w-48">
+      <div v-if="filters.length">
+        <RobustSelect
+          :options="filtersOptions"
+          :model-value="currentFilter"
+          :border="false"
+          @update:model-value="changeFilter"
+          class="w-full border-b pt-3 pl-1"
+        />
+      </div>
+      <div
+        v-if="presets.length && !fixed"
+        class="relative hidden min-h-0 h-full w-full border-r border-gray-200 dark:border-gray-700 lg:block"
+      >
+        <div class="absolute inset-0 overflow-auto py-2">
+          <button
+            v-for="(preset, index) in presets"
+            :key="index"
+            type="button"
+            class="w-full rounded-lg px-4 py-2 text-left hover:bg-gray-100 dark:hover:bg-white/5"
+            :class="getPresetStyle(preset)"
+            @click="setQuickAction(preset)"
+          >
+            {{ preset.title }}
+          </button>
+        </div>
       </div>
     </div>
 
     <section class="p-4 dark:border-gray-700">
-      <div class="mb-4 flex items-center text-center text-lg font-semibold">
+      <div
+        v-if="!dualCalendar"
+        class="mb-4 flex items-center text-center text-lg font-semibold"
+      >
         <div v-if="!fixed" class="flex flex-1">
           <button
             type="button"
@@ -733,7 +901,7 @@ defineExpose({
         </button>
       </div>
 
-      <div class="relative w-full">
+      <div v-if="!dualCalendar" class="relative w-full">
         <div
           v-if="showMonthSelectionActive"
           class="absolute inset-0 z-10 grid grid-cols-3 gap-4"
@@ -840,30 +1008,330 @@ defineExpose({
           </button>
         </div>
       </div>
+      <div v-else class="flex gap-x-4">
+        <div>
+          <div
+            v-if="showMonthSelectionActive"
+            class="absolute inset-0 z-10 grid grid-cols-3 gap-4"
+          >
+            <button
+              v-for="(month, index) in months"
+              :key="index"
+              type="button"
+              class="flex items-center justify-center rounded-lg py-2 text-center"
+              :class="[
+                activeMonth === index
+                  ? variantStyling.background
+                  : 'hover:bg-gray-100 dark:hover:bg-gray-700',
+              ]"
+              @click="
+                () => {
+                  setMonth(index);
+                  hideMonthSelection();
+                }
+              "
+            >
+              {{ month.title }}
+            </button>
+          </div>
+
+          <div
+            v-if="showYearSelectionActive"
+            class="absolute inset-0 z-10 flex flex-col gap-2 overflow-y-auto"
+          >
+            <button
+              v-for="year in yearSelectionYears"
+              :ref="(ref) => (refYearEntry[year] = ref)"
+              :key="year"
+              type="button"
+              class="rounded-lg py-2 text-center tabular-nums"
+              :class="[
+                activeYear === year
+                  ? variantStyling.background
+                  : 'hover:bg-gray-100 dark:hover:bg-gray-700',
+              ]"
+              :data-year="year"
+              @click="
+                () => {
+                  setYear(year);
+                  hideYearSelection();
+                }
+              "
+            >
+              {{ year }}
+            </button>
+          </div>
+          <div class="mb-4 flex items-center text-center text-lg font-semibold">
+            <div class="flex flex-1">
+              <button
+                v-if="!fixed"
+                type="button"
+                class="flex h-8 w-8 items-center justify-center rounded-lg text-gray-800 hover:bg-gray-100 hover:text-gray-800 active:bg-gray-100 dark:text-gray-400 dark:hover:bg-white/5 dark:hover:text-gray-100"
+                @click="subMonth"
+              >
+                <PhCaretLeft type="chevron-left" size="14" weight="bold" />
+              </button>
+              <div v-if="!fixed" class="flex flex-1 justify-center mr-8">
+                <button
+                  type="button"
+                  class="flex h-8 items-center rounded-lg px-2 tabular-nums hover:bg-gray-100 dark:hover:bg-white/5"
+                  @click="
+                    () => {
+                      showMonthSelection();
+                      hideYearSelection();
+                    }
+                  "
+                >
+                  {{ monthHeading[0] }}
+                </button>
+                <button
+                  type="button"
+                  class="flex h-8 items-center rounded-lg px-2 tabular-nums hover:bg-gray-100 dark:hover:bg-white/5"
+                  @click="
+                    () => {
+                      showYearSelection();
+                      hideMonthSelection();
+                    }
+                  "
+                >
+                  {{ yearHeading[0] }}
+                </button>
+              </div>
+              <div v-else class="flex flex-1 justify-center mr-8">
+                <div v-if="title" class="h-8 items-center px-2 tabular-nums">
+                  {{ title }}
+                </div>
+                <div v-else class="flex">
+                  <div class="h-8 px-2 tabular-nums">
+                    {{ monthHeading[0] }}
+                  </div>
+                  <div class="h-8 px-2 tabular-nums">
+                    {{ yearHeading[0] }}
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div
+            class="grid grid-cols-7 gap-y-1"
+            :class="[
+              {
+                'opacity-0':
+                  showMonthSelectionActive || showYearSelectionActive,
+              },
+            ]"
+          >
+            <div
+              v-for="(day, idx) in getDayNames()"
+              :key="idx"
+              class="pb-2 text-center text-sm text-gray-400 dark:text-gray-400"
+            >
+              {{ day.charAt(0).toUpperCase() }}
+            </div>
+            <div
+              v-for="offset in firstWeekday[0]"
+              :key="offset + '_offset'"
+            ></div>
+            <button
+              v-for="day in daysInMonth[0]"
+              :key="day.display + '_day'"
+              type="button"
+              class="relative"
+              :disabled="!dayAllowed(day)"
+              :class="[isBetweenRange(day) ? variantStyling.background : '']"
+              @click="daySelect(day)"
+              @mouseover="dayHover(day)"
+            >
+              <div
+                v-if="isLast(day) || isFirst(day)"
+                class="absolute z-0 h-full"
+                :class="[
+                  variantStyling.background,
+                  isFirst(day)
+                    ? 'right-0 w-1/2'
+                    : isLast(day)
+                      ? 'left-0 w-1/2'
+                      : '',
+                ]"
+              ></div>
+              <div
+                class="relative z-10 flex h-8 w-8 min-w-8 items-center justify-center rounded-lg text-sm font-medium tabular-nums"
+                :class="[
+                  isBetweenRange(day) ||
+                  isLast(day) ||
+                  isFirst(day) ||
+                  isSelectedDay(day)
+                    ? `rounded-0 ${variantStyling.background}`
+                    : 'hover:bg-gray-100 dark:hover:bg-white/5',
+                ]"
+              >
+                {{ day.display }}
+              </div>
+            </button>
+          </div>
+        </div>
+        <div>
+          <div
+            v-if="showMonthSelectionActive"
+            class="absolute inset-0 z-10 grid grid-cols-3 gap-4"
+          >
+            <button
+              v-for="(month, index) in months"
+              :key="index"
+              type="button"
+              class="flex items-center justify-center rounded-lg py-2 text-center"
+              :class="[
+                activeMonth === index
+                  ? variantStyling.background
+                  : 'hover:bg-gray-100 dark:hover:bg-gray-700',
+              ]"
+              @click="
+                () => {
+                  setMonth(index);
+                  hideMonthSelection();
+                }
+              "
+            >
+              {{ month.title }}
+            </button>
+          </div>
+
+          <div
+            v-if="showYearSelectionActive"
+            class="absolute inset-0 z-10 flex flex-col gap-2 overflow-y-auto"
+          >
+            <button
+              v-for="year in yearSelectionYears"
+              :ref="(ref) => (refYearEntry[year] = ref)"
+              :key="year"
+              type="button"
+              class="rounded-lg py-2 text-center tabular-nums"
+              :class="[
+                activeYear === year
+                  ? variantStyling.background
+                  : 'hover:bg-gray-100 dark:hover:bg-gray-700',
+              ]"
+              :data-year="year"
+              @click="
+                () => {
+                  setYear(year);
+                  hideYearSelection();
+                }
+              "
+            >
+              {{ year }}
+            </button>
+          </div>
+          <div class="mb-4 flex items-center text-center text-lg font-semibold">
+            <div class="flex flex-1">
+              <div v-if="!fixed" class="flex flex-1 justify-center ml-8">
+                <button
+                  type="button"
+                  class="flex h-8 items-center rounded-lg px-2 tabular-nums hover:bg-gray-100 dark:hover:bg-white/5"
+                  @click="
+                    () => {
+                      showMonthSelection();
+                      hideYearSelection();
+                    }
+                  "
+                >
+                  {{ monthHeading[1] }}
+                </button>
+                <button
+                  type="button"
+                  class="flex h-8 items-center rounded-lg px-2 tabular-nums hover:bg-gray-100 dark:hover:bg-white/5"
+                  @click="
+                    () => {
+                      showYearSelection();
+                      hideMonthSelection();
+                    }
+                  "
+                >
+                  {{ yearHeading[1] }}
+                </button>
+              </div>
+              <div v-else class="flex flex-1 justify-center ml-8">
+                <div v-if="title" class="h-8 items-center px-2 tabular-nums">
+                  {{ title }}
+                </div>
+                <div v-else class="flex">
+                  <div class="h-8 px-2 tabular-nums">
+                    {{ monthHeading[1] }}
+                  </div>
+                  <div class="h-8 px-2 tabular-nums">
+                    {{ yearHeading[1] }}
+                  </div>
+                </div>
+              </div>
+              <button
+                v-if="!fixed"
+                type="button"
+                class="flex h-8 w-8 items-center justify-center rounded-lg text-gray-800 hover:bg-gray-100 hover:text-gray-800 active:bg-gray-100 dark:text-gray-400 dark:hover:bg-white/5 dark:hover:text-gray-100"
+                @click="addMonth"
+              >
+                <PhCaretRight type="chevron-right" size="14" weight="bold" />
+              </button>
+            </div>
+          </div>
+          <div
+            class="grid grid-cols-7 gap-y-1"
+            :class="[
+              {
+                'opacity-0':
+                  showMonthSelectionActive || showYearSelectionActive,
+              },
+            ]"
+          >
+            <div
+              v-for="(day, idx) in getDayNames()"
+              :key="idx"
+              class="pb-2 text-center text-sm text-gray-400 dark:text-gray-400"
+            >
+              {{ day.charAt(0).toUpperCase() }}
+            </div>
+            <div
+              v-for="offset in firstWeekday[1]"
+              :key="offset + '_offset'"
+            ></div>
+            <button
+              v-for="day in daysInMonth[1]"
+              :key="day + '_day'"
+              type="button"
+              class="relative"
+              :disabled="!dayAllowed(day)"
+              :class="[isBetweenRange(day) ? variantStyling.background : '']"
+              @click="daySelect(day)"
+              @mouseover="dayHover(day)"
+            >
+              <div
+                v-if="isLast(day) || isFirst(day)"
+                class="absolute z-0 h-full"
+                :class="[
+                  variantStyling.background,
+                  isFirst(day)
+                    ? 'right-0 w-1/2'
+                    : isLast(day)
+                      ? 'left-0 w-1/2'
+                      : '',
+                ]"
+              ></div>
+              <div
+                class="relative z-10 flex h-8 w-8 min-w-8 items-center justify-center rounded-lg text-sm font-medium tabular-nums"
+                :class="[
+                  isBetweenRange(day) ||
+                  isLast(day) ||
+                  isFirst(day) ||
+                  isSelectedDay(day)
+                    ? `rounded-0 ${variantStyling.background}`
+                    : 'hover:bg-gray-100 dark:hover:bg-white/5',
+                ]"
+              >
+                {{ day.display }}
+              </div>
+            </button>
+          </div>
+        </div>
+      </div>
     </section>
-    <div
-      v-if="Array.isArray(modelValue) && !multiplePeriod && !fixed"
-      class="flex flex-shrink-0 flex-col items-start border-gray-200 p-4 dark:border-gray-700 sm:border-l"
-    >
-      <RobustDatePicker
-        v-model="modelValue[0] as Date"
-        title="From"
-        condensed
-        class="mb-4 w-full"
-        :past="past"
-        :future="future"
-        @change="() => emit('update:preset', undefined)"
-      />
-      <RobustDatePicker
-        v-model="modelValue[1] as Date"
-        title="To"
-        condensed
-        class="mb-4 w-full"
-        :past="past"
-        :future="future"
-        @change="() => emit('update:preset', undefined)"
-      />
-      <slot />
-    </div>
   </div>
 </template>
