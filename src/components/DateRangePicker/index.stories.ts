@@ -29,11 +29,31 @@ const meta: Meta<typeof DaterangePicker> = {
     onChange: {},
   },
   args: {
-    title: 'Date range picker',
+    // title: 'Date range picker',
     condensed: false,
     readonly: false,
     enableComparison: true,
     enablePerspective: true,
+    filters: [
+      {
+        title: 'On the books',
+        value: 'on_the_books',
+      },
+      {
+        title: 'Budget',
+        value: 'budget',
+      },
+    ],
+    comparisonPresets: [
+      {
+        title: 'STLY by timeframe',
+        value: 'STLY_timeframe',
+      },
+      {
+        title: 'LY ACT by timeframe',
+        value: 'LY_ACT_TIMEFRAME',
+      },
+    ],
   },
 };
 
@@ -45,15 +65,15 @@ export const Default: Story = {
   render: (args) => ({
     components: { DaterangePicker },
     setup: () => {
-      const dateRange = ref([new Date(), addDays(new Date(), 30)]);
-      const dateRangeComparison = ref(undefined);
+      const dateRange = ref(undefined);
+      const dateRangeComparison = ref([]);
       const perspectiveDate = ref(undefined);
       const perspectiveDateComparison = ref(undefined);
       const activePreset = ref(undefined);
       const activePresetComparison = ref(undefined);
       const perspectivePreset = ref(undefined);
       const perspectivePresetComparison = ref(undefined);
-      const showComparison = ref(false);
+      const showComparison = ref(true);
 
       return {
         args,

@@ -87,6 +87,10 @@ const props = defineProps({
     type: [String, Number, Boolean, Array] as PropType<Value | Array<Value>>,
     default: undefined,
   },
+  border: {
+    type: Boolean,
+    default: () => true,
+  },
   lazy: {
     type: Boolean,
     default: false,
@@ -105,7 +109,7 @@ const emit = defineEmits([
 const refSelectInput = ref();
 
 const refSelectWrapper = ref();
-const { options, modelValue } = toRefs(props);
+const { options, modelValue, border } = toRefs(props);
 
 const anchorRef = ref();
 
@@ -211,7 +215,6 @@ function selectItem(item) {
     emit('change', updatedValue);
     emit('update:modelValue', updatedValue);
   } else {
-    emit('input', item.value);
     if (item.value !== props.modelValue) {
       emit('change', item.value);
       emit('update:modelValue', item.value);
@@ -222,8 +225,6 @@ function selectItem(item) {
     });
   }
 }
-
-console.log(refSelectWrapper);
 
 function resetFields() {
   search.value = '';
@@ -310,6 +311,7 @@ function deselectAll() {
     :class="$props.class"
     :readonly="readonly"
     :condensed="condensed"
+    :box-class="!border && 'border-0 focus-within:ring-0'"
     v-bind="$attrs"
     @click.stop="openDropdown"
     @focus.stop="openDropdown"
