@@ -51,6 +51,14 @@ const props = defineProps({
     type: Object as PropType<[Date, Date] | Date | [Date, Date][]>,
     default: () => new Date(),
   },
+  enablePreset: {
+    type: Boolean,
+    default: () => true,
+  },
+  readOnly: {
+    type: Boolean,
+    default: () => false,
+  },
   presets: {
     type: Array as PropType<Array<Preset>>,
     default: () => defaultPresets.filter((d) => d.type === 'range'),
@@ -70,8 +78,8 @@ const props = defineProps({
     default: () => undefined,
   },
   presetReferenceDate: {
-    type: Date,
-    default: () => new Date(),
+    type: Object as PropType<[Date, Date]>,
+    default: () => undefined,
   },
   multiplePeriod: {
     type: Boolean,
@@ -123,6 +131,7 @@ const {
   cursorYear,
   dualCalendar,
   presetReferenceDate,
+  readOnly,
 } = toRefs(props);
 
 const now = ref();
@@ -562,7 +571,7 @@ const dayHover = (day) => {
 };
 
 const daySelect = (day) => {
-  if (!dayAllowed(day)) {
+  if (readOnly.value || !dayAllowed(day)) {
     return;
   }
 
@@ -775,7 +784,7 @@ const getPresetStyle = (preset: Preset) => {
 const changeFilter = (filter: number | string) => {
   emit('update:filter', filter);
   const foundFilter: any = filters.value.find(
-    (filter: any) => filter.value === filter || filter.key === filter
+    (filterObj: any) => filterObj.value === filter || filterObj.key === filter
   );
   if (foundFilter && foundFilter.eval) {
     const presetValue = foundFilter.eval(presetReferenceDate.value);
@@ -808,19 +817,25 @@ defineExpose({
 </script>
 
 <template>
-  <div class="relative flex w-full select-none flex-col sm:flex-row">
-    <div class="flex flex-col relative w-48">
+  <div
+    class="relative flex w-full select-none"
+    :class="enablePreset ? 'flex-col sm:flex-row' : 'flex-col'"
+  >
+    <div
+      class="flex flex-col relative w-48"
+      :class="!enablePreset ? 'w-full px-4' : 'pl-1'"
+    >
       <div v-if="filters.length">
         <RobustSelect
           :options="filtersOptions"
           :model-value="currentFilter"
           :border="false"
           @update:model-value="changeFilter"
-          class="w-full border-b pt-3 pl-1"
+          class="w-full border-b border-gray-200 dark:border-gray-700 pt-3"
         />
       </div>
       <div
-        v-if="presets.length && !fixed"
+        v-if="presets.length && enablePreset && !fixed"
         class="relative hidden min-h-0 h-full w-full border-r border-gray-200 dark:border-gray-700 lg:block"
       >
         <div class="absolute inset-0 overflow-auto py-2">
@@ -1008,59 +1023,59 @@ defineExpose({
           </button>
         </div>
       </div>
-      <div v-else class="flex gap-x-4">
-        <div>
-          <div
-            v-if="showMonthSelectionActive"
-            class="absolute inset-0 z-10 grid grid-cols-3 gap-4"
+      <div v-else class="flex gap-x-4 relative">
+        <div
+          v-if="showMonthSelectionActive"
+          class="absolute inset-0 z-10 top-10 grid grid-cols-3 gap-4"
+        >
+          <button
+            v-for="(month, index) in months"
+            :key="index"
+            type="button"
+            class="flex items-center justify-center rounded-lg py-2 text-center"
+            :class="[
+              activeMonth === index
+                ? variantStyling.background
+                : 'hover:bg-gray-100 dark:hover:bg-gray-700',
+            ]"
+            @click="
+              () => {
+                setMonth(index);
+                hideMonthSelection();
+              }
+            "
           >
-            <button
-              v-for="(month, index) in months"
-              :key="index"
-              type="button"
-              class="flex items-center justify-center rounded-lg py-2 text-center"
-              :class="[
-                activeMonth === index
-                  ? variantStyling.background
-                  : 'hover:bg-gray-100 dark:hover:bg-gray-700',
-              ]"
-              @click="
-                () => {
-                  setMonth(index);
-                  hideMonthSelection();
-                }
-              "
-            >
-              {{ month.title }}
-            </button>
-          </div>
+            {{ month.title }}
+          </button>
+        </div>
 
-          <div
-            v-if="showYearSelectionActive"
-            class="absolute inset-0 z-10 flex flex-col gap-2 overflow-y-auto"
+        <div
+          v-if="showYearSelectionActive"
+          class="absolute inset-0 z-10 top-10 flex flex-col gap-2 overflow-y-auto"
+        >
+          <button
+            v-for="year in yearSelectionYears"
+            :ref="(ref) => (refYearEntry[year] = ref)"
+            :key="year"
+            type="button"
+            class="rounded-lg py-2 text-center tabular-nums"
+            :class="[
+              activeYear === year
+                ? variantStyling.background
+                : 'hover:bg-gray-100 dark:hover:bg-gray-700',
+            ]"
+            :data-year="year"
+            @click="
+              () => {
+                setYear(year);
+                hideYearSelection();
+              }
+            "
           >
-            <button
-              v-for="year in yearSelectionYears"
-              :ref="(ref) => (refYearEntry[year] = ref)"
-              :key="year"
-              type="button"
-              class="rounded-lg py-2 text-center tabular-nums"
-              :class="[
-                activeYear === year
-                  ? variantStyling.background
-                  : 'hover:bg-gray-100 dark:hover:bg-gray-700',
-              ]"
-              :data-year="year"
-              @click="
-                () => {
-                  setYear(year);
-                  hideYearSelection();
-                }
-              "
-            >
-              {{ year }}
-            </button>
-          </div>
+            {{ year }}
+          </button>
+        </div>
+        <div>
           <div class="mb-4 flex items-center text-center text-lg font-semibold">
             <div class="flex flex-1">
               <button
@@ -1171,57 +1186,6 @@ defineExpose({
           </div>
         </div>
         <div>
-          <div
-            v-if="showMonthSelectionActive"
-            class="absolute inset-0 z-10 grid grid-cols-3 gap-4"
-          >
-            <button
-              v-for="(month, index) in months"
-              :key="index"
-              type="button"
-              class="flex items-center justify-center rounded-lg py-2 text-center"
-              :class="[
-                activeMonth === index
-                  ? variantStyling.background
-                  : 'hover:bg-gray-100 dark:hover:bg-gray-700',
-              ]"
-              @click="
-                () => {
-                  setMonth(index);
-                  hideMonthSelection();
-                }
-              "
-            >
-              {{ month.title }}
-            </button>
-          </div>
-
-          <div
-            v-if="showYearSelectionActive"
-            class="absolute inset-0 z-10 flex flex-col gap-2 overflow-y-auto"
-          >
-            <button
-              v-for="year in yearSelectionYears"
-              :ref="(ref) => (refYearEntry[year] = ref)"
-              :key="year"
-              type="button"
-              class="rounded-lg py-2 text-center tabular-nums"
-              :class="[
-                activeYear === year
-                  ? variantStyling.background
-                  : 'hover:bg-gray-100 dark:hover:bg-gray-700',
-              ]"
-              :data-year="year"
-              @click="
-                () => {
-                  setYear(year);
-                  hideYearSelection();
-                }
-              "
-            >
-              {{ year }}
-            </button>
-          </div>
           <div class="mb-4 flex items-center text-center text-lg font-semibold">
             <div class="flex flex-1">
               <div v-if="!fixed" class="flex flex-1 justify-center ml-8">

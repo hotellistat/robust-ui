@@ -12,7 +12,14 @@ import {
 import { PhCaretLeft, PhCaretRight, PhXCircle } from '@phosphor-icons/vue';
 import { computed, PropType, ref, watch } from 'vue';
 import defaultPresets, { Preset } from '../Calendar/presets';
-import { addDays, differenceInDays, subDays } from 'date-fns';
+import {
+  addDays,
+  addWeeks,
+  differenceInDays,
+  getDay,
+  startOfYear,
+  subDays,
+} from 'date-fns';
 
 const props = defineProps({
   title: {
@@ -50,6 +57,30 @@ const props = defineProps({
   enablePerspective: {
     type: Boolean,
     default: false,
+  },
+  enableMainPerspective: {
+    type: Boolean,
+    default: () => true,
+  },
+  enableComparisonPerspective: {
+    type: Boolean,
+    default: () => true,
+  },
+  enableMainPreset: {
+    type: Boolean,
+    default: () => false,
+  },
+  enableComparisonPreset: {
+    type: Boolean,
+    default: () => false,
+  },
+  readOnlyMainCalendar: {
+    type: Boolean,
+    default: () => false,
+  },
+  readOnlyComparisonCalendar: {
+    type: Boolean,
+    default: () => false,
   },
   error: {
     type: String,
@@ -91,10 +122,6 @@ const props = defineProps({
     type: Array as PropType<Preset[]>,
     default: () => defaultPresets,
   },
-  comparisonPresets: {
-    type: Array as PropType<Array<{ title: string; value: number | string }>>,
-    default: () => [],
-  },
   filters: {
     type: Array as PropType<Array<{ title: string; value: number | string }>>,
     default: () => [],
@@ -104,7 +131,9 @@ const props = defineProps({
     default: () => undefined,
   },
   comparisonFilters: {
-    type: Array as PropType<Array<{ title: string; value: number | string }>>,
+    type: Array as PropType<
+      Array<{ title: string; value: number | string } | Preset>
+    >,
     default: () => [],
   },
   comparisonFilter: {
@@ -141,6 +170,9 @@ const emit = defineEmits([
   'update:perspectivePreset',
   'update:perspectivePresetComparison',
   'update:showComparison',
+  'update:filter',
+  'update:comparisonFilter',
+  'comparisonCleared',
   'change',
 ]);
 
@@ -159,7 +191,6 @@ const presetsComparisonComputed = computed(() =>
 );
 
 const filtersComputed = computed(() => props.filters || []);
-const comparisonPresets = computed(() => props.comparisonPresets || []);
 
 // const enabledHistory = ref(false);
 // const displayCompare = ref();
@@ -267,11 +298,20 @@ watch(showComparisonPicker, (value) => {
   }
 });
 
-const stagedActiveFilter = ref<string | number>();
+const stagedActiveMainFilter = ref<string | number>();
 watch(
   () => props.filter,
   (value) => {
-    stagedActiveFilter.value = value;
+    stagedActiveMainFilter.value = value;
+  },
+  { immediate: true }
+);
+
+const stagedActiveComparisonFilter = ref<string | number>();
+watch(
+  () => props.comparisonFilter,
+  (value) => {
+    stagedActiveComparisonFilter.value = value;
   },
   { immediate: true }
 );
@@ -336,14 +376,49 @@ const displayPreset = computed(() => {
   return undefined;
 });
 
-const displayComparisonPreset = computed(() => {
-  if (!props.dateRangeComparison) {
+const computedComparisonFilterPreset = computed(() => {
+  if (!props.comparisonFilter) {
     return undefined;
   }
-  if (props.activePresetComparison) {
+
+  const foundFilter = comparisonDataTypesComputed.value.find(
+    (f) =>
+      f.key === props.comparisonFilter || f.value === props.comparisonFilter
+  );
+
+  return foundFilter;
+});
+
+const displayComparisonPreset = computed(() => {
+  if (
+    !props.dateRangeComparison ||
+    props.dateRangeComparison.length < 2 ||
+    (computedComparisonFilterPreset.value &&
+      !computedComparisonFilterPreset.value.eval &&
+      (!props.dateRangeComparison || props.dateRangeComparison.length < 2))
+  ) {
+    return undefined;
+  }
+
+  if (props.comparisonFilter) {
+    const preset: any = props.comparisonFilters.find(
+      (f: Preset) => f.key === props.comparisonFilter
+    );
+
+    if (!preset) {
+      return undefined;
+    }
+
+    return `vs. ${preset?.title}`;
+  } else if (props.activePresetComparison) {
     const preset = props.presetsComparison.find(
       (d) => d.key === props.activePresetComparison
     );
+
+    if (!preset) {
+      return undefined;
+    }
+
     return `vs. ${preset?.title}`;
   }
 
@@ -378,6 +453,7 @@ function subTimeframeFromDate() {
   ];
 
   stagedDateRange.value = refDate;
+  stagedActivePreset.value && (stagedActivePreset.value = undefined);
   saveTime();
 }
 
@@ -438,7 +514,13 @@ const wrapperAttrs = computed(() => {
 });
 
 const filterUpdated = (filterValue: string | number) => {
-  stagedActiveFilter.value = filterValue;
+  stagedActiveMainFilter.value = filterValue;
+};
+
+const filterComparisonUpdated = (filterValue: string | number) => {
+  emit('update:comparisonFilter', filterValue);
+  stagedActiveComparisonFilter.value = filterValue;
+  saveTime();
 };
 
 const openMainModal = () => {
@@ -452,8 +534,9 @@ const openComparisonModal = () => {
 };
 
 const clearComparisonDate = () => {
-  stagedDateRangeComparison.value = [];
   stagedActivePresetComparison.value = undefined;
+  stagedActiveComparisonFilter.value = undefined;
+  stagedDateRangeComparison.value = [];
   saveTime();
 };
 
@@ -472,10 +555,25 @@ const saveTime = async () => {
     'update:perspectivePresetComparison',
     stagedPerspectivePresetComparison.value
   );
+  emit('update:filter', stagedActiveMainFilter.value);
+  emit('update:comparisonFilter', stagedActiveComparisonFilter.value);
+  emit('comparisonCleared');
   emit('change', stagedDateRange.value);
   emit('blur');
   openMain.value = false;
 };
+
+const stagedPresetReferenceDate = computed(() => {
+  if (stagedDateRange.value && stagedDateRange.value.length === 2) {
+    return stagedDateRange.value;
+  } else {
+    return undefined;
+  }
+});
+
+const comparisonDataTypesComputed = computed<any[]>(
+  () => props.comparisonFilters
+);
 </script>
 
 <template>
@@ -491,7 +589,7 @@ const saveTime = async () => {
       </RobustButton>
       <RobustInputWrapper
         ref="inputWrapperMainRef"
-        box-class="items-center border-0"
+        box-class="items-center border-0 focus-within:ring-0"
         :hint="hint"
         :error="error"
         :condensed="condensed"
@@ -550,15 +648,15 @@ const saveTime = async () => {
             v-model:preset="stagedActivePreset"
             :presets="presetsMainComputed"
             :filters="filtersComputed"
-            :filter="stagedActiveFilter"
+            :filter="stagedActiveMainFilter"
             :future="future"
             :past="past"
-            @update:filter="filterUpdated"
             dual-calendar
+            @update:filter="filterUpdated"
           >
           </RobustCalendar>
           <div
-            v-if="enablePerspective"
+            v-if="enablePerspective && enableMainPerspective"
             class="flex w-full justify-end gap-x-8 items-center py-2 pr-4"
           >
             <div>
@@ -579,14 +677,19 @@ const saveTime = async () => {
           <RobustCalendar
             v-model="stagedDateRangeComparison"
             v-model:preset="stagedActivePresetComparison"
-            :filters="comparisonPresets"
-            variant="secondary"
+            v-model:presetReferenceDate="stagedPresetReferenceDate"
+            v-model:filter="stagedActiveComparisonFilter"
+            :filters="comparisonDataTypesComputed"
             :presets="presetsComparisonComputed"
             :future="future"
             :past="past"
+            :enable-preset="props.enableComparisonPreset"
+            :read-only="props.readOnlyComparisonCalendar"
+            variant="secondary"
+            @update:filter="filterComparisonUpdated"
           />
           <div
-            v-if="enablePerspective"
+            v-if="enablePerspective && enableComparisonPerspective"
             class="flex w-full justify-end gap-x-8 items-center py-2 pr-4"
           >
             <div>
@@ -615,13 +718,13 @@ const saveTime = async () => {
     <RobustInputWrapper
       v-if="enableComparison"
       ref="inputWrapperComparisonRef"
-      box-class="border-0 overflow-visible"
+      box-class="border-0 overflow-visible focus-within:ring-0"
       :condensed="condensed"
       @click.stop="openComparisonModal"
     >
       <RobustButton
         variant="transparent"
-        class="font-normal relative overflow-visible"
+        class="font-normal relative overflow-visible focus:ring-0"
         :class="condensed ? 'text-[0.6rem]' : 'text-xs'"
         :disabled="!props.dateRange || props.dateRange.length < 2"
         :condensed="condensed"

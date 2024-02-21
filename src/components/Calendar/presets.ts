@@ -2,7 +2,7 @@ export interface Preset {
   title: string;
   key: string;
   type: string;
-  eval: (date?: Date) => [Date, Date] | Date;
+  eval: (range?: [Date, Date]) => [Date, Date] | Date;
 }
 
 import {
