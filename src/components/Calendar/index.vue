@@ -53,7 +53,7 @@ const props = defineProps({
   },
   enablePreset: {
     type: Boolean,
-    default: () => true,
+    default: () => false,
   },
   readOnly: {
     type: Boolean,
@@ -103,7 +103,7 @@ const props = defineProps({
   },
   dualCalendar: {
     type: Boolean,
-    default: () => true,
+    default: () => false,
   },
 });
 
@@ -782,11 +782,16 @@ const getPresetStyle = (preset: Preset) => {
 };
 
 const changeFilter = (filter: number | string) => {
-  emit('update:filter', filter);
   const foundFilter: any = filters.value.find(
     (filterObj: any) => filterObj.value === filter || filterObj.key === filter
   );
-  if (foundFilter && foundFilter.eval) {
+
+  if (!foundFilter || foundFilter.type === 'disabled') {
+    return;
+  }
+
+  emit('update:filter', filter);
+  if (foundFilter.eval) {
     const presetValue = foundFilter.eval(presetReferenceDate.value);
 
     if (Array.isArray(presetValue)) {
