@@ -14,11 +14,17 @@ import { computed, PropType, ref, watch } from 'vue';
 import defaultPresets, { Preset } from '../Calendar/presets';
 import {
   addDays,
-  addWeeks,
+  addMonths,
+  addYears,
   differenceInDays,
-  getDay,
+  endOfMonth,
+  endOfYear,
+  isSameDay,
+  startOfMonth,
   startOfYear,
   subDays,
+  subMonths,
+  subYears,
 } from 'date-fns';
 
 const props = defineProps({
@@ -40,11 +46,11 @@ const props = defineProps({
   },
   enableComparison: {
     type: Boolean,
-    default: false,
+    default: () => false,
   },
   showComparison: {
     type: Boolean,
-    default: false,
+    default: () => false,
   },
   perspectiveDate: {
     type: Date,
@@ -56,7 +62,7 @@ const props = defineProps({
   },
   enablePerspective: {
     type: Boolean,
-    default: false,
+    default: () => false,
   },
   enableMainPerspective: {
     type: Boolean,
@@ -336,12 +342,26 @@ const displayDate = computed(() => {
   }
 
   const realDate = props.dateRange;
-  const formatter = Intl.DateTimeFormat(navigator.language, {
-    day: '2-digit',
-    month: '2-digit',
-    year: 'numeric',
-  });
-  return formatter.format(realDate[0]) + ' - ' + formatter.format(realDate[1]);
+  if (isDaterangeFullMonth(realDate) || displayPreset.value) {
+    const monthFormatter = Intl.DateTimeFormat(navigator.language, {
+      month: 'short',
+    });
+
+    return (
+      monthFormatter.format(realDate[0]) + '. ' + realDate[0].getFullYear()
+    );
+  } else if (isDaterangeFullYear(realDate)) {
+    return realDate[0].getFullYear();
+  } else {
+    const formatter = Intl.DateTimeFormat(navigator.language, {
+      day: '2-digit',
+      month: '2-digit',
+      year: 'numeric',
+    });
+    return (
+      formatter.format(realDate[0]) + ' - ' + formatter.format(realDate[1])
+    );
+  }
 });
 
 const displayComparisonDate = computed(() => {
@@ -354,14 +374,32 @@ const displayComparisonDate = computed(() => {
   }
 
   const realDate = props.dateRangeComparison;
-  const formatter = Intl.DateTimeFormat(navigator.language, {
-    day: '2-digit',
-    month: '2-digit',
-    year: 'numeric',
-  });
-  return `vs. ${formatter.format(realDate[0])} - ${formatter.format(
-    realDate[1]
-  )}`;
+  if (isDaterangeFullMonth(realDate) || displayComparisonPreset.value) {
+    const monthFormatter = Intl.DateTimeFormat(navigator.language, {
+      month: 'short',
+    });
+
+    return (
+      'vs. ' +
+      monthFormatter.format(realDate[0]) +
+      '. ' +
+      realDate[0].getFullYear()
+    );
+  } else if (isDaterangeFullYear(realDate)) {
+    return 'vs. ' + realDate[0].getFullYear();
+  } else {
+    const formatter = Intl.DateTimeFormat(navigator.language, {
+      day: '2-digit',
+      month: '2-digit',
+      year: 'numeric',
+    });
+    return (
+      'vs. ' +
+      formatter.format(realDate[0]) +
+      ' - ' +
+      formatter.format(realDate[1])
+    );
+  }
 });
 
 const displayPreset = computed(() => {
@@ -440,19 +478,65 @@ onClickOutside(mainElementRef, (event) => {
   closeDropdown();
 });
 
+function isDaterangeFullMonth(range: [Date, Date]) {
+  if (range[0].getMonth() !== range[1].getMonth()) {
+    return false;
+  }
+
+  if (
+    isSameDay(startOfMonth(range[0]), range[0]) &&
+    isSameDay(endOfMonth(range[1]), range[1])
+  ) {
+    return true;
+  }
+
+  return false;
+}
+
+function isDaterangeFullYear(range: [Date, Date]) {
+  if (range[0].getFullYear() !== range[1].getFullYear()) {
+    return false;
+  }
+
+  if (
+    isSameDay(startOfYear(range[0]), range[0]) &&
+    isSameDay(endOfYear(range[1]), range[1])
+  ) {
+    return true;
+  }
+
+  return false;
+}
+
 function subTimeframeFromDate() {
   if (!props.dateRange || props.dateRange.length < 2) {
     return;
   }
-  const diffDays = Math.abs(
-    differenceInDays(stagedDateRange.value[0], stagedDateRange.value[1])
-  );
-  const refDate: [Date, Date] = [
-    subDays(stagedDateRange.value[0], diffDays),
-    stagedDateRange.value[0],
-  ];
 
-  stagedDateRange.value = refDate;
+  if (isDaterangeFullMonth(props.dateRange)) {
+    const previousMonthDate = subMonths(props.dateRange[0], 1);
+    const previousMonthStart = new Date(startOfMonth(previousMonthDate));
+    const previousMonthEnd = new Date(endOfMonth(previousMonthDate));
+
+    stagedDateRange.value = [previousMonthStart, previousMonthEnd];
+  } else if (isDaterangeFullYear(props.dateRange)) {
+    const previousYearDate = subYears(props.dateRange[0], 1);
+    const previousYearStart = new Date(startOfYear(previousYearDate));
+    const previousYearEnd = new Date(endOfYear(previousYearDate));
+
+    stagedDateRange.value = [previousYearStart, previousYearEnd];
+  } else {
+    const diffDays = Math.abs(
+      differenceInDays(stagedDateRange.value[0], stagedDateRange.value[1])
+    );
+    const refDate: [Date, Date] = [
+      subDays(stagedDateRange.value[0], diffDays),
+      stagedDateRange.value[0],
+    ];
+
+    stagedDateRange.value = refDate;
+  }
+
   stagedActivePreset.value && (stagedActivePreset.value = undefined);
   saveTime();
 }
@@ -461,16 +545,33 @@ function addTimeframeFromDate() {
   if (!props.dateRange || props.dateRange.length < 2) {
     return;
   }
-  const diffDays = Math.abs(
-    differenceInDays(stagedDateRange.value[0], stagedDateRange.value[1])
-  );
 
-  const refDate: [Date, Date] = [
-    stagedDateRange.value[1],
-    addDays(stagedDateRange.value[1], diffDays),
-  ];
+  if (isDaterangeFullMonth(props.dateRange)) {
+    const previousMonthDate = addMonths(props.dateRange[0], 1);
+    const previousMonthStart = new Date(startOfMonth(previousMonthDate));
+    const previousMonthEnd = new Date(endOfMonth(previousMonthDate));
 
-  stagedDateRange.value = refDate;
+    stagedDateRange.value = [previousMonthStart, previousMonthEnd];
+  } else if (isDaterangeFullYear(props.dateRange)) {
+    const previousYearDate = addYears(props.dateRange[0], 1);
+    const previousYearStart = new Date(startOfYear(previousYearDate));
+    const previousYearEnd = new Date(endOfYear(previousYearDate));
+
+    stagedDateRange.value = [previousYearStart, previousYearEnd];
+  } else {
+    const diffDays = Math.abs(
+      differenceInDays(stagedDateRange.value[0], stagedDateRange.value[1])
+    );
+
+    const refDate: [Date, Date] = [
+      stagedDateRange.value[1],
+      addDays(stagedDateRange.value[1], diffDays),
+    ];
+
+    stagedDateRange.value = refDate;
+  }
+
+  stagedActivePreset.value && (stagedActivePreset.value = undefined);
   saveTime();
 }
 
@@ -581,7 +682,7 @@ const comparisonDataTypesComputed = computed<any[]>(
     <div class="flex justify-center items-center">
       <RobustButton
         variant="transparent"
-        class="rounded active:bg-primary-500 active:text-white flex justify-center items-center transition-colors duration-100"
+        class="rounded active:bg-primary-500 active:text-white flex justify-center items-center transition-colors duration-100 focus:ring-0"
         :condensed="condensed"
         @click="subTimeframeFromDate"
       >
@@ -609,7 +710,8 @@ const comparisonDataTypesComputed = computed<any[]>(
             <div class="relative flex flex-shrink-0">
               <div
                 :style="{ visibility: displayPreset ? 'hidden' : 'visible' }"
-                class="min-w-0 truncate tabular-nums"
+                :class="condensed ? 'min-w-28' : 'min-w-36'"
+                class="truncate tabular-nums"
               >
                 {{ displayDate }}
               </div>
@@ -630,7 +732,7 @@ const comparisonDataTypesComputed = computed<any[]>(
       </RobustInputWrapper>
       <RobustButton
         variant="transparent"
-        class="rounded active:bg-primary-500 active:text-white flex justify-center items-center transition-colors duration-100"
+        class="rounded active:bg-primary-500 active:text-white flex justify-center items-center transition-colors duration-100 focus:ring-0"
         :condensed="condensed"
         @click="addTimeframeFromDate"
       >
@@ -651,6 +753,7 @@ const comparisonDataTypesComputed = computed<any[]>(
             :filter="stagedActiveMainFilter"
             :future="future"
             :past="past"
+            :enable-preset="props.enableMainPreset"
             dual-calendar
             @update:filter="filterUpdated"
           >
@@ -686,6 +789,7 @@ const comparisonDataTypesComputed = computed<any[]>(
             :enable-preset="props.enableComparisonPreset"
             :read-only="props.readOnlyComparisonCalendar"
             variant="secondary"
+            dual-calendar
             @update:filter="filterComparisonUpdated"
           />
           <div
@@ -745,6 +849,7 @@ const comparisonDataTypesComputed = computed<any[]>(
             :style="{
               visibility: displayComparisonPreset ? 'hidden' : 'visible',
             }"
+            :class="condensed ? 'min-w-28' : 'min-w-36'"
             class="min-w-0 truncate tabular-nums"
           >
             {{ displayComparisonDate }}
