@@ -187,6 +187,7 @@ const openComparison = ref(false);
 const inputWrapperMainRef = ref();
 const inputWrapperComparisonRef = ref();
 const mainCalendar = ref();
+const isClearComparisonOnHover = ref(false);
 
 const presetsMainComputed = computed(() =>
   props.presetsMain.filter((d) => d.type === 'range')
@@ -468,6 +469,10 @@ onClickOutside(mainElementRef, (event) => {
     return;
   }
 
+  if (isClearComparisonOnHover.value) {
+    return clearComparisonDate();
+  }
+
   if (
     inputWrapperMainRef.value?.wrapperRef.contains(event.target) ||
     inputWrapperComparisonRef.value?.wrapperRef.contains(event.target)
@@ -621,7 +626,6 @@ const filterUpdated = (filterValue: string | number) => {
 const filterComparisonUpdated = (filterValue: string | number) => {
   emit('update:comparisonFilter', filterValue);
   stagedActiveComparisonFilter.value = filterValue;
-  saveTime();
 };
 
 const openMainModal = () => {
@@ -638,6 +642,8 @@ const clearComparisonDate = () => {
   stagedActivePresetComparison.value = undefined;
   stagedActiveComparisonFilter.value = undefined;
   stagedDateRangeComparison.value = [];
+  openComparison.value = false;
+  isClearComparisonOnHover.value = false;
   saveTime();
 };
 
@@ -662,6 +668,7 @@ const saveTime = async () => {
   emit('change', stagedDateRange.value);
   emit('blur');
   openMain.value = false;
+  openComparison.value = false;
 };
 
 const stagedPresetReferenceDate = computed(() => {
@@ -824,12 +831,12 @@ const comparisonDataTypesComputed = computed<any[]>(
       ref="inputWrapperComparisonRef"
       box-class="border-0 overflow-visible focus-within:ring-0"
       :condensed="condensed"
-      @click.stop="openComparisonModal"
+      @click="openComparisonModal"
     >
       <RobustButton
         variant="transparent"
         class="font-normal relative overflow-visible focus:ring-0"
-        :class="condensed ? 'text-[0.6rem]' : 'text-xs'"
+        :class="condensed ? 'text-xs' : 'text-sm'"
         :disabled="!props.dateRange || props.dateRange.length < 2"
         :condensed="condensed"
       >
@@ -840,9 +847,12 @@ const comparisonDataTypesComputed = computed<any[]>(
             props.activePresetComparison
           "
           class="absolute hover:text-red-500"
-          :class="condensed ? 'top-[1px] right-[1px]' : 'top-1 right-1'"
-          size="14"
-          @click="clearComparisonDate"
+          :class="condensed ? 'top-[1px] right-0' : 'top-0.5 right-[1px]'"
+          @mouseover="isClearComparisonOnHover = true"
+          @mouseleave="isClearComparisonOnHover = false"
+          :weight="isClearComparisonOnHover ? 'fill' : 'regular'"
+          :size="condensed ? 14 : 16"
+          @click.stop="clearComparisonDate"
         />
         <div class="flex items-center gap-2 relative">
           <div
