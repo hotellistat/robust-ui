@@ -228,6 +228,7 @@ function resetValue() {
       :variant="variant"
       :past="past"
       :future="future"
+      :enable-preset="presets.length !== 0"
     />
   </RobustFloating>
 </template>
