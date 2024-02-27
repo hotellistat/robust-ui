@@ -168,13 +168,14 @@ const daysInMonth = computed(() => {
       date.getMonth() + 1,
       date.getDate()
     );
+    const secondMonthDays = getDaysInMonth(secondMonth);
     const mappedMonth = mapDaysInMonth(
       dateMonthDays,
       date.getMonth(),
       date.getFullYear()
     );
     const mappedSecondMonth = mapDaysInMonth(
-      dateMonthDays,
+      secondMonthDays,
       secondMonth.getMonth(),
       secondMonth.getFullYear()
     );
@@ -230,14 +231,11 @@ const firstWeekday = computed(() => {
     dateSecondMonth.setDate(1);
     const day = date.getDay();
     const daySecondMonth = dateSecondMonth.getDay();
-    return [
-      (day === 0 ? 7 : day) - 1,
-      (daySecondMonth === 0 ? 7 : daySecondMonth) - 1,
-    ];
+    return [day, daySecondMonth];
   }
   date.setDate(1);
   const day = date.getDay();
-  return (day === 0 ? 7 : day) - 1;
+  return day;
 });
 
 const activeMonth = computed(() => {
@@ -584,7 +582,7 @@ const daySelect = (day) => {
     ? day.value
     : new Date(values.year, values.month, values.day);
 
-  cursor.value = tmpDate;
+  !dualCalendar.value && (cursor.value = tmpDate);
 
   if (Array.isArray(modelValue.value)) {
     if (multiplePeriod.value) {
@@ -592,10 +590,10 @@ const daySelect = (day) => {
     } else {
       let newModelValue = [];
       if (modelValue.value.length >= 2) {
-        newModelValue.push(new Date(cursor.value));
+        newModelValue.push(new Date(tmpDate));
       } else {
         newModelValue = modelValue.value;
-        newModelValue.push(new Date(cursor.value));
+        newModelValue.push(new Date(tmpDate));
         if (newModelValue.length > 1) {
           newModelValue = [
             set(min(newModelValue), {
@@ -615,8 +613,8 @@ const daySelect = (day) => {
       emit('update:preset', undefined);
     }
   } else {
-    selectedDate.value = new Date(cursor.value);
-    emit('update:modelValue', cursor.value);
+    selectedDate.value = new Date(tmpDate);
+    emit('update:modelValue', tmpDate);
     emit('update:preset', undefined);
   }
 };
