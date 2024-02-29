@@ -484,7 +484,7 @@ onClickOutside(mainElementRef, (event) => {
 });
 
 function isDaterangeFullMonth(range: [Date, Date]) {
-  if (range[0].getMonth() !== range[1].getMonth()) {
+  if (!range[0] || !range[1] || range[0].getMonth() !== range[1].getMonth()) {
     return false;
   }
 
@@ -499,7 +499,11 @@ function isDaterangeFullMonth(range: [Date, Date]) {
 }
 
 function isDaterangeFullYear(range: [Date, Date]) {
-  if (range[0].getFullYear() !== range[1].getFullYear()) {
+  if (
+    !range[0] ||
+    !range[1] ||
+    range[0].getFullYear() !== range[1].getFullYear()
+  ) {
     return false;
   }
 
