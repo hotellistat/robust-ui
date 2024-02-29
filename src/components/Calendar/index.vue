@@ -265,6 +265,18 @@ const activeYear = computed(() => {
 //   }
 // };
 
+const formatDateToUTC = (date: Date) => {
+  const newDate = new Date(
+    Date.UTC(date.getUTCFullYear(), date.getUTCMonth(), date.getUTCDate())
+  );
+
+  newDate.setUTCHours(12);
+  newDate.setMinutes(0);
+  newDate.setSeconds(0);
+
+  return newDate;
+};
+
 const mapDaysInMonth = (days: number, month: number, year: number) => {
   const mappedMonth = [];
   for (const day in Array(days).fill(0)) {
@@ -596,16 +608,8 @@ const daySelect = (day) => {
         newModelValue.push(new Date(tmpDate));
         if (newModelValue.length > 1) {
           newModelValue = [
-            set(min(newModelValue), {
-              hours: 0,
-              minutes: 0,
-              seconds: 0,
-            }),
-            set(max(newModelValue), {
-              hours: 23,
-              minutes: 59,
-              seconds: 59,
-            }),
+            formatDateToUTC(min(newModelValue)),
+            formatDateToUTC(max(newModelValue)),
           ];
         }
       }
