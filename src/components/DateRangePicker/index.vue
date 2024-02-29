@@ -824,7 +824,15 @@ const comparisonDataTypesComputed = computed<any[]>(
           class="flex items-start justify-between border-t border-gray-200 p-4 dark:border-gray-700"
         >
           <slot name="footer" />
-          <RobustButton type="primary" class="ml-auto" @click="saveTime"
+          <RobustButton
+            type="primary"
+            class="ml-auto"
+            @click="saveTime"
+            :disabled="
+              (activeSection === 'main' && stagedDateRange.length < 2) ||
+              (activeSection === 'comparison' &&
+                stagedDateRangeComparison.length < 2)
+            "
             >Apply time range</RobustButton
           >
         </div>
