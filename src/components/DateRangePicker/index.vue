@@ -11,7 +11,7 @@ import {
 } from '..';
 import { PhCaretLeft, PhCaretRight, PhXCircle } from '@phosphor-icons/vue';
 import { computed, PropType, ref, watch } from 'vue';
-import defaultPresets, { Preset } from '../Calendar/presets';
+import defaultPresets, { Filter, Preset } from '../Calendar/presets';
 import {
   addDays,
   addMonths,
@@ -74,11 +74,11 @@ const props = defineProps({
   },
   enableMainPreset: {
     type: Boolean,
-    default: () => false,
+    default: () => true,
   },
   enableComparisonPreset: {
     type: Boolean,
-    default: () => false,
+    default: () => true,
   },
   readOnlyMainCalendar: {
     type: Boolean,
@@ -129,7 +129,7 @@ const props = defineProps({
     default: () => defaultPresets,
   },
   filters: {
-    type: Array as PropType<Array<{ title: string; value: number | string }>>,
+    type: Array as PropType<Array<Filter>>,
     default: () => [],
   },
   filter: {
@@ -137,9 +137,7 @@ const props = defineProps({
     default: () => undefined,
   },
   comparisonFilters: {
-    type: Array as PropType<
-      Array<{ title: string; value: number | string } | Preset>
-    >,
+    type: Array as PropType<Array<Filter>>,
     default: () => [],
   },
   comparisonFilter: {
@@ -305,11 +303,30 @@ watch(showComparisonPicker, (value) => {
   }
 });
 
+const mainFiltersComputed = computed<Filter[]>(() => props.filters);
+
+const comparisonFiltersComputed = computed<Filter[]>(
+  () => props.comparisonFilters
+);
+
 const stagedActiveMainFilter = ref<string | number>();
 watch(
   () => props.filter,
   (value) => {
     stagedActiveMainFilter.value = value;
+    const foundFilter = mainFiltersComputed.value.find(
+      (filter) => filter.key === value
+    );
+
+    if (
+      foundFilter &&
+      foundFilter.type === 'range' &&
+      foundFilter.evalPerspective
+    ) {
+      stagedPerspectiveDate.value = foundFilter.evalPerspective(
+        stagedDateRange.value as [Date, Date]
+      );
+    }
   },
   { immediate: true }
 );
@@ -319,10 +336,104 @@ watch(
   () => props.comparisonFilter,
   (value) => {
     stagedActiveComparisonFilter.value = value;
+
+    const foundFilter = comparisonFiltersComputed.value.find(
+      (filter) => filter.key === value
+    );
+
+    if (
+      foundFilter &&
+      foundFilter.type === 'range' &&
+      foundFilter.evalPerspective
+    ) {
+      stagedPerspectiveDateComparison.value = foundFilter.evalPerspective(
+        stagedDateRange.value as [Date, Date]
+      );
+    }
   },
   { immediate: true }
 );
 // type DateType = DateTypeCustom | DateTypePreset;
+
+const computedEnableMainPreset = computed(() => {
+  if (props.enableMainPreset === false) {
+    return false;
+  } else if (
+    computedMainFilterPreset.value &&
+    computedMainFilterPreset.value.disablePreset
+  ) {
+    return false;
+  } else {
+    return presetsMainComputed.value.length !== 0;
+  }
+});
+
+const computedMainReadOnly = computed(() => {
+  if (
+    props.readOnlyMainCalendar === true ||
+    (computedMainFilterPreset.value &&
+      computedMainFilterPreset.value.disableEdit)
+  ) {
+    return true;
+  } else {
+    return false;
+  }
+});
+
+const computedEnableMainPerspective = computed(() => {
+  if (!props.enablePerspective || !props.enableMainPerspective) {
+    return false;
+  }
+
+  if (
+    computedMainFilterPreset.value &&
+    computedMainFilterPreset.value.disablePerspective
+  ) {
+    return false;
+  } else {
+    return true;
+  }
+});
+
+const computedEnableComparisonPerspective = computed(() => {
+  if (!props.enablePerspective || !props.enableComparisonPerspective) {
+    return false;
+  }
+
+  if (
+    computedComparisonFilterPreset.value &&
+    computedComparisonFilterPreset.value.disablePerspective
+  ) {
+    return false;
+  } else {
+    return true;
+  }
+});
+
+const computedComparisonReadOnly = computed(() => {
+  if (
+    props.readOnlyComparisonCalendar === true ||
+    (computedComparisonFilterPreset.value &&
+      computedComparisonFilterPreset.value.disableEdit)
+  ) {
+    return true;
+  } else {
+    return false;
+  }
+});
+
+const computedEnableComparisonPreset = computed(() => {
+  if (props.enableComparisonPreset === false) {
+    return false;
+  } else if (
+    computedComparisonFilterPreset.value &&
+    computedComparisonFilterPreset.value.disablePreset
+  ) {
+    return false;
+  } else {
+    return presetsMainComputed.value.length !== 0;
+  }
+});
 
 interface DateTypeCustom {
   name: 'custom';
@@ -415,14 +526,25 @@ const displayPreset = computed(() => {
   return undefined;
 });
 
+const computedMainFilterPreset = computed(() => {
+  if (!props.filter) {
+    return undefined;
+  }
+
+  const foundFilter = mainFiltersComputed.value.find(
+    (f) => f.key === props.filter
+  );
+
+  return foundFilter;
+});
+
 const computedComparisonFilterPreset = computed(() => {
   if (!props.comparisonFilter) {
     return undefined;
   }
 
-  const foundFilter = comparisonDataTypesComputed.value.find(
-    (f) =>
-      f.key === props.comparisonFilter || f.value === props.comparisonFilter
+  const foundFilter = comparisonFiltersComputed.value.find(
+    (f) => f.key === props.comparisonFilter
   );
 
   return foundFilter;
@@ -433,8 +555,7 @@ const displayComparisonPreset = computed(() => {
     !props.dateRangeComparison ||
     props.dateRangeComparison.length < 2 ||
     (computedComparisonFilterPreset.value &&
-      !computedComparisonFilterPreset.value.eval &&
-      (!props.dateRangeComparison || props.dateRangeComparison.length < 2))
+      !computedComparisonFilterPreset.value.eval)
   ) {
     return undefined;
   }
@@ -624,6 +745,7 @@ const wrapperAttrs = computed(() => {
 });
 
 const filterUpdated = (filterValue: string | number) => {
+  emit('update:filter', filterValue);
   stagedActiveMainFilter.value = filterValue;
 };
 
@@ -643,6 +765,8 @@ const openComparisonModal = () => {
 };
 
 const clearComparisonDate = () => {
+  emit('comparisonCleared');
+  stagedPerspectiveDateComparison.value = undefined;
   stagedActivePresetComparison.value = undefined;
   stagedActiveComparisonFilter.value = undefined;
   stagedDateRangeComparison.value = [];
@@ -668,7 +792,6 @@ const saveTime = async () => {
   );
   emit('update:filter', stagedActiveMainFilter.value);
   emit('update:comparisonFilter', stagedActiveComparisonFilter.value);
-  emit('comparisonCleared');
   emit('change', stagedDateRange.value);
   emit('blur');
   openMain.value = false;
@@ -682,10 +805,6 @@ const stagedPresetReferenceDate = computed(() => {
     return undefined;
   }
 });
-
-const comparisonDataTypesComputed = computed<any[]>(
-  () => props.comparisonFilters
-);
 </script>
 
 <template>
@@ -764,13 +883,14 @@ const comparisonDataTypesComputed = computed<any[]>(
             :filter="stagedActiveMainFilter"
             :future="future"
             :past="past"
-            :enable-preset="props.enableMainPreset"
+            :enable-preset="computedEnableMainPreset"
+            :read-only="computedMainReadOnly"
             dual-calendar
             @update:filter="filterUpdated"
           >
           </RobustCalendar>
           <div
-            v-if="enablePerspective && enableMainPerspective"
+            v-if="computedEnableMainPerspective"
             class="flex w-full justify-end gap-x-8 items-center py-2 pr-4"
           >
             <div>
@@ -793,18 +913,18 @@ const comparisonDataTypesComputed = computed<any[]>(
             v-model:preset="stagedActivePresetComparison"
             v-model:presetReferenceDate="stagedPresetReferenceDate"
             v-model:filter="stagedActiveComparisonFilter"
-            :filters="comparisonDataTypesComputed"
+            :filters="comparisonFiltersComputed"
             :presets="presetsComparisonComputed"
             :future="future"
             :past="past"
-            :enable-preset="props.enableComparisonPreset"
-            :read-only="props.readOnlyComparisonCalendar"
+            :enable-preset="computedEnableComparisonPreset"
+            :read-only="computedComparisonReadOnly"
             variant="secondary"
             dual-calendar
             @update:filter="filterComparisonUpdated"
           />
           <div
-            v-if="enablePerspective && enableComparisonPerspective"
+            v-if="computedEnableComparisonPerspective"
             class="flex w-full justify-end gap-x-8 items-center py-2 pr-4"
           >
             <div>

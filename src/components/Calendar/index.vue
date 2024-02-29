@@ -25,7 +25,7 @@ import {
   watch,
 } from 'vue';
 import { PhCaretLeft, PhCaretRight } from '@phosphor-icons/vue';
-import defaultPresets, { Preset } from './presets';
+import defaultPresets, { Filter, Preset } from './presets';
 import variants from './variants';
 import { RobustDatePicker, RobustSelect } from '..';
 import { validate } from 'vee-validate';
@@ -68,9 +68,7 @@ const props = defineProps({
     default: () => undefined,
   },
   filters: {
-    type: Array as PropType<
-      Array<{ title: string; value: number | string } | Preset>
-    >,
+    type: Array as PropType<Array<Filter>>,
     default: () => [],
   },
   filter: {
@@ -267,7 +265,10 @@ const activeYear = computed(() => {
 
 const formatDateToUTC = (date: Date) => {
   const newDate = new Date(
-    Date.UTC(date.getUTCFullYear(), date.getUTCMonth(), date.getUTCDate())
+    date.getFullYear(),
+    date.getMonth(),
+    date.getDate(),
+    12
   );
 
   newDate.setUTCHours(12);
@@ -784,8 +785,8 @@ const getPresetStyle = (preset: Preset) => {
 };
 
 const changeFilter = (filter: number | string) => {
-  const foundFilter: any = filters.value.find(
-    (filterObj: any) => filterObj.value === filter || filterObj.key === filter
+  const foundFilter = filters.value.find(
+    (filterObj) => filterObj.key === filter
   );
 
   if (!foundFilter || foundFilter.type === 'disabled') {
@@ -793,7 +794,7 @@ const changeFilter = (filter: number | string) => {
   }
 
   emit('update:filter', filter);
-  if (foundFilter.eval) {
+  if (foundFilter.type === 'range' && foundFilter.eval) {
     const presetValue = foundFilter.eval(presetReferenceDate.value);
 
     if (Array.isArray(presetValue)) {
