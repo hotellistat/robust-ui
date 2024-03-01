@@ -5,6 +5,14 @@ export interface Preset {
   eval: (range?: [Date, Date]) => [Date, Date] | Date;
 }
 
+export interface Filter extends Preset {
+  evalPerspective: (range?: [Date, Date]) => Date;
+  disableEdit: boolean;
+  disablePreset: boolean;
+  disablePerspective: boolean;
+  disableCalendar: boolean;
+}
+
 import {
   endOfMonth,
   endOfWeek,
