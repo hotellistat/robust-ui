@@ -794,7 +794,7 @@ const changeFilter = (filter: number | string) => {
   }
 
   emit('update:filter', filter);
-  if (foundFilter.type === 'range' && foundFilter.eval) {
+  if (foundFilter.eval) {
     const presetValue = foundFilter.eval(presetReferenceDate.value);
 
     if (Array.isArray(presetValue)) {

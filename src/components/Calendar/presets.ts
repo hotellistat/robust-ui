@@ -1,16 +1,22 @@
-export interface Preset {
+export interface Options {
   title: string;
   key: string;
   type: string;
+  class?: string;
+}
+
+export interface Preset extends Options {
   eval: (range?: [Date, Date]) => [Date, Date] | Date;
 }
 
-export interface Filter extends Preset {
-  evalPerspective: (range?: [Date, Date]) => Date;
-  disableEdit: boolean;
-  disablePreset: boolean;
-  disablePerspective: boolean;
-  disableCalendar: boolean;
+export interface Filter extends Options {
+  eval?: (range?: [Date, Date]) => [Date, Date] | Date;
+  evalPerspective?: (range?: [Date, Date]) => Date;
+  type: 'range' | 'filter' | 'disabled';
+  disableEdit?: boolean;
+  disablePreset?: boolean;
+  disablePerspective?: boolean;
+  disableCalendar?: boolean;
 }
 
 import {

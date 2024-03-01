@@ -318,11 +318,7 @@ watch(
       (filter) => filter.key === value
     );
 
-    if (
-      foundFilter &&
-      foundFilter.type === 'range' &&
-      foundFilter.evalPerspective
-    ) {
+    if (foundFilter && foundFilter.evalPerspective) {
       stagedPerspectiveDate.value = foundFilter.evalPerspective(
         stagedDateRange.value as [Date, Date]
       );
@@ -341,11 +337,7 @@ watch(
       (filter) => filter.key === value
     );
 
-    if (
-      foundFilter &&
-      foundFilter.type === 'range' &&
-      foundFilter.evalPerspective
-    ) {
+    if (foundFilter && foundFilter.evalPerspective) {
       stagedPerspectiveDateComparison.value = foundFilter.evalPerspective(
         stagedDateRange.value as [Date, Date]
       );
@@ -551,26 +543,16 @@ const computedComparisonFilterPreset = computed(() => {
 });
 
 const displayComparisonPreset = computed(() => {
-  if (
-    !props.dateRangeComparison ||
-    props.dateRangeComparison.length < 2 ||
-    (computedComparisonFilterPreset.value &&
-      !computedComparisonFilterPreset.value.eval)
-  ) {
+  if (!props.dateRangeComparison || props.dateRangeComparison.length < 2) {
     return undefined;
   }
 
   if (props.comparisonFilter) {
-    const preset: any = props.comparisonFilters.find(
-      (f: Preset) => f.key === props.comparisonFilter
-    );
-
-    if (!preset) {
-      return undefined;
+    if (computedComparisonFilterPreset.value.eval) {
+      return `vs. ${computedComparisonFilterPreset.value?.title}`;
     }
-
-    return `vs. ${preset?.title}`;
-  } else if (props.activePresetComparison) {
+  }
+  if (props.activePresetComparison) {
     const preset = props.presetsComparison.find(
       (d) => d.key === props.activePresetComparison
     );
@@ -808,207 +790,224 @@ const stagedPresetReferenceDate = computed(() => {
 </script>
 
 <template>
-  <div class="flex flex-wrap gap-x-1 justify-center items-center">
-    <div class="flex justify-center items-center">
-      <RobustButton
-        variant="transparent"
-        class="rounded active:bg-primary-500 active:text-white flex justify-center items-center transition-colors duration-100 focus:ring-0"
-        :condensed="condensed"
-        @click="subTimeframeFromDate"
-      >
-        <PhCaretLeft class="block" />
-      </RobustButton>
+  <div class="flex flex-col gap-y-2 w-60">
+    <label
+      v-if="title"
+      class="mb-1 block select-none text-sm font-medium text-gray-500 dark:text-gray-400"
+    >
+      {{ title }}
+    </label>
+    <div class="flex flex-wrap gap-x-1 gap-y-1 justify-center items-center">
+      <div class="flex justify-center items-center">
+        <RobustButton
+          variant="transparent"
+          class="rounded active:bg-primary-500 active:text-white flex justify-center items-center transition-colors duration-100 focus:ring-0"
+          :condensed="condensed"
+          @click="subTimeframeFromDate"
+        >
+          <PhCaretLeft class="block" />
+        </RobustButton>
+        <RobustInputWrapper
+          ref="inputWrapperMainRef"
+          box-class="items-center border-0 focus-within:ring-0"
+          :condensed="condensed"
+          @click.stop="openMainModal"
+        >
+          <RobustButton
+            variant="transparent"
+            ref="select"
+            class="w-full select-none items-center bg-transparent text-current outline-none"
+            :class="condensed ? 'px-1' : 'px-2'"
+            v-bind="$attrs"
+          >
+            <div
+              class="flex items-center gap-2"
+              :class="[condensed ? 'text-xs' : 'text-sm']"
+            >
+              <div class="relative flex flex-shrink-0">
+                <div
+                  :style="{ visibility: displayPreset ? 'hidden' : 'visible' }"
+                  :class="condensed ? 'min-w-28' : 'min-w-36'"
+                  class="truncate tabular-nums"
+                >
+                  {{ displayDate }}
+                </div>
+                <div
+                  v-show="displayPreset"
+                  class="absolute inset-0 min-w-0 truncate"
+                >
+                  {{ displayPreset }}
+                </div>
+              </div>
+              <div
+                v-if="perspectiveDate"
+                class="ml-auto h-[8px] w-[8px] rounded-full bg-primary-300/50"
+                title="Perspective date enabled"
+              ></div>
+            </div>
+          </RobustButton>
+        </RobustInputWrapper>
+        <RobustButton
+          variant="transparent"
+          class="rounded active:bg-primary-500 active:text-white flex justify-center items-center transition-colors duration-100 focus:ring-0"
+          :condensed="condensed"
+          @click="addTimeframeFromDate"
+        >
+          <PhCaretRight class="block" />
+        </RobustButton>
+        <Component
+          :is="type === 'modal' ? RobustModal : RobustFloating"
+          v-bind="wrapperAttrs"
+          ref="mainElementRef"
+        >
+          <section v-if="activeSection === 'main'">
+            <RobustCalendar
+              ref="mainCalendar"
+              v-model="stagedDateRange"
+              v-model:preset="stagedActivePreset"
+              :presets="presetsMainComputed"
+              :filters="filtersComputed"
+              :filter="stagedActiveMainFilter"
+              :future="future"
+              :past="past"
+              :enable-preset="computedEnableMainPreset"
+              :read-only="computedMainReadOnly"
+              dual-calendar
+              @update:filter="filterUpdated"
+            >
+            </RobustCalendar>
+            <div
+              v-if="computedEnableMainPerspective"
+              class="flex w-full justify-end gap-x-8 items-center py-2 pr-4"
+            >
+              <div>
+                {{ perspectiveTitle }}
+              </div>
+              <RobustDatePicker
+                v-model="stagedPerspectiveDate"
+                v-model:preset="stagedPerspectivePreset"
+                placeholder="Newest"
+                condensed
+                resetable
+                :presets="perspectiveDatePresets"
+              />
+            </div>
+          </section>
+
+          <section v-else>
+            <RobustCalendar
+              v-model="stagedDateRangeComparison"
+              v-model:preset="stagedActivePresetComparison"
+              v-model:presetReferenceDate="stagedPresetReferenceDate"
+              v-model:filter="stagedActiveComparisonFilter"
+              :filters="comparisonFiltersComputed"
+              :presets="presetsComparisonComputed"
+              :future="future"
+              :past="past"
+              :enable-preset="computedEnableComparisonPreset"
+              :read-only="computedComparisonReadOnly"
+              variant="secondary"
+              dual-calendar
+              @update:filter="filterComparisonUpdated"
+            />
+            <div
+              v-if="computedEnableComparisonPerspective"
+              class="flex w-full justify-end gap-x-8 items-center py-2 pr-4"
+            >
+              <div>
+                {{ perspectiveTitle }}
+              </div>
+              <RobustDatePicker
+                v-model="stagedPerspectiveDateComparison"
+                v-model:preset="stagedPerspectivePresetComparison"
+                placeholder="Newest"
+                condensed
+                resetable
+                :presets="perspectiveDatePresets"
+              />
+            </div>
+          </section>
+          <div
+            class="flex items-start justify-between border-t border-gray-200 p-4 dark:border-gray-700"
+          >
+            <slot name="footer" />
+            <RobustButton
+              type="primary"
+              class="ml-auto"
+              @click="saveTime"
+              :disabled="
+                (activeSection === 'main' && stagedDateRange.length < 2) ||
+                (activeSection === 'comparison' &&
+                  stagedDateRangeComparison.length < 2)
+              "
+              >Apply time range</RobustButton
+            >
+          </div>
+        </Component>
+      </div>
       <RobustInputWrapper
-        ref="inputWrapperMainRef"
-        box-class="items-center border-0 focus-within:ring-0"
-        :hint="hint"
-        :error="error"
+        v-if="enableComparison"
+        ref="inputWrapperComparisonRef"
+        box-class="border-0 overflow-visible focus-within:ring-0"
         :condensed="condensed"
-        @click.stop="openMainModal"
+        @click="openComparisonModal"
       >
         <RobustButton
           variant="transparent"
-          ref="select"
-          class="w-full select-none items-center bg-transparent text-current outline-none"
-          :class="condensed ? 'px-1' : 'px-2'"
-          v-bind="$attrs"
+          class="font-normal relative overflow-visible focus:ring-0"
+          :class="condensed ? 'text-xs' : 'text-sm'"
+          :disabled="!props.dateRange || props.dateRange.length < 2"
+          :condensed="condensed"
         >
-          <div
-            class="flex items-center gap-2"
-            :class="[condensed ? 'text-xs' : 'text-sm']"
-          >
-            <div class="relative flex flex-shrink-0">
-              <div
-                :style="{ visibility: displayPreset ? 'hidden' : 'visible' }"
-                :class="condensed ? 'min-w-28' : 'min-w-36'"
-                class="truncate tabular-nums"
-              >
-                {{ displayDate }}
-              </div>
-              <div
-                v-show="displayPreset"
-                class="absolute inset-0 min-w-0 truncate"
-              >
-                {{ displayPreset }}
-              </div>
+          <PhXCircle
+            v-if="
+              (props.dateRangeComparison &&
+                props.dateRangeComparison.length === 2) ||
+              props.activePresetComparison
+            "
+            class="absolute hover:text-red-500"
+            :class="condensed ? 'top-[1px] right-0' : 'top-0.5 right-[1px]'"
+            @mouseover="isClearComparisonOnHover = true"
+            @mouseleave="isClearComparisonOnHover = false"
+            :weight="isClearComparisonOnHover ? 'fill' : 'regular'"
+            :size="condensed ? 14 : 16"
+            @click.stop="clearComparisonDate"
+          />
+          <div class="flex items-center gap-2 relative">
+            <div
+              :style="{
+                visibility: displayComparisonPreset ? 'hidden' : 'visible',
+              }"
+              :class="condensed ? 'min-w-28' : 'min-w-36'"
+              class="min-w-0 truncate tabular-nums"
+            >
+              {{ displayComparisonDate }}
             </div>
             <div
-              v-if="perspectiveDate"
+              v-show="displayComparisonPreset"
+              class="absolute inset-0 min-w-0 truncate"
+            >
+              {{ displayComparisonPreset }}
+            </div>
+            <div
+              v-if="perspectiveDateComparison"
               class="ml-auto h-[8px] w-[8px] rounded-full bg-primary-300/50"
               title="Perspective date enabled"
             ></div>
           </div>
         </RobustButton>
       </RobustInputWrapper>
-      <RobustButton
-        variant="transparent"
-        class="rounded active:bg-primary-500 active:text-white flex justify-center items-center transition-colors duration-100 focus:ring-0"
-        :condensed="condensed"
-        @click="addTimeframeFromDate"
-      >
-        <PhCaretRight class="block" />
-      </RobustButton>
-      <Component
-        :is="type === 'modal' ? RobustModal : RobustFloating"
-        v-bind="wrapperAttrs"
-        ref="mainElementRef"
-      >
-        <section v-if="activeSection === 'main'">
-          <RobustCalendar
-            ref="mainCalendar"
-            v-model="stagedDateRange"
-            v-model:preset="stagedActivePreset"
-            :presets="presetsMainComputed"
-            :filters="filtersComputed"
-            :filter="stagedActiveMainFilter"
-            :future="future"
-            :past="past"
-            :enable-preset="computedEnableMainPreset"
-            :read-only="computedMainReadOnly"
-            dual-calendar
-            @update:filter="filterUpdated"
-          >
-          </RobustCalendar>
-          <div
-            v-if="computedEnableMainPerspective"
-            class="flex w-full justify-end gap-x-8 items-center py-2 pr-4"
-          >
-            <div>
-              {{ perspectiveTitle }}
-            </div>
-            <RobustDatePicker
-              v-model="stagedPerspectiveDate"
-              v-model:preset="stagedPerspectivePreset"
-              placeholder="Newest"
-              condensed
-              resetable
-              :presets="perspectiveDatePresets"
-            />
-          </div>
-        </section>
-
-        <section v-else>
-          <RobustCalendar
-            v-model="stagedDateRangeComparison"
-            v-model:preset="stagedActivePresetComparison"
-            v-model:presetReferenceDate="stagedPresetReferenceDate"
-            v-model:filter="stagedActiveComparisonFilter"
-            :filters="comparisonFiltersComputed"
-            :presets="presetsComparisonComputed"
-            :future="future"
-            :past="past"
-            :enable-preset="computedEnableComparisonPreset"
-            :read-only="computedComparisonReadOnly"
-            variant="secondary"
-            dual-calendar
-            @update:filter="filterComparisonUpdated"
-          />
-          <div
-            v-if="computedEnableComparisonPerspective"
-            class="flex w-full justify-end gap-x-8 items-center py-2 pr-4"
-          >
-            <div>
-              {{ perspectiveTitle }}
-            </div>
-            <RobustDatePicker
-              v-model="stagedPerspectiveDateComparison"
-              v-model:preset="stagedPerspectivePresetComparison"
-              placeholder="Newest"
-              condensed
-              resetable
-              :presets="perspectiveDatePresets"
-            />
-          </div>
-        </section>
-        <div
-          class="flex items-start justify-between border-t border-gray-200 p-4 dark:border-gray-700"
-        >
-          <slot name="footer" />
-          <RobustButton
-            type="primary"
-            class="ml-auto"
-            @click="saveTime"
-            :disabled="
-              (activeSection === 'main' && stagedDateRange.length < 2) ||
-              (activeSection === 'comparison' &&
-                stagedDateRangeComparison.length < 2)
-            "
-            >Apply time range</RobustButton
-          >
-        </div>
-      </Component>
     </div>
-    <RobustInputWrapper
-      v-if="enableComparison"
-      ref="inputWrapperComparisonRef"
-      box-class="border-0 overflow-visible focus-within:ring-0"
-      :condensed="condensed"
-      @click="openComparisonModal"
-    >
-      <RobustButton
-        variant="transparent"
-        class="font-normal relative overflow-visible focus:ring-0"
-        :class="condensed ? 'text-xs' : 'text-sm'"
-        :disabled="!props.dateRange || props.dateRange.length < 2"
-        :condensed="condensed"
+    <div v-if="hint !== undefined || error !== undefined" class="mt-2">
+      <div v-if="hint !== undefined" class="select-none text-xs text-gray-400">
+        {{ hint }}
+      </div>
+      <div
+        v-if="error !== undefined"
+        class="select-none text-xs text-red-400 dark:text-red-400"
       >
-        <PhXCircle
-          v-if="
-            (props.dateRangeComparison &&
-              props.dateRangeComparison.length === 2) ||
-            props.activePresetComparison
-          "
-          class="absolute hover:text-red-500"
-          :class="condensed ? 'top-[1px] right-0' : 'top-0.5 right-[1px]'"
-          @mouseover="isClearComparisonOnHover = true"
-          @mouseleave="isClearComparisonOnHover = false"
-          :weight="isClearComparisonOnHover ? 'fill' : 'regular'"
-          :size="condensed ? 14 : 16"
-          @click.stop="clearComparisonDate"
-        />
-        <div class="flex items-center gap-2 relative">
-          <div
-            :style="{
-              visibility: displayComparisonPreset ? 'hidden' : 'visible',
-            }"
-            :class="condensed ? 'min-w-28' : 'min-w-36'"
-            class="min-w-0 truncate tabular-nums"
-          >
-            {{ displayComparisonDate }}
-          </div>
-          <div
-            v-show="displayComparisonPreset"
-            class="absolute inset-0 min-w-0 truncate"
-          >
-            {{ displayComparisonPreset }}
-          </div>
-          <div
-            v-if="perspectiveDateComparison"
-            class="ml-auto h-[8px] w-[8px] rounded-full bg-primary-300/50"
-            title="Perspective date enabled"
-          ></div>
-        </div>
-      </RobustButton>
-    </RobustInputWrapper>
+        {{ error }}
+      </div>
+    </div>
   </div>
 </template>
