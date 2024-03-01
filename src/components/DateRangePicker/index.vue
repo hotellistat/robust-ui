@@ -790,7 +790,7 @@ const stagedPresetReferenceDate = computed(() => {
 </script>
 
 <template>
-  <div class="flex flex-col gap-y-2 w-60">
+  <div class="flex flex-col gap-y-2">
     <label
       v-if="title"
       class="mb-1 block select-none text-sm font-medium text-gray-500 dark:text-gray-400"
