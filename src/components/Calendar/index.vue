@@ -14,6 +14,9 @@ import {
   subYears,
   isBefore,
   isAfter,
+  endOfWeek,
+  startOfWeek,
+  eachDayOfInterval,
 } from 'date-fns';
 import {
   computed,
@@ -723,9 +726,9 @@ const getShortMonthName = (month: number) => {
 };
 
 const getDayNames = () => {
-  const days = [1, 2, 3, 4, 5, 6, 7].map((day) => {
-    const dd = day < 10 ? `0${day}` : day;
-    return new Date(`2016-02-${dd}T00:00:00+00:00`);
+  const days = eachDayOfInterval({
+    start: startOfWeek(new Date()),
+    end: endOfWeek(new Date()),
   });
   return days.map((date) =>
     date.toLocaleString(navigator.language, {
