@@ -427,6 +427,9 @@ const computedEnableComparisonPreset = computed(() => {
   }
 });
 
+const hideMainCalendar = ref(false);
+const hideComparisonCalendar = ref(false);
+
 interface DateTypeCustom {
   name: 'custom';
 }
@@ -728,12 +731,30 @@ const wrapperAttrs = computed(() => {
 
 const filterUpdated = (filterValue: string | number) => {
   emit('update:filter', filterValue);
+
+  const foundFilter = mainFiltersComputed.value.find(
+    (filter) => filter.key === filterValue
+  );
   stagedActiveMainFilter.value = filterValue;
+  if (foundFilter.disableCalendar) {
+    hideMainCalendar.value = true;
+  } else {
+    hideMainCalendar.value = false;
+  }
 };
 
 const filterComparisonUpdated = (filterValue: string | number) => {
   emit('update:comparisonFilter', filterValue);
+
+  const foundFilter = comparisonFiltersComputed.value.find(
+    (filter) => filter.key === filterValue
+  );
   stagedActiveComparisonFilter.value = filterValue;
+  if (foundFilter.disableCalendar) {
+    hideComparisonCalendar.value = true;
+  } else {
+    hideComparisonCalendar.value = false;
+  }
 };
 
 const openMainModal = () => {
@@ -797,7 +818,10 @@ const stagedPresetReferenceDate = computed(() => {
     >
       {{ title }}
     </label>
-    <div class="flex flex-wrap gap-x-1 gap-y-1 justify-center items-center">
+    <div
+      class="flex flex-wrap gap-x-1 gap-y-1"
+      :class="enableComparison && 'justify-center items-center'"
+    >
       <div class="flex justify-center items-center">
         <RobustButton
           variant="transparent"
@@ -872,6 +896,7 @@ const stagedPresetReferenceDate = computed(() => {
               :past="past"
               :enable-preset="computedEnableMainPreset"
               :read-only="computedMainReadOnly"
+              :hide-calendar="hideMainCalendar"
               dual-calendar
               @update:filter="filterUpdated"
             >
@@ -879,6 +904,7 @@ const stagedPresetReferenceDate = computed(() => {
             <div
               v-if="computedEnableMainPerspective"
               class="flex w-full justify-end gap-x-8 items-center py-2 pr-4"
+              :class="hideMainCalendar && 'px-6'"
             >
               <div>
                 {{ perspectiveTitle }}
@@ -907,12 +933,14 @@ const stagedPresetReferenceDate = computed(() => {
               :enable-preset="computedEnableComparisonPreset"
               :read-only="computedComparisonReadOnly"
               variant="secondary"
+              :hide-calendar="hideComparisonCalendar"
               dual-calendar
               @update:filter="filterComparisonUpdated"
             />
             <div
               v-if="computedEnableComparisonPerspective"
-              class="flex w-full justify-end gap-x-8 items-center py-2 pr-4"
+              class="flex w-full justify-end gap-x-8 items-center py-4 px-4"
+              :class="hideComparisonCalendar && 'px-6'"
             >
               <div>
                 {{ perspectiveTitle }}
