@@ -809,7 +809,10 @@ const resetSizes = (resizable = false) => {
   const sizes: string[] = [];
   cols.forEach((col, idx) => {
     if (resizable && options.value.columns[idx].fixed !== true) {
-      const perc = (col.clientWidth / rowsWrapper.clientWidth) * 100;
+      const perc =
+        col && rowsWrapper
+          ? (col.clientWidth / rowsWrapper.clientWidth) * 100
+          : 0;
       sizesController.value[idx + 1] = `minmax(0, ${perc}%)`;
       sizes.push(`${perc}%`);
     } else {
@@ -1118,7 +1121,7 @@ onMounted(() => {
 });
 
 onUnmounted(() => {
-  resizeObserver.disconnect();
+  resizeObserver?.disconnect();
 });
 </script>
 
