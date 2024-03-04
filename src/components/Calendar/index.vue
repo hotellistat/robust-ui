@@ -103,6 +103,10 @@ const props = defineProps({
     type: Boolean,
     default: () => false,
   },
+  hideCalendar: {
+    type: Boolean,
+    default: () => false,
+  },
 });
 
 const emit = defineEmits([
@@ -861,7 +865,7 @@ defineExpose({
       </div>
     </div>
 
-    <section class="p-4 dark:border-gray-700">
+    <section v-if="!props.hideCalendar" class="p-4 dark:border-gray-700">
       <div
         v-if="!dualCalendar"
         class="mb-4 flex items-center text-center text-lg font-semibold"
