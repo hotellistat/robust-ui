@@ -17,6 +17,7 @@ import {
   endOfWeek,
   startOfWeek,
   eachDayOfInterval,
+  addDays,
 } from 'date-fns';
 import {
   computed,
@@ -139,6 +140,7 @@ const {
   readOnly,
 } = toRefs(props);
 
+const useMondayFirstWeekday = true;
 const now = ref();
 // const cursor = ref<Date>()
 const cursor = Array.isArray(modelValue.value)
@@ -236,11 +238,16 @@ const firstWeekday = computed(() => {
     dateSecondMonth.setDate(1);
     const day = date.getDay();
     const daySecondMonth = dateSecondMonth.getDay();
-    return [day, daySecondMonth];
+    return useMondayFirstWeekday
+      ? [
+          (day === 0 ? 7 : day) - 1,
+          (daySecondMonth === 0 ? 7 : daySecondMonth) - 1,
+        ]
+      : [day, daySecondMonth];
   }
   date.setDate(1);
   const day = date.getDay();
-  return day;
+  return useMondayFirstWeekday ? (day === 0 ? 7 : day) - 1 : day;
 });
 
 const activeMonth = computed(() => {
@@ -727,8 +734,12 @@ const getShortMonthName = (month: number) => {
 
 const getDayNames = () => {
   const days = eachDayOfInterval({
-    start: startOfWeek(new Date()),
-    end: endOfWeek(new Date()),
+    start: useMondayFirstWeekday
+      ? addDays(startOfWeek(new Date()), 1)
+      : startOfWeek(new Date()),
+    end: useMondayFirstWeekday
+      ? addDays(endOfWeek(new Date()), 1)
+      : endOfWeek(new Date()),
   });
   return days.map((date) =>
     date.toLocaleString(navigator.language, {
