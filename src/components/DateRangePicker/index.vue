@@ -207,7 +207,10 @@ const stagedDateRange = ref<[Date, Date] | []>();
 watch(
   () => props.dateRange,
   (value) => {
-    stagedDateRange.value = value || [];
+    if (!value || value.length < 2 || value.some((d) => !(d instanceof Date))) {
+      stagedDateRange.value = [];
+    }
+    stagedDateRange.value = value;
   },
   { immediate: true }
 );
@@ -216,7 +219,10 @@ const stagedDateRangeComparison = ref<[Date, Date] | []>();
 watch(
   () => props.dateRangeComparison,
   (value) => {
-    stagedDateRangeComparison.value = value || [];
+    if (!value || value.length < 2 || value.some((d) => !(d instanceof Date))) {
+      stagedDateRangeComparison.value = [];
+    }
+    stagedDateRangeComparison.value = value;
   },
   { immediate: true }
 );
@@ -225,6 +231,9 @@ const stagedPerspectiveDate = ref<Date>();
 watch(
   () => props.perspectiveDate,
   (value) => {
+    if (!value || !(value instanceof Date)) {
+      stagedPerspectiveDate.value = undefined;
+    }
     stagedPerspectiveDate.value = value;
   },
   { immediate: true }
@@ -234,6 +243,10 @@ const stagedPerspectiveDateComparison = ref<Date>();
 watch(
   () => props.perspectiveDateComparison,
   (value) => {
+    if (!value || !(value instanceof Date)) {
+      stagedPerspectiveDateComparison.value = undefined;
+    }
+    console.log(value);
     stagedPerspectiveDateComparison.value = value;
   },
   { immediate: true }
@@ -768,13 +781,17 @@ const openComparisonModal = () => {
 };
 
 const clearComparisonDate = () => {
-  emit('comparisonCleared');
+  const foundDefaultFilter = comparisonFiltersComputed.value.find(
+    (filter) => filter.default
+  );
+  stagedActiveComparisonFilter.value = foundDefaultFilter.key || undefined;
   stagedPerspectiveDateComparison.value = undefined;
   stagedActivePresetComparison.value = undefined;
-  stagedActiveComparisonFilter.value = undefined;
+  isClearComparisonOnHover.value = false;
+  hideComparisonCalendar.value = false;
   stagedDateRangeComparison.value = [];
   openComparison.value = false;
-  isClearComparisonOnHover.value = false;
+  emit('comparisonCleared');
   saveTime();
 };
 

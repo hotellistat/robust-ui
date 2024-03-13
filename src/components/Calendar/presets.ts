@@ -11,7 +11,7 @@ export interface Preset extends Options {
 
 export interface Filter extends Options {
   eval?: (range: [Date, Date]) => [Date, Date] | Date;
-  evalPerspective?: (range: [Date, Date]) => Date;
+  evalPerspective?: (range: [Date, Date]) => Date | undefined;
   type: 'range' | 'filter' | 'disabled';
   disableEdit?: boolean;
   disablePreset?: boolean;
