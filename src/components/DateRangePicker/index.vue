@@ -208,7 +208,7 @@ watch(
   () => props.dateRange,
   (value) => {
     if (!value || value.length < 2 || value.some((d) => !(d instanceof Date))) {
-      stagedDateRange.value = [];
+      return (stagedDateRange.value = []);
     }
     stagedDateRange.value = value;
   },
@@ -220,7 +220,7 @@ watch(
   () => props.dateRangeComparison,
   (value) => {
     if (!value || value.length < 2 || value.some((d) => !(d instanceof Date))) {
-      stagedDateRangeComparison.value = [];
+      return (stagedDateRangeComparison.value = []);
     }
     stagedDateRangeComparison.value = value;
   },
@@ -232,7 +232,7 @@ watch(
   () => props.perspectiveDate,
   (value) => {
     if (!value || !(value instanceof Date)) {
-      stagedPerspectiveDate.value = undefined;
+      return (stagedPerspectiveDate.value = undefined);
     }
     stagedPerspectiveDate.value = value;
   },
@@ -244,9 +244,8 @@ watch(
   () => props.perspectiveDateComparison,
   (value) => {
     if (!value || !(value instanceof Date)) {
-      stagedPerspectiveDateComparison.value = undefined;
+      return (stagedPerspectiveDateComparison.value = undefined);
     }
-    console.log(value);
     stagedPerspectiveDateComparison.value = value;
   },
   { immediate: true }
