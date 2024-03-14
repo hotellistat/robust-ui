@@ -10,7 +10,7 @@ import {
   RobustModal,
 } from '..';
 import { PhCaretLeft, PhCaretRight, PhXCircle } from '@phosphor-icons/vue';
-import { computed, PropType, ref, watch } from 'vue';
+import { computed, onMounted, PropType, ref, watch } from 'vue';
 import defaultPresets, { Filter, Preset } from '../Calendar/presets';
 import {
   addDays,
@@ -197,11 +197,67 @@ const presetsComparisonComputed = computed(() =>
 
 const filtersComputed = computed(() => props.filters || []);
 
+const mainFiltersComputed = computed<Filter[]>(() => props.filters);
+
+const comparisonFiltersComputed = computed<Filter[]>(
+  () => props.comparisonFilters
+);
+
+const computedMainFilterPreset = computed(() => {
+  if (!props.filter) {
+    return undefined;
+  }
+
+  const foundFilter = mainFiltersComputed.value.find(
+    (f) => f.key === props.filter
+  );
+
+  return foundFilter;
+});
+
+const computedComparisonFilterPreset = computed(() => {
+  if (!props.comparisonFilter) {
+    return undefined;
+  }
+
+  const foundFilter = comparisonFiltersComputed.value.find(
+    (f) => f.key === props.comparisonFilter
+  );
+
+  return foundFilter;
+});
+
 // const enabledHistory = ref(false);
 // const displayCompare = ref();
 // const storeHistory = ref(true);
 const mainElementRef = ref();
 const activeSection = ref<'comparison' | 'main'>('main');
+
+const stagedDateRangeComparison = ref<[Date, Date] | []>();
+watch(
+  () => props.dateRangeComparison,
+  (value) => {
+    // console.log(value, 'value daterange');
+    if (!value || value.length < 2 || value.some((d) => !(d instanceof Date))) {
+      return (stagedDateRangeComparison.value = []);
+    }
+    stagedDateRangeComparison.value = value;
+  },
+  { immediate: true }
+);
+
+const stagedPerspectiveDateComparison = ref<Date>();
+watch(
+  () => props.perspectiveDateComparison,
+  (value) => {
+    // console.log(value, 'value Perspective');
+    if (!value || !(value instanceof Date)) {
+      return (stagedPerspectiveDateComparison.value = undefined);
+    }
+    stagedPerspectiveDateComparison.value = value;
+  },
+  { immediate: true }
+);
 
 const stagedDateRange = ref<[Date, Date] | []>();
 watch(
@@ -211,18 +267,27 @@ watch(
       return (stagedDateRange.value = []);
     }
     stagedDateRange.value = value;
-  },
-  { immediate: true }
-);
 
-const stagedDateRangeComparison = ref<[Date, Date] | []>();
-watch(
-  () => props.dateRangeComparison,
-  (value) => {
-    if (!value || value.length < 2 || value.some((d) => !(d instanceof Date))) {
-      return (stagedDateRangeComparison.value = []);
+    if (computedComparisonFilterPreset.value) {
+      if (computedComparisonFilterPreset.value.eval) {
+        stagedDateRangeComparison.value =
+          computedComparisonFilterPreset.value.eval(stagedDateRange.value) as [
+            Date,
+            Date,
+          ];
+        emit('update:dateRangeComparison', stagedDateRangeComparison.value);
+      }
+      if (computedComparisonFilterPreset.value.evalPerspective) {
+        stagedPerspectiveDateComparison.value =
+          computedComparisonFilterPreset.value.evalPerspective(
+            stagedDateRange.value
+          );
+        emit(
+          'update:perspectiveDateComparison',
+          stagedPerspectiveDateComparison.value
+        );
+      }
     }
-    stagedDateRangeComparison.value = value;
   },
   { immediate: true }
 );
@@ -235,18 +300,6 @@ watch(
       return (stagedPerspectiveDate.value = undefined);
     }
     stagedPerspectiveDate.value = value;
-  },
-  { immediate: true }
-);
-
-const stagedPerspectiveDateComparison = ref<Date>();
-watch(
-  () => props.perspectiveDateComparison,
-  (value) => {
-    if (!value || !(value instanceof Date)) {
-      return (stagedPerspectiveDateComparison.value = undefined);
-    }
-    stagedPerspectiveDateComparison.value = value;
   },
   { immediate: true }
 );
@@ -315,25 +368,20 @@ watch(showComparisonPicker, (value) => {
   }
 });
 
-const mainFiltersComputed = computed<Filter[]>(() => props.filters);
-
-const comparisonFiltersComputed = computed<Filter[]>(
-  () => props.comparisonFilters
-);
-
 const stagedActiveMainFilter = ref<string | number>();
 watch(
   () => props.filter,
   (value) => {
     stagedActiveMainFilter.value = value;
-    const foundFilter = mainFiltersComputed.value.find(
-      (filter) => filter.key === value
-    );
 
-    if (foundFilter && foundFilter.evalPerspective) {
-      stagedPerspectiveDate.value = foundFilter.evalPerspective(
-        stagedDateRange.value as [Date, Date]
-      );
+    if (
+      computedMainFilterPreset.value &&
+      computedMainFilterPreset.value.evalPerspective
+    ) {
+      stagedPerspectiveDate.value =
+        computedMainFilterPreset.value.evalPerspective(
+          stagedDateRange.value as [Date, Date]
+        );
     }
   },
   { immediate: true }
@@ -345,14 +393,14 @@ watch(
   (value) => {
     stagedActiveComparisonFilter.value = value;
 
-    const foundFilter = comparisonFiltersComputed.value.find(
-      (filter) => filter.key === value
-    );
-
-    if (foundFilter && foundFilter.evalPerspective) {
-      stagedPerspectiveDateComparison.value = foundFilter.evalPerspective(
-        stagedDateRange.value as [Date, Date]
-      );
+    if (
+      computedComparisonFilterPreset.value &&
+      computedComparisonFilterPreset.value.evalPerspective
+    ) {
+      stagedPerspectiveDateComparison.value =
+        computedComparisonFilterPreset.value.evalPerspective(
+          stagedDateRange.value as [Date, Date]
+        );
     }
   },
   { immediate: true }
@@ -531,30 +579,6 @@ const displayPreset = computed(() => {
   }
 
   return undefined;
-});
-
-const computedMainFilterPreset = computed(() => {
-  if (!props.filter) {
-    return undefined;
-  }
-
-  const foundFilter = mainFiltersComputed.value.find(
-    (f) => f.key === props.filter
-  );
-
-  return foundFilter;
-});
-
-const computedComparisonFilterPreset = computed(() => {
-  if (!props.comparisonFilter) {
-    return undefined;
-  }
-
-  const foundFilter = comparisonFiltersComputed.value.find(
-    (f) => f.key === props.comparisonFilter
-  );
-
-  return foundFilter;
 });
 
 const displayComparisonPreset = computed(() => {
@@ -783,7 +807,7 @@ const clearComparisonDate = () => {
   const foundDefaultFilter = comparisonFiltersComputed.value.find(
     (filter) => filter.default
   );
-  stagedActiveComparisonFilter.value = foundDefaultFilter.key || undefined;
+  stagedActiveComparisonFilter.value = foundDefaultFilter?.key || undefined;
   stagedPerspectiveDateComparison.value = undefined;
   stagedActivePresetComparison.value = undefined;
   isClearComparisonOnHover.value = false;
@@ -822,6 +846,30 @@ const stagedPresetReferenceDate = computed(() => {
     return stagedDateRange.value;
   } else {
     return undefined;
+  }
+});
+
+onMounted(() => {
+  const foundFilter = mainFiltersComputed.value.find(
+    (filter) => filter.key === props.filter
+  );
+
+  if (foundFilter.disableCalendar) {
+    hideMainCalendar.value = true;
+  } else {
+    hideMainCalendar.value = false;
+  }
+
+  if (props.enableComparison) {
+    const foundComparisonFilter = comparisonFiltersComputed.value.find(
+      (filter) => filter.key === props.comparisonFilter
+    );
+
+    if (foundComparisonFilter.disableCalendar) {
+      hideComparisonCalendar.value = true;
+    } else {
+      hideComparisonCalendar.value = false;
+    }
   }
 });
 </script>
