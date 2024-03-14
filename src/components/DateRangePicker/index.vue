@@ -854,7 +854,7 @@ onMounted(() => {
     (filter) => filter.key === props.filter
   );
 
-  if (foundFilter.disableCalendar) {
+  if (foundFilter && foundFilter.disableCalendar) {
     hideMainCalendar.value = true;
   } else {
     hideMainCalendar.value = false;
@@ -865,7 +865,7 @@ onMounted(() => {
       (filter) => filter.key === props.comparisonFilter
     );
 
-    if (foundComparisonFilter.disableCalendar) {
+    if (foundComparisonFilter && foundComparisonFilter.disableCalendar) {
       hideComparisonCalendar.value = true;
     } else {
       hideComparisonCalendar.value = false;
