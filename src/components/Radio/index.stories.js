@@ -16,6 +16,7 @@ const DefaultTemplate = (args) => ({
     <div><Radio value="test" title="Radio title 1" v-model="value"/></div>
     <div><Radio value="arg" title="Radio title 2" v-model="value"/></div>
     <div><Radio value="more" title="Radio title 3" v-model="value"/></div>
+    <div><Radio value="disabled" title="Disabled radio" v-model="value" disabled/></div>
     `,
   components: { Radio },
   setup() {
