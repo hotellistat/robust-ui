@@ -1,4 +1,4 @@
-import{r as v}from"./vue.esm-bundler-72d4ff20.js";import{_ as d}from"./index-a086a70f.js";const u={title:"Ui/Radio",component:d,argTypes:{title:{control:{type:"text"}}}},s=l=>({template:`
+import{r as v}from"./vue.esm-bundler-72d4ff20.js";import{_ as d}from"./index-71b1c673.js";const u={title:"Ui/Radio",component:d,argTypes:{title:{control:{type:"text"}}}},s=l=>({template:`
     {{value}}
     <div><Radio :value="0" title="Radio title 0" v-model="value"/></div>
     <div><Radio value="test" title="Radio title 1" v-model="value"/></div>
