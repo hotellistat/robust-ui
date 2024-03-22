@@ -9,6 +9,7 @@
         type="radio"
         class="hidden"
         :disabled="disabled"
+        :name="name"
       />
       <div
         class="relative mr-2 box-content flex h-4 w-4 flex-shrink-0 flex-grow-0 items-center justify-center rounded-full border transition-all duration-100"
@@ -54,6 +55,10 @@ const props = defineProps({
   disabled: {
     type: Boolean,
     default: false,
+  },
+  name: {
+    type: String,
+    default: '',
   },
 });
 
