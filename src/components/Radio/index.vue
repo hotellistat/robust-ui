@@ -4,13 +4,21 @@
       :class="[$slots.title ? 'items-start' : 'items-center']"
       class="flex items-center"
     >
-      <input v-model="isChecked" type="radio" class="hidden" />
+      <input
+        v-model="isChecked"
+        type="radio"
+        class="hidden"
+        :disabled="disabled"
+      />
       <div
         class="relative mr-2 box-content flex h-4 w-4 flex-shrink-0 flex-grow-0 items-center justify-center rounded-full border transition-all duration-100"
         :class="[
           isChecked
             ? 'border-primary-500 bg-primary-500'
             : 'border-gray-300 bg-gray-100 dark:border-gray-500 dark:bg-gray-700',
+          disabled
+            ? 'cursor-not-allowed bg-gray-200 dark:bg-gray-600'
+            : 'cursor-pointer',
         ]"
       >
         <div
@@ -27,7 +35,6 @@
   </div>
 </template>
 
-
 <script lang="ts" setup>
 import { computed } from 'vue';
 
@@ -43,6 +50,10 @@ const props = defineProps({
   title: {
     type: String,
     default: '',
+  },
+  disabled: {
+    type: Boolean,
+    default: false,
   },
 });
 
