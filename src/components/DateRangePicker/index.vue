@@ -681,8 +681,8 @@ function subTimeframeFromDate() {
       differenceInDays(stagedDateRange.value[0], stagedDateRange.value[1])
     );
     const refDate: [Date, Date] = [
-      subDays(stagedDateRange.value[0], diffDays),
-      stagedDateRange.value[0],
+      subDays(stagedDateRange.value[0], diffDays + 1),
+      subDays(stagedDateRange.value[0], 1),
     ];
 
     stagedDateRange.value = refDate;
@@ -715,8 +715,8 @@ function addTimeframeFromDate() {
     );
 
     const refDate: [Date, Date] = [
-      stagedDateRange.value[1],
-      addDays(stagedDateRange.value[1], diffDays),
+      addDays(stagedDateRange.value[1], 1),
+      addDays(stagedDateRange.value[1], diffDays + 1),
     ];
 
     stagedDateRange.value = refDate;
@@ -808,10 +808,10 @@ const clearComparisonDate = () => {
     (filter) => filter.default
   );
   stagedActiveComparisonFilter.value = foundDefaultFilter?.key || undefined;
+  hideComparisonCalendar.value = foundDefaultFilter?.disableCalendar || false;
   stagedPerspectiveDateComparison.value = undefined;
   stagedActivePresetComparison.value = undefined;
   isClearComparisonOnHover.value = false;
-  hideComparisonCalendar.value = false;
   stagedDateRangeComparison.value = [];
   openComparison.value = false;
   emit('comparisonCleared');
@@ -928,7 +928,11 @@ onMounted(() => {
                 </div>
               </div>
               <div
-                v-if="perspectiveDate"
+                v-if="
+                  perspectiveDate &&
+                  props.enablePerspective &&
+                  props.enableMainPerspective
+                "
                 class="ml-auto h-[8px] w-[8px] rounded-full bg-primary-300/50"
                 title="Perspective date enabled"
               ></div>
@@ -1082,7 +1086,11 @@ onMounted(() => {
               {{ displayComparisonPreset }}
             </div>
             <div
-              v-if="perspectiveDateComparison"
+              v-if="
+                perspectiveDateComparison &&
+                props.enablePerspective &&
+                props.enableComparisonPerspective
+              "
               class="ml-auto h-[8px] w-[8px] rounded-full bg-primary-300/50"
               title="Perspective date enabled"
             ></div>
