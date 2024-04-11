@@ -7,7 +7,7 @@ import { computed, PropType, ref, useAttrs } from 'vue';
 
 defineOptions({
   inheritAttrs: false,
-})
+});
 
 const emit = defineEmits(['click', 'blur', 'focus']);
 
@@ -82,7 +82,13 @@ defineExpose({
 
 <template>
   <!-- We can't use label as a wrapper since it causes events not to trigger when e.g. using it in a select component -->
-  <div @click="onClick" @focus="onFocus" @blur="onBlur" class="inline-block" :class="[$props.class]">
+  <div
+    @click="onClick"
+    @focus="onFocus"
+    @blur="onBlur"
+    class="inline-block"
+    :class="[$props.class]"
+  >
     <label
       v-if="title"
       class="mb-1 block select-none text-sm font-medium text-gray-500 dark:text-gray-400"

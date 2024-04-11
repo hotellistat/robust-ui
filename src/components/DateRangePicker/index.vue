@@ -6,14 +6,26 @@ import {
   RobustCalendar,
   RobustInputWrapper,
   RobustButton,
-  RobustCheckbox,
   RobustDatePicker,
-  RobustTabs,
   RobustModal,
 } from '..';
-import { PhCaretDown, PhCalendar } from '@phosphor-icons/vue';
-import { computed, PropType, ref, watch } from 'vue';
-import defaultPresets, { Preset } from '../Calendar/presets';
+import { PhCaretLeft, PhCaretRight, PhXCircle } from '@phosphor-icons/vue';
+import { computed, onMounted, PropType, ref, watch } from 'vue';
+import defaultPresets, { Filter, Preset } from '../Calendar/presets';
+import {
+  addDays,
+  addMonths,
+  addYears,
+  differenceInDays,
+  endOfMonth,
+  endOfYear,
+  isSameDay,
+  startOfMonth,
+  startOfYear,
+  subDays,
+  subMonths,
+  subYears,
+} from 'date-fns';
 
 const props = defineProps({
   title: {
@@ -34,11 +46,11 @@ const props = defineProps({
   },
   enableComparison: {
     type: Boolean,
-    default: false,
+    default: () => false,
   },
   showComparison: {
     type: Boolean,
-    default: false,
+    default: () => false,
   },
   perspectiveDate: {
     type: Date,
@@ -50,7 +62,31 @@ const props = defineProps({
   },
   enablePerspective: {
     type: Boolean,
-    default: false,
+    default: () => false,
+  },
+  enableMainPerspective: {
+    type: Boolean,
+    default: () => true,
+  },
+  enableComparisonPerspective: {
+    type: Boolean,
+    default: () => true,
+  },
+  enableMainPreset: {
+    type: Boolean,
+    default: () => true,
+  },
+  enableComparisonPreset: {
+    type: Boolean,
+    default: () => true,
+  },
+  readOnlyMainCalendar: {
+    type: Boolean,
+    default: () => false,
+  },
+  readOnlyComparisonCalendar: {
+    type: Boolean,
+    default: () => false,
   },
   error: {
     type: String,
@@ -84,9 +120,29 @@ const props = defineProps({
     type: String,
     default: () => undefined,
   },
-  presets: {
+  presetsMain: {
     type: Array as PropType<Preset[]>,
     default: () => defaultPresets,
+  },
+  presetsComparison: {
+    type: Array as PropType<Preset[]>,
+    default: () => defaultPresets,
+  },
+  filters: {
+    type: Array as PropType<Array<Filter>>,
+    default: () => [],
+  },
+  filter: {
+    type: String || Number,
+    default: () => undefined,
+  },
+  comparisonFilters: {
+    type: Array as PropType<Array<Filter>>,
+    default: () => [],
+  },
+  comparisonFilter: {
+    type: String || Number,
+    default: () => undefined,
   },
   past: {
     type: Boolean,
@@ -118,46 +174,73 @@ const emit = defineEmits([
   'update:perspectivePreset',
   'update:perspectivePresetComparison',
   'update:showComparison',
+  'update:filter',
+  'update:comparisonFilter',
+  'comparisonCleared',
   'change',
 ]);
 
-const open = ref(false);
-const inputWrapperRef = ref();
+const openMain = ref(false);
+const openComparison = ref(false);
+const inputWrapperMainRef = ref();
+const inputWrapperComparisonRef = ref();
 const mainCalendar = ref();
+const isClearComparisonOnHover = ref(false);
 
-const presetsComputed = computed(() =>
-  props.presets.filter((d) => d.type === 'range')
+const presetsMainComputed = computed(() =>
+  props.presetsMain.filter((d) => d.type === 'range')
 );
+
+const presetsComparisonComputed = computed(() =>
+  props.presetsComparison.filter((d) => d.type === 'range')
+);
+
+const filtersComputed = computed(() => props.filters || []);
+
+const mainFiltersComputed = computed<Filter[]>(() => props.filters);
+
+const comparisonFiltersComputed = computed<Filter[]>(
+  () => props.comparisonFilters
+);
+
+const computedMainFilterPreset = computed(() => {
+  if (!props.filter) {
+    return undefined;
+  }
+
+  const foundFilter = mainFiltersComputed.value.find(
+    (f) => f.key === props.filter
+  );
+
+  return foundFilter;
+});
+
+const computedComparisonFilterPreset = computed(() => {
+  if (!props.comparisonFilter) {
+    return undefined;
+  }
+
+  const foundFilter = comparisonFiltersComputed.value.find(
+    (f) => f.key === props.comparisonFilter
+  );
+
+  return foundFilter;
+});
 
 // const enabledHistory = ref(false);
 // const displayCompare = ref();
 // const storeHistory = ref(true);
-const elementRef = ref();
+const mainElementRef = ref();
 const activeSection = ref<'comparison' | 'main'>('main');
 
-const stagedDateRange = ref<[Date, Date]>();
-watch(
-  () => props.dateRange,
-  (value) => {
-    stagedDateRange.value = value;
-  },
-  { immediate: true }
-);
-
-const stagedDateRangeComparison = ref<[Date, Date]>();
+const stagedDateRangeComparison = ref<[Date, Date] | []>();
 watch(
   () => props.dateRangeComparison,
   (value) => {
+    if (!value || value.length < 2 || value.some((d) => !(d instanceof Date))) {
+      return (stagedDateRangeComparison.value = []);
+    }
     stagedDateRangeComparison.value = value;
-  },
-  { immediate: true }
-);
-
-const stagedPerspectiveDate = ref<Date>();
-watch(
-  () => props.perspectiveDate,
-  (value) => {
-    stagedPerspectiveDate.value = value;
   },
   { immediate: true }
 );
@@ -166,7 +249,55 @@ const stagedPerspectiveDateComparison = ref<Date>();
 watch(
   () => props.perspectiveDateComparison,
   (value) => {
+    if (!value || !(value instanceof Date)) {
+      return (stagedPerspectiveDateComparison.value = undefined);
+    }
     stagedPerspectiveDateComparison.value = value;
+  },
+  { immediate: true }
+);
+
+const stagedDateRange = ref<[Date, Date] | []>();
+watch(
+  () => props.dateRange,
+  (value) => {
+    if (!value || value.length < 2 || value.some((d) => !(d instanceof Date))) {
+      return (stagedDateRange.value = []);
+    }
+    stagedDateRange.value = value;
+
+    if (computedComparisonFilterPreset.value) {
+      if (computedComparisonFilterPreset.value.eval) {
+        stagedDateRangeComparison.value =
+          computedComparisonFilterPreset.value.eval(stagedDateRange.value) as [
+            Date,
+            Date,
+          ];
+        emit('update:dateRangeComparison', stagedDateRangeComparison.value);
+      }
+      if (computedComparisonFilterPreset.value.evalPerspective) {
+        stagedPerspectiveDateComparison.value =
+          computedComparisonFilterPreset.value.evalPerspective(
+            stagedDateRange.value
+          );
+        emit(
+          'update:perspectiveDateComparison',
+          stagedPerspectiveDateComparison.value
+        );
+      }
+    }
+  },
+  { immediate: true }
+);
+
+const stagedPerspectiveDate = ref<Date>();
+watch(
+  () => props.perspectiveDate,
+  (value) => {
+    if (!value || !(value instanceof Date)) {
+      return (stagedPerspectiveDate.value = undefined);
+    }
+    stagedPerspectiveDate.value = value;
   },
   { immediate: true }
 );
@@ -235,7 +366,105 @@ watch(showComparisonPicker, (value) => {
   }
 });
 
+const stagedActiveMainFilter = ref<string | number>();
+watch(
+  () => props.filter,
+  (value) => {
+    stagedActiveMainFilter.value = value;
+
+    if (
+      computedMainFilterPreset.value &&
+      computedMainFilterPreset.value.evalPerspective
+    ) {
+      stagedPerspectiveDate.value =
+        computedMainFilterPreset.value.evalPerspective(
+          stagedDateRange.value as [Date, Date]
+        );
+    }
+  },
+  { immediate: true }
+);
+
+const stagedActiveComparisonFilter = ref<string | number>();
+watch(
+  () => props.comparisonFilter,
+  (value) => {
+    stagedActiveComparisonFilter.value = value;
+
+    if (
+      computedComparisonFilterPreset.value &&
+      computedComparisonFilterPreset.value.evalPerspective
+    ) {
+      stagedPerspectiveDateComparison.value =
+        computedComparisonFilterPreset.value.evalPerspective(
+          stagedDateRange.value as [Date, Date]
+        );
+    }
+  },
+  { immediate: true }
+);
 // type DateType = DateTypeCustom | DateTypePreset;
+
+const computedEnableMainPreset = ref(props.enableMainPreset);
+
+const computedMainReadOnly = computed(() => {
+  if (
+    props.readOnlyMainCalendar === true ||
+    (computedMainFilterPreset.value &&
+      computedMainFilterPreset.value.disableEdit)
+  ) {
+    return true;
+  } else {
+    return false;
+  }
+});
+
+const computedEnableMainPerspective = computed(() => {
+  if (!props.enablePerspective || !props.enableMainPerspective) {
+    return false;
+  }
+
+  if (
+    computedMainFilterPreset.value &&
+    computedMainFilterPreset.value.disablePerspective
+  ) {
+    return false;
+  } else {
+    return true;
+  }
+});
+
+const computedEnableComparisonPerspective = computed(() => {
+  if (!props.enablePerspective || !props.enableComparisonPerspective) {
+    return false;
+  }
+
+  if (
+    computedComparisonFilterPreset.value &&
+    computedComparisonFilterPreset.value.disablePerspective
+  ) {
+    return false;
+  } else {
+    return true;
+  }
+});
+
+const computedComparisonReadOnly = computed(() => {
+  if (
+    props.readOnlyComparisonCalendar === true ||
+    (computedComparisonFilterPreset.value &&
+      computedComparisonFilterPreset.value.disableEdit)
+  ) {
+    return true;
+  } else {
+    return false;
+  }
+});
+
+const enableComparisonPreset = ref(props.enableComparisonPreset);
+
+const hideMainCalendar = ref(false);
+const hideComparisonCalendar = ref(false);
 
 interface DateTypeCustom {
   name: 'custom';
@@ -247,7 +476,7 @@ interface DateTypePreset {
 }
 
 const perspectiveDatePresets = computed(() =>
-  props.presets.filter((d) => d.type === 'perspective')
+  props.presetsMain.filter((d) => d.type === 'perspective')
 );
 
 const displayDate = computed(() => {
@@ -256,12 +485,26 @@ const displayDate = computed(() => {
   }
 
   const realDate = props.dateRange;
-  const formatter = Intl.DateTimeFormat(navigator.language, {
-    day: '2-digit',
-    month: '2-digit',
-    year: 'numeric',
-  });
-  return formatter.format(realDate[0]) + ' - ' + formatter.format(realDate[1]);
+  if (isDaterangeFullMonth(realDate) || displayPreset.value) {
+    const monthFormatter = Intl.DateTimeFormat(navigator.language, {
+      month: 'short',
+    });
+
+    return (
+      monthFormatter.format(realDate[0]) + '. ' + realDate[0].getFullYear()
+    );
+  } else if (isDaterangeFullYear(realDate)) {
+    return realDate[0].getFullYear();
+  } else {
+    const formatter = Intl.DateTimeFormat(navigator.language, {
+      day: '2-digit',
+      month: '2-digit',
+      year: 'numeric',
+    });
+    return (
+      formatter.format(realDate[0]) + ' - ' + formatter.format(realDate[1])
+    );
+  }
 });
 
 const displayComparisonDate = computed(() => {
@@ -269,17 +512,37 @@ const displayComparisonDate = computed(() => {
     return undefined;
   }
 
-  if (!props.dateRangeComparison) {
-    return 'Select date';
+  if (!props.dateRangeComparison || props.dateRangeComparison.length < 2) {
+    return 'Select Comparison';
   }
 
   const realDate = props.dateRangeComparison;
-  const formatter = Intl.DateTimeFormat(navigator.language, {
-    day: '2-digit',
-    month: '2-digit',
-    year: 'numeric',
-  });
-  return formatter.format(realDate[0]) + ' - ' + formatter.format(realDate[1]);
+  if (isDaterangeFullMonth(realDate) || displayComparisonPreset.value) {
+    const monthFormatter = Intl.DateTimeFormat(navigator.language, {
+      month: 'short',
+    });
+
+    return (
+      'vs. ' +
+      monthFormatter.format(realDate[0]) +
+      '. ' +
+      realDate[0].getFullYear()
+    );
+  } else if (isDaterangeFullYear(realDate)) {
+    return 'vs. ' + realDate[0].getFullYear();
+  } else {
+    const formatter = Intl.DateTimeFormat(navigator.language, {
+      day: '2-digit',
+      month: '2-digit',
+      year: 'numeric',
+    });
+    return (
+      'vs. ' +
+      formatter.format(realDate[0]) +
+      ' - ' +
+      formatter.format(realDate[1])
+    );
+  }
 });
 
 const displayPreset = computed(() => {
@@ -287,7 +550,7 @@ const displayPreset = computed(() => {
     return undefined;
   }
   if (props.activePreset) {
-    const preset = props.presets.find((d) => d.key === props.activePreset);
+    const preset = props.presetsMain.find((d) => d.key === props.activePreset);
     return preset?.title;
   }
 
@@ -295,62 +558,273 @@ const displayPreset = computed(() => {
 });
 
 const displayComparisonPreset = computed(() => {
-  if (!props.dateRangeComparison) {
+  if (!props.dateRangeComparison || props.dateRangeComparison.length < 2) {
     return undefined;
   }
+
+  if (props.comparisonFilter) {
+    if (computedComparisonFilterPreset.value?.eval) {
+      return `vs. ${computedComparisonFilterPreset.value?.title}`;
+    }
+  }
   if (props.activePresetComparison) {
-    const preset = props.presets.find(
+    const preset = props.presetsComparison.find(
       (d) => d.key === props.activePresetComparison
     );
-    return preset?.title;
+
+    if (!preset) {
+      return undefined;
+    }
+
+    return `vs. ${preset?.title}`;
   }
 
   return undefined;
 });
 
-onClickOutside(elementRef, (event) => {
-  if (!open.value || props.type === 'modal') {
+onClickOutside(mainElementRef, (event) => {
+  if ((!openMain.value && !openComparison.value) || props.type === 'modal') {
     return;
   }
 
-  if (inputWrapperRef.value?.wrapperRef.contains(event.target)) {
+  if (isClearComparisonOnHover.value) {
+    return clearComparisonDate();
+  }
+
+  if (
+    inputWrapperMainRef.value?.wrapperRef.contains(event.target) ||
+    inputWrapperComparisonRef.value?.wrapperRef.contains(event.target)
+  ) {
     event.stopPropagation();
   }
 
   closeDropdown();
 });
 
+function isDaterangeFullMonth(range: [Date, Date]) {
+  if (!range[0] || !range[1] || range[0].getMonth() !== range[1].getMonth()) {
+    return false;
+  }
+
+  if (
+    isSameDay(startOfMonth(range[0]), range[0]) &&
+    isSameDay(endOfMonth(range[1]), range[1])
+  ) {
+    return true;
+  }
+
+  return false;
+}
+
+function isDaterangeFullYear(range: [Date, Date]) {
+  if (
+    !range[0] ||
+    !range[1] ||
+    range[0].getFullYear() !== range[1].getFullYear()
+  ) {
+    return false;
+  }
+
+  if (
+    isSameDay(startOfYear(range[0]), range[0]) &&
+    isSameDay(endOfYear(range[1]), range[1])
+  ) {
+    return true;
+  }
+
+  return false;
+}
+
+function subTimeframeFromDate() {
+  if (!props.dateRange || props.dateRange.length < 2) {
+    return;
+  }
+
+  if (isDaterangeFullMonth(props.dateRange)) {
+    const previousMonthDate = subMonths(props.dateRange[0], 1);
+    const previousMonthStart = new Date(startOfMonth(previousMonthDate));
+    const previousMonthEnd = new Date(endOfMonth(previousMonthDate));
+
+    stagedDateRange.value = [previousMonthStart, previousMonthEnd];
+  } else if (isDaterangeFullYear(props.dateRange)) {
+    const previousYearDate = subYears(props.dateRange[0], 1);
+    const previousYearStart = new Date(startOfYear(previousYearDate));
+    const previousYearEnd = new Date(endOfYear(previousYearDate));
+
+    stagedDateRange.value = [previousYearStart, previousYearEnd];
+  } else {
+    const diffDays = Math.abs(
+      differenceInDays(stagedDateRange.value[0], stagedDateRange.value[1])
+    );
+    const refDate: [Date, Date] = [
+      subDays(stagedDateRange.value[0], diffDays + 1),
+      subDays(stagedDateRange.value[0], 1),
+    ];
+
+    stagedDateRange.value = refDate;
+  }
+
+  stagedActivePreset.value && (stagedActivePreset.value = undefined);
+  saveTime();
+}
+
+function addTimeframeFromDate() {
+  if (!props.dateRange || props.dateRange.length < 2) {
+    return;
+  }
+
+  if (isDaterangeFullMonth(props.dateRange)) {
+    const previousMonthDate = addMonths(props.dateRange[0], 1);
+    const previousMonthStart = new Date(startOfMonth(previousMonthDate));
+    const previousMonthEnd = new Date(endOfMonth(previousMonthDate));
+
+    stagedDateRange.value = [previousMonthStart, previousMonthEnd];
+  } else if (isDaterangeFullYear(props.dateRange)) {
+    const previousYearDate = addYears(props.dateRange[0], 1);
+    const previousYearStart = new Date(startOfYear(previousYearDate));
+    const previousYearEnd = new Date(endOfYear(previousYearDate));
+
+    stagedDateRange.value = [previousYearStart, previousYearEnd];
+  } else {
+    const diffDays = Math.abs(
+      differenceInDays(stagedDateRange.value[0], stagedDateRange.value[1])
+    );
+
+    const refDate: [Date, Date] = [
+      addDays(stagedDateRange.value[1], 1),
+      addDays(stagedDateRange.value[1], diffDays + 1),
+    ];
+
+    stagedDateRange.value = refDate;
+  }
+
+  stagedActivePreset.value && (stagedActivePreset.value = undefined);
+  saveTime();
+}
+
 function closeDropdown() {
-  if (open.value === true) {
-    open.value = false;
+  if (openMain.value === true) {
+    openMain.value = false;
     emit('blur');
+  }
+
+  if ((openComparison.value = true)) {
+    openComparison.value = false;
   }
 }
 
 const wrapperAttrs = computed(() => {
   if (props.type === 'modal') {
     return {
-      opened: open.value,
+      opened:
+        activeSection.value === 'main' ? openMain.value : openComparison.value,
       size: 'xl',
       center: true,
       'onUpdate:opened': (value: boolean) => {
-        open.value = false;
+        activeSection.value === 'main'
+          ? (openMain.value = false)
+          : (openComparison.value = false);
       },
     };
   }
   return {
-    open: open.value,
+    open:
+      activeSection.value === 'main' ? openMain.value : openComparison.value,
     class: 'z-[100] origin-top-left',
-    reference: inputWrapperRef.value?.wrapperRef,
+    reference:
+      activeSection.value === 'main'
+        ? inputWrapperMainRef.value?.wrapperRef
+        : inputWrapperComparisonRef.value?.wrapperRef,
     options: {
       placement: 'bottom-start',
     },
   };
 });
 
+const filterUpdated = (filterValue: string | number) => {
+  emit('update:filter', filterValue);
+
+  const foundFilter = mainFiltersComputed.value.find(
+    (filter) => filter.key === filterValue
+  );
+  stagedActiveMainFilter.value = filterValue;
+  if (foundFilter.disableCalendar) {
+    hideMainCalendar.value = true;
+  } else {
+    hideMainCalendar.value = false;
+  }
+
+  if (props.enableMainPreset !== false) {
+    if (foundFilter?.disablePreset) {
+      computedEnableMainPreset.value = false;
+    } else {
+      computedEnableMainPreset.value = true;
+    }
+  } else {
+    return presetsMainComputed.value.length !== 0;
+  }
+};
+
+const filterComparisonUpdated = (filterValue: string | number) => {
+  emit('update:comparisonFilter', filterValue);
+
+  const foundFilter = comparisonFiltersComputed.value.find(
+    (filter) => filter.key === filterValue
+  );
+  stagedActiveComparisonFilter.value = filterValue;
+  if (foundFilter?.disableCalendar) {
+    hideComparisonCalendar.value = true;
+  } else {
+    hideComparisonCalendar.value = false;
+  }
+
+  if (props.enableComparisonPreset !== false) {
+    if (foundFilter?.disablePreset) {
+      enableComparisonPreset.value = false;
+    } else {
+      enableComparisonPreset.value = true;
+    }
+  } else {
+    return presetsComparisonComputed.value.length !== 0;
+  }
+};
+
+const openMainModal = () => {
+  openMain.value = true;
+  activeSection.value = 'main';
+};
+
+const openComparisonModal = () => {
+  openComparison.value = true;
+  activeSection.value = 'comparison';
+};
+
+const clearComparisonDate = () => {
+  const foundDefaultFilter = comparisonFiltersComputed.value.find(
+    (filter) => filter.default
+  );
+  stagedActiveComparisonFilter.value = foundDefaultFilter?.key || undefined;
+  hideComparisonCalendar.value = foundDefaultFilter?.disableCalendar || false;
+  stagedPerspectiveDateComparison.value = undefined;
+  stagedActivePresetComparison.value = undefined;
+  isClearComparisonOnHover.value = false;
+  stagedDateRangeComparison.value = [];
+  openComparison.value = false;
+  emit('comparisonCleared');
+  saveTime();
+};
+
 const saveTime = async () => {
-  emit('update:dateRange', stagedDateRange.value);
-  emit('update:dateRangeComparison', stagedDateRangeComparison.value);
+  emit(
+    'update:dateRange',
+    stagedDateRange.value.length ? stagedDateRange.value : undefined
+  );
+  emit(
+    'update:dateRangeComparison',
+    stagedDateRangeComparison.value.length
+      ? stagedDateRangeComparison.value
+      : undefined
+  );
   emit('update:perspectiveDate', stagedPerspectiveDate.value);
   emit(
     'update:perspectiveDateComparison',
@@ -363,181 +837,297 @@ const saveTime = async () => {
     'update:perspectivePresetComparison',
     stagedPerspectivePresetComparison.value
   );
+  emit('update:filter', stagedActiveMainFilter.value);
+  emit('update:comparisonFilter', stagedActiveComparisonFilter.value);
   emit('change', stagedDateRange.value);
   emit('blur');
-  open.value = false;
+  openMain.value = false;
+  openComparison.value = false;
 };
+
+const stagedPresetReferenceDate = computed(() => {
+  if (stagedDateRange.value && stagedDateRange.value.length === 2) {
+    return stagedDateRange.value;
+  } else {
+    return undefined;
+  }
+});
+
+onMounted(() => {
+  const foundFilter = mainFiltersComputed.value.find(
+    (filter) => filter.key === props.filter
+  );
+
+  if (foundFilter) {
+    if (foundFilter.disableCalendar) {
+      hideMainCalendar.value = true;
+    } else {
+      hideMainCalendar.value = false;
+    }
+
+    if (foundFilter.disablePreset) {
+      computedEnableMainPreset.value = false;
+    } else {
+      computedEnableMainPreset.value = true;
+    }
+  }
+
+  if (props.enableComparison) {
+    const foundComparisonFilter = comparisonFiltersComputed.value.find(
+      (filter) => filter.key === props.comparisonFilter
+    );
+
+    if (foundComparisonFilter) {
+      if (foundComparisonFilter.disableCalendar) {
+        hideComparisonCalendar.value = true;
+      } else {
+        hideComparisonCalendar.value = false;
+      }
+
+      if (foundComparisonFilter.disablePreset) {
+        enableComparisonPreset.value = false;
+      } else {
+        enableComparisonPreset.value = true;
+      }
+    }
+  }
+});
 </script>
 
 <template>
-  <RobustInputWrapper
-    ref="inputWrapperRef"
-    box-class="items-center"
-    :title="title"
-    :hint="hint"
-    :error="error"
-    :class="$props.class"
-    :condensed="condensed"
-    @click.stop="open = true"
-  >
-    <div
-      class="items-center text-gray-400"
-      :class="[condensed ? 'pl-2' : 'pl-3']"
+  <div class="flex flex-col gap-y-2">
+    <label
+      v-if="title"
+      class="mb-1 block select-none text-sm font-medium text-gray-500 dark:text-gray-400"
     >
-      <PhCalendar size="20" />
-    </div>
+      {{ title }}
+    </label>
     <div
-      ref="select"
-      class="w-full select-none items-center bg-transparent text-current outline-none"
-      :class="[condensed ? 'pl-2' : 'pl-3']"
-      v-bind="$attrs"
+      class="flex flex-wrap gap-x-1 gap-y-1"
+      :class="enableComparison && 'justify-center items-center'"
     >
-      <div
-        class="flex items-center gap-2"
-        :class="[
-          enableComparison && showComparisonPicker
-            ? condensed
-              ? 'text-xs font-medium'
-              : 'text-sm'
-            : 'text-base',
-        ]"
-      >
-        <div class="relative flex flex-shrink-0">
-          <div
-            :style="{ visibility: displayPreset ? 'hidden' : 'visible' }"
-            class="min-w-0 truncate tabular-nums"
+      <div class="flex justify-center items-center">
+        <RobustButton
+          variant="transparent"
+          class="rounded active:bg-primary-500 active:text-white flex justify-center items-center transition-colors duration-100 focus:ring-0"
+          :condensed="condensed"
+          @click="subTimeframeFromDate"
+        >
+          <PhCaretLeft class="block" />
+        </RobustButton>
+        <RobustInputWrapper
+          ref="inputWrapperMainRef"
+          box-class="items-center border-0 focus-within:ring-0"
+          :condensed="condensed"
+          @click.stop="openMainModal"
+        >
+          <RobustButton
+            variant="transparent"
+            ref="select"
+            class="w-full select-none items-center bg-transparent text-current outline-none"
+            :class="condensed ? 'px-1' : 'px-2'"
+            v-bind="$attrs"
           >
-            {{ displayDate }}
+            <div
+              class="flex items-center gap-2"
+              :class="[condensed ? 'text-xs' : 'text-sm']"
+            >
+              <div class="relative flex flex-shrink-0">
+                <div
+                  :style="{ visibility: displayPreset ? 'hidden' : 'visible' }"
+                  :class="condensed ? 'min-w-28' : 'min-w-36'"
+                  class="truncate tabular-nums"
+                >
+                  {{ displayDate }}
+                </div>
+                <div
+                  v-show="displayPreset"
+                  class="absolute inset-0 min-w-0 truncate"
+                >
+                  {{ displayPreset }}
+                </div>
+              </div>
+              <div
+                v-if="
+                  perspectiveDate &&
+                  props.enablePerspective &&
+                  props.enableMainPerspective
+                "
+                class="ml-auto h-[8px] w-[8px] rounded-full bg-primary-300/50"
+                title="Perspective date enabled"
+              ></div>
+            </div>
+          </RobustButton>
+        </RobustInputWrapper>
+        <RobustButton
+          variant="transparent"
+          class="rounded active:bg-primary-500 active:text-white flex justify-center items-center transition-colors duration-100 focus:ring-0"
+          :condensed="condensed"
+          @click="addTimeframeFromDate"
+        >
+          <PhCaretRight class="block" />
+        </RobustButton>
+        <Component
+          :is="type === 'modal' ? RobustModal : RobustFloating"
+          v-bind="wrapperAttrs"
+          ref="mainElementRef"
+        >
+          <section v-if="activeSection === 'main'">
+            <RobustCalendar
+              ref="mainCalendar"
+              v-model="stagedDateRange"
+              v-model:preset="stagedActivePreset"
+              :presets="presetsMainComputed"
+              :filters="filtersComputed"
+              :filter="stagedActiveMainFilter"
+              :future="future"
+              :past="past"
+              :enable-preset="computedEnableMainPreset"
+              :read-only="computedMainReadOnly"
+              :hide-calendar="hideMainCalendar"
+              dual-calendar
+              @update:filter="filterUpdated"
+            >
+            </RobustCalendar>
+            <div
+              v-if="computedEnableMainPerspective"
+              class="flex w-full justify-end gap-x-8 items-center py-2 pr-4"
+              :class="hideMainCalendar && 'px-6'"
+            >
+              <div>
+                {{ perspectiveTitle }}
+              </div>
+              <RobustDatePicker
+                v-model="stagedPerspectiveDate"
+                v-model:preset="stagedPerspectivePreset"
+                placeholder="Newest"
+                condensed
+                resetable
+                :presets="perspectiveDatePresets"
+              />
+            </div>
+          </section>
+
+          <section v-else>
+            <RobustCalendar
+              v-model="stagedDateRangeComparison"
+              v-model:preset="stagedActivePresetComparison"
+              v-model:presetReferenceDate="stagedPresetReferenceDate"
+              v-model:filter="stagedActiveComparisonFilter"
+              :filters="comparisonFiltersComputed"
+              :presets="presetsComparisonComputed"
+              :future="future"
+              :past="past"
+              :enable-preset="enableComparisonPreset"
+              :read-only="computedComparisonReadOnly"
+              variant="secondary"
+              :hide-calendar="hideComparisonCalendar"
+              dual-calendar
+              @update:filter="filterComparisonUpdated"
+            />
+            <div
+              v-if="computedEnableComparisonPerspective"
+              class="flex w-full justify-end gap-x-8 items-center py-4 px-4"
+              :class="hideComparisonCalendar && 'px-6'"
+            >
+              <div>
+                {{ perspectiveTitle }}
+              </div>
+              <RobustDatePicker
+                v-model="stagedPerspectiveDateComparison"
+                v-model:preset="stagedPerspectivePresetComparison"
+                placeholder="Newest"
+                condensed
+                resetable
+                :presets="perspectiveDatePresets"
+              />
+            </div>
+          </section>
+          <div
+            class="flex items-start justify-between border-t border-gray-200 p-4 dark:border-gray-700"
+          >
+            <slot name="footer" />
+            <RobustButton
+              type="primary"
+              class="ml-auto"
+              @click="saveTime"
+              :disabled="
+                (activeSection === 'main' && stagedDateRange.length < 2) ||
+                (activeSection === 'comparison' &&
+                  stagedDateRangeComparison?.length < 2)
+              "
+              >Apply time range</RobustButton
+            >
           </div>
-          <div v-show="displayPreset" class="absolute inset-0 min-w-0 truncate">
-            {{ displayPreset }}
-          </div>
-        </div>
-        <div
-          :class="[perspectiveDate ? 'visible' : 'invisible']"
-          class="ml-auto h-[8px] w-[8px] rounded-full bg-primary-300/50"
-          title="Perspective date enabled"
-        ></div>
+        </Component>
       </div>
-
-      <div
-        v-if="enableComparison && showComparisonPicker"
-        class="flex items-center gap-2 text-gray-400 dark:text-gray-400"
-        :class="[!condensed ? 'text-xs' : 'text-[0.6rem] font-medium']"
+      <RobustInputWrapper
+        v-if="enableComparison"
+        ref="inputWrapperComparisonRef"
+        box-class="border-0 overflow-visible focus-within:ring-0"
+        :condensed="condensed"
+        @click="openComparisonModal"
       >
-        <div class="relative flex flex-shrink-0">
-          <div
-            :style="{
-              visibility: displayComparisonPreset ? 'hidden' : 'visible',
-            }"
-            class="min-w-0 truncate tabular-nums"
-          >
-            {{ displayComparisonDate }}
+        <RobustButton
+          variant="transparent"
+          class="font-normal relative overflow-visible focus:ring-0"
+          :class="condensed ? 'text-xs' : 'text-sm'"
+          :disabled="!props.dateRange || props.dateRange.length < 2"
+          :condensed="condensed"
+        >
+          <PhXCircle
+            v-if="
+              (props.dateRangeComparison &&
+                props.dateRangeComparison.length === 2) ||
+              props.activePresetComparison
+            "
+            class="absolute hover:text-red-500"
+            :class="condensed ? 'top-[1px] right-0' : 'top-0.5 right-[1px]'"
+            @mouseover="isClearComparisonOnHover = true"
+            @mouseleave="isClearComparisonOnHover = false"
+            :weight="isClearComparisonOnHover ? 'fill' : 'regular'"
+            :size="condensed ? 14 : 16"
+            @click.stop="clearComparisonDate"
+          />
+          <div class="flex items-center gap-2 relative">
+            <div
+              :style="{
+                visibility: displayComparisonPreset ? 'hidden' : 'visible',
+              }"
+              :class="condensed ? 'min-w-28' : 'min-w-36'"
+              class="min-w-0 truncate tabular-nums"
+            >
+              {{ displayComparisonDate }}
+            </div>
+            <div
+              v-show="displayComparisonPreset"
+              class="absolute inset-0 min-w-0 truncate"
+            >
+              {{ displayComparisonPreset }}
+            </div>
+            <div
+              v-if="
+                perspectiveDateComparison &&
+                props.enablePerspective &&
+                props.enableComparisonPerspective
+              "
+              class="ml-auto h-[8px] w-[8px] rounded-full bg-primary-300/50"
+              title="Perspective date enabled"
+            ></div>
           </div>
-          <div
-            v-show="displayComparisonPreset"
-            class="absolute inset-0 min-w-0 truncate"
-          >
-            {{ displayComparisonPreset }}
-          </div>
-        </div>
-        <div
-          :class="[perspectiveDateComparison ? 'visible' : 'invisible']"
-          class="ml-auto h-[6px] w-[6px] rounded-full bg-primary-300/50"
-          title="Perspective date enabled"
-        ></div>
+        </RobustButton>
+      </RobustInputWrapper>
+    </div>
+    <div v-if="hint !== undefined || error !== undefined" class="mt-2">
+      <div v-if="hint !== undefined" class="select-none text-xs text-gray-400">
+        {{ hint }}
+      </div>
+      <div
+        v-if="error !== undefined"
+        class="select-none text-xs text-red-400 dark:text-red-400"
+      >
+        {{ error }}
       </div>
     </div>
-
-    <div
-      class="flex-shrink-0 items-center pr-3 text-gray-400 dark:text-gray-500"
-      :class="[condensed ? 'pl-2' : 'pl-3']"
-    >
-      <PhCaretDown
-        :size="14"
-        weight="bold"
-        class="transition-transform duration-200"
-        :class="{ 'rotate-180 transform': open }"
-      />
-    </div>
-  </RobustInputWrapper>
-  <Component
-    :is="type === 'modal' ? RobustModal : RobustFloating"
-    v-bind="wrapperAttrs"
-    ref="elementRef"
-  >
-    <template #title> </template>
-    <div
-      class="flex items-center justify-between border-gray-200 dark:border-gray-700"
-    >
-      <RobustTabs
-        v-if="showComparisonPicker && enableComparison"
-        v-model="activeSection"
-        class="w-full"
-        :tabs="
-          [
-            { title: 'Main date range', value: 'main' },
-            { title: 'Comparison date range', value: 'comparison' },
-          ].filter((item) => enableComparison || item?.value !== 'comparison')
-        "
-      />
-    </div>
-    <section v-if="activeSection === 'main'">
-      <RobustCalendar
-        ref="mainCalendar"
-        v-model="stagedDateRange"
-        v-model:preset="stagedActivePreset"
-        :presets="presetsComputed"
-        :future="future"
-        :past="past"
-      >
-        <RobustDatePicker
-          v-if="enablePerspective"
-          v-model="stagedPerspectiveDate"
-          v-model:preset="stagedPerspectivePreset"
-          placeholder="Newest"
-          :title="perspectiveTitle"
-          condensed
-          resetable
-          class="mb-4 w-full"
-          :presets="perspectiveDatePresets"
-        />
-
-        <RobustCheckbox v-if="enableComparison" v-model="showComparisonPicker">
-          <template #title>Compare</template>
-        </RobustCheckbox>
-      </RobustCalendar>
-    </section>
-
-    <section v-else>
-      <RobustCalendar
-        v-model="stagedDateRangeComparison"
-        v-model:preset="stagedActivePresetComparison"
-        variant="secondary"
-        :presets="presetsComputed"
-        :future="future"
-        :past="past"
-      >
-        <RobustDatePicker
-          v-if="enablePerspective"
-          v-model="stagedPerspectiveDateComparison"
-          v-model:preset="stagedPerspectivePresetComparison"
-          placeholder="Newest"
-          :title="perspectiveTitle"
-          condensed
-          resetable
-          class="mb-4 w-full"
-          :presets="perspectiveDatePresets"
-        />
-      </RobustCalendar>
-    </section>
-    <div
-      class="flex items-start justify-between border-t border-gray-200 p-4 dark:border-gray-700"
-    >
-      <slot name="footer" />
-      <RobustButton type="primary" class="ml-auto" @click="saveTime"
-        >Apply time range</RobustButton
-      >
-    </div>
-  </Component>
+  </div>
 </template>
