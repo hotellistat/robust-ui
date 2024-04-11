@@ -237,7 +237,6 @@ const stagedDateRangeComparison = ref<[Date, Date] | []>();
 watch(
   () => props.dateRangeComparison,
   (value) => {
-    // console.log(value, 'value daterange');
     if (!value || value.length < 2 || value.some((d) => !(d instanceof Date))) {
       return (stagedDateRangeComparison.value = []);
     }
@@ -250,7 +249,6 @@ const stagedPerspectiveDateComparison = ref<Date>();
 watch(
   () => props.perspectiveDateComparison,
   (value) => {
-    // console.log(value, 'value Perspective');
     if (!value || !(value instanceof Date)) {
       return (stagedPerspectiveDateComparison.value = undefined);
     }
@@ -407,18 +405,7 @@ watch(
 );
 // type DateType = DateTypeCustom | DateTypePreset;
 
-const computedEnableMainPreset = computed(() => {
-  if (props.enableMainPreset === false) {
-    return false;
-  } else if (
-    computedMainFilterPreset.value &&
-    computedMainFilterPreset.value.disablePreset
-  ) {
-    return false;
-  } else {
-    return presetsMainComputed.value.length !== 0;
-  }
-});
+const computedEnableMainPreset = ref(props.enableMainPreset);
 
 const computedMainReadOnly = computed(() => {
   if (
@@ -474,18 +461,7 @@ const computedComparisonReadOnly = computed(() => {
   }
 });
 
-const computedEnableComparisonPreset = computed(() => {
-  if (props.enableComparisonPreset === false) {
-    return false;
-  } else if (
-    computedComparisonFilterPreset.value &&
-    computedComparisonFilterPreset.value.disablePreset
-  ) {
-    return false;
-  } else {
-    return presetsMainComputed.value.length !== 0;
-  }
-});
+const enableComparisonPreset = ref(props.enableComparisonPreset);
 
 const hideMainCalendar = ref(false);
 const hideComparisonCalendar = ref(false);
@@ -587,7 +563,7 @@ const displayComparisonPreset = computed(() => {
   }
 
   if (props.comparisonFilter) {
-    if (computedComparisonFilterPreset.value.eval) {
+    if (computedComparisonFilterPreset.value?.eval) {
       return `vs. ${computedComparisonFilterPreset.value?.title}`;
     }
   }
@@ -777,6 +753,16 @@ const filterUpdated = (filterValue: string | number) => {
   } else {
     hideMainCalendar.value = false;
   }
+
+  if (props.enableMainPreset !== false) {
+    if (foundFilter?.disablePreset) {
+      computedEnableMainPreset.value = false;
+    } else {
+      computedEnableMainPreset.value = true;
+    }
+  } else {
+    return presetsMainComputed.value.length !== 0;
+  }
 };
 
 const filterComparisonUpdated = (filterValue: string | number) => {
@@ -786,10 +772,20 @@ const filterComparisonUpdated = (filterValue: string | number) => {
     (filter) => filter.key === filterValue
   );
   stagedActiveComparisonFilter.value = filterValue;
-  if (foundFilter.disableCalendar) {
+  if (foundFilter?.disableCalendar) {
     hideComparisonCalendar.value = true;
   } else {
     hideComparisonCalendar.value = false;
+  }
+
+  if (props.enableComparisonPreset !== false) {
+    if (foundFilter?.disablePreset) {
+      enableComparisonPreset.value = false;
+    } else {
+      enableComparisonPreset.value = true;
+    }
+  } else {
+    return presetsComparisonComputed.value.length !== 0;
   }
 };
 
@@ -819,8 +815,16 @@ const clearComparisonDate = () => {
 };
 
 const saveTime = async () => {
-  emit('update:dateRange', stagedDateRange.value);
-  emit('update:dateRangeComparison', stagedDateRangeComparison.value);
+  emit(
+    'update:dateRange',
+    stagedDateRange.value.length ? stagedDateRange.value : undefined
+  );
+  emit(
+    'update:dateRangeComparison',
+    stagedDateRangeComparison.value.length
+      ? stagedDateRangeComparison.value
+      : undefined
+  );
   emit('update:perspectiveDate', stagedPerspectiveDate.value);
   emit(
     'update:perspectiveDateComparison',
@@ -854,10 +858,18 @@ onMounted(() => {
     (filter) => filter.key === props.filter
   );
 
-  if (foundFilter && foundFilter.disableCalendar) {
-    hideMainCalendar.value = true;
-  } else {
-    hideMainCalendar.value = false;
+  if (foundFilter) {
+    if (foundFilter.disableCalendar) {
+      hideMainCalendar.value = true;
+    } else {
+      hideMainCalendar.value = false;
+    }
+
+    if (foundFilter.disablePreset) {
+      computedEnableMainPreset.value = false;
+    } else {
+      computedEnableMainPreset.value = true;
+    }
   }
 
   if (props.enableComparison) {
@@ -865,10 +877,18 @@ onMounted(() => {
       (filter) => filter.key === props.comparisonFilter
     );
 
-    if (foundComparisonFilter && foundComparisonFilter.disableCalendar) {
-      hideComparisonCalendar.value = true;
-    } else {
-      hideComparisonCalendar.value = false;
+    if (foundComparisonFilter) {
+      if (foundComparisonFilter.disableCalendar) {
+        hideComparisonCalendar.value = true;
+      } else {
+        hideComparisonCalendar.value = false;
+      }
+
+      if (foundComparisonFilter.disablePreset) {
+        enableComparisonPreset.value = false;
+      } else {
+        enableComparisonPreset.value = true;
+      }
     }
   }
 });
@@ -998,7 +1018,7 @@ onMounted(() => {
               :presets="presetsComparisonComputed"
               :future="future"
               :past="past"
-              :enable-preset="computedEnableComparisonPreset"
+              :enable-preset="enableComparisonPreset"
               :read-only="computedComparisonReadOnly"
               variant="secondary"
               :hide-calendar="hideComparisonCalendar"
@@ -1034,7 +1054,7 @@ onMounted(() => {
               :disabled="
                 (activeSection === 'main' && stagedDateRange.length < 2) ||
                 (activeSection === 'comparison' &&
-                  stagedDateRangeComparison.length < 2)
+                  stagedDateRangeComparison?.length < 2)
               "
               >Apply time range</RobustButton
             >
