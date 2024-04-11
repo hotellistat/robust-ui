@@ -33,7 +33,6 @@ export default defineConfig(async (config) => ({
         'fuse.js',
         '@phosphor-icons/vue',
         'vuedraggable',
-        'lodash'
       ],
       output: [
         {
