@@ -70,6 +70,15 @@ const options = ref([
       yeahhhh: null
     },
   },
+  {
+    title: 'Different object value',
+    value: {
+      name: "test",
+      asdf: 98,
+      value: true,
+      yeahhhh: undefined
+    },
+  },
 ]);
 
 export const Default: Story = {
