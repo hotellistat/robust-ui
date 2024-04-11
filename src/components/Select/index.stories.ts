@@ -61,6 +61,15 @@ const options = ref([
     title: 'Bye',
     value: 0,
   },
+  {
+    title: 'Object value',
+    value: {
+      name: "test",
+      asdf: 98,
+      value: true,
+      yeahhhh: null
+    },
+  },
 ]);
 
 export const Default: Story = {

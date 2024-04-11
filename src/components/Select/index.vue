@@ -21,6 +21,7 @@ import { MaybeRef, debouncedWatch } from '@vueuse/core';
 import { onClickOutside } from '@vueuse/core';
 import { PhCheck, PhCaretDown } from '@phosphor-icons/vue';
 import { size } from '@floating-ui/vue';
+import { isEqual } from 'lodash';
 
 export type Value = string | number | boolean | null | undefined;
 
@@ -196,7 +197,7 @@ onMounted(async () => {
 });
 
 const activeItem = computed(() => {
-  return props.options.find((item) => item.value === props.modelValue);
+  return props.options.find((item) => isEqual(item.value, props.modelValue));
 });
 
 function selectItem(item) {
