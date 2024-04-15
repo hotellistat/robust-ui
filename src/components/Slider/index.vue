@@ -194,7 +194,7 @@ const moderatedMax = () => {
 };
 
 const focus = () => {
-  slider.value.focus();
+  slider.value?.focus();
 };
 
 const reset = () => {
@@ -212,7 +212,7 @@ const onBlur = () => {
 };
 
 const onExternalClick = (e) => {
-  if (!slider.value.contains(e.target)) {
+  if (!slider.value?.contains(e.target)) {
     onBlur();
   }
 };
