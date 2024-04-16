@@ -817,11 +817,11 @@ const clearComparisonDate = () => {
 const saveTime = async () => {
   emit(
     'update:dateRange',
-    stagedDateRange.value.length ? stagedDateRange.value : undefined
+    stagedDateRange.value?.length ? stagedDateRange.value : undefined
   );
   emit(
     'update:dateRangeComparison',
-    stagedDateRangeComparison.value.length
+    stagedDateRangeComparison.value?.length
       ? stagedDateRangeComparison.value
       : undefined
   );
