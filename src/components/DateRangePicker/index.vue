@@ -237,7 +237,12 @@ const stagedDateRangeComparison = ref<[Date, Date] | []>();
 watch(
   () => props.dateRangeComparison,
   (value) => {
-    if (!value || value.length < 2 || value.some((d) => !(d instanceof Date))) {
+    if (
+      !value ||
+      !Array.isArray(value) ||
+      value.length < 2 ||
+      value.some((d) => !(d instanceof Date))
+    ) {
       return (stagedDateRangeComparison.value = []);
     }
     stagedDateRangeComparison.value = value;
@@ -261,7 +266,12 @@ const stagedDateRange = ref<[Date, Date] | []>();
 watch(
   () => props.dateRange,
   (value) => {
-    if (!value || value.length < 2 || value.some((d) => !(d instanceof Date))) {
+    if (
+      !value ||
+      !Array.isArray(value) ||
+      value.length < 2 ||
+      value.some((d) => !(d instanceof Date))
+    ) {
       return (stagedDateRange.value = []);
     }
     stagedDateRange.value = value;
