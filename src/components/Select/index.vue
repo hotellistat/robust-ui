@@ -235,9 +235,9 @@ function resetFields() {
 // in form of boolean
 function optionSelected(option: any) {
   if (Array.isArray(modelValue.value)) {
-    return modelValue.value.includes(option.value);
+    return !!options.value.find((item) => isEqual(item.value, option.value));
   }
-  return modelValue.value === option.value;
+  return isEqual(option.value, modelValue.value);
 }
 
 function getInputTitle() {
