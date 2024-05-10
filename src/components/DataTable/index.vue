@@ -218,7 +218,6 @@ import Checkbox from '../Checkbox/index.vue';
 import Input from '../Input/index.vue';
 import Fuse from 'fuse.js';
 import { debouncedWatch } from '@vueuse/shared';
-import { MaybeRef } from '@vueuse/core';
 import { RobustNotice } from '..';
 
 export type Direction = 0 | -1 | 1;
@@ -255,6 +254,7 @@ type DataTableOptions = {
   defaultColSize?: string;
   selection?: boolean;
   search?: boolean;
+  searchModel?: string;
   robustSearch?: boolean;
 };
 
@@ -270,6 +270,7 @@ const defaultOptions: Partial<DataTableOptions> = {
   defaultColSize: '150px',
   selection: true,
   search: true,
+  searchModel: '',
 };
 
 const props = defineProps({
@@ -357,7 +358,11 @@ const checkAllModel = computed({
 
 const selectedRows = ref([]);
 const excludedRows = ref([]);
-const searchModel = ref('');
+const searchModel = ref(
+  options.value.searchModel === undefined
+    ? defaultOptions.searchModel
+    : options.value.searchModel
+);
 const displayInfo = ref(false);
 const selectedAll = ref(false);
 
