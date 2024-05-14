@@ -233,16 +233,20 @@ const computedComparisonFilterPreset = computed(() => {
 const mainElementRef = ref();
 const activeSection = ref<'comparison' | 'main'>('main');
 
+const isDateRange = (value: any) => {
+  return !(
+    !value ||
+    !Array.isArray(value) ||
+    value.length < 2 ||
+    value.some((d) => !(d instanceof Date))
+  );
+};
+
 const stagedDateRangeComparison = ref<[Date, Date] | []>();
 watch(
   () => props.dateRangeComparison,
   (value) => {
-    if (
-      !value ||
-      !Array.isArray(value) ||
-      value.length < 2 ||
-      value.some((d) => !(d instanceof Date))
-    ) {
+    if (!isDateRange(value)) {
       return (stagedDateRangeComparison.value = []);
     }
     stagedDateRangeComparison.value = value;
@@ -266,12 +270,7 @@ const stagedDateRange = ref<[Date, Date] | []>();
 watch(
   () => props.dateRange,
   (value) => {
-    if (
-      !value ||
-      !Array.isArray(value) ||
-      value.length < 2 ||
-      value.some((d) => !(d instanceof Date))
-    ) {
+    if (!isDateRange(value)) {
       return (stagedDateRange.value = []);
     }
     stagedDateRange.value = value;
@@ -490,7 +489,7 @@ const perspectiveDatePresets = computed(() =>
 );
 
 const displayDate = computed(() => {
-  if (!props.dateRange || props.dateRange.length < 2) {
+  if (!isDateRange(props.dateRange)) {
     return 'Select date';
   }
 
@@ -522,7 +521,7 @@ const displayComparisonDate = computed(() => {
     return undefined;
   }
 
-  if (!props.dateRangeComparison || props.dateRangeComparison.length < 2) {
+  if (!isDateRange(props.dateRangeComparison)) {
     return 'Select Comparison';
   }
 
@@ -556,7 +555,7 @@ const displayComparisonDate = computed(() => {
 });
 
 const displayPreset = computed(() => {
-  if (!props.dateRange) {
+  if (!isDateRange(props.dateRange)) {
     return undefined;
   }
   if (props.activePreset) {
@@ -568,7 +567,7 @@ const displayPreset = computed(() => {
 });
 
 const displayComparisonPreset = computed(() => {
-  if (!props.dateRangeComparison || props.dateRangeComparison.length < 2) {
+  if (!isDateRange(props.dateRangeComparison)) {
     return undefined;
   }
 
@@ -646,7 +645,7 @@ function isDaterangeFullYear(range: [Date, Date]) {
 }
 
 function subTimeframeFromDate() {
-  if (!props.dateRange || props.dateRange.length < 2) {
+  if (!isDateRange(props.dateRange)) {
     return;
   }
 
@@ -679,7 +678,7 @@ function subTimeframeFromDate() {
 }
 
 function addTimeframeFromDate() {
-  if (!props.dateRange || props.dateRange.length < 2) {
+  if (!isDateRange(props.dateRange)) {
     return;
   }
 
