@@ -235,7 +235,7 @@ function resetFields() {
 // in form of boolean
 function optionSelected(option: any) {
   if (Array.isArray(modelValue.value)) {
-    return !!options.value.find((item) => isEqual(item.value, option.value));
+    return modelValue.value.some((value: any) => isEqual(value, option.value));
   }
   return isEqual(option.value, modelValue.value);
 }
