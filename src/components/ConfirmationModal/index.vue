@@ -6,7 +6,7 @@
     <div class="p-6">
       <div v-if="!$slots.body" class="mb-8">
         <slot name="description">
-          Are you sure you want to proceed with this action?
+          {{ props.description }}
         </slot>
       </div>
       <div class="flex justify-end gap-2">
@@ -59,6 +59,10 @@ const props = defineProps({
     type: [String, Boolean] as PropType<string | false>,
     default: 'danger',
   },
+  description: {
+    type: String,
+    default: 'Are you sure you want to proceed with this action?',
+  },
   condensed: {
     type: Boolean,
     default: false,
@@ -85,8 +89,6 @@ const cancel = () => {
 
 const open = ref(false);
 
-
-
 const handleClick = (e: MouseEvent) => {
   if (e.shiftKey) {
     return confirm();
@@ -97,7 +99,6 @@ const handleClick = (e: MouseEvent) => {
 
 defineExpose({
   click: handleClick,
-  open
+  open,
 });
-
 </script>
