@@ -1,5 +1,5 @@
 <template>
-  <div ref="table" class="flex w-full flex-col gap-y-2 sm:gap-y-2">
+  <div ref="table" class="flex w-full flex-col gap-y-2 sm:gap-y-2 relative">
     <div v-if="search" class="search-wrapper">
       <Input v-model="searchModel" placeholder="Search" />
       <!-- Display filters -->
@@ -24,7 +24,10 @@
     <slot name="header" />
     <div
       class="rows-wrapper flex flex-col"
-      :class="horizontalScroll ? 'overflow-auto' : 'overflow-hidden'"
+      :class="[
+        options.stickyHeaderClass,
+        horizontalScroll ? 'overflow-auto' : 'overflow-hidden',
+      ]"
     >
       <div
         ref="header"
@@ -32,7 +35,11 @@
         :style="{
           gridTemplateColumns: sizes,
         }"
-        :class="[headerClass, horizontalScroll ? 'w-max' : '']"
+        :class="[
+          headerClass,
+          horizontalScroll ? 'w-max' : '',
+          options.stickyHeader ? 'sticky top-0 z-10' : '',
+        ]"
       >
         <div class="checkbox">
           <Checkbox
@@ -256,6 +263,8 @@ type DataTableOptions = {
   search?: boolean;
   searchModel?: string;
   robustSearch?: boolean;
+  stickyHeader?: boolean;
+  stickyHeaderClass?: string;
 };
 
 const defaultOptions: Partial<DataTableOptions> = {
