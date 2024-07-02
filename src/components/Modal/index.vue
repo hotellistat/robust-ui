@@ -15,7 +15,7 @@
         role="dialog"
       >
         <div
-          class="robust-ui-modal__backdrop absolute top-0 left-0 right-0 bottom-0 bg-white/60 dark:bg-black/40"
+          class="robust-ui-modal__backdrop absolute top-0 left-0 right-0 bottom-0 bg-black/40 dark:bg-black/40"
           @click.self="close"
         ></div>
         <div
@@ -24,7 +24,7 @@
           @keydown.esc="close"
         >
           <div
-            class="relative flex max-h-full min-h-0 w-full flex-col border border-gray-200 bg-white/60 backdrop-blur-3xl dark:border-gray-800 dark:bg-gray-800/70"
+            class="relative flex max-h-full min-h-0 w-full flex-col bg-white/80 backdrop-blur-3xl dark:bg-gray-800/80"
             :class="[
               modalClass,
               modalBoxInnerClass,
