@@ -34,7 +34,7 @@ export const Default: Story = {
 <div class="dark:text-white max-w-screen-lg" @click="args.opened = true"> ${lorem}</div>
 <Modal v-model:opened="args.opened" v-bind="args">
   <template #title>
-    Title
+    Title ggg
   </template>
   <template #header>
     <div class="p-4">header</div>

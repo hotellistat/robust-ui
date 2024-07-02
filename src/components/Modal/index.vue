@@ -33,10 +33,13 @@
           >
             <div
               v-if="$slots.title"
-              class="flex flex-shrink-0 items-center p-6 text-xl"
+              class="flex flex-shrink-0 items-center p-6 text-lg"
             >
-              <div class="flex-1 leading-4 truncate">
-                <slot name="title" :close="manualClose"></slot>
+              <div class="flex-1 truncate">
+                <slot
+                  name="title"
+                  :close="manualClose"
+                ></slot>
               </div>
               <button
                 v-if="props.dismissable"
@@ -44,11 +47,20 @@
                 class="-m-4 p-4 text-gray-400 transition-colors duration-150 hover:text-gray-900 dark:hover:text-gray-100"
                 @click="close"
               >
-                <PhX size="20" class="block" />
+                <PhX
+                  size="20"
+                  class="block"
+                />
               </button>
             </div>
-            <div v-if="$slots.header" class="w-full flex-shrink-0">
-              <slot name="header" :close="manualClose"></slot>
+            <div
+              v-if="$slots.header"
+              class="w-full flex-shrink-0"
+            >
+              <slot
+                name="header"
+                :close="manualClose"
+              ></slot>
             </div>
             <section
               :class="[
@@ -60,8 +72,14 @@
             >
               <slot :close="manualClose"></slot>
             </section>
-            <div v-if="$slots.footer" class="w-full flex-shrink-0">
-              <slot name="footer" :close="manualClose"></slot>
+            <div
+              v-if="$slots.footer"
+              class="w-full flex-shrink-0"
+            >
+              <slot
+                name="footer"
+                :close="manualClose"
+              ></slot>
             </div>
           </div>
         </div>
@@ -69,7 +87,6 @@
     </Transition>
   </Teleport>
 </template>
-
 <script lang="ts" setup>
 import { computed, onMounted, toRefs, watch } from 'vue';
 import { PhX } from '@phosphor-icons/vue';
@@ -236,7 +253,6 @@ defineExpose({
   close,
 });
 </script>
-
 <style lang="postcss">
 .robust-ui-modal__fade-enter-active {
   transition: all 150ms ease-in-out;
