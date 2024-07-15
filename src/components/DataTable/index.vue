@@ -35,9 +35,11 @@
       >
         <div
           class="datatable-grid-column robust-datatable-first-header select-none items-center flex"
-          :style="{
-            width: firstColumnSize,
-          }"
+          :style="
+            header?.clientHeight
+              ? { height: header.clientHeight + 'px', width: firstColumnSize }
+              : { width: firstColumnSize }
+          "
           :class="[
             headerClass,
             horizontalScroll ? 'w-max' : '',
@@ -102,7 +104,7 @@
             >
               <!-- Columns -->
               <div
-                class="grid min-h-[48px] grid-cols-2 items-center sm:flex px-2"
+                class="grid min-h-[48px] grid-cols-2 items-center sm:flex"
                 :class="firstColumn?.class ?? ''"
               >
                 <div class="block sm:hidden" :class="firstColumn?.class ?? ''">
