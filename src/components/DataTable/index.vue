@@ -144,7 +144,7 @@
           </div>
         </div>
       </div>
-      <div class="rows-wrapper flex flex-col h-max">
+      <div class="rows-wrapper flex flex-col h-max flex-1">
         <div
           ref="header"
           class="datatable-grid-columns robust-datatable-header hidden select-none items-center gap-x-2 sm:grid"
