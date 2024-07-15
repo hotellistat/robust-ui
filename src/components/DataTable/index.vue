@@ -1,5 +1,5 @@
 <template>
-  <div ref="table" class="flex w-[800px] flex-col gap-y-2 sm:gap-y-2 relative">
+  <div ref="table" class="flex flex-col gap-y-2 sm:gap-y-2 relative">
     <div v-if="search" class="search-wrapper">
       <Input v-model="searchModel" placeholder="Search" />
       <!-- Display filters -->
