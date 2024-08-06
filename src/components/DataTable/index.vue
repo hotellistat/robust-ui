@@ -144,7 +144,10 @@
           </div>
         </div>
       </div>
-      <div class="rows-wrapper flex flex-col h-max flex-1">
+      <div
+        class="rows-wrapper flex flex-col flex-1"
+        :class="options.firstColumnSticky && 'h-max'"
+      >
         <div
           ref="header"
           class="datatable-grid-columns robust-datatable-header hidden select-none items-center gap-x-2 sm:grid"
@@ -202,7 +205,12 @@
 
         <Separator v-if="!options.removeSeparators" class="hidden sm:block" />
 
-        <div>
+        <div
+          :class="
+            !options.firstColumnSticky &&
+            'overflow-y-auto scrollable-content overflow-x-auto'
+          "
+        >
           <!-- Rows -->
           <div
             v-for="(entry, idx) in sortedData"
