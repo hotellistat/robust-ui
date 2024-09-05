@@ -921,6 +921,7 @@ onMounted(() => {
           class="rounded active:bg-primary-500 active:text-white flex justify-center items-center transition-colors duration-100 focus:ring-0"
           :condensed="condensed"
           @click="subTimeframeFromDate"
+          :disabled="!props.dateRange || stagedDateRange.length < 2"
         >
           <PhCaretLeft class="block" />
         </RobustButton>
@@ -973,6 +974,7 @@ onMounted(() => {
           class="rounded active:bg-primary-500 active:text-white flex justify-center items-center transition-colors duration-100 focus:ring-0"
           :condensed="condensed"
           @click="addTimeframeFromDate"
+          :disabled="!props.dateRange || stagedDateRange.length < 2"
         >
           <PhCaretRight class="block" />
         </RobustButton>
