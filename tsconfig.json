@@ -7,10 +7,19 @@
     "outDir": "dist",
     "declaration": true,
     "allowJs": true,
-    "types": ["vite/client", "web-bluetooth"],
-    "typeRoots": ["./src/types", "./node_modules/@types"]
+    "allowSyntheticDefaultImports": true,
+    "types": [
+      "vite/client",
+      "web-bluetooth"
+    ],
+    "typeRoots": [
+      "./src/types",
+      "./node_modules/@types"
+    ]
   },
-  "include": ["./src/**/*"],
+  "include": [
+    "./src/**/*"
+  ],
   "exclude": [
     "src/**/*.stories.js",
     "src/**/*.stories.ts",

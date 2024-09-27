@@ -4,24 +4,14 @@ export default {
   inheritAttrs: false,
 };
 </script>
-
 <script lang="ts" setup>
 import RobustInputWrapper from '../InputWrapper/index.vue';
 import FLoating from '../Floating/index.vue';
-import {
-  ref,
-  computed,
-  nextTick,
-  toRefs,
-  onMounted,
-  inject,
-  PropType,
-} from 'vue';
-import { MaybeRef, debouncedWatch } from '@vueuse/core';
+import { ref, computed, nextTick, toRefs, onMounted, PropType } from 'vue';
+import { debouncedWatch } from '@vueuse/core';
 import { onClickOutside } from '@vueuse/core';
 import { PhCheck, PhCaretDown } from '@phosphor-icons/vue';
-import { size } from '@floating-ui/vue';
-import { isEqual } from 'lodash';
+import isEqual from 'fast-deep-equal/es6';
 
 export type Value = string | number | boolean | null | undefined;
 
@@ -301,7 +291,6 @@ function deselectAll() {
   emit('update:modelValue', newValue);
 }
 </script>
-
 <template>
   <RobustInputWrapper
     ref="refSelectWrapper"
@@ -345,7 +334,6 @@ function deselectAll() {
         :class="[$slots.prefix || condensed ? 'pl-2' : 'pl-3']"
       />
     </div>
-
     <div
       class="pointer-events-none flex h-full flex-shrink-0 select-none items-center pr-3 text-gray-400 dark:text-gray-500"
       :class="[condensed ? 'pl-2' : 'pl-3']"
