@@ -212,8 +212,8 @@
           "
         >
           <!-- Rows -->
-          <div v-bind="options.isVirtualised ? containerProps : ''" :class="options.isVirtualised ? 'h-screen' : ''">
-            <div v-bind="options.isVirtualised ? wrapperProps : ''" :class="options.isVirtualised ? 'h-full' : ''">
+          <div v-bind="options.isVirtualised ? containerProps : {}" :class="options.isVirtualised ? 'h-screen' : ''">
+            <div v-bind="options.isVirtualised ? wrapperProps : {}" :class="options.isVirtualised ? 'h-full' : ''">
               <div
                 v-for="(entry, idx) in sortedData"
                 :key="idx"
@@ -593,7 +593,7 @@ const sortedData = computed(() => {
 });
 
 const initMaxPage = () => {
-  if (options.value.serverSide || options.value.isVirtualised) {
+  if (options.value.serverSide) {
     return options.value.maxPage ?? defaultOptions.maxPage;
   }
   return Math.ceil(data.value.length / rowsLimit.value);
@@ -602,7 +602,7 @@ const maxPageController = ref(initMaxPage());
 
 const maxPage = computed({
   get() {
-    if (options.value.serverSide || options.value.isVirtualised) {
+    if (options.value.serverSide) {
       return initMaxPage();
     }
     return maxPageController.value;
