@@ -141,3 +141,12 @@ export const ServerSide = ServerSideTemplate.bind({});
 ServerSide.args = {
   data,
 };
+
+export const Virtualised = DefaultTemplate.bind({});
+Virtualised.args = {
+  data,
+  options: {
+    ...options,
+    isVirtualised: true,
+  },
+};
