@@ -212,89 +212,95 @@
           "
         >
           <!-- Rows -->
-          <div
-            v-for="(entry, idx) in sortedData"
-            :key="idx"
-            class="flex flex-col justify-between hover:bg-gray-100 hover:dark:bg-gray-700"
-            @click="onClickRow(entry, idx)"
-            @mouseover="emitMouseOverRow($event, entry)"
-            @mouseleave="emitMouseLeaveRow($event, entry)"
-            @mousemove="emitMouseMoveRow($event, entry)"
-            @mouseenter="emitMouseEnterRow($event, entry)"
-          >
-            <div v-if="entry.isHeader">
-              <slot
-                name="header-row"
-                :data="entry"
-                :style="{
-                  gridTemplateColumns: sizes,
-                }"
-              />
-            </div>
-            <div v-else>
+          <div v-bind="options.isVirtualised ? containerProps : {}" :class="options.isVirtualised ? 'h-screen' : ''">
+            <div v-bind="options.isVirtualised ? wrapperProps : {}" :class="options.isVirtualised ? 'h-full' : ''">
               <div
-                class="datatable-grid-columns flex flex-col gap-x-2 gap-y-2 sm:grid sm:items-center"
-                :style="{
-                  gridTemplateColumns: sizes,
-                }"
-                :class="entry.rowClass ?? ''"
+                v-for="(entry, idx) in sortedData"
+                :key="idx"
+                class="flex flex-col justify-between hover:bg-gray-100 hover:dark:bg-gray-700"
+                @click="onClickRow(entry, idx)"
+                @mouseover="emitMouseOverRow($event, entry)"
+                @mouseleave="emitMouseLeaveRow($event, entry)"
+                @mousemove="emitMouseMoveRow($event, entry)"
+                @mouseenter="emitMouseEnterRow($event, entry)"
               >
-                <div>
-                  <Checkbox
-                    v-if="options.selection !== false"
-                    v-model="checkboxSelected"
-                    :value="entry[options.id]"
+                <div v-if="entry.isHeader">
+                  <slot
+                    name="header-row"
+                    :data="entry"
+                    :style="{
+                      gridTemplateColumns: sizes,
+                    }"
                   />
                 </div>
-                <!-- Columns -->
-                <div
-                  v-for="column in tableColumns"
-                  :key="column.key"
-                  class="grid min-h-[48px] grid-cols-2 items-center sm:flex"
-                  :class="column.class ?? ''"
-                >
-                  <div class="block sm:hidden" :class="column.class ?? ''">
-                    {{ column.name }}
+                <div v-else>
+                  <div
+                    class="datatable-grid-columns flex flex-col gap-x-2 gap-y-2 sm:grid sm:items-center"
+                    :style="{
+                      gridTemplateColumns: sizes,
+                    }"
+                    :class="entry.rowClass ?? ''"
+                  >
+                    <div>
+                      <Checkbox
+                        v-if="options.selection !== false"
+                        v-model="checkboxSelected"
+                        :value="entry[options.id]"
+                      />
+                    </div>
+                    <!-- Columns -->
+                    <div
+                      v-for="column in tableColumns"
+                      :key="column.key"
+                      class="grid min-h-[48px] grid-cols-2 items-center sm:flex"
+                      :class="column.class ?? ''"
+                    >
+                      <div class="block sm:hidden" :class="column.class ?? ''">
+                        {{ column.name }}
+                      </div>
+                      <slot
+                        v-if="$slots[column.key] && !loading"
+                        :name="`${column.key}`"
+                        :data="entry"
+                        :idx="idx"
+                        :on-click="() => onClickCell(entry)"
+                      />
+                      <!-- Column content -->
+                      <div
+                        v-else-if="!$slots[column.key] && !loading"
+                        class="w-full overflow-hidden break-words"
+                        @click="() => onClickCell(entry)"
+                      >
+                        {{
+                          entry[column.key] === undefined
+                            ? 'No data'
+                            : entry[column.key]
+                        }}
+                      </div>
+                      <div
+                        v-else
+                        class="loading dark:loading-dark h-6 w-full"
+                      ></div>
+                    </div>
                   </div>
                   <slot
-                    v-if="$slots[column.key] && !loading"
-                    :name="`${column.key}`"
+                    name="collapsed"
                     :data="entry"
-                    :idx="idx"
-                    :on-click="() => onClickCell(entry)"
+                    :style="{
+                      display: 'grid',
+                      gridTemplateColumns: sizes,
+                    }"
                   />
-                  <!-- Column content -->
-                  <div
-                    v-else-if="!$slots[column.key] && !loading"
-                    class="w-full overflow-hidden break-words"
-                    @click="() => onClickCell(entry)"
-                  >
-                    {{
-                      entry[column.key] === undefined
-                        ? 'No data'
-                        : entry[column.key]
-                    }}
-                  </div>
-                  <div
-                    v-else
-                    class="loading dark:loading-dark h-6 w-full"
-                  ></div>
                 </div>
+                <Separator v-if="!options.removeSeparators" />
               </div>
-              <slot
-                name="collapsed"
-                :data="entry"
-                :style="{
-                  display: 'grid',
-                  gridTemplateColumns: sizes,
-                }"
-              />
             </div>
-            <Separator v-if="!options.removeSeparators" />
           </div>
         </div>
       </div>
     </div>
+  </div>
+
     <slot
       v-if="$slots.footer"
       name="footer"
@@ -326,7 +332,6 @@
         />
       </div>
     </div>
-  </div>
 </template>
 
 <script setup lang="ts">
@@ -348,6 +353,7 @@ import Input from '../Input/index.vue';
 import Fuse from 'fuse.js';
 import { debouncedWatch } from '@vueuse/shared';
 import { RobustNotice } from '..';
+import { useVirtualList } from '@vueuse/core';
 
 export type Direction = 0 | -1 | 1;
 
@@ -389,6 +395,7 @@ type DataTableOptions = {
   stickyHeaderClass?: string;
   firstColumnSticky?: boolean;
   removeSeparators?: boolean;
+  isVirtualised?: boolean;
 };
 
 const defaultOptions: Partial<DataTableOptions> = {
@@ -404,6 +411,7 @@ const defaultOptions: Partial<DataTableOptions> = {
   selection: true,
   search: true,
   searchModel: '',
+  isVirtualised: false,
 };
 
 const props = defineProps({
@@ -556,12 +564,26 @@ const ghostColumns = computed(() => {
   return sortedData.value.length;
 });
 
-const sortedData = computed(() => {
+const { list, containerProps, wrapperProps } = useVirtualList(
+  props.data,
+  {
+    itemHeight: 40,
+    overscan: 2,
+  },
+);
+
+const sortedData = computed(() => {  
   if (loading.value) {
     return Array(rowsLimit.value).fill({});
   }
   if (options.value.serverSide) {
     return data.value;
+  }
+  if(options.value.isVirtualised) {
+    const data = list.value.map((d) => {
+      return d.data;
+    })
+    return data;
   }
   const sorted = sortData();
   gotoPage(page.value);
