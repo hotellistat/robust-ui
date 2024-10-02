@@ -1225,7 +1225,7 @@ const getSpace = () => {
     value: c.type === '%' ? perc(c) : c.value,
   }));
 
-  if (horizontalScroll.value) {
+  if (horizontalScroll.value && tableWrapper.value) {
     // Transform percentages in px
     sizes = sizes.map((c) => ({
       ...c,
