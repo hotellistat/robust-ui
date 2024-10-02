@@ -145,6 +145,7 @@
         </div>
       </div>
       <div
+        ref="tableWrapper"
         class="rows-wrapper flex flex-col flex-1"
         :class="options.firstColumnSticky && 'h-max'"
       >
@@ -448,6 +449,7 @@ const { data, options, loading, headerClass, horizontalScroll } = toRefs(props);
 
 const table = ref();
 const header = ref();
+const tableWrapper = ref();
 const search = ref(
   options.value.search === undefined
     ? defaultOptions.search
@@ -1222,6 +1224,23 @@ const getSpace = () => {
     ...c,
     value: c.type === '%' ? perc(c) : c.value,
   }));
+
+  if (horizontalScroll.value) {
+    // Transform percentages in px
+    sizes = sizes.map((c) => ({
+      ...c,
+      value: c.type === '%' ? c.value * (availableSpace / 100) : c.value,
+      type: 'px',
+    }));
+    const tableWidth = tableWrapper.value.clientWidth;
+    if (headerWidth < tableWidth) {
+      const diff = tableWidth - headerWidth;
+      sizes = sizes.map((c) => ({
+        ...c,
+        value: c.value + diff / sizes.length,
+      }));
+    }
+  }
   return {
     sizes,
     available: availableSpace,
@@ -1254,7 +1273,7 @@ const initSpace = () => {
 watch(
   () => options.value.columns,
   () => {
-    if (!horizontalScroll.value) initSpace();
+    initSpace();
   },
   {
     deep: true,
@@ -1264,7 +1283,7 @@ watch(
 watch(
   () => horizontalScroll,
   () => {
-    if (!horizontalScroll.value) initSpace();
+    initSpace();
   },
   {
     deep: true,
@@ -1273,7 +1292,7 @@ watch(
 
 onMounted(() => {
   createResizableTable();
-  if (!horizontalScroll.value) initSpace();
+  initSpace();
   resizeObserver = new ResizeObserver(onResize);
   resizeObserver.observe(table.value);
 });
