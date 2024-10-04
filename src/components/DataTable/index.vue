@@ -577,7 +577,6 @@ const { list, containerProps, wrapperProps } = useVirtualList(
 );
 
 const sortedData = computed(() => { 
-  console.log('----sortedData----', containerProps, wrapperProps, options.value);
    
   if (loading.value) {
     return Array(rowsLimit.value).fill({});
@@ -585,9 +584,7 @@ const sortedData = computed(() => {
   if (options.value.serverSide) {
     return data.value;
   }
-  if(options.value.isVirtualised) {
-    console.log('----list----', list.value);
-    
+  if(options.value.isVirtualised) {    
     const data = list.value.map((d) => {
       return d.data;
     })
