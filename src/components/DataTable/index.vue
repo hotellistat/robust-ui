@@ -234,10 +234,11 @@
             />
 
             <div
-              :class="
+              :class="[
                 !options.firstColumnSticky &&
-                'overflow-y-auto scrollable-content overflow-x-auto'
-              "
+                  'overflow-y-auto scrollable-content overflow-x-auto',
+                horizontalScroll ? 'w-max' : '',
+              ]"
             >
               <!-- Rows -->
 
