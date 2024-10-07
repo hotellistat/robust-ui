@@ -9,13 +9,13 @@
   "files": [
     "dist"
   ],
-  "main": "dist/index.mjs",
-  "browser": "dist/index.mjs",
-  "module": "dist/index.mjs",
+  "main": "dist/src/index.mjs",
+  "browser": "dist/src/index.mjs",
+  "module": "dist/src/index.mjs",
   "types": "dist/index.d.ts",
   "exports": {
     ".": {
-      "import": "./dist/index.mjs",
+      "import": "./dist/src/index.mjs",
       "types": "./dist/index.d.ts"
     }
   },
