@@ -29,9 +29,14 @@
         horizontalScroll ? 'overflow-scroll' : 'overflow-hidden',
       ]"
     >
-
-      <div v-bind="options.isVirtualised ? containerProps : {}" :class="options.isVirtualised ? 'h-screen flex' : 'w-full'">
-        <div v-bind="options.isVirtualised ? wrapperProps : {}" :class="options.isVirtualised ? 'h-full flex' : 'w-full'">
+      <div
+        v-bind="options.isVirtualised ? containerProps : {}"
+        :class="options.isVirtualised ? 'h-screen flex' : 'w-full'"
+      >
+        <div
+          v-bind="options.isVirtualised ? wrapperProps : {}"
+          :class="options.isVirtualised ? 'h-full flex' : 'w-full'"
+        >
           <div
             v-if="options.firstColumnSticky"
             class="flex flex-col sticky left-0 z-20 h-max"
@@ -40,7 +45,10 @@
               class="datatable-grid-column robust-datatable-first-header select-none items-center flex"
               :style="
                 header?.clientHeight
-                  ? { height: header.clientHeight + 'px', width: firstColumnSize }
+                  ? {
+                      height: header.clientHeight + 'px',
+                      width: firstColumnSize,
+                    }
                   : { width: firstColumnSize }
               "
               :class="[
@@ -65,7 +73,11 @@
                 >
                   {{ firstColumn?.name }}
                 </div>
-                <slot v-else :name="`c_${firstColumn?.key}`" :data="firstColumn" />
+                <slot
+                  v-else
+                  :name="`c_${firstColumn?.key}`"
+                  :data="firstColumn"
+                />
                 <button
                   v-if="firstColumn?.sortable !== false"
                   type="button"
@@ -89,7 +101,10 @@
                 </button>
               </div>
             </div>
-            <Separator v-if="!options.removeSeparators" class="hidden sm:block" />
+            <Separator
+              v-if="!options.removeSeparators"
+              class="hidden sm:block"
+            />
             <div>
               <div
                 v-for="(entry, idx) in sortedData"
@@ -110,7 +125,10 @@
                     class="grid min-h-[48px] grid-cols-2 items-center sm:flex"
                     :class="firstColumn?.class ?? ''"
                   >
-                    <div class="block sm:hidden" :class="firstColumn?.class ?? ''">
+                    <div
+                      class="block sm:hidden"
+                      :class="firstColumn?.class ?? ''"
+                    >
                       {{ firstColumn?.name }}
                     </div>
                     <slot
@@ -132,7 +150,10 @@
                           : entry[firstColumn?.key]
                       }}
                     </div>
-                    <div v-else class="loading dark:loading-dark h-6 w-full"></div>
+                    <div
+                      v-else
+                      class="loading dark:loading-dark h-6 w-full"
+                    ></div>
                   </div>
                 </div>
                 <slot
@@ -148,6 +169,7 @@
             </div>
           </div>
           <div
+            ref="tableWrapper"
             class="rows-wrapper flex flex-col flex-1"
             :class="options.firstColumnSticky && 'h-max'"
           >
@@ -206,7 +228,10 @@
               </div>
             </div>
 
-            <Separator v-if="!options.removeSeparators" class="hidden sm:block" />
+            <Separator
+              v-if="!options.removeSeparators"
+              class="hidden sm:block"
+            />
 
             <div
               :class="
@@ -215,88 +240,87 @@
               "
             >
               <!-- Rows -->
-        
+
+              <div
+                v-for="(entry, idx) in sortedData"
+                :key="idx"
+                class="flex flex-col justify-between hover:bg-gray-100 hover:dark:bg-gray-700"
+                @click="onClickRow(entry, idx)"
+                @mouseover="emitMouseOverRow($event, entry)"
+                @mouseleave="emitMouseLeaveRow($event, entry)"
+                @mousemove="emitMouseMoveRow($event, entry)"
+                @mouseenter="emitMouseEnterRow($event, entry)"
+              >
+                <div v-if="entry.isHeader">
+                  <slot
+                    name="header-row"
+                    :data="entry"
+                    :style="{
+                      gridTemplateColumns: sizes,
+                    }"
+                  />
+                </div>
+                <div v-else>
                   <div
-                    v-for="(entry, idx) in sortedData"
-                    :key="idx"
-                    class="flex flex-col justify-between hover:bg-gray-100 hover:dark:bg-gray-700"
-                    @click="onClickRow(entry, idx)"
-                    @mouseover="emitMouseOverRow($event, entry)"
-                    @mouseleave="emitMouseLeaveRow($event, entry)"
-                    @mousemove="emitMouseMoveRow($event, entry)"
-                    @mouseenter="emitMouseEnterRow($event, entry)"
+                    class="datatable-grid-columns flex flex-col gap-x-2 gap-y-2 sm:grid sm:items-center"
+                    :style="{
+                      gridTemplateColumns: sizes,
+                    }"
+                    :class="entry.rowClass ?? ''"
                   >
-                    <div v-if="entry.isHeader">
-                      <slot
-                        name="header-row"
-                        :data="entry"
-                        :style="{
-                          gridTemplateColumns: sizes,
-                        }"
+                    <div>
+                      <Checkbox
+                        v-if="options.selection !== false"
+                        v-model="checkboxSelected"
+                        :value="entry[options.id]"
                       />
                     </div>
-                    <div v-else>
-                      <div
-                        class="datatable-grid-columns flex flex-col gap-x-2 gap-y-2 sm:grid sm:items-center"
-                        :style="{
-                          gridTemplateColumns: sizes,
-                        }"
-                        :class="entry.rowClass ?? ''"
-                      >
-                        <div>
-                          <Checkbox
-                            v-if="options.selection !== false"
-                            v-model="checkboxSelected"
-                            :value="entry[options.id]"
-                          />
-                        </div>
-                        <!-- Columns -->
-                        <div
-                          v-for="column in tableColumns"
-                          :key="column.key"
-                          class="grid min-h-[48px] grid-cols-2 items-center sm:flex"
-                          :class="column.class ?? ''"
-                        >
-                          <div class="block sm:hidden" :class="column.class ?? ''">
-                            {{ column.name }}
-                          </div>
-                          <slot
-                            v-if="$slots[column.key] && !loading"
-                            :name="`${column.key}`"
-                            :data="entry"
-                            :idx="idx"
-                            :on-click="() => onClickCell(entry)"
-                          />
-                          <!-- Column content -->
-                          <div
-                            v-else-if="!$slots[column.key] && !loading"
-                            class="w-full overflow-hidden break-words"
-                            @click="() => onClickCell(entry)"
-                          >
-                            {{
-                              entry[column.key] === undefined
-                                ? 'No data'
-                                : entry[column.key]
-                            }}
-                          </div>
-                          <div
-                            v-else
-                            class="loading dark:loading-dark h-6 w-full"
-                          ></div>
-                        </div>
+                    <!-- Columns -->
+                    <div
+                      v-for="column in tableColumns"
+                      :key="column.key"
+                      class="grid min-h-[48px] grid-cols-2 items-center sm:flex"
+                      :class="column.class ?? ''"
+                    >
+                      <div class="block sm:hidden" :class="column.class ?? ''">
+                        {{ column.name }}
                       </div>
                       <slot
-                        name="collapsed"
+                        v-if="$slots[column.key] && !loading"
+                        :name="`${column.key}`"
                         :data="entry"
-                        :style="{
-                          display: 'grid',
-                          gridTemplateColumns: sizes,
-                        }"
+                        :idx="idx"
+                        :on-click="() => onClickCell(entry)"
                       />
+                      <!-- Column content -->
+                      <div
+                        v-else-if="!$slots[column.key] && !loading"
+                        class="w-full overflow-hidden break-words"
+                        @click="() => onClickCell(entry)"
+                      >
+                        {{
+                          entry[column.key] === undefined
+                            ? 'No data'
+                            : entry[column.key]
+                        }}
+                      </div>
+                      <div
+                        v-else
+                        class="loading dark:loading-dark h-6 w-full"
+                      ></div>
                     </div>
-                    <Separator v-if="!options.removeSeparators" />
                   </div>
-
+                  <slot
+                    name="collapsed"
+                    :data="entry"
+                    :style="{
+                      display: 'grid',
+                      gridTemplateColumns: sizes,
+                    }"
+                  />
+                </div>
+                <Separator v-if="!options.removeSeparators" />
+              </div>
             </div>
           </div>
         </div>
@@ -304,37 +328,37 @@
     </div>
   </div>
 
-    <slot
-      v-if="$slots.footer"
-      name="footer"
-      :data="{
-        size: sizes,
-      }"
-    />
-    <div v-if="isFooterVisible" class="flex items-center justify-between py-2">
-      <div v-if="page !== undefined" class="flex items-center gap-x-2">
-        <div class="flex gap-x-2">
-          <PhCaretDoubleLeft :size="24" @click="firstPage" />
-          <PhCaretLeft :size="24" @click="prevPage" />
-        </div>
-        <div>{{ page }}</div>
-        <div class="flex gap-x-2">
-          <PhCaretRight :size="24" @click="nextPage" />
-          <PhCaretDoubleRight :size="24" @click="lastPage" />
-        </div>
+  <slot
+    v-if="$slots.footer"
+    name="footer"
+    :data="{
+      size: sizes,
+    }"
+  />
+  <div v-if="isFooterVisible" class="flex items-center justify-between py-2">
+    <div v-if="page !== undefined" class="flex items-center gap-x-2">
+      <div class="flex gap-x-2">
+        <PhCaretDoubleLeft :size="24" @click="firstPage" />
+        <PhCaretLeft :size="24" @click="prevPage" />
       </div>
-      <div
-        v-if="rowsLimitOptions !== undefined"
-        class="flex items-center gap-x-2"
-      >
-        <div>Rows per page:</div>
-        <Select
-          v-model="rowsLimit"
-          :options="rowsLimitOptions"
-          @change="rowsLimitChange"
-        />
+      <div>{{ page }}</div>
+      <div class="flex gap-x-2">
+        <PhCaretRight :size="24" @click="nextPage" />
+        <PhCaretDoubleRight :size="24" @click="lastPage" />
       </div>
     </div>
+    <div
+      v-if="rowsLimitOptions !== undefined"
+      class="flex items-center gap-x-2"
+    >
+      <div>Rows per page:</div>
+      <Select
+        v-model="rowsLimit"
+        :options="rowsLimitOptions"
+        @change="rowsLimitChange"
+      />
+    </div>
+  </div>
 </template>
 
 <script setup lang="ts">
@@ -568,26 +592,22 @@ const ghostColumns = computed(() => {
   return sortedData.value.length;
 });
 
-const { list, containerProps, wrapperProps } = useVirtualList(
-  props.data,
-  {
-    itemHeight: 40,
-    overscan: 2,
-  },
-);
+const { list, containerProps, wrapperProps } = useVirtualList(props.data, {
+  itemHeight: 40,
+  overscan: 2,
+});
 
-const sortedData = computed(() => { 
-   
+const sortedData = computed(() => {
   if (loading.value) {
     return Array(rowsLimit.value).fill({});
   }
   if (options.value.serverSide) {
     return data.value;
   }
-  if(options.value.isVirtualised) {    
+  if (options.value.isVirtualised) {
     const data = list.value.map((d) => {
       return d.data;
-    })
+    });
     return data;
   }
   const sorted = sortData();
