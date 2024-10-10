@@ -1,6 +1,11 @@
 <template>
   <label class="flex items-center gap-x-3">
-    <input v-model="isChecked" class="hidden" type="checkbox" />
+    <input
+      v-model="isChecked"
+      class="hidden"
+      type="checkbox"
+      :disabled="props.readonly"
+    />
     <div
       type="checkbox"
       class="duration-250 relative box-content h-4 w-8 rounded-2xl border-4 transition-colors"
@@ -38,6 +43,10 @@ const props = defineProps({
   modelValue: {
     type: [Boolean, Number, String, Object],
     required: true,
+  },
+  readonly: {
+    type: Boolean,
+    default: false,
   },
 });
 
