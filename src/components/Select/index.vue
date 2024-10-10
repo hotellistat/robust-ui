@@ -171,6 +171,9 @@ onClickOutside(elementRef, (event) => {
 });
 
 function openDropdown(event) {
+  if (props.readonly || props.disabled) {
+    return;
+  }
   open.value = true;
   sortOptionsBySelected();
   nextTick(() => {
@@ -339,6 +342,7 @@ function deselectAll() {
       :class="[condensed ? 'pl-2' : 'pl-3']"
     >
       <PhCaretDown
+        v-if="!readonly && !disabled"
         :size="14"
         weight="bold"
         class="transition-transform duration-200"

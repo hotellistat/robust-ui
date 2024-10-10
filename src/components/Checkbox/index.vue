@@ -1,7 +1,13 @@
 <template>
   <div class="inline-block">
     <label class="grid grid-cols-[1fr,auto] items-center">
-      <input :id="cuid" v-model="isChecked" type="checkbox" class="hidden" />
+      <input
+        :id="cuid"
+        v-model="isChecked"
+        type="checkbox"
+        class="hidden"
+        :disabled="props.disabled || props.readonly"
+      />
       <div
         class="relative mr-2 box-content h-4 w-4 flex-shrink-0 flex-grow-0 rounded border text-white transition-all duration-100"
         :class="[
@@ -19,16 +25,15 @@
       </div>
       <div class="w-full select-none">
         {{ title }}
-        <slot name="title"/>
+        <slot name="title" />
       </div>
 
       <div v-if="description || $slots.description"></div>
 
       <p v-if="description || $slots.description" class="opacity-60 text-sm">
         {{ description }}
-        <slot name="description"/>
+        <slot name="description" />
       </p>
-
     </label>
   </div>
 </template>
@@ -59,6 +64,10 @@ const props = defineProps({
     default: undefined,
   },
   disabled: {
+    type: Boolean,
+    default: false,
+  },
+  readonly: {
     type: Boolean,
     default: false,
   },
