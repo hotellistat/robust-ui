@@ -1,5 +1,5 @@
 <template>
-  <div ref="table" class="flex flex-col gap-y-2 sm:gap-y-2 relative">
+  <div ref="table" class="flex h-full flex-col gap-y-2 sm:gap-y-2 relative">
     <div v-if="search" class="search-wrapper">
       <Input v-model="searchModel" placeholder="Search" />
       <!-- Display filters -->
@@ -35,10 +35,12 @@
       >
         <div
           v-bind="options.isVirtualised ? wrapperProps : {}"
-          :class="[
-            options.isVirtualised ? 'h-full flex' : 'w-full',
-            options.firstColumnSticky && 'flex',
-          ]"
+          class="h-full"
+          :class="
+            options.isVirtualised || options.firstColumnSticky
+              ? 'flex'
+              : 'w-full'
+          "
         >
           <div
             v-if="options.firstColumnSticky"
@@ -173,7 +175,7 @@
           </div>
           <div
             ref="tableWrapper"
-            class="rows-wrapper flex flex-col flex-1"
+            class="rows-wrapper h-full flex flex-col flex-1"
             :class="options.firstColumnSticky && 'h-max'"
           >
             <div
