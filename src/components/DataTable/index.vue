@@ -35,7 +35,10 @@
       >
         <div
           v-bind="options.isVirtualised ? wrapperProps : {}"
-          :class="options.isVirtualised ? 'h-full flex' : 'w-full'"
+          :class="[
+            options.isVirtualised ? 'h-full flex' : 'w-full',
+            options.firstColumnSticky && 'flex',
+          ]"
         >
           <div
             v-if="options.firstColumnSticky"
