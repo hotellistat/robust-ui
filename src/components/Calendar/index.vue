@@ -504,9 +504,7 @@ const isSelectedDay = (day) => {
       }
     }
   } else {
-    const tmpDate = new Date();
-    tmpDate.setFullYear(cursor.value.getFullYear());
-    tmpDate.setMonth(cursor.value.getMonth());
+    const tmpDate = new Date(cursor.value);
     tmpDate.setDate(day);
 
     if (Array.isArray(modelValue.value)) {
