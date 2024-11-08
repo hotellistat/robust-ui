@@ -19,6 +19,8 @@ import {
   differenceInDays,
   endOfMonth,
   endOfYear,
+  isAfter,
+  isBefore,
   isSameDay,
   startOfMonth,
   startOfYear,
@@ -240,6 +242,18 @@ const isDateRange = (value: any) => {
     value.length < 2 ||
     value.some((d) => !(d instanceof Date))
   );
+};
+
+const isPast = (date: Date) => {
+  const today = new Date();
+  today.setHours(0, 0, 0, 0);
+  return isBefore(date, today);
+};
+
+const isFuture = (date: Date) => {
+  const today = new Date();
+  today.setHours(23, 59, 59, 999);
+  return isAfter(date, today);
 };
 
 const stagedDateRangeComparison = ref<[Date, Date] | []>();
@@ -649,18 +663,20 @@ function subTimeframeFromDate() {
     return;
   }
 
+  let bufferDateRange: [Date, Date];
+
   if (isDaterangeFullMonth(props.dateRange)) {
     const previousMonthDate = subMonths(props.dateRange[0], 1);
     const previousMonthStart = new Date(startOfMonth(previousMonthDate));
     const previousMonthEnd = new Date(endOfMonth(previousMonthDate));
 
-    stagedDateRange.value = [previousMonthStart, previousMonthEnd];
+    bufferDateRange = [previousMonthStart, previousMonthEnd];
   } else if (isDaterangeFullYear(props.dateRange)) {
     const previousYearDate = subYears(props.dateRange[0], 1);
     const previousYearStart = new Date(startOfYear(previousYearDate));
     const previousYearEnd = new Date(endOfYear(previousYearDate));
 
-    stagedDateRange.value = [previousYearStart, previousYearEnd];
+    bufferDateRange = [previousYearStart, previousYearEnd];
   } else {
     const diffDays = Math.abs(
       differenceInDays(stagedDateRange.value[0], stagedDateRange.value[1])
@@ -670,9 +686,18 @@ function subTimeframeFromDate() {
       subDays(stagedDateRange.value[0], 1),
     ];
 
-    stagedDateRange.value = refDate;
+    bufferDateRange = refDate;
   }
 
+  if (props.past === false) {
+    if (isPast(bufferDateRange[0]) && isPast(bufferDateRange[1])) {
+      return;
+    } else if (isPast(bufferDateRange[0])) {
+      bufferDateRange[0] = new Date();
+    }
+  }
+
+  stagedDateRange.value = bufferDateRange;
   stagedActivePreset.value && (stagedActivePreset.value = undefined);
   saveTime();
 }
@@ -682,18 +707,20 @@ function addTimeframeFromDate() {
     return;
   }
 
+  let bufferDateRange: [Date, Date];
+
   if (isDaterangeFullMonth(props.dateRange)) {
     const previousMonthDate = addMonths(props.dateRange[0], 1);
     const previousMonthStart = new Date(startOfMonth(previousMonthDate));
     const previousMonthEnd = new Date(endOfMonth(previousMonthDate));
 
-    stagedDateRange.value = [previousMonthStart, previousMonthEnd];
+    bufferDateRange = [previousMonthStart, previousMonthEnd];
   } else if (isDaterangeFullYear(props.dateRange)) {
     const previousYearDate = addYears(props.dateRange[0], 1);
     const previousYearStart = new Date(startOfYear(previousYearDate));
     const previousYearEnd = new Date(endOfYear(previousYearDate));
 
-    stagedDateRange.value = [previousYearStart, previousYearEnd];
+    bufferDateRange = [previousYearStart, previousYearEnd];
   } else {
     const diffDays = Math.abs(
       differenceInDays(stagedDateRange.value[0], stagedDateRange.value[1])
@@ -704,9 +731,18 @@ function addTimeframeFromDate() {
       addDays(stagedDateRange.value[1], diffDays + 1),
     ];
 
-    stagedDateRange.value = refDate;
+    bufferDateRange = refDate;
   }
 
+  if (props.future === false) {
+    if (isFuture(bufferDateRange[0]) && isFuture(bufferDateRange[1])) {
+      return;
+    } else if (isFuture(bufferDateRange[1])) {
+      bufferDateRange[1] = new Date();
+    }
+  }
+
+  stagedDateRange.value = bufferDateRange;
   stagedActivePreset.value && (stagedActivePreset.value = undefined);
   saveTime();
 }
