@@ -15,7 +15,7 @@ export default {
 const DefaultTemplate = (args) => ({
   components: { DataTable },
   template: `
-  <DataTable v-bind="args" header-class="bg-slate-200 dark:bg-slate-800/25 rounded-t-xl shadow-sm">
+  <DataTable v-bind="args" class="w-[800px]" header-class="bg-slate-200 dark:bg-slate-800/25 rounded-t-xl shadow-sm" horizontal-scroll>
   </DataTable>`,
   setup() {
     return { args };
