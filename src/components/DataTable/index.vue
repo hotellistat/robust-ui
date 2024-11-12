@@ -1133,6 +1133,9 @@ const resizeLine = () => {
     return;
   }
   const tableEl = table.value;
+  if (!tableEl) {
+    return;
+  }
   const cols: HTMLElement[] = tableEl.querySelectorAll('.robust-table-column');
   const rowsWrapper = tableEl.querySelector('.rows-wrapper');
 
@@ -1159,6 +1162,9 @@ const createResizableTable = () => {
   }
 
   const tableEl = table.value;
+  if (!tableEl) {
+    return;
+  }
   const cols: HTMLElement[] = tableEl.querySelectorAll('.robust-table-column');
   const rowsWrapper = tableEl.querySelector('.rows-wrapper');
 
